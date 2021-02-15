@@ -1,0 +1,29 @@
+Pull from main to branch
+This will update the branch with all changed made in main
+branch name: phils
+
+$ git checkout phils
+$ git pull origin main
+
+
+
+
+$ git merge main
+
+
+Merge branch to main
+branch name: phils
+
+$ git merge phils -m 'comment'
+
+
+
+
+
+HARD RESET
+git fetch --all
+git reset --hard origin/main
+git pull origin main
+
+CREATE BRANCH IN TERMINAL
+git branch <BRANCH-NAME>
