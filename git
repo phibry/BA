@@ -27,3 +27,6 @@ git pull origin main
 
 CREATE BRANCH IN TERMINAL
 git branch <BRANCH-NAME>
+
+PUSH BRANCH TO GITHUB
+git push -u origin <BRANCH-NAME>
