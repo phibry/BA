@@ -55,15 +55,20 @@ knitr::opts_chunk$set(out.width = "70%", fig.align = "center", echo=FALSE, warni
 
 \newpage
 
-```{r child = '05_conclusion.Rmd'}
+```{r child = '05_results.Rmd'}
 ```
 
 \newpage
 
-```{r child = '06_reference.Rmd'}
+```{r child = '06_conclusion.Rmd'}
 ```
 
 \newpage
 
-```{r child = '07_attachment.Rmd'}
+```{r child = '07_reference.Rmd'}
+```
+
+\newpage
+
+```{r child = '08_attachment.Rmd'}
 ```
