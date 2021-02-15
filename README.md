@@ -1,3 +1,3 @@
 # BA
 
-Bachelor Thesios
+Bachelor Thesis
