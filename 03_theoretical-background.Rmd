@@ -7,6 +7,9 @@ geometry: margin = 1in
 
 Bitcoin explanation in section [2.3.](#bitcoin)
 
+Ken is testing Github. 
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Commodo elit at imperdiet dui accumsan sit. Tempus iaculis urna id volutpat lacus laoreet non curabitur gravida. Turpis egestas integer eget aliquet nibh praesent tristique magna. Nec ultrices dui sapien eget mi proin sed. Turpis nunc eget lorem dolor sed viverra ipsum nunc. Lorem donec massa sapien faucibus et. In hac habitasse platea dictumst vestibulum rhoncus est pellentesque. Ac tortor vitae purus faucibus ornare suspendisse sed nisi lacus. Mauris cursus mattis molestie a iaculis at erat pellentesque adipiscing.
+
 ### 2.1. Neural Network
 
 Set of algorithms to recognize pattern. Mapping input to output.
