@@ -5,20 +5,108 @@ geometry: margin = 1in
 
 ## 2. Theory
 
+Bitcoin explanation in section [2.3.](#bitcoin)
+
 Ken is testing Github. 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Commodo elit at imperdiet dui accumsan sit. Tempus iaculis urna id volutpat lacus laoreet non curabitur gravida. Turpis egestas integer eget aliquet nibh praesent tristique magna. Nec ultrices dui sapien eget mi proin sed. Turpis nunc eget lorem dolor sed viverra ipsum nunc. Lorem donec massa sapien faucibus et. In hac habitasse platea dictumst vestibulum rhoncus est pellentesque. Ac tortor vitae purus faucibus ornare suspendisse sed nisi lacus. Mauris cursus mattis molestie a iaculis at erat pellentesque adipiscing.
 
-### 2.1. Dummy-Title
+### 2.1. Neural Network
 
-Neque volutpat ac tincidunt vitae semper quis. At elementum eu facilisis sed odio morbi quis commodo odio. Eget dolor morbi non arcu risus quis. Gravida quis blandit turpis cursus in hac. Vehicula ipsum a arcu cursus vitae congue mauris. Id eu nisl nunc mi ipsum faucibus vitae. Ut sem viverra aliquet eget sit amet. Tempor orci eu lobortis elementum. Eu feugiat pretium nibh ipsum consequat nisl vel pretium. Vel turpis nunc eget lorem dolor sed viverra. Enim neque volutpat ac tincidunt. Eget nullam non nisi est sit amet facilisis magna. Adipiscing commodo elit at imperdiet dui accumsan sit amet. Diam vel quam elementum pulvinar etiam non. In hac habitasse platea dictumst vestibulum rhoncus. Mattis aliquam faucibus purus in massa. Netus et malesuada fames ac. In fermentum posuere urna nec tincidunt praesent. Dolor sit amet consectetur adipiscing. At in tellus integer feugiat scelerisque.
+Set of algorithms to recognize pattern. Mapping input to output.
+Three different applications
 
-Tellus at urna condimentum mattis pellentesque id nibh. Morbi tempus iaculis urna id volutpat lacus laoreet. Sem fringilla ut morbi tincidunt augue interdum. Mauris nunc congue nisi vitae. Diam maecenas ultricies mi eget. Vel quam elementum pulvinar etiam. Aliquam faucibus purus in massa. In est ante in nibh mauris cursus. Non diam phasellus vestibulum lorem sed risus ultricies. Sed vulputate mi sit amet mauris commodo quis imperdiet massa. Lectus vestibulum mattis ullamcorper velit sed ullamcorper morbi tincidunt ornare. Pellentesque habitant morbi tristique senectus et netus et malesuada fames. Elit duis tristique sollicitudin nibh sit amet commodo. A iaculis at erat pellentesque adipiscing commodo elit. Quam viverra orci sagittis eu volutpat odio facilisis. Eros donec ac odio tempor orci dapibus ultrices in iaculis.
+- Classification (Supervised Learning): Depending on labeled data (Human groups them, or result of another method). NN finds correlation between labels and data. -> **identify objects in imgs, gesture recognition, detect voices, classify text as spam**
+- Clustering (Unsupervised Learning): Detection of similarities, grouping them together. Unlabeled data. The more data, the more accurate is the output. -> **fraud detection, comparing docs/imgs, anomaly detection**
+- Predictive Analysis: Exposed to enough data, NN is able to establish correlation between present events and future events. Regression between the past and the future. -> **Time Series, predict the number which most likely to occur next**
 
-### 2.2. Dummy-Title
-Dui id ornare arcu odio ut sem nulla. Quam nulla porttitor massa id neque aliquam vestibulum morbi. Nulla at volutpat diam ut venenatis. Diam in arcu cursus euismod quis viverra nibh cras pulvinar. Pellentesque pulvinar pellentesque habitant morbi tristique senectus et netus. Posuere lorem ipsum dolor sit. Mus mauris vitae ultricies leo integer malesuada nunc. Lorem donec massa sapien faucibus et molestie ac feugiat. Erat pellentesque adipiscing commodo elit at imperdiet dui. Id diam maecenas ultricies mi eget. Dui ut ornare lectus sit amet est placerat in egestas. Commodo sed egestas egestas fringilla phasellus faucibus scelerisque eleifend. Morbi blandit cursus risus at ultrices mi. Mollis nunc sed id semper risus. Egestas sed sed risus pretium quam vulputate dignissim suspendisse in. Vitae justo eget magna fermentum iaculis. Pellentesque pulvinar pellentesque habitant morbi tristique. Pharetra magna ac placerat vestibulum lectus. In hac habitasse platea dictumst quisque sagittis. Sapien nec sagittis aliquam malesuada bibendum arcu vitae elementum curabitur.
+Further explanation: Nodes, Layer, Input, Ouput, Weights, Activation funtion, Training, Feedforward NN, Mulitple linear Regression, Gradient Descent, Logistic Regression
 
-### 2.2.1. Dummy-Title
+### 2.2. LSTM / RNN
 
-Velit euismod in pellentesque massa placerat duis ultricies lacus. Senectus et netus et malesuada fames. Fringilla ut morbi tincidunt augue interdum velit. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam. Duis at consectetur lorem donec massa sapien faucibus et. Lacus luctus accumsan tortor posuere ac. Nunc id cursus metus aliquam eleifend mi in nulla. Quis risus sed vulputate odio ut enim blandit. Ullamcorper eget nulla facilisi etiam dignissim diam quis enim. Commodo ullamcorper a lacus vestibulum sed arcu non. Sit amet commodo nulla facilisi nullam vehicula ipsum. Risus quis varius quam quisque. Velit egestas dui id ornare arcu odio ut sem nulla. At in tellus integer feugiat scelerisque varius morbi enim. Pharetra magna ac placerat vestibulum lectus mauris ultrices eros in.
+Long-short-term-memory / Recurrent Neural Networks
 
-Magnis dis parturient montes nascetur ridiculus mus mauris vitae ultricies. Viverra suspendisse potenti nullam ac tortor vitae purus faucibus ornare. Eget gravida cum sociis natoque penatibus et magnis dis parturient. Sit amet porttitor eget dolor morbi non arcu risus quis. Fermentum et sollicitudin ac orci phasellus egestas tellus. Risus viverra adipiscing at in tellus integer feugiat scelerisque. Pulvinar pellentesque habitant morbi tristique senectus et netus. Lacus sed viverra tellus in. Massa sed elementum tempus egestas sed. Euismod lacinia at quis risus sed vulputate odio ut. Sed libero enim sed faucibus. Tempor orci eu lobortis elementum.
+Explain.
+
+### 2.3. Bitcoin {#bitcoin}
+
+#### 2.3.1. SHA256 Hash
+
+&nbsp;
+
+- Block
+- Blockchain
+- Distributed Blockchain
+- Token
+- Coinbase Transaction
+- Public/Private Key -> Signing
+- Signature (sign, verify)
+- Transaction
+
+\newpage
+
+### 2.7. Reference
+
+#### 2.7.1. Figure Reference
+
+&nbsp;
+
+As you can see in figure \ref{fig:fig1} -> GOOGLE
+
+```{r fig1, echo=FALSE, fig.cap="Visualization of the adjusted prices of the Alphabet Inc Class A Stock."}
+GOOGL <- getSymbols("GOOGL", auto.assign=F)
+g.adj <- GOOGL[,6]
+par(mfrow=c(1,1))
+plot(g.adj, main="Adjusted Prices ~ Google")
+```
+
+\newpage
+
+#### 2.7.2. Equation Reference
+
+&nbsp;
+
+GARCH-formula can be seen in \ref{eq:garch}
+
+\begin{align} \label{eq:garch}
+  \epsilon_{t} &= \mathrm{log}(x_{t})-\mathrm{log}(x_{t-1}) \nonumber \\
+  \epsilon_{t} &= \sigma_{t}u_{t} \\
+  \sigma_{t}^{2} &=c \sigma^{2}+\sum_{j=1}^{n}\alpha_{j}\sigma_{t-j}^{2}+\sum_{k=1}^{m}\beta_{k}\epsilon_{t-k}^{2} \nonumber
+\end{align}
+
+\newpage
+
+#### 2.7.3. Table Reference
+
+&nbsp;
+
+In table \ref{tab:coeftable} you can see the flexerino of the coefficients.
+
+```{r coeftable, echo=FALSE, message=FALSE}
+g.adj.lr <- na.exclude(diff(log(g.adj)))
+g.subset.lr <- head(g.adj.lr, length(g.adj.lr)-100)
+y.garch_11 <- garchFit(~garch(1,1), data=g.subset.lr, delta=2, include.delta=F, 
+                       include.mean=F, trace=F)
+r1 <- y.garch_11@fit$matcoef[,1]
+r2 <- y.garch_11@fit$matcoef[,2]
+r3 <- y.garch_11@fit$matcoef[,4]
+paras <- data.frame(r1, r2, r3)
+rownames(paras) <- c("$\\omega$", "$\\alpha_{1}$", "$\\beta_{1}$")
+colnames(paras) <- c("Estimate", "Std. Error", "p-Value")
+kable(paras, "latex", escape=F, booktabs = T, linesep="", caption="Coefficients GARCH(1,1).", digits=20)
+```
+
+\newpage
+
+#### 2.7.4. Section Reference {#sec-ref}
+
+Here we can see a wild section, which will reference to itself: [2.7.4.](#sec-ref)
+
+Or reference to the Bitcoin-section [2.3.](#bitcoin)
+
+\newpage
+
+#### 2.7.5. Literature Reference
+
+Add bibliography reference in the `.bib`-file in the add folder.
+
+Here I make a reference to the original bitcoinpaper [@bitcoin] `[@bitcoin]` or to the specific page on the NN financial trading paper [@nnfin, pp. 6-8] -> `[@nnfin, pp. 6-8]`
