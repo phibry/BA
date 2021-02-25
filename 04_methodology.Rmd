@@ -5,19 +5,64 @@ geometry: margin = 1in
 
 ## 3. Methodology
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Commodo elit at imperdiet dui accumsan sit. Tempus iaculis urna id volutpat lacus laoreet non curabitur gravida. Turpis egestas integer eget aliquet nibh praesent tristique magna. Nec ultrices dui sapien eget mi proin sed. Turpis nunc eget lorem dolor sed viverra ipsum nunc. Lorem donec massa sapien faucibus et. In hac habitasse platea dictumst vestibulum rhoncus est pellentesque. Ac tortor vitae purus faucibus ornare suspendisse sed nisi lacus. Mauris cursus mattis molestie a iaculis at erat pellentesque adipiscing.
+The focus of this thesis is to predict historical prices of bitcoin using the models listed in Chapter XX. The predictive accuracy of these obtained predictions are compared using loss functions (Annualized Sharpe, Diebold Mariano Test, MAE, MSE, RMSE, Mincer-Zarnowitz Regressions). Then, based on the best models with the most accurate predictions, trading strategies are worked out to compare with a buy-and-hold strategy. Finally, we would like to venture into the topic of explainability and attempt to explain why the chosen models lead to these outcomes. The procedure of this quantitative study is described in this chapter.
 
-### 3.1. Dummy-Title
+-   Data and Analysis of Bitcoin (BTC/USD)
+-   Defining the train and test samples (including description about calm and volatile phases).
+-   Calculate predictions with the defined models (AR, NN, RNN, LSTM).
+-   Compare Predictions with Realized Data (Annualized Sharpe, Diebold Mariano Test, MAE, MSE, RMSE, Mincer-Zarnowitz Regressions)
+-   Explain trading strategies
+-   Explainability for the best models
+-   (Backup: Which models work well in which market phases?)
 
-Neque volutpat ac tincidunt vitae semper quis. At elementum eu facilisis sed odio morbi quis commodo odio. Eget dolor morbi non arcu risus quis. Gravida quis blandit turpis cursus in hac. Vehicula ipsum a arcu cursus vitae congue mauris. Id eu nisl nunc mi ipsum faucibus vitae. Ut sem viverra aliquet eget sit amet. Tempor orci eu lobortis elementum. Eu feugiat pretium nibh ipsum consequat nisl vel pretium. Vel turpis nunc eget lorem dolor sed viverra. Enim neque volutpat ac tincidunt. Eget nullam non nisi est sit amet facilisis magna. Adipiscing commodo elit at imperdiet dui accumsan sit amet. Diam vel quam elementum pulvinar etiam non. In hac habitasse platea dictumst vestibulum rhoncus. Mattis aliquam faucibus purus in massa. Netus et malesuada fames ac. In fermentum posuere urna nec tincidunt praesent. Dolor sit amet consectetur adipiscing. At in tellus integer feugiat scelerisque.
+### 3.1. Data and Analysis of Bitcoin (Source, Why BTC/USD, 
 
-Tellus at urna condimentum mattis pellentesque id nibh. Morbi tempus iaculis urna id volutpat lacus laoreet. Sem fringilla ut morbi tincidunt augue interdum. Mauris nunc congue nisi vitae. Diam maecenas ultricies mi eget. Vel quam elementum pulvinar etiam. Aliquam faucibus purus in massa. In est ante in nibh mauris cursus. Non diam phasellus vestibulum lorem sed risus ultricies. Sed vulputate mi sit amet mauris commodo quis imperdiet massa. Lectus vestibulum mattis ullamcorper velit sed ullamcorper morbi tincidunt ornare. Pellentesque habitant morbi tristique senectus et netus et malesuada fames. Elit duis tristique sollicitudin nibh sit amet commodo. A iaculis at erat pellentesque adipiscing commodo elit. Quam viverra orci sagittis eu volutpat odio facilisis. Eros donec ac odio tempor orci dapibus ultrices in iaculis.
+-   Source
 
-### 3.2. Dummy-Title
-Dui id ornare arcu odio ut sem nulla. Quam nulla porttitor massa id neque aliquam vestibulum morbi. Nulla at volutpat diam ut venenatis. Diam in arcu cursus euismod quis viverra nibh cras pulvinar. Pellentesque pulvinar pellentesque habitant morbi tristique senectus et netus. Posuere lorem ipsum dolor sit. Mus mauris vitae ultricies leo integer malesuada nunc. Lorem donec massa sapien faucibus et molestie ac feugiat. Erat pellentesque adipiscing commodo elit at imperdiet dui. Id diam maecenas ultricies mi eget. Dui ut ornare lectus sit amet est placerat in egestas. Commodo sed egestas egestas fringilla phasellus faucibus scelerisque eleifend. Morbi blandit cursus risus at ultrices mi. Mollis nunc sed id semper risus. Egestas sed sed risus pretium quam vulputate dignissim suspendisse in. Vitae justo eget magna fermentum iaculis. Pellentesque pulvinar pellentesque habitant morbi tristique. Pharetra magna ac placerat vestibulum lectus. In hac habitasse platea dictumst quisque sagittis. Sapien nec sagittis aliquam malesuada bibendum arcu vitae elementum curabitur.
+-   Structure of data (intraday, daily etc.)
 
-### 3.2.1. Dummy-Title
+-   Why BTC/USD
 
-Velit euismod in pellentesque massa placerat duis ultricies lacus. Senectus et netus et malesuada fames. Fringilla ut morbi tincidunt augue interdum velit. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam. Duis at consectetur lorem donec massa sapien faucibus et. Lacus luctus accumsan tortor posuere ac. Nunc id cursus metus aliquam eleifend mi in nulla. Quis risus sed vulputate odio ut enim blandit. Ullamcorper eget nulla facilisi etiam dignissim diam quis enim. Commodo ullamcorper a lacus vestibulum sed arcu non. Sit amet commodo nulla facilisi nullam vehicula ipsum. Risus quis varius quam quisque. Velit egestas dui id ornare arcu odio ut sem nulla. At in tellus integer feugiat scelerisque varius morbi enim. Pharetra magna ac placerat vestibulum lectus mauris ultrices eros in.
+-   Derivation of log-returns
 
-Magnis dis parturient montes nascetur ridiculus mus mauris vitae ultricies. Viverra suspendisse potenti nullam ac tortor vitae purus faucibus ornare. Eget gravida cum sociis natoque penatibus et magnis dis parturient. Sit amet porttitor eget dolor morbi non arcu risus quis. Fermentum et sollicitudin ac orci phasellus egestas tellus. Risus viverra adipiscing at in tellus integer feugiat scelerisque. Pulvinar pellentesque habitant morbi tristique senectus et netus. Lacus sed viverra tellus in. Massa sed elementum tempus egestas sed. Euismod lacinia at quis risus sed vulputate odio ut. Sed libero enim sed faucibus. Tempor orci eu lobortis elementum.
+-   Description of data (mean, sd, skewness, kurtosis, ADF)
+
+### 3.2. Defining train and test samples 
+
+-   Describe different phases
+
+-   Explain why we set train and test sample like this
+
+-   Describe stable and volatile phases and why we should keep that in mind for predictions
+
+### 3.3. Forecasting
+
+-   Autoregressive process (AR)
+
+-   Deep learning neural network / multi layer percepton
+
+-   Recurrent neural network (RNN)
+
+-   Long short-term memory (LSTM)
+
+### 3.3.1. In-sample
+
+-   Compare Predictions with Realized Data (Annualized Sharpe, Diebold Mariano Test, MAE, MSE, RMSE, Mincer-Zarnowitz Regressions)
+
+### 3.3.2. Out-of-sample
+
+-   Compare Predictions with Realized Data (Annualized Sharpe, Diebold Mariano Test, MAE, MSE, RMSE, Mincer-Zarnowitz Regressions)
+
+### 3.4. Trading strategies
+
+-   Define trading strategies
+
+-   Define realistic fee structure for trading (Coinbase Pro, Binance, Kraken etc.)
+
+### 3.5. Explainability
+
+-   Performing the predictions with the two (?) best models
+
+-   Include variations to find possible starting points for explainability (number of nodes, layers)
+
+### 3.6. (Relationship between accuracy and market phase)
