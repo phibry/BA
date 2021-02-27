@@ -29,8 +29,40 @@ Explain.
 
 ### 2.3. Bitcoin {#bitcoin}
 
-#### 2.3.1. SHA256 Hash
+In this section bitcoin as a cryptocurreny is introduced. The historical data is analyzed and commentend. Further the technology around cryptocurrencies is briefly explained. A detailed explanation would requier a paper itself, therefore the explantion is done as simple as possible.
 
+
+#### 2.3.1. historical analysis
+
+```{r, echo=FALSE, message=FALSE}
+# acessing data via coinmarket cap https://coinmarketcap.com/
+# from yahoofinance ticker BTC-USD
+# *Close price adjusted for splits.
+#**Adjusted close price adjusted for both dividends and splits.
+
+
+getSymbols("BTC-USD") # acessing yahoo finance
+BTC_USD=`BTC-USD`     
+
+
+#
+head(BTC_USD,n=5)
+tail(BTC_USD,n=3)      #  
+
+x_level = Cl(BTC_USD)   # 
+log_ret   = diff(log(Cl(BTC_USD))) # 
+
+# Line Chart
+chartSeries(BTC_USD,type="line", theme=chartTheme("white"))
+
+# Bar Chart
+chartSeries(BTC_USD, type="bar",theme=chartTheme("white"))
+
+```
+
+
+
+#### 2.3.2. SHA256 Hash
  
 
 -   Block
