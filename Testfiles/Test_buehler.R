@@ -11,6 +11,11 @@ getSymbols("BTC-USD")
 
 
 BTC_USD=na.exclude(BTC_USD)
+
+
+
+
+
 #
 
 head(BTC_USD,n=5)
@@ -32,5 +37,15 @@ chartSeries(BTC_USD, type="bar",theme=chartTheme("white"))
 chartSeries(BTC_USD, type="auto", theme=chartTheme("white"))
 
 # 
+
+
+
+# log returns btc
+
+
+
+
+
+
 
 
