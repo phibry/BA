@@ -33,6 +33,7 @@ In this section bitcoin as a cryptocurreny is introduced. The historical data is
 
 In the following work bitcoin as a cryptocurreny is mentionend in its short term BTC, by the meaning of US Dollars per Bitcoin.
 
+
 #### 2.3.1. historical analysis
 
 Bitcoin was first introduced in 2009 as the leader of a new era of cryptocurrencies. Firstly the recognition wasnt very high due to the fact of a non established technology. At the end of 2016 things began to change, more volume was flushed in the market and the price of BTC began to slowly ascend. in 2017 the real rally began and the BTC rose up to nearly 20k USD / BTC. In the following years until 2020 BTC had a lot of different phases from rising and falling to  a price at the end in 2020 around 100 USD per BTC. Most recent events topped everything before, as the BTC rose up to 58000 US Dollar after companies like Tesla and Signal bougth in with high volume. 
