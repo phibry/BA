@@ -66,3 +66,4 @@ The focus of this thesis is to predict historical prices of bitcoin using the mo
 -   Include variations to find possible starting points for explainability (number of nodes, layers)
 
 ### 3.6. (Relationship between accuracy and market phase)
+
