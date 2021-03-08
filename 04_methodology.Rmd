@@ -3,7 +3,7 @@ output: pdf_document
 geometry: margin = 1in
 ---
 
-## 3. Methodology
+## 4. Methodology
 
 The focus of this thesis is to predict historical prices of bitcoin using the models listed in Chapter XX. The predictive accuracy of these obtained predictions are compared using loss functions (Annualized Sharpe, Diebold Mariano Test, MAE, MSE, RMSE, Mincer-Zarnowitz Regressions). Then, based on the best models with the most accurate predictions, trading strategies are worked out to compare with a buy-and-hold strategy. Finally, we would like to venture into the topic of explainability and attempt to explain why the chosen models lead to these outcomes. The procedure of this quantitative study is described in this chapter.
 
@@ -15,7 +15,7 @@ The focus of this thesis is to predict historical prices of bitcoin using the mo
 -   Explainability for the best models
 -   (Backup: Which models work well in which market phases?)
 
-### 3.1. Data and Analysis of Bitcoin (Source, Why BTC/USD, 
+### 4.1. Data and analysis of Bitcoin 
 
 -   Source
 
@@ -27,7 +27,7 @@ The focus of this thesis is to predict historical prices of bitcoin using the mo
 
 -   Description of data (mean, sd, skewness, kurtosis, ADF)
 
-### 3.2. Defining train and test samples 
+### 4.2. Defining train and test samples
 
 -   Describe different phases
 
@@ -35,7 +35,7 @@ The focus of this thesis is to predict historical prices of bitcoin using the mo
 
 -   Describe stable and volatile phases and why we should keep that in mind for predictions
 
-### 3.3. Forecasting
+### 4.3. Forecasting
 
 -   Autoregressive process (AR)
 
@@ -45,26 +45,26 @@ The focus of this thesis is to predict historical prices of bitcoin using the mo
 
 -   Long short-term memory (LSTM)
 
-### 3.3.1. In-sample
+### 4.3.1. In-sample
 
 -   Compare Predictions with Realized Data (Annualized Sharpe, Diebold Mariano Test, MAE, MSE, RMSE, Mincer-Zarnowitz Regressions)
 
-### 3.3.2. Out-of-sample
+### 4.3.2. Out-of-sample
 
 -   Compare Predictions with Realized Data (Annualized Sharpe, Diebold Mariano Test, MAE, MSE, RMSE, Mincer-Zarnowitz Regressions)
 
-### 3.4. Trading strategies
+### 4.4. Trading strategies
 
 -   Define trading strategies
 
 -   Define realistic fee structure for trading (Coinbase Pro, Binance, Kraken etc.)
 
-### 3.5. Explainability
+### 4.5. Explainability
 
 -   Performing the predictions with the two (?) best models
 
 -   Include variations to find possible starting points for explainability (number of nodes, layers)
 
-### 3.6. (Relationship between accuracy and market phase)
+### 4.6. (Relationship between accuracy and market phase)
 
 -   Test
