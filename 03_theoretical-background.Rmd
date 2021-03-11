@@ -5,34 +5,33 @@ output:
     df_print: paged
 ---
 
-## 2. Theory
+## 3. Theory
 
-Bitcoin explanation in section [2.3.](#bitcoin)
+The following chapter is intended to provide the theoretical foundations necessary for understanding our work. It is divided into a part that provides an overview of artificial neural networks. Followed by section [2.3.](#bitcoin) that shows the background and the ecosystem of Bitcoin. This knowledge should be kept in mind, which should help in understanding the price formation of Bitcoin.
 
-Ken is testing Github. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Commodo elit at imperdiet dui accumsan sit. Tempus iaculis urna id volutpat lacus laoreet non curabitur gravida. Turpis egestas integer eget aliquet nibh praesent tristique magna. Nec ultrices dui sapien eget mi proin sed. Turpis nunc eget lorem dolor sed viverra ipsum nunc. Lorem donec massa sapien faucibus et. In hac habitasse platea dictumst vestibulum rhoncus est pellentesque. Ac tortor vitae purus faucibus ornare suspendisse sed nisi lacus. Mauris cursus mattis molestie a iaculis at erat pellentesque adipiscing.
+### 3.1. Neural network
 
-### 2.1. Neural Network
+In the context of this work, artificial neural networks are used to answer supervised learning questions that focus on classification of data. This means that a neural network finds a correlation between the data and their labels and optimizes its parameters in order to minimize the error for the next try. This process is called supervised training and is performed with a test data sample. An application example of classification is that a neural network is used for face recognition after it has learned the classification of different faces in the process of supervised training. Predictive analysis works similarly to the classification of labeled data. It estimates future values based on past events and can be trained with historical data. On the other hand, unsupervised learning (clustering) is applied to detect patterns from unlabeled data. Based on these patterns, for example, anomalies can be detected that are relevant in the fight against fraud (fraud detection). Unsupervised learning is not discussed further in this paper.
 
-Set of algorithms to recognize pattern. Mapping input to output. Three different applications
+Section [3.2.](#Perceptron) will demonstrate the functioning of a neural network using a simple perceptron.
 
--   Classification (Supervised Learning): Depending on labeled data (Human groups them, or result of another method). NN finds correlation between labels and data. -\> **identify objects in imgs, gesture recognition, detect voices, classify text as spam**
--   Clustering (Unsupervised Learning): Detection of similarities, grouping them together. Unlabeled data. The more data, the more accurate is the output. -\> **fraud detection, comparing docs/imgs, anomaly detection**
--   Predictive Analysis: Exposed to enough data, NN is able to establish correlation between present events and future events. Regression between the past and the future. -\> **Time Series, predict the number which most likely to occur next**
+### 3.3. Perceptron
 
-Further explanation: Nodes, Layer, Input, Ouput, Weights, Activation funtion, Training, Feedforward NN, Mulitple linear Regression, Gradient Descent, Logistic Regression
+Long-short-term-memory / Recurrent Neural Networks
 
-### 2.2. LSTM / RNN
+### 3.3. LSTM / RNN
 
 Long-short-term-memory / Recurrent Neural Networks
 
 Explain.
 
-### 2.3. Bitcoin {#bitcoin}
+### 3.3. Bitcoin {#bitcoin}
 
 In this section bitcoin as a cryptocurreny is introduced. The historical data is analyzed and commentend. Further the technology around cryptocurrencies is briefly explained. A detailed explanation would requiere a paper itself, therefore the explantion is done as simple as possible.
 
 In the following work bitcoin as a cryptocurreny is mentionend in its short term BTC, by the meaning of US Dollars per Bitcoin.
 
+<<<<<<< HEAD
 
 #### 2.3.1. historical analysis
 
@@ -41,7 +40,11 @@ Bitcoin was first introduced in 2009 as the leader of a new era of cryptocurrenc
 
 
 
+=======
+#### 3.3.1. Historical analysis
+>>>>>>> main
 
+Bitcoin was first introduced in 2009 as the leader of a new era of cryptocurrencies. Firstly the recognition wasnt very high due to the fact of a non established technology. At the end of 2016 things began to change, more volume was flushed in the market and the price of BTC began to slowly ascend. in 2017 the real rally began and the BTC rose up to nearly 20k USD / BTC. In the following years until 2020 BTC had a lot of different phases from rising and falling to a price at the end in 2020 around 100 USD per BTC. Most recent events topped everything before, as the BTC rose up to 58000 US Dollar after companies like Tesla and Signal bougth in with high volume.
 
 ```{r, echo=FALSE, message=FALSE}
 # acessing data via coinmarket cap https://coinmarketcap.com/
@@ -54,10 +57,8 @@ BTC_USD=na.exclude(BTC_USD)                   # exclusion of nas
 chartSeries(BTC_USD,type="line", theme=chartTheme("white"))
 ```
 
+#### 3.3.2. SHA256 Hash
 
-
-
-#### 2.3.2. SHA256 Hash
  
 
 -   Block
@@ -71,9 +72,9 @@ chartSeries(BTC_USD,type="line", theme=chartTheme("white"))
 
 \newpage
 
-### 2.7. Reference
+### 3.7. Reference
 
-#### 2.7.1. Figure Reference
+#### 3.7.1. Figure Reference
 
  
 
@@ -88,7 +89,7 @@ plot(g.adj, main="Adjusted Prices ~ Google")
 
 \newpage
 
-#### 2.7.2. Equation Reference
+#### 3.7.2. Equation Reference
 
  
 
@@ -103,7 +104,7 @@ GARCH-formula can be seen in \ref{eq:garch}
 ```
 \newpage
 
-#### 2.7.3. Table Reference
+#### 3.7.3. Table Reference
 
  
 
@@ -125,7 +126,7 @@ kable(paras, "latex", escape=F, booktabs = T, linesep="", caption="Coefficients 
 
 \newpage
 
-#### 2.7.4. Section Reference {#sec-ref}
+#### 3.7.4. Section Reference {#sec-ref}
 
 Here we can see a wild section, which will reference to itself: [2.7.4.](#sec-ref)
 
@@ -133,7 +134,7 @@ Or reference to the Bitcoin-section [2.3.](#bitcoin)
 
 \newpage
 
-#### 2.7.5. Literature Reference
+#### 3.7.5. Literature Reference
 
 Add bibliography reference in the `.bib`-file in the add folder.
 
