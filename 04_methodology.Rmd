@@ -17,15 +17,30 @@ The focus of this thesis is to predict historical prices of bitcoin using the mo
 
 ### 4.1. Data and analysis of Bitcoin 
 
--   Source
+The data in this paper is accessed  via yahoofinance provided by coinmarket https://coinmarketcap.com/. We use the daily "closing price" of bitcoin in US Dollars with the ticker BTC-USD. Cryptoexchanges are mostly 24 hours 256 days open, there is no real "closing price" for the bitcoin, therefore the "closing-Price" is just the last price of the day evaluated at last timestamp with timeformat UTC.
 
--   Structure of data (intraday, daily etc.)
+
+In chapter [3.3.](#bitcoin) the bitcoin price is visualized. 
+
+stationarity issues:
+-acf()
+-heterscedasity
+
+
+```{r, echo=FALSE, message=FALSE}
+
+```
+
+
 
 -   Why BTC/USD
 
 -   Derivation of log-returns
 
 -   Description of data (mean, sd, skewness, kurtosis, ADF)
+
+
+
 
 ### 4.2. Defining train and test samples
 
