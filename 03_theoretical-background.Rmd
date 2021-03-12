@@ -7,7 +7,7 @@ output:
 
 ## 3. Theory
 
-The following chapter is intended to provide the theoretical foundations necessary for understanding our work. It is divided into a part that provides an overview of artificial neural networks. Followed by section [2.3.](#bitcoin) that shows the background and the ecosystem of Bitcoin. This knowledge should be kept in mind, which should help in understanding the price formation of Bitcoin.
+The following chapter is intended to provide the theoretical foundations necessary for our work. It is divided into a part that provides an overview of artificial neural networks. Followed by section [2.3.](#bitcoin) that shows the background and the ecosystem of Bitcoin. This knowledge should be kept in mind, which should help in understanding the price formation of Bitcoin.
 
 ### 3.1. Neural network
 
@@ -15,9 +15,31 @@ In the context of this work, artificial neural networks are used to answer super
 
 Section [3.2.](#Perceptron) will demonstrate the functioning of a neural network using a simple perceptron.
 
-### 3.3. Perceptron
+### 3.3. Perceptron {#perceptron}
 
-Long-short-term-memory / Recurrent Neural Networks
+The construction of an artificial neural network is demonstrated using a perceptron. It is a simple algorithm for supervised learning of binary classification problems. This algorithm classifies patterns by performing a linear separation. Although this discovery was anticipated with great expectations in 1958, it became increasingly apparent that these binary classifiers are only applicable to linearly separable data inputs. This was only later addressed by the discovery of multiple layer perceptrons (MLP).
+
+(Rosenblatt, 1958)
+
+Basically, a perceptron is a single-layer neural network and consists of the following five components and can also be observed in \ref{#fig:Perceptron}.
+
+1.  Inputs
+
+2.  Weights
+
+3.  Bias
+
+4.  Weighted sum
+
+5.  Activation function
+
+Inputs are the information that is fed into the model. In the case of econometric time series, it is mostly the current and historical log returns (lags). These are multiplied by the weights and added together with the bias term to form the weighted sum. This weighted sum is finally passed on to the activation function, which determines the output of the perceptron. In order to provide a binary output, step functions are used for the activation function.
+
+![Schematic diagram of a perceptron.](images/Perceptron.jpg){#fig:Perceptron}
+
+(<https://images.deepai.org/glossary-terms/perceptron-6168423.jpg>)
+
+(Anthony and Bartlett, 1999)
 
 ### 3.3. LSTM / RNN
 
@@ -47,8 +69,6 @@ chartSeries(BTC_USD,type="line", theme=chartTheme("white"))
 ```
 
 #### 3.3.2. SHA256 Hash
-
- 
 
 -   Block
 -   Blockchain
