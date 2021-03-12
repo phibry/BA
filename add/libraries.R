@@ -7,4 +7,7 @@ library(quantmod)
 library(forecast)
 library(fGarch)
 library(devtools)
-library(MDFA)
+#library(MDFA) misspelled? added MDFS below
+library(MDFS)
+
+
