@@ -125,22 +125,11 @@ chartSeries(BTC_USD,type="line", theme=chartTheme("white"))
 
 #### 3.7.1. Figure Reference
 
- 
-
-As you can see in figure \ref{fig:fig1} -\> GOOGLE
-
-```{r fig1, echo=FALSE, fig.cap="Visualization of the adjusted prices of the Alphabet Inc Class A Stock."}
-GOOGL <- getSymbols("GOOGL", auto.assign=F)
-g.adj <- GOOGL[,6]
-par(mfrow=c(1,1))
-plot(g.adj, main="Adjusted Prices ~ Google")
-```
 
 \newpage
 
 #### 3.7.2. Equation Reference
 
- 
 
 GARCH-formula can be seen in \ref{eq:garch}
 
@@ -155,23 +144,6 @@ GARCH-formula can be seen in \ref{eq:garch}
 
 #### 3.7.3. Table Reference
 
- 
-
-In table \ref{tab:coeftable} you can see the flexerino of the coefficients.
-
-```{r coeftable, echo=FALSE, message=FALSE}
-g.adj.lr <- na.exclude(diff(log(g.adj)))
-g.subset.lr <- head(g.adj.lr, length(g.adj.lr)-100)
-y.garch_11 <- garchFit(~garch(1,1), data=g.subset.lr, delta=2, include.delta=F, 
-                       include.mean=F, trace=F)
-r1 <- y.garch_11@fit$matcoef[,1]
-r2 <- y.garch_11@fit$matcoef[,2]
-r3 <- y.garch_11@fit$matcoef[,4]
-paras <- data.frame(r1, r2, r3)
-rownames(paras) <- c("$\\omega$", "$\\alpha_{1}$", "$\\beta_{1}$")
-colnames(paras) <- c("Estimate", "Std. Error", "p-Value")
-kable(paras, "latex", escape=F, booktabs = T, linesep="", caption="Coefficients GARCH(1,1).", digits=20)
-```
 
 \newpage
 
