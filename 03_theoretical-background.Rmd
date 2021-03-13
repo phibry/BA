@@ -33,13 +33,13 @@ Basically, a perceptron is a single-layer neural network and consists of the fol
 
 5.  Activation function
 
-Inputs are the information that is fed into the model. In the case of econometric time series, it is mostly the current and historical log returns (lags). These are multiplied by the weights and added together with the bias term to form the weighted sum. This weighted sum is finally passed on to the non-linear activation function, which determines the output of the perceptron. In order to provide a binary output, step functions are used for the activation function.
+Inputs are the information that is fed into the model. In the case of econometric time series, it is mostly the current and historical log returns (lags). These are multiplied by the weights and added together with the bias term to form the weighted sum. This weighted sum is finally passed on to the non-linear activation function, which determines the output of the perceptron.
 
 ![Schematic diagram of a perceptron.](images/Perceptron.jpg){#fig:Perceptron width="491"}
 
 (<https://images.deepai.org/glossary-terms/perceptron-6168423.jpg>)
 
-The perceptron can also be represented as a function. Analogous to the representation above, the inputs $x_{i}$ are multiplied by the weights $w_{i}$ in a linear combination. Then an error term is added so that the whole can be packed into the non-linear activation function $g(S)$ . $\hat{y}$ is the binary output of this perceptron.
+The perceptron can also be represented as a function. Analogous to the representation above, the inputs $x_{i}$ are multiplied by the weights $w_{i}$ in a linear combination. Then an error term is added so that the whole can be packed into the non-linear activation function $g(S)$ . $\hat{y}$ is the binary output of this perceptron. With the aid of an activation function, a binary output is obtained. The Heaviside step function shown in figure \ref{#fig:Perceptron} is usually only used in single layer perceptrons, which recognize linear separable patterns. For the multi layer neural networks presented later, step functions are not an option, because in the course of the backprogation algorithm the gradient descent has to be minimized. This requires derivatives of the activation function, which in the case of this Heaviside step function equals 0. Because the foundation for the optimization process is missing, functions like the sigmoid function or the hyperbolic tangent function are used. More about this topic is discussed in chapter \ref{#backprogation_algorithm}.
 
 ```{=tex}
 \begin{align} \label{eq:perceptron}
@@ -48,15 +48,15 @@ The perceptron can also be represented as a function. Analogous to the represent
 ```
 (Anthony and Bartlett, 1999)
 
-The aim is to feed the perceptron with the training set and change the weights $w_{i}$ with each cycle so that the prediction becomes accurate. The output value is compared to the desired value. Finally, the sign of the difference $y-\hat{y}$ determines whether the inputs of that iteration are added to or subtracted from the weights. Ideally, the weights will gradually converge and provide us with an usable model.
+As just mentioned, the aim is to feed the perceptron with the training set and change the weights $w_{i}$ with each cycle so that the prediction becomes accurate. The output value is compared to the desired value. Finally, the sign of the difference $y-\hat{y}$ determines whether the inputs of that iteration are added to or subtracted from the weights. Ideally, the weights will gradually converge and provide us with an usable model.
 
-### 3.1.2. Backprogation algorithm
+### 3.1.2. Backprogation algorithm {#backprogation_algorithm}
 
 -   Backprogatation algo
 
 -   Gradient descent
 
-### 3.1.3. Types of artificial neural networks {#bitcoin}
+### 3.1.3. Types of artificial neural networks {#types_of_nn}
 
 -   MLP / DNN (explain nodes and layers)
 
@@ -72,25 +72,17 @@ The aim is to feed the perceptron with the training set and change the weights $
 
 -   Dying Relu Problem (?)
 
-### 3.2. Bitcoin
+### 3.2. Bitcoin {#bitcoin}
 
 In this section bitcoin as a cryptocurreny is introduced. The historical data is analyzed and commentend. Further the technology in and around cryptocurrencies is briefly explained. A detailed explanation would requiere a paper itself, therefore the explanation is done as simple as possible.
 
 In the following work bitcoin as a cryptocurreny is mentionend in its short term BTC, by the meaning of US Dollars per Bitcoin.
 
-
-
 #### 3.2.1. Historical analysis
-
 
 #### 2.3.1. historical analysis
 
-Bitcoin was first introduced in 2009 as the leader of a new era of cryptocurrencies. Firstly the recognition wasnt very high due to the fact of a non established technology. At the end of 2016 things began to change, more volume was flushed in the market and the price of BTC began to slowly ascend. in 2017 the real rally began and the BTC rose up to nearly 20k USD / BTC. In the following years until 2020 BTC had a lot of different phases from rising and falling to  a price at the end in 2020 around 10000 USD per BTC. Most recent events topped everything before, as the BTC rose up to 58000 US Dollar after companies like Tesla and Signal bought in with high volume. 
-
-
-
-
-
+Bitcoin was first introduced in 2009 as the leader of a new era of cryptocurrencies. Firstly the recognition wasnt very high due to the fact of a non established technology. At the end of 2016 things began to change, more volume was flushed in the market and the price of BTC began to slowly ascend. in 2017 the real rally began and the BTC rose up to nearly 20k USD / BTC. In the following years until 2020 BTC had a lot of different phases from rising and falling to a price at the end in 2020 around 10000 USD per BTC. Most recent events topped everything before, as the BTC rose up to 58000 US Dollar after companies like Tesla and Signal bought in with high volume.
 
 ```{r, echo=FALSE, message=FALSE}
 # acessing data via coinmarket cap https://coinmarketcap.com/
@@ -105,10 +97,7 @@ BTC_USD =BTC_USD_13_03_21# acessing yahoo finance, exclusion of na
 chartSeries(BTC_USD,type="line", theme=chartTheme("white"))
 ```
 
-
 #### 3.3.2. SHA256 Hash
-
-
 
 -   Block
 -   Blockchain
