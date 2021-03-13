@@ -7,7 +7,10 @@ library(quantmod)
 library(forecast)
 library(fGarch)
 library(devtools)
-#library(MDFA) misspelled? added MDFS below
+library(MDFA)
+library(neuralnet)
+library(boot)
+library(plyr) 
+library(MASS)
 library(MDFS)
-
 
