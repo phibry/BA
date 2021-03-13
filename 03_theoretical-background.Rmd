@@ -32,9 +32,9 @@ In this section bitcoin as a cryptocurreny is introduced. The historical data is
 In the following work bitcoin as a cryptocurreny is mentionend in its short term BTC, by the meaning of US Dollars per Bitcoin.
 
 
-#### 2.3.1. historical course analysis
+#### 2.3.1. historical analysis
 
-Bitcoin was first introduced in 2009 as the leader of a new era of cryptocurrencies. Firstly the recognition wasnt very high due to the fact of a non established technology. At the end of 2016 things began to change, more volume was flushed in the market and the price of BTC began to slowly ascend. in 2017 the real rally began and the BTC rose up to nearly 20k USD / BTC. In the following years until 2020 BTC had a lot of different phases from rising and falling to  a price at the end in 2020 around 10000 USD per BTC. Most recent events topped everything before, as the BTC rose up to 58000 US Dollar after companies like Tesla and Signal bougth in with high volume. 
+Bitcoin was first introduced in 2009 as the leader of a new era of cryptocurrencies. Firstly the recognition wasnt very high due to the fact of a non established technology. At the end of 2016 things began to change, more volume was flushed in the market and the price of BTC began to slowly ascend. in 2017 the real rally began and the BTC rose up to nearly 20k USD / BTC. In the following years until 2020 BTC had a lot of different phases from rising and falling to  a price at the end in 2020 around 10000 USD per BTC. Most recent events topped everything before, as the BTC rose up to 58000 US Dollar after companies like Tesla and Signal bought in with high volume. 
 
 
 
@@ -47,14 +47,14 @@ Bitcoin was first introduced in 2009 as the leader of a new era of cryptocurrenc
 # *Close price adjusted for splits.
 #**Adjusted close price adjusted for both dividends and splits.
 
-BTC_USD=getSymbols("BTC-USD",auto.assign = F) # acessing yahoo finance
-BTC_USD=na.exclude(BTC_USD)                   # exclusion of nas
+load("data/BTC_USD_13_03_21.rda") # loading saved data bitcoin all prices and  volume
+
+BTC_USD =BTC_USD_13_03_21# acessing yahoo finance, exclusion of na
+
 chartSeries(BTC_USD,type="line", theme=chartTheme("white"))
 ```
 
 #### 3.3.2. SHA256 Hash
-
- 
 
 -   Block
 -   Blockchain
