@@ -7,14 +7,10 @@
 #**Adjusted close price adjusted for both dividends and splits.
 
 
-getSymbols("BTC-USD")
-
-
-BTC_USD=na.exclude(BTC_USD)
-
-
-
-
+#getSymbols("BTC-USD")
+#BTC_USD_13_03_21=na.exclude(`BTC-USD`)
+#save(BTC_USD_13_03_21, file = "BTC_USD_13_03_21.rda")
+load()
 
 #
 
@@ -23,12 +19,15 @@ tail(BTC_USD,n=3)      #
 
 x_level = Cl(BTC_USD)
 plot(log(Cl(BTC_USD)))# 
-log_ret   = diff(log(Cl(BTC_USD))) # 
+log_ret_13_03_21  = na.exclude(diff(log(Cl(BTC_USD)))) # 
+
+
 
 
 plot(log_ret)
 # Line Chart
 chartSeries(BTC_USD,type="line", theme=chartTheme("white"))
+
 
 # Bar Chart
 chartSeries(BTC_USD, type="bar",theme=chartTheme("white"))
@@ -49,23 +48,43 @@ lo
 
 #save to rda file+
 
-log_ret_12_03_21=na.exclude(log_ret)
+#log_ret_13_03_21=na.exclude(log_ret)
 
 getwd()
 setwd("C:/Users/buehl/Desktop/BA/BA/data")
 
-save(log_ret_12_03_21, file = "log_ret_12_03_21.rda")
+save(log_ret_13_03_21, file = "log_ret_13_03_21.rda")
+
+
 class(log_ret)
 str(log_ret)
 
 
 
-acf(log_ret_12_03_21)
+acf(log_ret_13_03_21)
 
 
 
-y.garch_11<-garchFit(~arma(0,10)+garch(1,1),data=log_ret_12_03_21,delta=2,include.delta=F,include.mean=F,trace=F)
-summary(y.garch_11)
+y.garch<-garchFit(~arma(0,10)+garch(1,1),data=log_ret_13_03_21,delta=2,include.delta=F,include.mean=F,trace=F)
+summary(y.garch)
+
+
+
+ts.plot(log_ret_13_03_21)
+
+lines(y.garch@sigma.t,col="red")
+lines(y.garch@residuals,col="blue")
+
+
+log_ret_13_03_21_sd<-y.garch@residuals/y.garch@sigma.t
+
+ts.plot(log_ret_12_03_21_sd)
+acf(log_ret_12_03_21_sd)
+
+save(log_ret_13_03_21_sd, file = "log_ret_13_03_21_sd.rda")
+
+
+
 
 
 train_set <- scaled[paste("/",in_out_sample_separator,sep=""),]

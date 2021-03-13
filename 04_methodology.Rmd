@@ -17,28 +17,37 @@ The focus of this thesis is to predict historical prices of bitcoin using the mo
 
 ### 4.1. Data and analysis of Bitcoin 
 
-The data in this paper is accessed  via yahoofinance provided by coinmarket https://coinmarketcap.com/. We use the daily "closing price" of bitcoin in US Dollars with the ticker BTC-USD. Cryptoexchanges are mostly 24 hours 256 days open, there is no real "closing price" for the bitcoin, therefore the "closing-Price" is just the last price of the day evaluated at last timestamp with timeformat UTC.
+The data in this paper is accessed  via yahoofinance provided by coinmarket https://coinmarketcap.com/. We use the daily "closing price" of bitcoin in US Dollars with the ticker BTC-USD. Cryptoassets are tradeble 24 hours a day  256 days a year, there is no real "closing price" for the bitcoin, therefore the "closing-Price" is just the last price of the day evaluated at last timestamp with timeformat UTC.
 
 
-In chapter [3.3.](#bitcoin) the bitcoin price is visualized. 
-
-stationarity issues:
--acf()
--heterscedasity
+In chapter [3.3.](#bitcoin) the bitcoin price is visualized. For processing and analyzing the data in order to fullfill the weak stationarity assumptions we transform the data into logreturns
 
 
+
+$$\mathrm{LogReturn} = \mathrm{log}(x_{t})-\mathrm{log}(x_{t-1})$$
 ```{r, echo=FALSE, message=FALSE}
+load("data/log_ret_13_03_21_sd.rda")# loading logreturns standardized by arma(0,10)-garch(1,1)
+load("data/log_ret_13_03_21.rda")    # loading logreturns
+log_ret=    log_ret_13_03_21
+log_ret_sd= log_ret_13_03_21_sd
+
+ts.plot(log_ret)
 
 ```
 
+By computing the autocorrelation oft the log_returns, there is still dependence visible in lag 6 and 10. This indicates dependency in volatility-cluster, to cancel out the effect an ARMA-GARCH model is fitted to the data and the residuals are standardized by the model standard-deviation.
 
+```{r, echo=FALSE, message=FALSE}
+acf(log_ret)
+```
+To check the dependencies the standardized 
+```{r, echo=FALSE, message=FALSE}
+ts.plot(log_ret_sd)
 
--   Why BTC/USD
-
--   Derivation of log-returns
-
--   Description of data (mean, sd, skewness, kurtosis, ADF)
-
+```
+```{r, echo=FALSE, message=FALSE}
+acf(log_ret_sd^2)
+```
 
 
 
