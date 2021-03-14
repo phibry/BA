@@ -6,7 +6,7 @@
 # *Close price adjusted for splits.
 #**Adjusted close price adjusted for both dividends and splits.
 
-
+# generatign data ####
 #getSymbols("BTC-USD")
 #BTC_USD_13_03_21=na.exclude(`BTC-USD`)
 #save(BTC_USD_13_03_21, file = "BTC_USD_13_03_21.rda")
@@ -35,16 +35,7 @@ chartSeries(BTC_USD, type="bar",theme=chartTheme("white"))
 # Candle Stick Chart
 chartSeries(BTC_USD, type="auto", theme=chartTheme("white"))
 
-# 
-
-
-
-# log returns btc
-lo
-# Train-test split
-
-
-
+#
 
 #save to rda file+
 
@@ -56,17 +47,15 @@ setwd("C:/Users/buehl/Desktop/BA/BA/data")
 save(log_ret_13_03_21, file = "log_ret_13_03_21.rda")
 
 
-class(log_ret)
-str(log_ret)
-
-
-
-acf(log_ret_13_03_21)
 
 
 
 y.garch<-garchFit(~arma(0,10)+garch(1,1),data=log_ret_13_03_21,delta=2,include.delta=F,include.mean=F,trace=F)
 summary(y.garch)
+
+dim(log_ret_13_03_21_sd)
+
+log_ret_13_03_21_sd=reclass(log_ret_13_03_21_sd,log_ret_13_03_21)
 
 
 
@@ -75,6 +64,8 @@ ts.plot(log_ret_13_03_21)
 lines(y.garch@sigma.t,col="red")
 lines(y.garch@residuals,col="blue")
 
+
+head(log_ret_13_03_21_sd)
 
 log_ret_13_03_21_sd<-y.garch@residuals/y.garch@sigma.t
 
@@ -85,17 +76,72 @@ save(log_ret_13_03_21_sd, file = "log_ret_13_03_21_sd.rda")
 
 
 
+#analizing data ####
 
 
-train_set <- scaled[paste("/",in_out_sample_separator,sep=""),]
-test_set <- scaled[paste(in_out_sample_separator,"/",sep=""),]
+
+
+load("data/log_ret_13_03_21_sd.rda")# loading logreturns standardized by arma(0,10)-garch(1,1)
+load("data/log_ret_13_03_21.rda")
+
+
+
+x=log_ret_13_03_21_sd
+
+
+data_mat<-cbind(x,lag(x),lag(x,k=2),lag(x,k=3),lag(x,k=4),lag(x,k=5),lag(x,k=6))
+
+data_mat<-cbind(x,lag(x),lag(x,k=2))
+
+# Check length of time series before na.exclude
+dim(data_mat)
+data_mat<-na.exclude(data_mat)
+
+
+
+
+maxs <- apply(data_mat, 2, max) 
+mins <- apply(data_mat, 2, min)
+# Transform data into [0,1]  
+scaled_log_ret <- scale(data_mat, center = mins, scale = maxs - mins)
+
+
+
+
+in_out_sample_separator="2019-12-31"
+train_set <- scaled_log_ret[paste("/",in_out_sample_separator,sep=""),]
+test_set <- scaled_log_ret[paste(in_out_sample_separator,"/",sep=""),]
 
 train_set<-as.matrix(train_set)
 test_set<-as.matrix(test_set)
 
 
+colnames(train_set)<-paste("lag",0:(ncol(train_set)-1),sep="")
+n <- colnames(train_set)
 
-estimate_nn<-function(train_set,number_neurons,data_mat,test_set,f)
+head(train_set)
+
+f <- as.formula(paste   ("lag0 ~"   ,  paste(n[!n %in% "lag0"], collapse = " + ")  ))
+
+
+
+nn <- neuralnet(f,data=train_set,hidden=c(5,5,4,3),linear.output=F)
+plot(nn)
+
+
+
+nn$net.result
+
+
+
+
+summary(nn)
+
+
+
+
+
+estimate_nn<-function(train_set,number_neurons,data_mat,test_set,f) # function 
 {
   nn <- neuralnet(f,data=train_set,hidden=number_neurons,linear.output=T)
   
@@ -123,6 +169,8 @@ estimate_nn<-function(train_set,number_neurons,data_mat,test_set,f)
   return(list(MSE_nn=MSE_nn,predicted_nn=predicted_nn,predicted_nn_in_sample=predicted_nn_in_sample))
   
 }
+
+
 
 
 
