@@ -40,7 +40,7 @@ Inputs are the information that is fed into the model. In the case of econometri
 
 (<https://images.deepai.org/glossary-terms/perceptron-6168423.jpg>)
 
-The perceptron can also be represented as a function. Analogous to the representation above, the inputs $x_{i}$ are multiplied by the weights $w_{i}$ in a linear combination. Then an error term is added so that the whole can be packed into the non-linear activation function $g(S)$ . $\hat{y}$ is the binary output of this perceptron. With the aid of an activation function, a binary output is obtained. The Heaviside step function shown in figure \ref{#fig:Perceptron} is usually only used in single layer perceptrons, which recognize linear separable patterns. For the multi layer neural networks presented later, step functions are not an option, because in the course of the backprogation algorithm the gradient descent has to be minimized. This requires derivatives of the activation function, which in the case of this Heaviside step function equals 0. Because the foundation for the optimization process is missing, functions like the sigmoid function or the hyperbolic tangent function are used. More about this topic is discussed in chapter \ref{#backprogation_algorithm}.
+The perceptron can also be represented as a function. Analogous to the representation above, the inputs $x_{i}$ are multiplied by the weights $w_{i}$ in a linear combination. Then an error term is added so that the whole can be packed into the non-linear activation function $g(S)$ . $\hat{y}$ is the binary output of this perceptron. With the aid of an activation function, a binary output is obtained. The Heaviside step function shown in figure \ref{#fig:Perceptron} is usually only used in single layer perceptrons, which recognize linear separable patterns. For the multi layer neural networks presented later, step functions are not an option, because in the course of the backprogation algorithm the gradient descent has to be minimized. This requires derivatives of the activation function, which in the case of this Heaviside step function equals 0. Because the foundation for the optimization process is missing, functions like the sigmoid function or the hyperbolic tangent function are used. More about this topic is discussed in chapter \ref{#backprogation_algorithm}. [3.1.2.](#backprogation_algorithm)
 
 ```{=tex}
 \begin{align} \label{eq:perceptron}
@@ -115,8 +115,6 @@ chartSeries(BTC_USD,type="line", theme=chartTheme("white"))
 
 #### 3.7.1. Figure Reference
 
- 
-
 As you can see in figure \ref{fig:fig1} -\> GOOGLE
 
 ```{r fig1, echo=FALSE, fig.cap="Visualization of the adjusted prices of the Alphabet Inc Class A Stock."}
@@ -130,8 +128,6 @@ plot(g.adj, main="Adjusted Prices ~ Google")
 
 #### 3.7.2. Equation Reference
 
- 
-
 GARCH-formula can be seen in \ref{eq:garch}
 
 ```{=tex}
@@ -144,8 +140,6 @@ GARCH-formula can be seen in \ref{eq:garch}
 \newpage
 
 #### 3.7.3. Table Reference
-
- 
 
 In table \ref{tab:coeftable} you can see the flexerino of the coefficients.
 
@@ -177,4 +171,4 @@ Or reference to the Bitcoin-section [2.3.](#bitcoin)
 
 Add bibliography reference in the `.bib`-file in the add folder.
 
-Here I make a reference to the original bitcoinpaper [@bitcoin] `[@bitcoin]` or to the specific page on the NN financial trading paper [@nnfin, pp. 6-8] -\> `[@nnfin, pp. 6-8]`
+Here I make a reference to the original bitcoinpaper [@bitcoin] or to the specific page on the NN financial trading paper [@nnfin, pp. 6-8].
