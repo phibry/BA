@@ -1,16 +1,13 @@
 ---
+output: 
+  pdf_document:
+    toc: no
 bibliography: add/doc.bib
+linkcolor: red
 csl: add/ieee.csl
 header-includes:
 - \usepackage{pdfpages}
 - \usepackage{amsmath}
-linkcolor: red
-output:
-  html_document:
-    df_print: paged
-    toc: no
-  pdf_document:
-    toc: no
 ---
 
 ```{r knitr.global_options, include=F}
@@ -29,15 +26,14 @@ source("add/libraries.R")
 \includepdf{add/titlepage.pdf}
 \includepdf{add/declaration.pdf}
 ```
-
+```{=tex}
 \setcounter{tocdepth}{4}
 \tableofcontents
-
+```
 \newpage
 
 ```{r child = '01_abstract.Rmd'}
 ```
-
 
 \newpage
 
