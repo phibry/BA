@@ -115,11 +115,9 @@ chartSeries(BTC_USD,type="line", theme=chartTheme("white"))
 
 #### 3.7.1. Figure Reference
 
-
 \newpage
 
 #### 3.7.2. Equation Reference
-
 
 GARCH-formula can be seen in \ref{eq:garch}
 
@@ -133,7 +131,6 @@ GARCH-formula can be seen in \ref{eq:garch}
 \newpage
 
 #### 3.7.3. Table Reference
-
 
 \newpage
 
