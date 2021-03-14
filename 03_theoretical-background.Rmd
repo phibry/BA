@@ -4,25 +4,26 @@ geometry: margin = 1in
 # output:
 #   html_document:
 #     df_print: paged
+bibliography: add/doc.bib
 ---
 
-## 3. Theory
+## 3. Theory {#theory}
 
 The following chapter is intended to provide the theoretical foundations necessary for our work. It is divided into a part that provides an overview of artificial neural networks. Followed by section [2.3.](#bitcoin) that shows the background and the ecosystem of Bitcoin. This knowledge should be kept in mind, which should help in understanding the price formation of Bitcoin.
 
-### 3.1. Neural network
+### 3.1. Neural network {#neural_network}
 
 In the context of this work, artificial neural networks are used to answer supervised learning questions that focus on classification of data. This means that a neural network finds a correlation between the data and their labels and optimizes its parameters in order to minimize the error for the next try. This process is called supervised training and is performed with a test data sample. An application example of classification is that a neural network is used for face recognition after it has learned the classification of different faces in the process of supervised training. Predictive analysis works similarly to the classification of labeled data. It estimates future values based on past events and can be trained with historical data. On the other hand, unsupervised learning (clustering) is applied to detect patterns from unlabeled data. Based on these patterns, for example, anomalies can be detected that are relevant in the fight against fraud (fraud detection). Unsupervised learning is not discussed further in this paper.
 
-Section [3.1.1.](#Perceptron) will demonstrate the functioning of a neural network using a simple perceptron.
+Section [3.1.1.](#perceptron) will demonstrate the functioning of a neural network using a simple perceptron.
 
 ### 3.1.1. Perceptron {#perceptron}
 
-The construction of an artificial neural network is demonstrated using a perceptron. It is a simple algorithm for supervised learning of binary classification problems. This algorithm classifies patterns by performing a linear separation. Although this discovery was anticipated with great expectations in 1958, it became increasingly apparent that these binary classifiers are only applicable to linearly separable data inputs. This was only later addressed by the discovery of multiple layer perceptrons (MLP).
+The construction of an artificial neural network is demonstrated using a perceptron. It is a simple algorithm for supervised learning of binary classification problems. This algorithm classifies patterns by performing a linear separation. Although this discovery was anticipated with great expectations in 1958, it became increasingly apparent that these binary classifiers are only applicable to linearly separable data inputs. This was only later addressed by the discovery of multiple layer perceptrons (MLP). [@perceptron_paper]
 
 (Rosenblatt, 1958)
 
-Basically, a perceptron is a single-layer neural network and consists of the following five components and can also be observed in \ref{fig:Perceptron}.
+Basically, a perceptron is a single-layer neural network and consists of the following five components and can also be observed in figure \@ref(fig:perceptron_schema).
 
 1.  Inputs
 
@@ -36,12 +37,11 @@ Basically, a perceptron is a single-layer neural network and consists of the fol
 
 Inputs are the information that is fed into the model. In the case of econometric time series, it is mostly the current and historical log returns (lags). These are multiplied by the weights and added together with the bias term to form the weighted sum. This weighted sum is finally passed on to the non-linear activation function, which determines the output of the perceptron.
 
-
-```{r Perceptron, out.width='80%', fig.cap='Schematic diagram of a perceptron.', echo=FALSE}
+```{r perceptron_schema, out.width='80%', fig.cap='Schematic diagram of a perceptron.', echo=FALSE}
 knitr::include_graphics("images/Perceptron.jpg")
 ```
 
-The perceptron can also be represented as a function. Analogous to the representation above, the inputs $x_{i}$ are multiplied by the weights $w_{i}$ in a linear combination. Then an error term is added so that the whole can be packed into the non-linear activation function $g(S)$ . $\hat{y}$ is the binary output of this perceptron. With the aid of an activation function, a binary output is obtained. The Heaviside step function shown in figure \ref{fig:Perceptron} is usually only used in single layer perceptrons, which recognize linear separable patterns. For the multi layer neural networks presented later, step functions are not an option, because in the course of the backprogation algorithm the gradient descent has to be minimized. This requires derivatives of the activation function, which in the case of this Heaviside step function equals 0. Because the foundation for the optimization process is missing, functions like the sigmoid function or the hyperbolic tangent function are used. More about this topic is discussed in chapter [3.1.2.](#backprogation_algorithm).
+The perceptron can also be represented as a function. Analogous to the representation above, the inputs $x_{i}$ are multiplied by the weights $w_{i}$ in a linear combination. Then an error term is added so that the whole can be packed into the non-linear activation function $g(S)$ . $\hat{y}$ is the binary output of this perceptron. With the aid of an activation function, a binary output is obtained. The Heaviside step function shown in figure \ref{fig:perceptron_schema} is usually only used in single layer perceptrons, which recognize linear separable patterns. For the multi layer neural networks presented later, step functions are not an option, because in the course of the backpropagation algorithm the gradient descent has to be minimized. This requires derivatives of the activation function, which in the case of this Heaviside step function equals 0. Because the foundation for the optimization process is missing, functions like the sigmoid function or the hyperbolic tangent function are used. More about this topic is discussed in chapter [3.1.2.](#backprogation_algorithm). [@nn_learning_theoretical_foundations]
 
 ```{=tex}
 \begin{align} \label{eq:perceptron}
@@ -50,13 +50,39 @@ The perceptron can also be represented as a function. Analogous to the represent
 ```
 (Anthony and Bartlett, 1999)
 
-As just mentioned, the aim is to feed the perceptron with the training set and change the weights $w_{i}$ with each cycle so that the prediction becomes accurate. The output value is compared to the desired value. Finally, the sign of the difference $y-\hat{y}$ determines whether the inputs of that iteration are added to or subtracted from the weights. Ideally, the weights will gradually converge and provide us with an usable model.
+As just mentioned, the aim is to feed the perceptron with the training set and change the weights $w_{i}$ with each cycle so that the prediction becomes accurate. The output value is compared to the desired value. Finally, the sign of the difference $y-\hat{y}$ determines whether the inputs of that iteration are added to or subtracted from the weights. Ideally, the weights will gradually converge and provide us with an usable model. [@nn_learning_theoretical_foundations]
 
-### 3.1.2. Backprogation algorithm {#backprogation_algorithm}
+### 3.1.2. Backpropagation algorithm {#backprogation_algorithm}
 
--   Backprogatation algo
+Finding the optimal weights of the neural network is achieved by finding the minimum of an error function. One of the most common methods for this is the backpropagation algorithm. This algorithm searches for the minimum of the error function by making use of a method called Gradient Descent. The gradient method is used in numerics to solve general optimization problems. In doing so, we progress (using the example of a minimization problem) from a starting point along a descent direction until no further numerical improvement is achieved. Since this method requires the computation of the gradient of the error function after each step, a continuity and differentiability of this function must necessarily be given. The step function mentioned above in section 3.1.1 is therefore out of the question, but a non-linear function such the logistic and the hyperbolic tangent functions (sigmoid).
 
--   Gradient descent
+```{=tex}
+\begin{align} \label{eq:sigmoid_logistic}
+y(v_{i})=(1+e^{-v_{i}})^{-1}
+\end{align}
+```
+```{=tex}
+\begin{align} \label{eq:sigmoid_tanh}
+y(v\_{i})=tanh(v\_{i})
+\end{align}
+```
+While the target range of the 'ordinary' sigmoid function is between 0 and 1, the $y$ of the Tanh function ranges between -1 and 1.
+
+```{r sigmoid, echo=FALSE, fig.cap="Two common sigmoid activation functions: logistic functions and hyperbolic tangent."}
+# Define x
+x <- seq(-5, 5, 0.02)
+
+# Calculate target variables for both functions
+l <- (1 + exp(-x))^(-1)
+t <- tanh(x)
+
+# Plotting sigmoid functions
+plot(x = x, y = l, type = "l", main = "Activation functions", xlim = c(-5,5), ylim = c(-1, 1), ylab = "y")
+lines(x = x, y = t, col = 2)
+legend("bottomright", legend = c("Logistic", "Tanh"), col = c(1,2), pch = "-", cex = 1)
+```
+
+[@backpropagation]
 
 ### 3.1.3. Types of artificial neural networks {#types_of_nn}
 
@@ -71,6 +97,8 @@ As just mentioned, the aim is to feed the perceptron with the training set and c
 -   Early stopping required to avoid overfitting to in-sample data
 
 -   Gradient vanishing problem
+
+Sigmoid suffers from the problem of Vanishing Gradient. The gradients of the NN's output with respect to the parameters become so small, that the NN takes smaller steps towards the minima of the loss function and eventually stop learning.
 
 -   Dying Relu Problem (?)
 
@@ -158,7 +186,7 @@ colnames(paras) <- c("Estimate", "Std. Error", "p-Value")
 kable(paras, "latex", escape=F, booktabs = T, linesep="", caption="Coefficients GARCH(1,1).", digits=20)
 ```
 
-\newpage
+> > > > > > > \newpage
 
 #### 3.7.4. Section Reference {#sec-ref}
 

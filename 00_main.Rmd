@@ -1,7 +1,10 @@
 ---
-output: 
+output:
   pdf_document:
     toc: no
+  html_document:
+    toc: no
+    df_print: paged
 bibliography: add/doc.bib
 linkcolor: red
 csl: add/ieee.csl
