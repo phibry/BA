@@ -22,7 +22,7 @@ The construction of an artificial neural network is demonstrated using a percept
 
 (Rosenblatt, 1958)
 
-Basically, a perceptron is a single-layer neural network and consists of the following five components and can also be observed in \ref{#fig:Perceptron}.
+Basically, a perceptron is a single-layer neural network and consists of the following five components and can also be observed in \ref{fig:Perceptron}.
 
 1.  Inputs
 
@@ -36,11 +36,12 @@ Basically, a perceptron is a single-layer neural network and consists of the fol
 
 Inputs are the information that is fed into the model. In the case of econometric time series, it is mostly the current and historical log returns (lags). These are multiplied by the weights and added together with the bias term to form the weighted sum. This weighted sum is finally passed on to the non-linear activation function, which determines the output of the perceptron.
 
-![Schematic diagram of a perceptron.](images/Perceptron.jpg){#fig:Perceptron width="491"}
 
-(<https://images.deepai.org/glossary-terms/perceptron-6168423.jpg>)
+```{r Perceptron, out.width='80%', fig.cap='Schematic diagram of a perceptron.', echo=FALSE}
+knitr::include_graphics("images/Perceptron.jpg")
+```
 
-The perceptron can also be represented as a function. Analogous to the representation above, the inputs $x_{i}$ are multiplied by the weights $w_{i}$ in a linear combination. Then an error term is added so that the whole can be packed into the non-linear activation function $g(S)$ . $\hat{y}$ is the binary output of this perceptron. With the aid of an activation function, a binary output is obtained. The Heaviside step function shown in figure \ref{#fig:Perceptron} is usually only used in single layer perceptrons, which recognize linear separable patterns. For the multi layer neural networks presented later, step functions are not an option, because in the course of the backprogation algorithm the gradient descent has to be minimized. This requires derivatives of the activation function, which in the case of this Heaviside step function equals 0. Because the foundation for the optimization process is missing, functions like the sigmoid function or the hyperbolic tangent function are used. More about this topic is discussed in chapter \ref{#backprogation_algorithm}.
+The perceptron can also be represented as a function. Analogous to the representation above, the inputs $x_{i}$ are multiplied by the weights $w_{i}$ in a linear combination. Then an error term is added so that the whole can be packed into the non-linear activation function $g(S)$ . $\hat{y}$ is the binary output of this perceptron. With the aid of an activation function, a binary output is obtained. The Heaviside step function shown in figure \ref{fig:Perceptron} is usually only used in single layer perceptrons, which recognize linear separable patterns. For the multi layer neural networks presented later, step functions are not an option, because in the course of the backprogation algorithm the gradient descent has to be minimized. This requires derivatives of the activation function, which in the case of this Heaviside step function equals 0. Because the foundation for the optimization process is missing, functions like the sigmoid function or the hyperbolic tangent function are used. More about this topic is discussed in chapter [3.1.2.](#backprogation_algorithm).
 
 ```{=tex}
 \begin{align} \label{eq:perceptron}
@@ -115,11 +116,18 @@ chartSeries(BTC_USD,type="line", theme=chartTheme("white"))
 
 #### 3.7.1. Figure Reference
 
+As you can see in figure \ref{fig:fig1} -\> GOOGLE
+
+```{r fig1, echo=FALSE, fig.cap="Visualization of the adjusted prices of the Alphabet Inc Class A Stock."}
+GOOGL <- getSymbols("GOOGL", auto.assign=F)
+g.adj <- GOOGL[,6]
+par(mfrow=c(1,1))
+plot(g.adj, main="Adjusted Prices ~ Google")
+```
 
 \newpage
 
 #### 3.7.2. Equation Reference
-
 
 GARCH-formula can be seen in \ref{eq:garch}
 
@@ -134,6 +142,21 @@ GARCH-formula can be seen in \ref{eq:garch}
 
 #### 3.7.3. Table Reference
 
+In table \ref{tab:coeftable} you can see the flexerino of the coefficients.
+
+```{r coeftable, echo=FALSE, message=FALSE}
+g.adj.lr <- na.exclude(diff(log(g.adj)))
+g.subset.lr <- head(g.adj.lr, length(g.adj.lr)-100)
+y.garch_11 <- garchFit(~garch(1,1), data=g.subset.lr, delta=2, include.delta=F, 
+                       include.mean=F, trace=F)
+r1 <- y.garch_11@fit$matcoef[,1]
+r2 <- y.garch_11@fit$matcoef[,2]
+r3 <- y.garch_11@fit$matcoef[,4]
+paras <- data.frame(r1, r2, r3)
+rownames(paras) <- c("$\\omega$", "$\\alpha_{1}$", "$\\beta_{1}$")
+colnames(paras) <- c("Estimate", "Std. Error", "p-Value")
+kable(paras, "latex", escape=F, booktabs = T, linesep="", caption="Coefficients GARCH(1,1).", digits=20)
+```
 
 \newpage
 
@@ -149,4 +172,4 @@ Or reference to the Bitcoin-section [2.3.](#bitcoin)
 
 Add bibliography reference in the `.bib`-file in the add folder.
 
-Here I make a reference to the original bitcoinpaper [@bitcoin] `[@bitcoin]` or to the specific page on the NN financial trading paper [@nnfin, pp. 6-8] -\> `[@nnfin, pp. 6-8]`
+Here I make a reference to the original bitcoinpaper [@bitcoin] or to the specific page on the NN financial trading paper [@nnfin, pp. 6-8].
