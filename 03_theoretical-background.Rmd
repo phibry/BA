@@ -1,8 +1,9 @@
 ---
+output: pdf_document
 geometry: margin = 1in
-output:
-  html_document:
-    df_print: paged
+# output:
+#   html_document:
+#     df_print: paged
 ---
 
 ## 3. Theory
