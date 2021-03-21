@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2021.3.14)  21 MAR 2021 11:10
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2021.3.21)  21 MAR 2021 17:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -479,7 +479,7 @@ Package: array 2020/10/01 v2.5c Tabular extension package (FMi)
 )
 (c:/Users/kenge/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/multirow/multirow.
 sty
-Package: multirow 2021/01/29 v2.7 Span multiple rows of a table
+Package: multirow 2021/03/15 v2.8 Span multiple rows of a table
 \multirow@colwidth=\skip62
 \multirow@cntb=\count293
 \multirow@dima=\skip63
@@ -592,7 +592,7 @@ Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
 
 (c:/Users/kenge/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3backend/l3backen
 d-pdftex.def
-File: l3backend-pdftex.def 2021-03-02 L3 backend support: PDF output (pdfTeX)
+File: l3backend-pdftex.def 2021-03-18 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count305
 \l__pdf_internal_box=\box69
 ) (./00_main.aux)
@@ -851,13 +851,13 @@ name{page.}) has been already used, duplicate ignored
                    \relax 
 l.162 \newpage
                [6] [1] [2]
-<images/Perceptron.jpg, id=312, 1440.38126pt x 761.84625pt>
+<images/Perceptron.jpg, id=313, 1440.38126pt x 761.84625pt>
 File: images/Perceptron.jpg Graphic file (type jpg)
 <use images/Perceptron.jpg>
 Package pdftex.def Info: images/Perceptron.jpg  used on input line 332.
 (pdftex.def)             Requested size: 375.78702pt x 198.76122pt.
 [3]
-<00_main_files/figure-latex/sigmoid-1.pdf, id=337, 469.755pt x 325.215pt>
+<00_main_files/figure-latex/sigmoid-1.pdf, id=338, 469.755pt x 325.215pt>
 File: 00_main_files/figure-latex/sigmoid-1.pdf Graphic file (type pdf)
 <use 00_main_files/figure-latex/sigmoid-1.pdf>
 Package pdftex.def Info: 00_main_files/figure-latex/sigmoid-1.pdf  used on inpu
@@ -868,148 +868,159 @@ has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
 l.406 \end{figure}
-                   <./images/Perceptron.jpg>]
-LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 4
-26.
-(c:/Users/kenge/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
-File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
-) [5pdfTeX warning (ext4): destination with the same identifier (name{figure.2}
-) has been already used, duplicate ignored
+                   <./images/Perceptron.jpg>] [5pdfTeX warning (ext4): destinat
+ion with the same identifier (name{figure.2}) has been already used, duplicate 
+ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.452 \end{itemize}
-                    <./00_main_files/figure-latex/sigmoid-1.pdf>] [6]
+l.449 \end{align}
+                  <./00_main_files/figure-latex/sigmoid-1.pdf>]
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 4
+59.
+(c:/Users/kenge/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
+File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
+) [6]
 
-LaTeX Warning: Reference `price_btc' on page 7 undefined on input line 489.
+LaTeX Warning: Reference `price_btc' on page 7 undefined on input line 522.
 
 
-LaTeX Warning: Reference `logprice_btc' on page 7 undefined on input line 490.
+LaTeX Warning: Reference `logprice_btc' on page 7 undefined on input line 523.
 
 [7]
-<images/logbtc_usd.jpeg, id=377, 599.23875pt x 339.51843pt>
+<images/logbtc_usd.jpeg, id=384, 599.23875pt x 339.51843pt>
 File: images/logbtc_usd.jpeg Graphic file (type jpg)
 <use images/logbtc_usd.jpeg>
-Package pdftex.def Info: images/logbtc_usd.jpeg  used on input line 520.
+Package pdftex.def Info: images/logbtc_usd.jpeg  used on input line 553.
 (pdftex.def)             Requested size: 375.81255pt x 212.92896pt.
-<images/btc_usd.jpeg, id=378, 599.23875pt x 339.51843pt>
+<images/btc_usd.jpeg, id=385, 599.23875pt x 339.51843pt>
 File: images/btc_usd.jpeg Graphic file (type jpg)
 <use images/btc_usd.jpeg>
-Package pdftex.def Info: images/btc_usd.jpeg  used on input line 529.
+Package pdftex.def Info: images/btc_usd.jpeg  used on input line 562.
 (pdftex.def)             Requested size: 375.81255pt x 212.92896pt.
 [8pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.559 \newpage
+l.592 \newpage
               pdfTeX warning (ext4): destination with the same identifier (name
 {figure.4}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.559 \newpage
+l.592 \newpage
                <./images/logbtc_usd.jpeg> <./images/btc_usd.jpeg>] [9] [10] [11
 ]
-<00_main_files/figure-latex/unnamed-chunk-10-1.pdf, id=406, 469.755pt x 325.215
+<00_main_files/figure-latex/unnamed-chunk-10-1.pdf, id=413, 469.755pt x 325.215
 pt>
 File: 00_main_files/figure-latex/unnamed-chunk-10-1.pdf Graphic file (type pdf)
 
 <use 00_main_files/figure-latex/unnamed-chunk-10-1.pdf>
 Package pdftex.def Info: 00_main_files/figure-latex/unnamed-chunk-10-1.pdf  use
-d on input line 636.
+d on input line 669.
 (pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
-<00_main_files/figure-latex/unnamed-chunk-11-1.pdf, id=407, 469.755pt x 325.215
+<00_main_files/figure-latex/unnamed-chunk-11-1.pdf, id=414, 469.755pt x 325.215
 pt>
 File: 00_main_files/figure-latex/unnamed-chunk-11-1.pdf Graphic file (type pdf)
 
 <use 00_main_files/figure-latex/unnamed-chunk-11-1.pdf>
 Package pdftex.def Info: 00_main_files/figure-latex/unnamed-chunk-11-1.pdf  use
-d on input line 644.
+d on input line 677.
 (pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
 [12 <./00_main_files/figure-latex/unnamed-chunk-10-1.pdf>]
-<00_main_files/figure-latex/unnamed-chunk-12-1.pdf, id=419, 469.755pt x 325.215
+<00_main_files/figure-latex/unnamed-chunk-12-1.pdf, id=426, 469.755pt x 325.215
 pt>
 File: 00_main_files/figure-latex/unnamed-chunk-12-1.pdf Graphic file (type pdf)
 
 <use 00_main_files/figure-latex/unnamed-chunk-12-1.pdf>
 Package pdftex.def Info: 00_main_files/figure-latex/unnamed-chunk-12-1.pdf  use
-d on input line 648.
+d on input line 681.
 (pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
-<00_main_files/figure-latex/unnamed-chunk-13-1.pdf, id=420, 469.755pt x 325.215
+<00_main_files/figure-latex/unnamed-chunk-13-1.pdf, id=427, 469.755pt x 325.215
 pt>
 File: 00_main_files/figure-latex/unnamed-chunk-13-1.pdf Graphic file (type pdf)
 
 <use 00_main_files/figure-latex/unnamed-chunk-13-1.pdf>
 Package pdftex.def Info: 00_main_files/figure-latex/unnamed-chunk-13-1.pdf  use
-d on input line 650.
+d on input line 683.
 (pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
 [13 <./00_main_files/figure-latex/unnamed-chunk-11-1.pdf> <./00_main_files/figu
 re-latex/unnamed-chunk-12-1.pdf>] [14 <./00_main_files/figure-latex/unnamed-chu
 nk-13-1.pdf>] [15] [16] [17] [18]
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 852--857
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 885--890
 [][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 852--857
+Underfull \hbox (badness 10000) in paragraph at lines 885--890
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 858--862
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 891--895
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 858--862
+Underfull \hbox (badness 10000) in paragraph at lines 891--895
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 863--867
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 896--900
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 863--867
+Underfull \hbox (badness 10000) in paragraph at lines 896--900
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 868--873
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 901--906
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 868--873
+Underfull \hbox (badness 10000) in paragraph at lines 901--906
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 874--878
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 907--913
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 874--878
+Underfull \hbox (badness 10000) in paragraph at lines 907--913
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 879--883
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 914--918
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 879--883
+Underfull \hbox (badness 10000) in paragraph at lines 914--918
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 884--889
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 919--923
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 884--889
+Underfull \hbox (badness 10000) in paragraph at lines 919--923
+
+ []
+
+
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 924--929
+[][][] []
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 924--929
 
  []
 
@@ -1021,10 +1032,10 @@ Package rerunfilecheck Info: File `00_main.out' has not changed.
 (rerunfilecheck)             Checksum: 66766B103304763089A607FC84B476A4;6265.
  ) 
 Here is how much of TeX's memory you used:
- 12589 strings out of 480970
- 187160 string characters out of 5906243
- 519449 words of memory out of 5000000
- 29409 multiletter control sequences out of 15000+600000
+ 12596 strings out of 480962
+ 187273 string characters out of 5905990
+ 519533 words of memory out of 5000000
+ 29420 multiletter control sequences out of 15000+600000
  444690 words of font info for 55 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  71i,17n,77p,390b,445s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1047,10 +1058,10 @@ aming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/kenge/AppData
 pData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/ken
 ge/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb><c:/Users
 /kenge/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb>
-Output written on 00_main.pdf (26 pages, 772877 bytes).
+Output written on 00_main.pdf (26 pages, 775570 bytes).
 PDF statistics:
- 576 PDF objects out of 1000 (max. 8388607)
- 491 compressed objects within 5 object streams
- 121 named destinations out of 1000 (max. 500000)
+ 587 PDF objects out of 1000 (max. 8388607)
+ 501 compressed objects within 6 object streams
+ 125 named destinations out of 1000 (max. 500000)
  385 words of extra memory for PDF output out of 10000 (max. 10000000)
 
