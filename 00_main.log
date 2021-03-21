@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2021.3.14)  14 MAR 2021 14:07
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2021.3.14)  21 MAR 2021 11:10
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -595,8 +595,7 @@ d-pdftex.def
 File: l3backend-pdftex.def 2021-03-02 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count305
 \l__pdf_internal_box=\box69
-)
-No file 00_main.aux.
+) (./00_main.aux)
 \openout1 = `00_main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 108.
@@ -648,6 +647,7 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 108.
 LaTeX Info: Redefining \pageref on input line 108.
 LaTeX Info: Redefining \nameref on input line 108.
+(./00_main.out) (./00_main.out)
 \@outlinefile=\write3
 \openout3 = `00_main.out'.
 
@@ -693,7 +693,7 @@ File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 
 pdfTeX warning: pdflatex.exe (file ./add/titlepage.pdf): PDF inclusion: found P
 DF version <1.7>, but at most version <1.5> allowed
-<add/titlepage.pdf, id=4, 597.23125pt x 845.1575pt>
+<add/titlepage.pdf, id=156, 597.23125pt x 845.1575pt>
 File: add/titlepage.pdf Graphic file (type pdf)
 <use add/titlepage.pdf>
 Package pdftex.def Info: add/titlepage.pdf  used on input line 117.
@@ -714,7 +714,7 @@ DF version <1.7>, but at most version <1.5> allowed
 
 pdfTeX warning: pdflatex.exe (file ./add/titlepage.pdf): PDF inclusion: found P
 DF version <1.7>, but at most version <1.5> allowed
-<add/titlepage.pdf, id=7, page=1, 597.23125pt x 845.1575pt>
+<add/titlepage.pdf, id=159, page=1, 597.23125pt x 845.1575pt>
 File: add/titlepage.pdf Graphic file (type pdf)
 <use add/titlepage.pdf, page 1>
 Package pdftex.def Info: add/titlepage.pdf , page1 used on input line 117.
@@ -749,7 +749,7 @@ Package pdftex.def Info: add/titlepage.pdf , page1 used on input line 117.
 
 pdfTeX warning: pdflatex.exe (file ./add/declaration.pdf): PDF inclusion: found
  PDF version <1.7>, but at most version <1.5> allowed
-<add/declaration.pdf, id=54, 597.4822pt x 845.1575pt>
+<add/declaration.pdf, id=207, 597.4822pt x 845.1575pt>
 File: add/declaration.pdf Graphic file (type pdf)
 <use add/declaration.pdf>
 Package pdftex.def Info: add/declaration.pdf  used on input line 118.
@@ -770,7 +770,7 @@ pdfTeX warning: pdflatex.exe (file ./add/declaration.pdf): PDF inclusion: found
 
 pdfTeX warning: pdflatex.exe (file ./add/declaration.pdf): PDF inclusion: found
  PDF version <1.7>, but at most version <1.5> allowed
-<add/declaration.pdf, id=57, page=1, 597.4822pt x 845.1575pt>
+<add/declaration.pdf, id=210, page=1, 597.4822pt x 845.1575pt>
 File: add/declaration.pdf Graphic file (type pdf)
 <use add/declaration.pdf, page 1>
 Package pdftex.def Info: add/declaration.pdf , page1 used on input line 118.
@@ -797,7 +797,41 @@ File: add/declaration.pdf Graphic file (type pdf)
 <use add/declaration.pdf, page 1>
 Package pdftex.def Info: add/declaration.pdf , page1 used on input line 118.
 (pdftex.def)             Requested size: 562.0983pt x 795.10587pt.
-[3 <./add/declaration.pdf>]
+[3 <./add/declaration.pdf>] (./00_main.toc
+LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 1
+.
+(c:/Users/kenge/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ot1lmr.fd
+File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 1
+.
+(c:/Users/kenge/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omllmm.fd
+File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
+1.
+(c:/Users/kenge/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omslmsy.fd
+File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
+1.
+(c:/Users/kenge/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omxlmex.fd
+File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <10> on input line 1.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <7> on input line 1.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <5> on input line 1.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 1.
+(c:/Users/kenge/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 1.
+(c:/Users/kenge/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+))
 \tf@toc=\write4
 \openout4 = `00_main.toc'.
 
@@ -810,112 +844,213 @@ l.123 \newpage
 name{page.}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
+l.123 \newpage
+               [5]pdfTeX warning (ext4): destination with the same identifier (
+name{page.}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
 l.162 \newpage
-               [5] [1] [2]
-<images/Perceptron.jpg, id=123, 1440.38126pt x 761.84625pt>
+               [6] [1] [2]
+<images/Perceptron.jpg, id=312, 1440.38126pt x 761.84625pt>
 File: images/Perceptron.jpg Graphic file (type jpg)
 <use images/Perceptron.jpg>
-Package pdftex.def Info: images/Perceptron.jpg  used on input line 334.
+Package pdftex.def Info: images/Perceptron.jpg  used on input line 332.
 (pdftex.def)             Requested size: 375.78702pt x 198.76122pt.
-LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 3
-42.
-(c:/Users/kenge/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ot1lmr.fd
-File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)
-LaTeX Font Info:    Trying to load font information for OML+lmm on input line 3
-42.
-(c:/Users/kenge/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omllmm.fd
-File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)
-LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-342.
-(c:/Users/kenge/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omslmsy.fd
-File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)
-LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-342.
-(c:/Users/kenge/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omxlmex.fd
-File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 342.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 342.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 342.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 342
-.
-(c:/Users/kenge/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
-File: umsa.fd 2013/01/14 v3.01 AMS symbols A
-)
-LaTeX Font Info:    Trying to load font information for U+msb on input line 342
-.
-(c:/Users/kenge/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
-File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-
-LaTeX Warning: Reference `fig:Perceptron' on page 3 undefined on input line 347
-.
-
 [3]
-LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 3
-78.
+<00_main_files/figure-latex/sigmoid-1.pdf, id=337, 469.755pt x 325.215pt>
+File: 00_main_files/figure-latex/sigmoid-1.pdf Graphic file (type pdf)
+<use 00_main_files/figure-latex/sigmoid-1.pdf>
+Package pdftex.def Info: 00_main_files/figure-latex/sigmoid-1.pdf  used on inpu
+t line 401.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+[4pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  
+l.406 \end{figure}
+                   <./images/Perceptron.jpg>]
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 4
+26.
 (c:/Users/kenge/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
-) [4pdfTeX warning (ext4): destination with the same identifier (name{figure.1}
+) [5pdfTeX warning (ext4): destination with the same identifier (name{figure.2}
 ) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.405   D
-         ying Relu Problem (?) <./images/Perceptron.jpg>]
-<00_main_files/figure-latex/unnamed-chunk-10-1.pdf, id=163, 469.755pt x 325.215
+l.452 \end{itemize}
+                    <./00_main_files/figure-latex/sigmoid-1.pdf>] [6]
+
+LaTeX Warning: Reference `price_btc' on page 7 undefined on input line 489.
+
+
+LaTeX Warning: Reference `logprice_btc' on page 7 undefined on input line 490.
+
+[7]
+<images/logbtc_usd.jpeg, id=377, 599.23875pt x 339.51843pt>
+File: images/logbtc_usd.jpeg Graphic file (type jpg)
+<use images/logbtc_usd.jpeg>
+Package pdftex.def Info: images/logbtc_usd.jpeg  used on input line 520.
+(pdftex.def)             Requested size: 375.81255pt x 212.92896pt.
+<images/btc_usd.jpeg, id=378, 599.23875pt x 339.51843pt>
+File: images/btc_usd.jpeg Graphic file (type jpg)
+<use images/btc_usd.jpeg>
+Package pdftex.def Info: images/btc_usd.jpeg  used on input line 529.
+(pdftex.def)             Requested size: 375.81255pt x 212.92896pt.
+[8pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  
+l.559 \newpage
+              pdfTeX warning (ext4): destination with the same identifier (name
+{figure.4}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  
+l.559 \newpage
+               <./images/logbtc_usd.jpeg> <./images/btc_usd.jpeg>] [9] [10] [11
+]
+<00_main_files/figure-latex/unnamed-chunk-10-1.pdf, id=406, 469.755pt x 325.215
 pt>
 File: 00_main_files/figure-latex/unnamed-chunk-10-1.pdf Graphic file (type pdf)
 
 <use 00_main_files/figure-latex/unnamed-chunk-10-1.pdf>
 Package pdftex.def Info: 00_main_files/figure-latex/unnamed-chunk-10-1.pdf  use
-d on input line 437.
+d on input line 636.
 (pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
-[5 <./00_main_files/figure-latex/unnamed-chunk-10-1.pdf>] [6]
+<00_main_files/figure-latex/unnamed-chunk-11-1.pdf, id=407, 469.755pt x 325.215
+pt>
+File: 00_main_files/figure-latex/unnamed-chunk-11-1.pdf Graphic file (type pdf)
 
-LaTeX Warning: Reference `fig:fig1' on page 7 undefined on input line 470.
-
-<00_main_files/figure-latex/fig1-1.pdf, id=186, 469.755pt x 325.215pt>
-File: 00_main_files/figure-latex/fig1-1.pdf Graphic file (type pdf)
-<use 00_main_files/figure-latex/fig1-1.pdf>
-Package pdftex.def Info: 00_main_files/figure-latex/fig1-1.pdf  used on input l
-ine 474.
+<use 00_main_files/figure-latex/unnamed-chunk-11-1.pdf>
+Package pdftex.def Info: 00_main_files/figure-latex/unnamed-chunk-11-1.pdf  use
+d on input line 644.
 (pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
-[7pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) 
-has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  
-l.481 \newpage
-               <./00_main_files/figure-latex/fig1-1.pdf>]
+[12 <./00_main_files/figure-latex/unnamed-chunk-10-1.pdf>]
+<00_main_files/figure-latex/unnamed-chunk-12-1.pdf, id=419, 469.755pt x 325.215
+pt>
+File: 00_main_files/figure-latex/unnamed-chunk-12-1.pdf Graphic file (type pdf)
 
-LaTeX Warning: Reference `eq:garch' on page 8 undefined on input line 486.
+<use 00_main_files/figure-latex/unnamed-chunk-12-1.pdf>
+Package pdftex.def Info: 00_main_files/figure-latex/unnamed-chunk-12-1.pdf  use
+d on input line 648.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+<00_main_files/figure-latex/unnamed-chunk-13-1.pdf, id=420, 469.755pt x 325.215
+pt>
+File: 00_main_files/figure-latex/unnamed-chunk-13-1.pdf Graphic file (type pdf)
 
-[8]
+<use 00_main_files/figure-latex/unnamed-chunk-13-1.pdf>
+Package pdftex.def Info: 00_main_files/figure-latex/unnamed-chunk-13-1.pdf  use
+d on input line 650.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+[13 <./00_main_files/figure-latex/unnamed-chunk-11-1.pdf> <./00_main_files/figu
+re-latex/unnamed-chunk-12-1.pdf>] [14 <./00_main_files/figure-latex/unnamed-chu
+nk-13-1.pdf>] [15] [16] [17] [18]
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 852--857
+[][] []
+ []
 
-LaTeX Warning: Reference `tab:coeftable' on page 9 undefined on input line 499.
+
+Underfull \hbox (badness 10000) in paragraph at lines 852--857
+
+ []
 
 
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 858--862
+[][][] []
+ []
 
-! LaTeX Error: Too deeply nested.
 
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.523 \begin{quote}
-                    
+Underfull \hbox (badness 10000) in paragraph at lines 858--862
+
+ []
+
+
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 863--867
+[][][] []
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 863--867
+
+ []
+
+
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 868--873
+[][][] []
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 868--873
+
+ []
+
+
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 874--878
+[][][] []
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 874--878
+
+ []
+
+
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 879--883
+[][][] []
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 879--883
+
+ []
+
+
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 884--889
+[][][] []
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 884--889
+
+ []
+
+[19] [20] (./00_main.aux)
+
+LaTeX Warning: There were undefined references.
+
+Package rerunfilecheck Info: File `00_main.out' has not changed.
+(rerunfilecheck)             Checksum: 66766B103304763089A607FC84B476A4;6265.
+ ) 
 Here is how much of TeX's memory you used:
- 12383 strings out of 480970
- 183498 string characters out of 5906243
- 513416 words of memory out of 5000000
- 29286 multiletter control sequences out of 15000+600000
- 434454 words of font info for 52 fonts, out of 8000000 for 9000
+ 12589 strings out of 480970
+ 187160 string characters out of 5906243
+ 519449 words of memory out of 5000000
+ 29409 multiletter control sequences out of 15000+600000
+ 444690 words of font info for 55 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 71i,17n,77p,241b,445s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 71i,17n,77p,390b,445s stack positions out of 5000i,500n,10000p,200000b,80000s
+{c:/Users/kenge/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.e
+nc}{c:/Users/kenge/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1
+.enc}{c:/Users/kenge/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-m
+athit.enc}{c:/Users/kenge/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm
+/lm-mathsy.enc}{c:/Users/kenge/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvi
+ps/lm/lm-mathex.enc}{c:/Users/kenge/AppData/Roaming/TinyTeX/texmf-dist/fonts/en
+c/dvips/lm/lm-rm.enc}<c:/Users/kenge/AppData/Roaming/TinyTeX/texmf-dist/fonts/t
+ype1/public/lm/lmbx10.pfb><c:/Users/kenge/AppData/Roaming/TinyTeX/texmf-dist/fo
+nts/type1/public/lm/lmbx12.pfb><c:/Users/kenge/AppData/Roaming/TinyTeX/texmf-di
+st/fonts/type1/public/lm/lmex10.pfb><c:/Users/kenge/AppData/Roaming/TinyTeX/tex
+mf-dist/fonts/type1/public/lm/lmmi10.pfb><c:/Users/kenge/AppData/Roaming/TinyTe
+X/texmf-dist/fonts/type1/public/lm/lmmi5.pfb><c:/Users/kenge/AppData/Roaming/Ti
+nyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb><c:/Users/kenge/AppData/Roamin
+g/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/kenge/AppData/Ro
+aming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/kenge/AppData
+/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/Users/kenge/Ap
+pData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/ken
+ge/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb><c:/Users
+/kenge/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb>
+Output written on 00_main.pdf (26 pages, 772877 bytes).
+PDF statistics:
+ 576 PDF objects out of 1000 (max. 8388607)
+ 491 compressed objects within 5 object streams
+ 121 named destinations out of 1000 (max. 500000)
+ 385 words of extra memory for PDF output out of 10000 (max. 10000000)
 
-!  ==> Fatal error occurred, no output PDF file produced!
