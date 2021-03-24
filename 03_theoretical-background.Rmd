@@ -50,7 +50,7 @@ As just mentioned, the aim is to feed the perceptron with the training set and c
 
 ### 3.1.2. Backpropagation algorithm {#backprogation_algorithm}
 
-Finding the optimal weights of the neural network is achieved by finding the minimum of an error function. One of the most common methods for this is the backpropagation algorithm. This algorithm searches for the minimum of the error function by making use of a method called gradient descent. The gradient method is used in numerics to solve general optimization problems. In doing so, we progress (using the example of a minimization problem) from a starting point along a descent direction until no further numerical improvement is achieved. Since this method requires the computation of the gradient of the error function after each step, a continuity and differentiability of this function must necessarily be given. The step function mentioned above in section 3.1.1 is therefore out of the question, but a non-linear function such the logistic and the hyperbolic tangent functions (sigmoid) [@backpropagation].
+Finding the optimal weights of the neural network is achieved by finding the minimum of an error function. One of the most common methods for this is the backpropagation algorithm. This algorithm searches for the minimum of the error function by making use of a method called gradient descent. The gradient method is used in numerics to solve general optimization problems. In doing so, we progress (using the example of a minimization problem) from a starting point along a descent direction until no further numerical improvement is achieved. Since this method requires the computation of the gradient of the error function after each step, a continuity and differentiability of this function must necessarily be given. The step function mentioned above in section 3.1.1 is therefore out of the question, but a non-linear function such the logistic and the hyperbolic tangent functions (sigmoid) [@backpropagation]. While the target range of the 'ordinary' sigmoid function (equation \ref{eq:sigmoid_logistic}) is between 0 and 1, the $y$ of the hyperbolic tangent function (equation \ref{eq:sigmoid_tanh}) ranges between -1 and 1. Both functions are visible in figure \ref{fig:sigmoid}.
 
 ```{=tex}
 \begin{align} \label{eq:sigmoid_logistic}
@@ -62,7 +62,7 @@ y(v_{i})=(1+e^{-v_{i}})^{-1}
 y(v_{i})=\tanh(v_{i})
 \end{align}
 ```
-While the target range of the 'ordinary' sigmoid function is between 0 and 1, the $y$ of the Tanh function ranges between -1 and 1. Both functions are visible in figure \ref{fig:sigmoid}.
+
 
 ```{r sigmoid, echo=FALSE, fig.cap="Two common sigmoid activation functions: logistic functions and hyperbolic tangent."}
 # Define x
@@ -86,8 +86,7 @@ E=MSE=\frac{1}{n}\sum_{i = 1}^{n}(y_{i}-\hat{y}_{i})^2 \\
 =\frac{1}{n}\sum_{i = 1}^{n}(y_{i}-g(w_{0}+x_{i}w_{i}))^2
 \end{align}
 ```
-
-As mentioned, this is searched for by the gradient descent method. The gradient of a function is a vector whose entries are the first partial derivatives of the function. The first entry is the partial derivative after the first variable, the second entry is the partial derivative after the second variable and so on. Each entry indicates the slope of the function in the direction of the variable to which it was derived. In this work, the notation $\nabla{E}$ is used when talking about the gradient for the error function $E$, which is displayed in equation \ref{eq:gradient_descent}  [@backpropagation].
+As mentioned, this is searched for by the gradient descent method. The gradient of a function is a vector whose entries are the first partial derivatives of the function. The first entry is the partial derivative after the first variable, the second entry is the partial derivative after the second variable and so on. Each entry indicates the slope of the function in the direction of the variable to which it was derived. In this work, the notation $\nabla{E}$ is used when talking about the gradient for the error function $E$, which is displayed in equation \ref{eq:gradient_descent} [@backpropagation].
 
 ```{=tex}
 \begin{align} \label{eq:gradient_descent}
@@ -97,8 +96,7 @@ As mentioned, this is searched for by the gradient descent method. The gradient 
 \frac{\partial E}{\partial w_{i}})
 \end{align}
 ```
-
-The weights get adjusted according to the following algorithm \ref{eq:weight_adj} where $\Delta{w_{i}}$ is the change of the weight $w_{i}$ and $\gamma$ represents a freely definable parameter. In literature, this parameter is often called learning constant [@backpropagation_proofs]. 
+The weights get adjusted according to the following algorithm \ref{eq:weight_adj} where $\Delta{w_{i}}$ is the change of the weight $w_{i}$ and $\gamma$ represents a freely definable parameter. In literature, this parameter is often called learning constant [@backpropagation_proofs]. The negative value is used because the gradient naturally points in the direction with the largest increase of the error function. To minimize the MSE, the elements in the gradient $\nabla{E}$ must be multiplied by -1.
 
 ```{=tex}
 \begin{align} \label{eq:weight_adj}
@@ -107,15 +105,17 @@ The weights get adjusted according to the following algorithm \ref{eq:weight_adj
 \end{align}
 ```
 
-Simple example in the making...
+### 3.1.3. Multilayer perceptron {#MLP}
 
-### 3.1.3. Types of artificial neural networks {#types_of_nn}
+Multilayer perceptrons (MLP) are the widely used neural network models and use the backpropagation algorithm. They are an evolution of the original perceptron proposed by Rosenblatt MLP) [@perceptron_paper]. The distinction is that they have at least one hidden layer between input and output layer. As a consequence, an MLP has more neurons whose weights must be optimized. Consequently, this requires more computing power, but more complex classification problems can be handled [@mlp_architecture].
 
--   MLP / DNN (explain nodes and layers)
+```{r mlp_schema, out.width='60%', fig.cap='Schematic diagram of a multilayer perceptron', echo=FALSE}
+knitr::include_graphics("images/MLP.jpeg")
+```
 
--   Recurrent neural networks (RNN)
+### 3.1.3. Recurrent neural networks (RNN) {#RNN}
 
--   Long-short term memory (LSTM)
+### 3.1.3. Long-short term memory (LSTM) {#LSTM}
 
 ### 3.1.4. Challenges
 

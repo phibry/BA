@@ -11,7 +11,12 @@ csl: add/ieee.csl
 header-includes:
 - \usepackage{pdfpages}
 - \usepackage{amsmath}
+- \usepackage{placeins} # to keep figures and text in the order you wrote them
 ---
+```{r, include=FALSE}
+options(tinytex.verbose = TRUE)
+```
+
 
 ```{r knitr.global_options, include=F}
 knitr::opts_chunk$set(out.width = "70%", fig.align = "center", echo=FALSE, warning=FALSE, message=FALSE, tidy.opts=list(width.cutoff=60), tidy=TRUE)
