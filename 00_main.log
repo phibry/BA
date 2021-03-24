@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2021.3.21)  24 MAR 2021 11:51
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2021.3.21)  24 MAR 2021 21:31
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -827,7 +827,7 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.39 ...ubsection}{5. References}{19}{section*.40}
+l.39 ...ubsection}{5. References}{20}{section*.40}
                                                   % [3{c:/Users/kenge/AppData/R
 oaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}])
 \tf@toc=\write4
@@ -867,176 +867,187 @@ l.415
                                                   
 l.450 \end{align}
                   <./00_main_files/figure-latex/sigmoid-1.pdf>]
-<images/MLP.jpeg, id=378, 642.4pt x 376.40625pt>
+<images/MLP.jpeg, id=379, 642.4pt x 376.40625pt>
 File: images/MLP.jpeg Graphic file (type jpg)
 <use images/MLP.jpeg>
-Package pdftex.def Info: images/MLP.jpeg  used on input line 465.
+Package pdftex.def Info: images/MLP.jpeg  used on input line 472.
 (pdftex.def)             Requested size: 281.8629pt x 165.15402pt.
-LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 4
-83.
-(c:/Users/kenge/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
-File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
-) [6pdfTeX warning (ext4): destination with the same identifier (name{figure.3}
-) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  
-l.499 \newpage
-               <./images/MLP.jpeg>]
-
-LaTeX Warning: Reference `price_btc' on page 7 undefined on input line 534.
-
-
-LaTeX Warning: Reference `logprice_btc' on page 7 undefined on input line 535.
-
-[7]
-<images/logbtc_usd.jpeg, id=395, 599.23875pt x 339.51843pt>
-File: images/logbtc_usd.jpeg Graphic file (type jpg)
-<use images/logbtc_usd.jpeg>
-Package pdftex.def Info: images/logbtc_usd.jpeg  used on input line 565.
-(pdftex.def)             Requested size: 375.81255pt x 212.92896pt.
-<images/btc_usd.jpeg, id=396, 599.23875pt x 339.51843pt>
-File: images/btc_usd.jpeg Graphic file (type jpg)
-<use images/btc_usd.jpeg>
-Package pdftex.def Info: images/btc_usd.jpeg  used on input line 574.
-(pdftex.def)             Requested size: 375.81255pt x 212.92896pt.
-[8pdfTeX warning (ext4): destination with the same identifier (name{figure.4}) 
+[6pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.604 \newpage
+l.512 ...ng-short term memory (LSTM)}\label{LSTM}}
+                                                   <./images/MLP.jpeg>]
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 5
+19.
+(c:/Users/kenge/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
+File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
+) [7]
+
+LaTeX Warning: Reference `price_btc' on page 8 undefined on input line 570.
+
+
+LaTeX Warning: Reference `logprice_btc' on page 8 undefined on input line 571.
+
+[8]
+<images/logbtc_usd.jpeg, id=402, 599.23875pt x 339.51843pt>
+File: images/logbtc_usd.jpeg Graphic file (type jpg)
+<use images/logbtc_usd.jpeg>
+Package pdftex.def Info: images/logbtc_usd.jpeg  used on input line 601.
+(pdftex.def)             Requested size: 375.81255pt x 212.92896pt.
+<images/btc_usd.jpeg, id=403, 599.23875pt x 339.51843pt>
+File: images/btc_usd.jpeg Graphic file (type jpg)
+<use images/btc_usd.jpeg>
+Package pdftex.def Info: images/btc_usd.jpeg  used on input line 610.
+(pdftex.def)             Requested size: 375.81255pt x 212.92896pt.
+[9pdfTeX warning (ext4): destination with the same identifier (name{figure.4}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  
+l.640 \newpage
               pdfTeX warning (ext4): destination with the same identifier (name
 {figure.5}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.604 \newpage
-               <./images/logbtc_usd.jpeg> <./images/btc_usd.jpeg>] [9] [10] [11
-]
-<00_main_files/figure-latex/unnamed-chunk-11-1.pdf, id=425, 469.755pt x 325.215
+l.640 \newpage
+               <./images/logbtc_usd.jpeg> <./images/btc_usd.jpeg>] [10] [11] [1
+2]
+<00_main_files/figure-latex/unnamed-chunk-11-1.pdf, id=432, 469.755pt x 325.215
 pt>
 File: 00_main_files/figure-latex/unnamed-chunk-11-1.pdf Graphic file (type pdf)
 
 <use 00_main_files/figure-latex/unnamed-chunk-11-1.pdf>
 Package pdftex.def Info: 00_main_files/figure-latex/unnamed-chunk-11-1.pdf  use
-d on input line 681.
+d on input line 717.
 (pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
-<00_main_files/figure-latex/unnamed-chunk-12-1.pdf, id=426, 469.755pt x 325.215
+<00_main_files/figure-latex/unnamed-chunk-12-1.pdf, id=433, 469.755pt x 325.215
 pt>
 File: 00_main_files/figure-latex/unnamed-chunk-12-1.pdf Graphic file (type pdf)
 
 <use 00_main_files/figure-latex/unnamed-chunk-12-1.pdf>
 Package pdftex.def Info: 00_main_files/figure-latex/unnamed-chunk-12-1.pdf  use
-d on input line 689.
+d on input line 725.
 (pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
-[12 <./00_main_files/figure-latex/unnamed-chunk-11-1.pdf>]
-<00_main_files/figure-latex/unnamed-chunk-13-1.pdf, id=439, 469.755pt x 325.215
+[13 <./00_main_files/figure-latex/unnamed-chunk-11-1.pdf>]
+<00_main_files/figure-latex/unnamed-chunk-13-1.pdf, id=445, 469.755pt x 325.215
 pt>
 File: 00_main_files/figure-latex/unnamed-chunk-13-1.pdf Graphic file (type pdf)
 
 <use 00_main_files/figure-latex/unnamed-chunk-13-1.pdf>
 Package pdftex.def Info: 00_main_files/figure-latex/unnamed-chunk-13-1.pdf  use
-d on input line 693.
+d on input line 729.
 (pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
-<00_main_files/figure-latex/unnamed-chunk-14-1.pdf, id=440, 469.755pt x 325.215
+<00_main_files/figure-latex/unnamed-chunk-14-1.pdf, id=446, 469.755pt x 325.215
 pt>
 File: 00_main_files/figure-latex/unnamed-chunk-14-1.pdf Graphic file (type pdf)
 
 <use 00_main_files/figure-latex/unnamed-chunk-14-1.pdf>
 Package pdftex.def Info: 00_main_files/figure-latex/unnamed-chunk-14-1.pdf  use
-d on input line 695.
+d on input line 731.
 (pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
-[13 <./00_main_files/figure-latex/unnamed-chunk-12-1.pdf> <./00_main_files/figu
-re-latex/unnamed-chunk-13-1.pdf>] [14 <./00_main_files/figure-latex/unnamed-chu
-nk-14-1.pdf>] [15] [16] [17] [18]
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 897--902
+[14 <./00_main_files/figure-latex/unnamed-chunk-12-1.pdf> <./00_main_files/figu
+re-latex/unnamed-chunk-13-1.pdf>] [15 <./00_main_files/figure-latex/unnamed-chu
+nk-14-1.pdf>] [16] [17] [18] [19]
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 933--938
 [][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 897--902
+Underfull \hbox (badness 10000) in paragraph at lines 933--938
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 903--907
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 939--943
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 903--907
+Underfull \hbox (badness 10000) in paragraph at lines 939--943
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 908--912
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 944--948
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 908--912
+Underfull \hbox (badness 10000) in paragraph at lines 944--948
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 913--918
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 949--954
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 913--918
+Underfull \hbox (badness 10000) in paragraph at lines 949--954
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 919--925
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 955--961
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 919--925
+Underfull \hbox (badness 10000) in paragraph at lines 955--961
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 926--932
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 962--968
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 926--932
+Underfull \hbox (badness 10000) in paragraph at lines 962--968
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 933--937
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 969--974
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 933--937
+Underfull \hbox (badness 10000) in paragraph at lines 969--974
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 938--942
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 975--979
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 938--942
+Underfull \hbox (badness 10000) in paragraph at lines 975--979
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 943--948
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 980--984
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 943--948
+Underfull \hbox (badness 10000) in paragraph at lines 980--984
 
  []
 
-[19] [20] (./00_main.aux)
+
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 985--990
+[][][] []
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 985--990
+
+ []
+
+[20] [21] (./00_main.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -1044,8 +1055,8 @@ Package rerunfilecheck Info: File `00_main.out' has not changed.
 (rerunfilecheck)             Checksum: 74E9020C454A18EFC191A2BC08474CDB;6704.
  ) 
 Here is how much of TeX's memory you used:
- 12593 strings out of 480962
- 187258 string characters out of 5905990
+ 12595 strings out of 480962
+ 187284 string characters out of 5905990
  519726 words of memory out of 5000000
  29410 multiletter control sequences out of 15000+600000
  444371 words of font info for 54 fonts, out of 8000000 for 9000
@@ -1069,10 +1080,10 @@ aming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/kenge/AppData
 /Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/Users/kenge/Ap
 pData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/ken
 ge/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb>
-Output written on 00_main.pdf (25 pages, 824798 bytes).
+Output written on 00_main.pdf (26 pages, 827427 bytes).
 PDF statistics:
- 598 PDF objects out of 1000 (max. 8388607)
- 513 compressed objects within 6 object streams
- 131 named destinations out of 1000 (max. 500000)
+ 607 PDF objects out of 1000 (max. 8388607)
+ 521 compressed objects within 6 object streams
+ 133 named destinations out of 1000 (max. 500000)
  406 words of extra memory for PDF output out of 10000 (max. 10000000)
 
