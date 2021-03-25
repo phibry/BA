@@ -3,7 +3,7 @@ output: pdf_document
 geometry: margin = 1in
 ---
 
-## 4. Methodology
+## 3. Methodology
 
 The focus of this thesis is to predict historical prices of bitcoin using the models listed in Chapter XX. The predictive accuracy of these obtained predictions are compared using loss functions (Annualized Sharpe, Diebold Mariano Test, MAE, MSE, RMSE, Mincer-Zarnowitz Regressions). Then, based on the best models with the most accurate predictions, trading strategies are worked out to compare with a buy-and-hold strategy. Finally, we would like to venture into the topic of explainability and attempt to explain why the chosen models lead to these outcomes. The procedure of this quantitative study is described in this chapter.
 
@@ -15,12 +15,12 @@ The focus of this thesis is to predict historical prices of bitcoin using the mo
 -   Explainability for the best models
 -   (Backup: Which models work well in which market phases?)
 
-### 4.1. Data and analysis of Bitcoin 
+### 3.1. Data and analysis of Bitcoin 
 
 The data in this paper is accessed  via yahoofinance provided by coinmarket https://coinmarketcap.com/. We use the daily "closing price" of bitcoin in US Dollars with the ticker BTC-USD. Cryptoassets are tradeble 24 hours a day  256 days a year, there is no real "closing price" for the bitcoin, therefore the "closing-Price" is just the last price of the day evaluated at last timestamp with timeformat UTC.
 
 
-In chapter [3.3.](#bitcoin) the bitcoin price is visualized. For processing and analyzing the data in order to fullfill the weak stationarity assumptions we transform the data into logreturns
+In chapter [2.3.](#bitcoin) the bitcoin price is visualized. For processing and analyzing the data in order to fullfill the weak stationarity assumptions we transform the data into logreturns
 
 
 
@@ -51,7 +51,7 @@ acf(log_ret_sd^2)
 
 
 
-### 4.2. Defining train and test samples
+### 3.2. Defining train and test samples
 
 -   Describe different phases
 
@@ -59,7 +59,7 @@ acf(log_ret_sd^2)
 
 -   Describe stable and volatile phases and why we should keep that in mind for predictions
 
-### 4.3. Forecasting
+### 3.3. Forecasting
 
 -   Autoregressive process (AR)
 
@@ -69,26 +69,27 @@ acf(log_ret_sd^2)
 
 -   Long short-term memory (LSTM)
 
-### 4.3.1. In-sample
+#### 3.3.1. In-sample
+&nbsp;
 
 -   Compare Predictions with Realized Data (Annualized Sharpe, Diebold Mariano Test, MAE, MSE, RMSE, Mincer-Zarnowitz Regressions)
 
-### 4.3.2. Out-of-sample
+### 3.3.2. Out-of-sample
 
 -   Compare Predictions with Realized Data (Annualized Sharpe, Diebold Mariano Test, MAE, MSE, RMSE, Mincer-Zarnowitz Regressions)
 
-### 4.4. Trading strategies
+### 3.4. Trading strategies
 
 -   Define trading strategies
 
 -   Define realistic fee structure for trading (Coinbase Pro, Binance, Kraken etc.)
 
-### 4.5. Explainability
+### 3.5. Explainability
 
 -   Performing the predictions with the two (?) best models
 
 -   Include variations to find possible starting points for explainability (number of nodes, layers)
 
-### 4.6. (Relationship between accuracy and market phase)
+### 3.6. (Relationship between accuracy and market phase)
 
 -   Test

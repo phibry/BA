@@ -3,6 +3,6 @@ output: pdf_document
 geometry: margin = 1in
 ---
 
-## 5. References
+## References
 
 <div id="refs"></div>
