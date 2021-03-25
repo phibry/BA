@@ -4,6 +4,6 @@ output: pdf_document
 geometry: margin = 1in
 ---
 
-## 6. Attachment
+## Attachment
 
 This project work is created  with R-4.0.2 , RStudio Version 1.4.904 and RMarkdown in collaborative working via Git / Github
