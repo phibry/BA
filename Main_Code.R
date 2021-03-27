@@ -1,13 +1,41 @@
+# load libraries file
+source("add/libraries.r")
+
+#----------!!dont do this unless you want to load fresh data!!!-------------------------------#
+# Downloading Data ####
+
+# Acessing data via coinmarket cap https://coinmarketcap.com/
+# from yahoofinance ticker BTC-USD
+# *Close price adjusted for splits.
+#**Adjusted close price adjusted for both dividends and splits.
+
+#saving original data------------------------------------#
+#getSymbols("BTC-USD") # loads the newest data from quandl
+#BTC_USD_27_03_21=na.omit(`BTC-USD`)
+#save(BTC_USD_27_03_21, file = "data/BTC_USD_27_03_21.rda")
+
+#create an save log returns-------------------------------#  
+#log_ret_27_03_21  = na.exclude(diff(log(Cl(BTC_USD_27_03_21)))) # saveing the logretursn of closing data Cl()
+#save(log_ret_27_03_21, file = "data/log_ret_27_03_21.rda")  
+# 
+#---------------------------------------------------------------------------------------------#
+
+
 #Loading data ####
-load("data/log_ret_13_03_21.rda")  # loading logreturns closing! data xts
-logret=log_ret_13_03_21            # shorter variable name
+
+load("data/BTC_USD_27_03_21.rda")  # loading logreturns closing! data xts
+logret=log_ret_27_03_21            # shorter variable name
+
+
+
 
 
 # Feedforwardnets ####
 ##preparing data ####
-x=logret
+x=logret["2018-01-01::"] # only the data from 2017 until now 
 
-data_mat<-cbind(x,lag(x),lag(x,k=2),lag(x,k=3),lag(x,k=4),lag(x,k=5),lag(x,k=6)) # only the first 6 lags
+# creating a data mtrix with every row is x today and the lags before n
+data_mat<-cbind(x,lag(x),lag(x,k=2),lag(x,k=3),lag(x,k=4),lag(x,k=5),lag(x,k=6)) # only the  6 lags
 # other lags 
 data_mat<-cbind(x,lag(x),lag(x,k=2))    
 
@@ -22,7 +50,7 @@ mins <- apply(data_mat, 2, min)   #    creating a vector with the minimum per la
 scaled_log_ret <- scale(data_mat, center = mins, scale = maxs - mins)  # scaling the returns   # all values betwen  0 1
 ## insample out of sample split ####
 # separating in sample / out of sample
-in_out_sample_separator="2019-12-31"                  ### note this can be changed and should be fixeed by grouo
+in_out_sample_separator="2020-05-01"                  ### note this can be changed and should be fixeed by grouo
 train_set <- scaled_log_ret[paste("/",in_out_sample_separator,sep=""),]
 test_set <- scaled_log_ret[paste(in_out_sample_separator,"/",sep=""),]
 
@@ -41,12 +69,11 @@ n <- colnames(train_set)
 f <- as.formula(paste   ("lag0 ~"   ,  paste(n[!n %in% "lag0"], collapse = " + ")  ))
 
 # defining hidden layers in a vector could be anything
-layer=hidden=c(100,100,1000)
+layer=hidden=c(5,10,5)
 
 #generating neural net
-set
-nn <- neuralnet(f,data=train_set,hidden=layer,linear.output=F)
 
+nn <- neuralnet(f,data=train_set,hidden=layer,linear.output=F)
 
 nn
 plot(nn)

@@ -7,8 +7,8 @@
 #**Adjusted close price adjusted for both dividends and splits.
 
 # generatign data ####
-#getSymbols("BTC-USD")
-#BTC_USD_13_03_21=na.exclude(`BTC-USD`)
+getSymbols("BTC-USD")
+BTC_USD_13_03_21=na.exclude(`BTC-USD`)
 #save(BTC_USD_13_03_21, file = "BTC_USD_13_03_21.rda")
 load()
 
