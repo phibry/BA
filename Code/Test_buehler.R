@@ -97,11 +97,13 @@ load("data/BTC_USD_27_03_21.rda")
 
 btc=`BTC_USD_27_03_21`
 
-log_ret_btc_sma10=diff(log(SMA(Cl(btc),10)))["2018-01-01::"]
+log_ret_btc_sma10=diff(log(SMA(Cl(btc),3)))["2018-01-01::"]
 
 x=log_ret_btc_sma10
 
 target_out<-data_mat[paste(in_out_sample_separator,"/",sep=""),1]
+
+plot(x)
 
 
 #gleichers vorgehen wie immer ####
@@ -153,7 +155,8 @@ net=estimate_nn(train_set,number_neurons=layer,data_mat,test_set,f)
 
 net$MSE_nn
 
-signal=sign(net$predicted_nn)
+signal=sign(net$predicted_nn)  # vorzeichen vom netzoutput out of sample
+
 
 head(signal)
 head(Cl(`BTC_USD_27_03_21`)["2020-05-01::"])
@@ -164,20 +167,23 @@ tail(Cl(`BTC_USD_27_03_21`)["2020-05-01::"])
 length(Cl(`BTC_USD_27_03_21`)["2020-05-01::"])
 length(signal)
 
-sum(is.na(signal))
+?class()
 
-chartSeries(Cl(`BTC_USD_27_03_21`)["2020-05-01::"],theme="white")
-
-addTA(signal,type="S",col="red")
-
-
-plot(signal)
+load("data/log_ret_27_03_21.rda")
+target_out=log_ret_27_03_21["2020-05-01::"]
+  
 
 
+perf_nn<-signal*target_out
 
-trade   =  
-return  =   diff(log(mobidat))
-ret = return*trade
-names(ret)="filter"
-charts.PerformanceSummary(ret, main="Naive Buy Rule")
-#sqrt(255)*SharpeRatio(ret,FUN="StdDev")  # 1.761906 L1=12 ,L2 =134
+
+charts.PerformanceSummary(perf_nn, main="perfromance via SMA10")
+sqrt(255)*SharpeRatio(perf_nn,FUN="StdDev")
+
+
+bah=target_out
+  
+charts.PerformanceSummary(bah, main="Buy and hold")
+sqrt(255)*SharpeRatio(bah,FUN="StdDev")
+
+

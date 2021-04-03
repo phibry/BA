@@ -83,8 +83,6 @@ net=estimate_nn(train_set,number_neurons=layer,data_mat,test_set,f)
 net$MSE_nn
 
 
-
-
 #
 
 
