@@ -1,221 +1,189 @@
 # testfile Buehler
 # this file is only for testing purpose, does not appear in final paper
 
-# acessing data via coinmarket cap https://coinmarketcap.com/
+
+
+source("add/libraries.r") # load libraries file
+source("add/Functions.r") #load functions
+
+#----------!!dont do this unless you want to load fresh data!!!-------------------------------#
+# Downloading Data ####
+
+# Acessing data via coinmarket cap https://coinmarketcap.com/
 # from yahoofinance ticker BTC-USD
 # *Close price adjusted for splits.
 #**Adjusted close price adjusted for both dividends and splits.
 
-# generatign data ####
-getSymbols("BTC-USD")
-BTC_USD_13_03_21=na.exclude(`BTC-USD`)
-#save(BTC_USD_13_03_21, file = "BTC_USD_13_03_21.rda")
-load()
+#saving original data------------------------------------#
+#getSymbols("BTC-USD") # loads the newest data from quandl
+#BTC_USD_27_03_21=na.omit(`BTC-USD`)
+#save(BTC_USD_27_03_21, file = "data/BTC_USD_27_03_21.rda")
 
-#
-
-head(BTC_USD,n=5)
-tail(BTC_USD,n=3)      #  
-
-x_level = Cl(BTC_USD)
-plot(log(Cl(BTC_USD)))# 
-log_ret_13_03_21  = na.exclude(diff(log(Cl(BTC_USD)))) # 
+#create an save log returns-------------------------------#  
+#log_ret_27_03_21  = na.exclude(diff(log(Cl(BTC_USD_27_03_21)))) # saveing the logretursn of closing data Cl()
+#save(log_ret_27_03_21, file = "data/log_ret_27_03_21.rda")  
+# 
+#---------------------------------------------------------------------------------------------#
 
 
+#Loading data ####
 
-
-plot(log_ret)
-# Line Chart
-chartSeries(BTC_USD,type="line", theme=chartTheme("white"))
-
-
-# Bar Chart
-chartSeries(BTC_USD, type="bar",theme=chartTheme("white"))
-
-# Candle Stick Chart
-chartSeries(BTC_USD, type="auto", theme=chartTheme("white"))
-
-#
-
-#save to rda file+
-
-#log_ret_13_03_21=na.exclude(log_ret)
-
-getwd()
-setwd("C:/Users/buehl/Desktop/BA/BA/data")
-
-save(log_ret_13_03_21, file = "log_ret_13_03_21.rda")
+load("data/log_ret_27_03_21.rda")  # loading logreturns closing! data xts
+logret=log_ret_27_03_21            # shorter variable name
 
 
 
 
 
-y.garch<-garchFit(~arma(0,10)+garch(1,1),data=log_ret_13_03_21,delta=2,include.delta=F,include.mean=F,trace=F)
-summary(y.garch)
+# Feedforwardnets ####
+##preparing data ####
+x=logret["2018-01-01::"] # only the data from 2017 until now 
 
-dim(log_ret_13_03_21_sd)
+acf(x)   # check the dependency structure 
+# creating a data matrix with every row is x today and the lags before n
+data_mat<-cbind(x,lag(x),lag(x,k=2),lag(x,k=3),lag(x,k=4),lag(x,k=5),lag(x,k=6)) # only the  6 lags
+# other lags 
+data_mat<-cbind(x,lag(x),lag(x,k=2),lag(x,k=3),lag(x,k=4),lag(x,k=5),lag(x,k=6),lag(x,k=7),lag(x,k=8),lag(x,k=9),lag(x,k=10)) 
+#data_mat<-cbind(x,lag(x),lag(x,k=2))    
 
-log_ret_13_03_21_sd=reclass(log_ret_13_03_21_sd,log_ret_13_03_21)
-
-
-
-ts.plot(log_ret_13_03_21)
-
-lines(y.garch@sigma.t,col="red")
-lines(y.garch@residuals,col="blue")
-
-
-head(log_ret_13_03_21_sd)
-
-log_ret_13_03_21_sd<-y.garch@residuals/y.garch@sigma.t
-
-ts.plot(log_ret_12_03_21_sd)
-acf(log_ret_12_03_21_sd)
-
-save(log_ret_13_03_21_sd, file = "log_ret_13_03_21_sd.rda")
-
-
-
-#analizing data ####
-
-
-
-
-load("data/log_ret_13_03_21_sd.rda")# loading logreturns standardized by arma(0,10)-garch(1,1)
-load("data/log_ret_13_03_21.rda")
-
-
-
-x=log_ret_13_03_21_sd
-
-
-data_mat<-cbind(x,lag(x),lag(x,k=2),lag(x,k=3),lag(x,k=4),lag(x,k=5),lag(x,k=6))
-
-data_mat<-cbind(x,lag(x),lag(x,k=2))
-
-# Check length of time series before na.exclude
-dim(data_mat)
+# exclude nas
 data_mat<-na.exclude(data_mat)
 
+# because of the perceptron functions are sigmoid ad the classification is betwen 0 and we need to scale the returns
+maxs <- apply(data_mat, 2, max)   #    creating a vector with the maximum per lag 
+mins <- apply(data_mat, 2, min)   #    creating a vector with the minimum per lag
 
 
-
-maxs <- apply(data_mat, 2, max) 
-mins <- apply(data_mat, 2, min)
-# Transform data into [0,1]  
-scaled_log_ret <- scale(data_mat, center = mins, scale = maxs - mins)
-
-
-
-
-in_out_sample_separator="2019-12-31"
+scaled_log_ret <- scale(data_mat, center = mins, scale = maxs - mins)  # scaling the returns   # all values betwen  0 1
+## insample out of sample split ####
+# separating in sample / out of sample
+in_out_sample_separator="2020-05-01"                  ### note this can be changed and should be fixeed by grouo
 train_set <- scaled_log_ret[paste("/",in_out_sample_separator,sep=""),]
 test_set <- scaled_log_ret[paste(in_out_sample_separator,"/",sep=""),]
 
+# neuralnet package need the data in matrix format, cannot handle xts
 train_set<-as.matrix(train_set)
 test_set<-as.matrix(test_set)
 
 
+# describing the matrix with the lags ( automatic when we change the lag size)
 colnames(train_set)<-paste("lag",0:(ncol(train_set)-1),sep="")
 n <- colnames(train_set)
 
-head(train_set)
 
+## generating a net ####
+# neuralnet needs th notation in formuma style similar to regression
 f <- as.formula(paste   ("lag0 ~"   ,  paste(n[!n %in% "lag0"], collapse = " + ")  ))
 
+# defining hidden layers in a vector could be anything
+layer=hidden=c(5,10,5)
 
+#generating neural net
 
-nn <- neuralnet(f,data=train_set,hidden=c(5,5,4,3),linear.output=F)
+nn <- neuralnet(f,data=train_set,hidden=layer,linear.output=F)
 plot(nn)
 
+net=estimate_nn(train_set,number_neurons=layer,data_mat,test_set,f)
+
+net$MSE_nn
 
 
-nn$net.result
+#
 
 
+# tryin a sma on logrets ####
+
+load("data/BTC_USD_27_03_21.rda")
+
+btc=`BTC_USD_27_03_21`
+
+log_ret_btc_sma10=diff(log(SMA(Cl(btc),3)))["2018-01-01::"]
+
+x=log_ret_btc_sma10
+
+target_out<-data_mat[paste(in_out_sample_separator,"/",sep=""),1]
+
+plot(x)
 
 
-summary(nn)
+#gleichers vorgehen wie immer ####
+acf(x)   # check the dependency structure 
+# creating a data matrix with every row is x today and the lags before n
+data_mat<-cbind(x,lag(x),lag(x,k=2),lag(x,k=3),lag(x,k=4),lag(x,k=5),lag(x,k=6)) # only the  6 lags
+# other lags 
+data_mat<-cbind(x,lag(x),lag(x,k=2),lag(x,k=3),lag(x,k=4),lag(x,k=5),lag(x,k=6),lag(x,k=7),lag(x,k=8),lag(x,k=9)) 
+#data_mat<-cbind(x,lag(x),lag(x,k=2))    
+
+# exclude nas
+data_mat<-na.exclude(data_mat)
+
+# because of the perceptron functions are sigmoid ad the classification is betwen 0 and we need to scale the returns
+maxs <- apply(data_mat, 2, max)   #    creating a vector with the maximum per lag 
+mins <- apply(data_mat, 2, min)   #    creating a vector with the minimum per lag
 
 
+scaled_log_ret <- scale(data_mat, center = mins, scale = maxs - mins)  # scaling the returns   # all values betwen  0 1
+## insample out of sample split ####
+# separating in sample / out of sample
+in_out_sample_separator="2020-05-01"                  ### note this can be changed and should be fixeed by grouo
+train_set <- scaled_log_ret[paste("/",in_out_sample_separator,sep=""),]
+test_set <- scaled_log_ret[paste(in_out_sample_separator,"/",sep=""),]
+
+# neuralnet package need the data in matrix format, cannot handle xts
+train_set<-as.matrix(train_set)
+test_set<-as.matrix(test_set)
 
 
+# describing the matrix with the lags ( automatic when we change the lag size)
+colnames(train_set)<-paste("lag",0:(ncol(train_set)-1),sep="")
+n <- colnames(train_set)
 
-estimate_nn<-function(train_set,number_neurons,data_mat,test_set,f) # function 
-{
-  nn <- neuralnet(f,data=train_set,hidden=number_neurons,linear.output=T)
+
+## generating a net ####
+# neuralnet needs th notation in formuma style similar to regression
+f <- as.formula(paste   ("lag0 ~"   ,  paste(n[!n %in% "lag0"], collapse = " + ")  ))
+
+# defining hidden layers in a vector could be anything
+layer=hidden=c(5,10,5)
+
+#generating neural net
+
+nn <- neuralnet(f,data=train_set,hidden=layer,linear.output=F)
+plot(nn)
+
+net=estimate_nn(train_set,number_neurons=layer,data_mat,test_set,f)
+
+net$MSE_nn
+
+signal=sign(net$predicted_nn)  # vorzeichen vom netzoutput out of sample
+
+
+head(signal)
+head(Cl(`BTC_USD_27_03_21`)["2020-05-01::"])
+
+tail(signal)
+tail(Cl(`BTC_USD_27_03_21`)["2020-05-01::"])
+
+length(Cl(`BTC_USD_27_03_21`)["2020-05-01::"])
+length(signal)
+
+?class()
+
+load("data/log_ret_27_03_21.rda")
+target_out=log_ret_27_03_21["2020-05-01::"]
   
+
+
+perf_nn<-signal*target_out
+
+
+charts.PerformanceSummary(perf_nn, main="perfromance via SMA10")
+sqrt(255)*SharpeRatio(perf_nn,FUN="StdDev")
+
+
+bah=target_out
   
-  # In sample performance
-  predicted_scaled_in_sample<-nn$net.result[[1]]
-  # Scale back from interval [0,1] to original log-returns
-  predicted_nn_in_sample<-predicted_scaled_in_sample*(max(data_mat[,1])-min(data_mat[,1]))+min(data_mat[,1])
-  # In-sample MSE
-  MSE.in.nn<-mean(((train_set[,1]-predicted_scaled_in_sample)*(max(data_mat[,1])-min(data_mat[,1])))^2)
-  
-  # Out-of-sample performance
-  # Compute out-of-sample forecasts
-  pr.nn <- compute(nn,as.matrix(test_set[,2:ncol(test_set)]))
-  predicted_scaled<-pr.nn$net.result
-  # Results from NN are normalized (scaled)
-  # Descaling for comparison
-  predicted_nn <- predicted_scaled*(max(data_mat[,1])-min(data_mat[,1]))+min(data_mat[,1])
-  test.r <- test_set[,1]*(max(data_mat[,1])-min(data_mat[,1]))+min(data_mat[,1])
-  # Calculating MSE
-  MSE.out.nn <- mean((test.r - predicted_nn)^2)
-  
-  # Compare in-sample and out-of-sample
-  MSE_nn<-c(MSE.in.nn,MSE.out.nn)
-  return(list(MSE_nn=MSE_nn,predicted_nn=predicted_nn,predicted_nn_in_sample=predicted_nn_in_sample))
-  
-}
+charts.PerformanceSummary(bah, main="Buy and hold")
+sqrt(255)*SharpeRatio(bah,FUN="StdDev")
 
 
-
-
-# plotig data bitcoin prices ####  
-# for theroretical background
-
-
-# acessing data via coinmarket cap https://coinmarketcap.com/
-# from yahoofinance ticker BTC-USD
-# *Close price adjusted for splits.s
-#**Adjusted close price adjusted for both dividends and splits.
-
-load("data/BTC_USD_13_03_21.rda") 
-
-BTC_USD =BTC_USD_13_03_21
-
-cl_btc=Cl(BTC_USD)
-cl_btc_log=log(cl_btc)
-
-
-first=min(cl_btc["2019-06-26::2020-09-01"]) # maximales value zwischen datum 
-cl_btc[which(cl_btc==first) ]               # 
-
-events <- xts(LETTERS[1:5], as.Date(c("2015-01-14","2017-12-16","2018-12-15","2019-06-26","2020-03-12")))
-
-
-plot.xts(Cl(BTC_USD),col = "black", main="Bitcoin in US $",lwd = 0.8)
-addEventLines(events,srt=90,pos=2,lty=3,col = c("darkgreen","red","darkgreen","red","darkgreen"),lwd=2,)
-
-
-plot.xts(cl_btc_log,col = "black", main="Logarithmic Bitcoin in US $",lwd = 0.8)
-addEventLines(events,srt=90,pos=2,lty=3,col = c("darkgreen","red","darkgreen","red","darkgreen"),lwd=2,)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-2014-09-20
-
-plot.xts(test)
