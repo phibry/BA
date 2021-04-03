@@ -1,5 +1,5 @@
-# load libraries file
-source("add/libraries.r")
+source("add/libraries.r") # load libraries file
+source("add/Functions.r") #load functions
 
 #----------!!dont do this unless you want to load fresh data!!!-------------------------------#
 # Downloading Data ####
@@ -34,10 +34,12 @@ logret=log_ret_27_03_21            # shorter variable name
 ##preparing data ####
 x=logret["2018-01-01::"] # only the data from 2017 until now 
 
-# creating a data mtrix with every row is x today and the lags before n
+acf(x)   # check the dependency structure 
+# creating a data matrix with every row is x today and the lags before n
 data_mat<-cbind(x,lag(x),lag(x,k=2),lag(x,k=3),lag(x,k=4),lag(x,k=5),lag(x,k=6)) # only the  6 lags
 # other lags 
-data_mat<-cbind(x,lag(x),lag(x,k=2))    
+data_mat<-cbind(x,lag(x),lag(x,k=2),lag(x,k=3),lag(x,k=4),lag(x,k=5),lag(x,k=6),lag(x,k=7),lag(x,k=8),lag(x,k=9),lag(x,k=10)) 
+#data_mat<-cbind(x,lag(x),lag(x,k=2))    
 
 # exclude nas
 data_mat<-na.exclude(data_mat)
@@ -74,7 +76,18 @@ layer=hidden=c(5,10,5)
 #generating neural net
 
 nn <- neuralnet(f,data=train_set,hidden=layer,linear.output=F)
-
-nn
 plot(nn)
+
+net=estimate_nn(train_set,number_neurons=layer,data_mat,test_set,f)
+
+net$MSE_nn
+
+
+#
+
+
+
+
+
+
 
