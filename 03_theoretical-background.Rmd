@@ -133,6 +133,8 @@ In between are the hidden layers, whose number and size can be configured as des
 #### 2.1.4. Recurrent neural networks (RNN) {#RNN}
 &nbsp;
 
+
+
 #### 2.1.5. Long-short term memory (LSTM) {#LSTM}
 &nbsp;
 
@@ -146,6 +148,12 @@ In between are the hidden layers, whose number and size can be configured as des
 Sigmoid suffers from the problem of Vanishing Gradient. The gradients of the NN's output with respect to the parameters become so small, that the NN takes smaller steps towards the minima of the loss function and eventually stop learning.
 
 -   Dying Relu Problem (?)
+
+#### 2.1.7. Model comparison
+
+- Plot of performance
+- Sharpe Ratio
+- Diebold Mariano
 
 \newpage
 

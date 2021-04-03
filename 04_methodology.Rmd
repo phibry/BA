@@ -9,8 +9,8 @@ The focus of this thesis is to predict historical prices of bitcoin using the mo
 
 -   Data and Analysis of Bitcoin (BTC/USD)
 -   Defining the train and test samples (including description about calm and volatile phases).
--   Calculate predictions with the defined models (AR, NN, RNN, LSTM).
--   Compare Predictions with Realized Data (Annualized Sharpe, Diebold Mariano Test, MAE, MSE, RMSE, Mincer-Zarnowitz Regressions)
+-   Calculate predictions with the defined models (AR, NN, RNN, LSTM, Emponential Smoothing + NN (Slavek Smyl)).
+-   Compare Predictions / performance with Realized Data (Annualized Sharpe, Diebold Mariano Test, MAE, MSE, RMSE, Mincer-Zarnowitz Regressions)
 -   Explain trading strategies
 -   Explainability for the best models
 -   (Backup: Which models work well in which market phases?)
@@ -80,11 +80,18 @@ acf(log_ret_sd^2)
 
 -   Define trading strategies
 
+- Sign-trading (daily)
+- Vola-gewichtet trading 
+
 -   Define realistic fee structure for trading (Coinbase Pro, Binance, Kraken etc.)
+
+### 3.4.1. Other cryptocurrency
+
+- Test our best model with another time series
 
 ### 3.5. Explainability
 
--   Performing the predictions with the two (?) best models
+- Performing the predictions with the two (?) best models
 
 -   Include variations to find possible starting points for explainability (number of nodes, layers)
 
