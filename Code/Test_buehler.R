@@ -3,7 +3,8 @@
 
 
 
-source("add/libraries.r") # load libraries file
+source("add/libraries.r") 
+# load libraries file
 source("add/Functions.r") #load functions
 
 #----------!!dont do this unless you want to load fresh data!!!-------------------------------#
@@ -32,7 +33,7 @@ load("data/log_ret_27_03_21.rda")  # loading logreturns closing! data xts
 logret=log_ret_27_03_21            # shorter variable name
 
 
-
+acf(logret)
 
 
 # Feedforwardnets ####
@@ -76,20 +77,70 @@ n <- colnames(train_set)
 f <- as.formula(paste   ("lag0 ~"   ,  paste(n[!n %in% "lag0"], collapse = " + ")  ))
 
 # defining hidden layers in a vector could be anything
-layer=hidden=c(5,10,5)
+number_neurons=c(5,10,5)
 
 #generating neural net
 
-nn <- neuralnet(f,data=train_set,hidden=layer,linear.output=F)
+nn <- neuralnet(f,data=train_set,hidden=number_neurons,linear.output=F)
 plot(nn)
 
-net=estimate_nn(train_set,number_neurons=layer,data_mat,test_set,f)
-
+net=estimate_nn(train_set,number_neurons=number_neurons,data_mat,test_set,f)
 net$MSE_nn
 
 
-#
+#--------------------------------------------------------------------------------------------------------#
+## optimizing with layers ####
+##same procedure
+load("data/log_ret_27_03_21.rda")  
+logret=log_ret_27_03_21           
+x=logret["2018-01-01::"] 
+acf(x)   
+data_mat<-cbind(x,lag(x),lag(x,k=2),lag(x,k=3),lag(x,k=4),lag(x,k=5),lag(x,k=6),lag(x,k=7),lag(x,k=8),lag(x,k=9),lag(x,k=10)) 
+data_mat<-na.exclude(data_mat)
+maxs <- apply(data_mat, 2, max)   #    creating a vector with the maximum per lag 
+mins <- apply(data_mat, 2, min)   #    creating a vector with the minimum per lag
+scaled_log_ret <- scale(data_mat, center = mins, scale = maxs - mins)  # scaling the returns   # all values betwen  0 1
+in_out_sample_separator="2020-05-01"             
+train_set <- scaled_log_ret[paste("/",in_out_sample_separator,sep=""),]
+test_set <- scaled_log_ret[paste(in_out_sample_separator,"/",sep=""),]
+train_set<-as.matrix(train_set)
+test_set<-as.matrix(test_set)
+colnames(train_set)<-paste("lag",0:(ncol(train_set)-1),sep="")
+n <- colnames(train_set)
+f <- as.formula(paste   ("lag0 ~"   ,  paste(n[!n %in% "lag0"], collapse = " + ")  ))
+##
+#defining the max and minim neuron for looping louie
+minlayer=1
+maxlayer=10
+minneuron=1
+maxneuron=10
+resmat=matrix(nrow = maxlayer,ncol = maxneuron,0)
+number_neurons
 
+pb <- txtProgressBar(min = minlayer, max = maxlayer, style = 3)
+for( layer_i in minlayer:maxlayer)
+  {
+
+  for (neuron_k in minneuron:maxneuron)
+   {
+    number_neurons=c(rep(neuron_k,layer_i))
+    
+    net=estimate_nn(train_set,number_neurons=number_neurons,data_mat,test_set,f)
+    resmat[layer_i,neuron_k]=net$MSE_nn[1]
+  }
+  
+  setTxtProgressBar(pb, layer_i)
+}
+
+close(pb)
+
+
+max(resmat)
+
+
+
+#
+#-------------------------------------------------------------------------------------------------------------#
 
 # tryin a sma on logrets ####
 
@@ -106,7 +157,7 @@ target_out<-data_mat[paste(in_out_sample_separator,"/",sep=""),1]
 plot(x)
 
 
-#gleichers vorgehen wie immer ####
+#same procedure as usual  ####
 acf(x)   # check the dependency structure 
 # creating a data matrix with every row is x today and the lags before n
 data_mat<-cbind(x,lag(x),lag(x,k=2),lag(x,k=3),lag(x,k=4),lag(x,k=5),lag(x,k=6)) # only the  6 lags

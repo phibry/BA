@@ -74,15 +74,12 @@ f <- as.formula(paste   ("lag0 ~"   ,  paste(n[!n %in% "lag0"], collapse = " + "
 layer=hidden=c(5,10,5)
 
 #generating neural net
-
 nn <- neuralnet(f,data=train_set,hidden=layer,linear.output=F)
 plot(nn)
 
 net=estimate_nn(train_set,number_neurons=layer,data_mat,test_set,f)
 
 net$MSE_nn
-
-
 #
 
 
