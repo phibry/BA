@@ -1,6 +1,6 @@
 # # feed forward nets ####
 library(neuralnet)
-neuralnet(f,data=train_set,hidden=layer,linear.output=F) # neurnalnet function
+# neuralnet(f,data=train_set,hidden=layer,linear.output=F) # neurnalnet function
 # feedforward estimation
 
 # this function takes the input :
@@ -44,3 +44,4 @@ estimate_nn<-function(train_set,number_neurons,data_mat,test_set,f)
   return(list(MSE_nn=MSE_nn,predicted_nn=predicted_nn,predicted_nn_in_sample=predicted_nn_in_sample))
   
 }
+
