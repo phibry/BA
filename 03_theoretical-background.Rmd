@@ -170,30 +170,98 @@ Looking at equation \ref{eq:RNN_many_to_one_2}, $y_{i}$ equals the output and de
 #### 2.1.5. Long-short term memory (LSTM) {#LSTM}
 &nbsp;
 
-#### 2.1.6. Challenges
+#### 2.1.6. Challenges {#challenges}
+&nbsp;
+
+##### 2.1.6.1 Overfitting {#overfitting}
 &nbsp;
 
 We have encountered several challenges that can occur when using neural networks. One of these possible problems is called overfitting. The goal of a neural network is to build a statistical model of the training set that is capable of generating the data. In overfitting on the other hand, the exact conditions of the training data including noise are reproduced. The focus is no longer on the underlying function. Last but not least, an unnecessarily large number of parameters or epochs can be 'consumed' for this, which makes the whole process relatively inefficient [@RNN]. 
 
-Another characteristic that requires our attention is the vanishing gradient problem. As explained in the chapter [2.1.2.](#backpropagation_algorithm), the weights of the neural network are adjusted using the gradient of the loss function. Thereby, the problem can occur that the gradient almost vanishes. The error function's gradients become so small that the backpropagation algorithm takes smaller steps towards the loss function's minima and eventually stops learning. For example, if the derivative of an activation function such as the logistic sigmoid function approaches zero for extremely large or small values for $x$. To avoid these extreme values for $x$, the inputs are scaled and normalized in this paper. This ensures that the definition range is within the range where the gradient is still large enough for the backpropagation algorithm.  
+=> still needs clarification how we solve these challenges in this thesis!
+
+##### 2.1.6.2. Vanishing gradient problem {#vanishing_gradient}
+&nbsp;
+
+Another characteristic that requires our attention is the vanishing gradient problem. As explained in chapter [2.1.2.](#backpropagation_algorithm), the weights of the neural network are adjusted using the gradient of the loss function. Thereby, the problem can occur that the gradient almost vanishes. The error function's gradients become so small that the backpropagation algorithm takes smaller steps towards the loss function's minima and eventually stops learning. For example, if the derivative of an activation function such as the logistic sigmoid function approaches zero for extremely large or small values for $x$. To avoid these extreme values for $x$, the inputs are scaled and normalized in this paper. This ensures that the definition range is within the range where the gradient is still large enough for the backpropagation algorithm.  
 
 => still needs clarification how we solve these challenges in this thesis!
 
-#### 2.1.7. Model comparison
+### 2.2. Model comparison {#model_comparison}
+&nbsp;
 
-- Plot of performance
-- Sharpe Ratio
-- Diebold Mariano
+This thesis sets the goal to compare the different neural networks presented. Besides the types of neural networks, the network architecture (number of layers and nodes) is explored. In addition, a comparison is made with the winner of the Forecasting Competition M4, which combines a standard exponential smoothing model with an LSTM network. To make the comparison meaningful enough, the following two figures are compared. 
+
+#### 2.2.1. Sharpe ratio {#sharpe_ratio}
+&nbsp;
+
+The first number refers to the performance of the trading strategy based on the sign of the prediction $t+1$ and is called Sharpe Ratio. Sharpe ratio is a very powerful and widely used ratio to measure performance and it describes return per risk.
+
+```{=tex}
+\begin{align} \label{eq:Sharpe}
+  SharpeRatio = \frac{R_{p}-R_{f}}{\sigma}
+\end{align}
+```
+
+$R_{p}$ represents the return of the portfolio, while $R_{f}$ equals the risk free rate. $\sigma$ is the standard deviation of the portfolios excess return (risk). For the comparison of different series, the Sharpe Ratio needs to be annualized with $\sqrt{365}$ as the crypto market is open 24/7.
+
+#### 2.2.2. Diebold Mariano {#diebold_mariano}
+&nbsp;
+
+The second method used is the Diebold Mariano test, which compares the predictive accuracy between two forecasts. First, the loss differential $d_{i}$ between two forecasts is defined in equation \ref{eq:DM_loss_diff} where a loss function L of one model is subtracted from another model. The proposed loss functions include absolute errors (AE) and squared errors (SE) [@DM_paper]. Given an expected value of $d = 0$, both forecasts are assumed to have the same accuracy. If the expected value differs from zero, the null hypothesis can be rejected. This would mean that the two methods have different levels of accuracy. 
+
+```{=tex}
+\begin{align} \label{eq:DM_hypothesis}
+  H_{0}: E(d_{i}) = 0 \\
+  H_{1}: E(d_{i}) \neq 0 \nonumber
+\end{align}
+```
+
+with
+
+```{=tex}
+\begin{align} \label{eq:DM_loss_diff}
+  d_{i} = L(e_{1i}) - L(e_{2i})
+\end{align}
+```
+
+and
+
+```{=tex}
+\begin{align} \label{eq:DM_error}
+  e_{ti} = \hat{y_{ti}} - y_{i} \\
+  \text{for } t={1,2} \nonumber
+\end{align}
+```
+
+Under the null hypothesis $H_{0}$, the Diebold Mariano test uses the statistics shown in equation \ref{eq:DM} and is asymptotically N(0,1) distributed. On the other hand, the null hypothesis is rejected if the calculated absolute Diebold Mariano value is outside $-z_{\alpha/2}$ and $z_{\alpha/2}$. Thus, $|DM|>z_{\alpha/2}$ is valid when there is a significant difference between the predictions where $z_{\alpha/2}$ is the positive bound of the z-value to the level $\alpha$.    
+
+```{=tex}
+\begin{align} \label{eq:DM}
+  DM = \frac{\bar{d}}{\sqrt{\frac{2*\pi*\hat{f_{d}(0)}}{T}}} \rightarrow N(0,1)
+\end{align}
+```
+
+where $\bar{d}$ is the sample mean of the loss differential and $f_{d}(0)$ is the spectral density of the loss differential at lag k [@DM_lecture].
+
+```{=tex}
+\begin{align} \label{eq:DM_definitions}
+  \bar{d} = \sum_{i = 1}^{T}d_{i} \\
+  f_{d}(0) = \frac{1}{2\pi}(\sum_{k=-\infty}^{\infty} \gamma_{d}(k))
+\end{align}
+```
+
+In conclusion, the Diebold Mariano test helps us to understand whether the predictions of one model turned out better by chance or due to statistical significance. 
 
 \newpage
 
-### 2.2. Bitcoin {#bitcoin}
+### 2.3. Bitcoin {#bitcoin}
 
 In this section bitcoin as a crypto-curreny is introduced. The historical data is analyzed and commented. Further the technology in and around crypto-currencies is briefly explained. A detailed explanation would require a paper itself, therefore the explanation is done as simple as possible.
 
 In the following work bitcoin as a cryptocurreny is mentionend in its short term BTC, by the meaning of US Dollars per Bitcoin.
 
-#### 2.2.1. Historical analysis
+#### 2.3.1. Historical analysis
 &nbsp;
 
 The story of bitcoin began with a paper published by the name of Satoshi Nakamoto [@bitcoin]. The publisher of the document cannot be assigned to a real person, therefore the technology inventor remains mysteriosly unknown until today. In 2009 the first bitcoin transaction was executed. On account of the opensource technology of bitcoin, lots of alternative currencies were created. Until 2013 the cryptocurrencies operated under the radar of most regulatory institutions. Because of the anonymity of the transactions, criminals were attracted by the newborn payment method. Headlines, such as the seizure of 26,000 bitcoins by closing the "Dark-Web" Website Silkroad through the Drug Enforcement Agency, followed moreoften in the newspapers. Nevertheless in 2014 more companys,such as :Zynga, D LasVegas Casinos, Golden Gate Hotel & Casino, TigerDirect, Overstock.com, Newegg, Dell, and even Microsoft [@A_History_of_Bitcoin]. began to accept bitcoin as a payment method. In 2014 the first derivative with bitcoin as an underlying was approved by the U.S.Commodity Futures Trading Commission. 2015 an estimated 160000 merchants used bitcoin to trade . It is observed that the value of bitcoin is very volatile, we will discuss this in a FURTHER XYXY section. Let us first look a the price in \ref{fig:price_btc} and the log(price)\ref{fig:logprice_btc} and get a sense of the chart. Note: The data in the charts start in 2014 where it was listed in coinmarket, events between 2009 and 2014 are described without visualization.
