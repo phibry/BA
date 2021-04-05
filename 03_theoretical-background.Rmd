@@ -13,16 +13,12 @@ The following chapter is intended to provide the theoretical foundations necessa
 
 ### 2.1. Neural network {#neural_network}
 
-In the context of this work, artificial neural networks are used to answer supervised learning questions that focus on the classification of data. This means that a neural network finds a correlation between the data and their labels and optimizes its parameters to minimize the error for the next try. This process is called supervised training and is performed with a test data sample. An application example of classification is that a neural network is used for face recognition after it has learned the classification of different faces in the process of supervised training. Predictive analysis works similarly to the classification of labeled data. It estimates future values based on past events and can be trained with historical data. On the other hand, unsupervised learning (clustering) is applied to detect patterns from unlabeled data. Based on these patterns, for example, anomalies can be detected that are relevant in the fight against fraud (fraud detection). Unsupervised learning is not discussed further in this paper.
-
-Section [2.1.1.](#perceptron) will demonstrate the functioning of a neural network using a simple perceptron.
+In the context of this work, artificial neural networks are used to answer supervised learning questions that focus on the classification of data. This means that a neural network finds a correlation between the data and their labels and optimizes its parameters to minimize the error for the next try. This process is called supervised training and is performed with a test data sample. An application example of classification is that a neural network is used for face recognition after it has learned the classification of different faces in the process of supervised training. Predictive analysis works similarly to the classification of labeled data. It estimates future values based on past events and can be trained with historical data. On the other hand, unsupervised learning (clustering) is applied to detect patterns from unlabeled data. Based on these patterns, for example, anomalies can be detected that are relevant in the fight against fraud (fraud detection). Unsupervised learning is not discussed further in this paper. Section [2.1.1.](#perceptron) will demonstrate the functioning of a neural network using a simple perceptron.
 
 #### 2.1.1. Perceptron {#perceptron}
 &nbsp;
 
-The construction of an artificial neural network is demonstrated using a perceptron. It is a simple algorithm for supervised learning of binary classification problems. This algorithm classifies patterns by performing a linear separation. Although this discovery was anticipated with great expectations in 1958, it became increasingly apparent that these binary classifiers are only applicable to linearly separable data inputs. This was only later addressed by the discovery of multiple layer perceptrons (MLP) [@perceptron_paper].
-
-Basically, a perceptron is a single-layer neural network and consists of the following five components and can also be observed in figure \ref{fig:perceptron_schema}.
+The construction of an artificial neural network is demonstrated using a perceptron. It is a simple algorithm for supervised learning of binary classification problems. This algorithm classifies patterns by performing a linear separation. Although this discovery was anticipated with great expectations in 1958, it became increasingly apparent that these binary classifiers are only applicable to linearly separable data inputs. This was only later addressed by the discovery of multiple layer perceptrons (MLP) [@perceptron_paper]. Basically, a perceptron is a single-layer neural network and consists of the following five components and can also be observed in figure \ref{fig:perceptron_schema}.
 
 1.  Inputs
 
@@ -90,8 +86,9 @@ In the course of the error analysis, the output of the neural network respective
 
 ```{=tex}
 \begin{align} \label{eq:mse}
-  E=MSE=\frac{1}{n}\sum_{i = 1}^{n}(y_{i}-\hat{y}_{i})^2 \\
-  =\frac{1}{n}\sum_{i = 1}^{n}(y_{i}-g(w_{0}+x_{i}w_{i}))^2 \nonumber
+  E &=MSE(w) \\
+  &=\frac{1}{n}\sum_{i = 1}^{n}(y_{i}-\hat{y}_{i})^2 \nonumber \\
+  &=\frac{1}{n}\sum_{i = 1}^{n}(y_{i}-g(w_{0}+x_{i}w_{i}))^2 \nonumber 
 \end{align}
 ```
 As mentioned, this is searched for by the gradient descent method. The gradient of a function is a vector whose entries are the first partial derivatives of the function. The first entry is the partial derivative after the first variable, the second entry is the partial derivative after the second variable and so on. Each entry indicates the slope of the function in the direction of the variable to which it was derived. In this work, the notation $\nabla{E}$ is used when talking about the gradient for the error function $E$, which is displayed in equation \ref{eq:gradient_descent} [@backpropagation].
@@ -155,8 +152,8 @@ knitr::include_graphics("images/RNN_many_to_one.jpg")
 
 ```{=tex}
 \begin{align} \label{eq:RNN_many_to_one_1}
-  h_{i} & = f_{W}(h_{i-1}, x_{t}) \\
-  & = \tanh(W_{h}*h_{i-1} + W_{x}*x_{i} + b) \nonumber 
+  h_{i} & = f_{W}(h_{i-1}, x_{i}) \\
+  & = \tanh(W_{h}h_{i-1} + W_{x}x_{i} + b) \nonumber 
 \end{align}
 ```
 
@@ -164,7 +161,7 @@ Equation \ref{eq:RNN_many_to_one_1} shows how the hidden states $h_{i}$ are calc
 
 ```{=tex}
 \begin{align} \label{eq:RNN_many_to_one_2}
-  y_{i} = W_{y}*h_{i}
+  \hat{y_{i}} = W_{y}h_{i}
 \end{align}
 ```
 
@@ -176,13 +173,11 @@ Looking at equation \ref{eq:RNN_many_to_one_2}, $y_{i}$ equals the output and de
 #### 2.1.6. Challenges
 &nbsp;
 
--   Early stopping required to avoid overfitting to in-sample data
+We have encountered several challenges that can occur when using neural networks. One of these possible problems is called overfitting. The goal of a neural network is to build a statistical model of the training set that is capable of generating the data. In overfitting on the other hand, the exact conditions of the training data including noise are reproduced. The focus is no longer on the underlying function. Last but not least, an unnecessarily large number of parameters or epochs can be 'consumed' for this, which makes the whole process relatively inefficient [@RNN]. 
 
--   Gradient vanishing problem
+Another characteristic that requires our attention is the vanishing gradient problem. As explained in the chapter [2.1.2.](#backpropagation_algorithm), the weights of the neural network are adjusted using the gradient of the loss function. Thereby, the problem can occur that the gradient almost vanishes. The error function's gradients become so small that the backpropagation algorithm takes smaller steps towards the loss function's minima and eventually stops learning. For example, if the derivative of an activation function such as the logistic sigmoid function approaches zero for extremely large or small values for $x$. To avoid these extreme values for $x$, the inputs are scaled and normalized in this paper. This ensures that the definition range is within the range where the gradient is still large enough for the backpropagation algorithm.  
 
-Sigmoid suffers from the problem of Vanishing Gradient. The gradients of the NN's output with respect to the parameters become so small, that the NN takes smaller steps towards the minima of the loss function and eventually stop learning.
-
--   Dying Relu Problem (?)
+=> still needs clarification how we solve these challenges in this thesis!
 
 #### 2.1.7. Model comparison
 
