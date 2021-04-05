@@ -119,9 +119,7 @@ insampleres(maxlayer=1,maxneuron=10,rep=50)# function pb
 
 
 # tryin a sma on logrets ####
-
 load("data/BTC_USD_27_03_21.rda")
-
 btc=`BTC_USD_27_03_21`
 
 log_ret_btc_sma10=diff(log(SMA(Cl(btc),3)))["2018-01-01::"]
@@ -194,15 +192,12 @@ tail(Cl(`BTC_USD_27_03_21`)["2020-05-01::"])
 length(Cl(`BTC_USD_27_03_21`)["2020-05-01::"])
 length(signal)
 
-?class()
 
 load("data/log_ret_27_03_21.rda")
 target_out=log_ret_27_03_21["2020-05-01::"]
   
 
-
 perf_nn<-signal*target_out
-
 
 charts.PerformanceSummary(perf_nn, main="perfromance via SMA10")
 sqrt(255)*SharpeRatio(perf_nn,FUN="StdDev")
