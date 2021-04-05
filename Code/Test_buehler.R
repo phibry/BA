@@ -88,9 +88,9 @@ net=estimate_nn(train_set,number_neurons=number_neurons,data_mat,test_set,f)
 net$MSE_nn
 
 
-#--------------------------------------------------------------------------------------------------------#
-## optimizing with layers ####
-##same procedure
+#-------------------------------------------------------------------------------------------------------------#
+# optimizing via nn mlp ####
+
 load("data/log_ret_27_03_21.rda")  
 logret=log_ret_27_03_21           
 x=logret["2018-01-01::"] 
@@ -108,39 +108,15 @@ test_set<-as.matrix(test_set)
 colnames(train_set)<-paste("lag",0:(ncol(train_set)-1),sep="")
 n <- colnames(train_set)
 f <- as.formula(paste   ("lag0 ~"   ,  paste(n[!n %in% "lag0"], collapse = " + ")  ))
-##
-#defining the max and minim neuron for looping louie
-minlayer=1
-maxlayer=10
-minneuron=1
-maxneuron=10
-resmat=matrix(nrow = maxlayer,ncol = maxneuron,0)
-number_neurons
-
-pb <- txtProgressBar(min = minlayer, max = maxlayer, style = 3)
-for( layer_i in minlayer:maxlayer)
-  {
-
-  for (neuron_k in minneuron:maxneuron)
-   {
-    number_neurons=c(rep(neuron_k,layer_i))
-    
-    net=estimate_nn(train_set,number_neurons=number_neurons,data_mat,test_set,f)
-    resmat[layer_i,neuron_k]=net$MSE_nn[1]
-  }
-  
-  setTxtProgressBar(pb, layer_i)
-}
-
-close(pb)
-
-
-max(resmat)
 
 
 
-#
+insampleres(maxlayer=1,maxneuron=10,rep=50)# function pb
+
 #-------------------------------------------------------------------------------------------------------------#
+
+
+
 
 # tryin a sma on logrets ####
 
