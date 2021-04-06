@@ -253,20 +253,20 @@ where $\bar{d}$ is the sample mean of the loss differential and $f_{d}(0)$ is th
 
 In conclusion, the Diebold Mariano test helps us to understand whether the predictions of one model turned out better by chance or due to statistical significance. 
 
+\newpage
 
 #### 2.2.3. Mean Squared Error {#MSE}
 &nbsp;
 
-The third performance measurement method is also widely used and called Mean squared error. 
-
-\ref{eq:DM_loss_diff}
+The third performance measurement method is also widely used and called Mean Squared Error. Its calculation is very simple, for every timestep the estimated value is subtracted from the real empirical value, squared and then summarized and divided by the absolute number of observations as seen in equation \ref{eq:MSE}.
 
 ```{=tex}
-\begin{align} \label{eq:DM_definitions}
-  \bar{d} = \sum_{i = 1}^{T}d_{i} \\
-  f_{d}(0) = \frac{1}{2\pi}(\sum_{k=-\infty}^{\infty} \gamma_{d}(k))
-\end{align}
+\begin{align} \label{eq:MSE}
+  MSE = \frac{1}{N}\sum_{i = 1}^{N}(realvalue_{i}-\hat{prediciton}_{i})^2
+\end{align}  
 ```
+
+Altough its wide application in many different sectors, the MSE has a problem with outliers, due to the squared term, a huge outlier could influence the MSE very strongly. Therefore one should always check for outliers.
 
 \newpage
 
