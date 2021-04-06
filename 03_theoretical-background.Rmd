@@ -253,6 +253,21 @@ where $\bar{d}$ is the sample mean of the loss differential and $f_{d}(0)$ is th
 
 In conclusion, the Diebold Mariano test helps us to understand whether the predictions of one model turned out better by chance or due to statistical significance. 
 
+
+#### 2.2.3. Mean Squared Error {#MSE}
+&nbsp;
+
+The third performance measurement method is also widely used and called Mean squared error. 
+
+\ref{eq:DM_loss_diff}
+
+```{=tex}
+\begin{align} \label{eq:DM_definitions}
+  \bar{d} = \sum_{i = 1}^{T}d_{i} \\
+  f_{d}(0) = \frac{1}{2\pi}(\sum_{k=-\infty}^{\infty} \gamma_{d}(k))
+\end{align}
+```
+
 \newpage
 
 ### 2.3. Bitcoin {#bitcoin}
