@@ -255,6 +255,21 @@ In conclusion, the Diebold Mariano test helps us to understand whether the predi
 
 \newpage
 
+#### 2.2.3. Mean Squared Error {#MSE}
+&nbsp;
+
+The third performance measurement method is also widely used and called Mean Squared Error. Its calculation is very simple, for every timestep the estimated value is subtracted from the real empirical value, squared and then summarized and divided by the absolute number of observations as seen in equation \ref{eq:MSE}.
+
+```{=tex}
+\begin{align} \label{eq:MSE}
+  MSE = \frac{1}{N}\sum_{i = 1}^{N}(realvalue_{i}-\hat{prediciton}_{i})^2
+\end{align}  
+```
+
+Altough its wide application in many different sectors, the MSE has a problem with outliers, due to the squared term, a huge outlier could influence the MSE very strongly. Therefore one should always check for outliers.
+
+\newpage
+
 ### 2.3. Bitcoin {#bitcoin}
 
 In this section bitcoin as a crypto-curreny is introduced. The historical data is analyzed and commented. Further the technology in and around crypto-currencies is briefly explained. A detailed explanation would require a paper itself, therefore the explanation is done as simple as possible.

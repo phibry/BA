@@ -20,7 +20,7 @@ The focus of this thesis is to predict historical prices of bitcoin using the mo
 The data in this paper is accessed  via yahoofinance provided by coinmarket https://coinmarketcap.com/. We use the daily "closing price" of bitcoin in US Dollars with the ticker BTC-USD. Cryptoassets are tradeble 24 hours a day  256 days a year, there is no real "closing price" for the bitcoin, therefore the "closing-Price" is just the last price of the day evaluated at last timestamp with timeformat UTC.
 
 
-In chapter [2.3.](#bitcoin) the bitcoin price is visualized. For processing and analyzing the data in order to fullfill the weak stationarity assumptions we transform the data into logreturns
+In chapter [2.3.](#bitcoin) the bitcoin price is visualized. For processing and analyzing the data in order to fullfill the weak stationarity assumptions we transform the data into logreturns.
 
 
 
