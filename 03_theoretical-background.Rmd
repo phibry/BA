@@ -306,7 +306,8 @@ knitr::include_graphics("images/btc_usd.jpeg")
 
 \newpage
 
-#### 2.3.2. SHA256 Hash
+#### 2.3.2. Technology overview SHA256 Hash
+
 &nbsp;
 
 -   Block
@@ -317,3 +318,10 @@ knitr::include_graphics("images/btc_usd.jpeg")
 -   Public/Private Key -\> Signing
 -   Signature (sign, verify)
 -   Transaction
+
+
+
+
+
+
+
