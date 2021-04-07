@@ -13,16 +13,12 @@ The following chapter is intended to provide the theoretical foundations necessa
 
 ### 2.1. Neural network {#neural_network}
 
-In the context of this work, artificial neural networks are used to answer supervised learning questions that focus on the classification of data. This means that a neural network finds a correlation between the data and their labels and optimizes its parameters to minimize the error for the next try. This process is called supervised training and is performed with a test data sample. An application example of classification is that a neural network is used for face recognition after it has learned the classification of different faces in the process of supervised training. Predictive analysis works similarly to the classification of labeled data. It estimates future values based on past events and can be trained with historical data. On the other hand, unsupervised learning (clustering) is applied to detect patterns from unlabeled data. Based on these patterns, for example, anomalies can be detected that are relevant in the fight against fraud (fraud detection). Unsupervised learning is not discussed further in this paper.
-
-Section [2.1.1.](#perceptron) will demonstrate the functioning of a neural network using a simple perceptron.
+In the context of this work, artificial neural networks are used to answer supervised learning questions that focus on the classification of data. This means that a neural network finds a correlation between the data and their labels and optimizes its parameters to minimize the error for the next try. This process is called supervised training and is performed with a test data sample. An application example of classification is that a neural network is used for face recognition after it has learned the classification of different faces in the process of supervised training. Predictive analysis works similarly to the classification of labeled data. It estimates future values based on past events and can be trained with historical data. On the other hand, unsupervised learning (clustering) is applied to detect patterns from unlabeled data. Based on these patterns, for example, anomalies can be detected that are relevant in the fight against fraud (fraud detection). Unsupervised learning is not discussed further in this paper. Section [2.1.1.](#perceptron) will demonstrate the functioning of a neural network using a simple perceptron.
 
 #### 2.1.1. Perceptron {#perceptron}
 &nbsp;
 
-The construction of an artificial neural network is demonstrated using a perceptron. It is a simple algorithm for supervised learning of binary classification problems. This algorithm classifies patterns by performing a linear separation. Although this discovery was anticipated with great expectations in 1958, it became increasingly apparent that these binary classifiers are only applicable to linearly separable data inputs. This was only later addressed by the discovery of multiple layer perceptrons (MLP) [@perceptron_paper].
-
-Basically, a perceptron is a single-layer neural network and consists of the following five components and can also be observed in figure \ref{fig:perceptron_schema}.
+The construction of an artificial neural network is demonstrated using a perceptron. It is a simple algorithm for supervised learning of binary classification problems. This algorithm classifies patterns by performing a linear separation. Although this discovery was anticipated with great expectations in 1958, it became increasingly apparent that these binary classifiers are only applicable to linearly separable data inputs. This was only later addressed by the discovery of multiple layer perceptrons (MLP) [@perceptron_paper]. Basically, a perceptron is a single-layer neural network and consists of the following five components and can also be observed in figure \ref{fig:perceptron_schema}.
 
 1.  Inputs
 
@@ -38,7 +34,7 @@ Inputs are the information that is fed into the model. In the case of econometri
 
 \newpage
 
-```{r perceptron_schema, out.width='70%', fig.cap='Schematic diagram of a perceptron.', echo=FALSE}
+```{r perceptron_schema, fig.align='center', out.width='70%', fig.cap='Schematic diagram of a perceptron.', echo=FALSE}
 knitr::include_graphics("images/Perceptron.jpg")
 ```
 
@@ -72,7 +68,7 @@ Finding the optimal weights of the neural network is achieved by finding the min
 <!-- \hat{y}(v_{i})=\tanh(v_{i}) -->
 <!-- \end{align} -->
 
-```{r sigmoid, echo=FALSE, fig.cap="Two common sigmoid activation functions: logistic functions and hyperbolic tangent."}
+```{r sigmoid, fig.align='center', echo=FALSE, fig.cap="Two common sigmoid activation functions: logistic functions and hyperbolic tangent."}
 # Define x
 v <- seq(-5, 5, 0.02)
 
@@ -90,8 +86,9 @@ In the course of the error analysis, the output of the neural network respective
 
 ```{=tex}
 \begin{align} \label{eq:mse}
-  E=MSE=\frac{1}{n}\sum_{i = 1}^{n}(y_{i}-\hat{y}_{i})^2 \\
-  =\frac{1}{n}\sum_{i = 1}^{n}(y_{i}-g(w_{0}+x_{i}w_{i}))^2 \nonumber
+  E &=MSE(w) \\
+  &=\frac{1}{n}\sum_{i = 1}^{n}(y_{i}-\hat{y}_{i})^2 \nonumber \\
+  &=\frac{1}{n}\sum_{i = 1}^{n}(y_{i}-g(w_{0}+x_{i}w_{i}))^2 \nonumber 
 \end{align}
 ```
 As mentioned, this is searched for by the gradient descent method. The gradient of a function is a vector whose entries are the first partial derivatives of the function. The first entry is the partial derivative after the first variable, the second entry is the partial derivative after the second variable and so on. Each entry indicates the slope of the function in the direction of the variable to which it was derived. In this work, the notation $\nabla{E}$ is used when talking about the gradient for the error function $E$, which is displayed in equation \ref{eq:gradient_descent} [@backpropagation].
@@ -120,7 +117,7 @@ The weights get adjusted according to the following algorithm \ref{eq:weight_adj
 
 Multilayer perceptrons (MLP) are widely used feedforward neural network models and make usage of the backpropagation algorithm. They are an evolution of the original perceptron proposed by Rosenblatt in 1958 [@perceptron_paper]. The distinction is that they have at least one hidden layer between input and output layer, which means that an MLP has more neurons whose weights must be optimized. Consequently, this requires more computing power, but more complex classification problems can be handled [@mlp_architecture]. Figure \ref{fig:mlp_schema} shows the structure of an MLP with $n$ hidden layers. Compared to the perceptron, it can be seen that this neural network consists of an input layer, one or more hidden layers, and an output layer. In each layer, there is a different number of neurons, respectively nodes. These properties (number of layers and nodes) can be summarized with the term 'network architecture' and will be dealt with in this thesis.
 
-```{r mlp_schema, out.width='60%', fig.cap='Schematic diagram of a multilayer perceptron', echo=FALSE}
+```{r mlp_schema, fig.align='center', out.width='60%', fig.cap='Schematic diagram of a multilayer perceptron', echo=FALSE}
 knitr::include_graphics("images/MLP.jpeg")
 
 # https://assets.website-files.com/5ac6b7f2924c652fd013a891/5edab65ea64212da0ad611b7_5d52f096076d2b058e88cf0c_Artificial-neural-network-architecture-ANN-i-h-1-h-2-h-n-o.jpeg
@@ -133,42 +130,169 @@ In between are the hidden layers, whose number and size can be configured as des
 #### 2.1.4. Recurrent neural networks (RNN) {#RNN}
 &nbsp;
 
+Recurrent neural networks (RNN) are a further development of conventional neural networks. While MLP use new inputs $x_i$ in each epoch, RNN also use sequential data $h_i$ in addition to $x_i$. This sequential data are called hidden states and result from the previous runs. This has the advantage that historical information stemming from past predictions is included for the prediction for $t+1$. This effect can be intuitively explained by an example in which the flight path of a scheduled flight is predicted using RNN. When predicting the exact location (coordinates) of a plane, it is of great advantage to know the location at $t-1$ and to derive the flight direction from it. With the inclusion of this information, the target area can be narrowed down, which optimally leads to more accurate results. The same principle is used in applications like machine translation and speech recognition, where the result (here possibly letter or word) of the last epoch plays a big role for the next prediction [@RNN].
 
+```{r RNN, fig.align='center', out.width='80%', fig.cap= 'Process sequences of different applicances of RNN.', echo=FALSE}
+
+knitr::include_graphics("images/RNN.jpg")
+
+#[1]F.-F. Li, J. Johnson, and S. Yeung, ‘Lecture 10: Recurrent Neural Networks’, p. 105.
+
+```
+
+Figure \ref{fig:RNN} shows different process sequences of the RNN, which vary depending on the field of application. The red rectangles at the bottom represent the number of inputs. Similarly, the blue rectangles represent the outputs that come out of the RNN. The term 'many' refers to $>1$ and is illustrated with three rectangles in the figure. The green ones represent the hidden states $h_i$ of all time steps and thus can be seen as the memory of the neural network. The green arrows show that the previous hidden state is used as input for the current step. Starting from the left: one-to-many can be used for image captioning (extracting sequence of words from images), many-to-one for sentiment classification from sequence of words, many-to-many for machine translation (sequence of words in one language to sequence of words in another language) and many-to-many for video classification on frame level [@RNN_Stanford]. For the prediction of the BTC/USD exchange rate in this paper, we deal with the process many-to-one. This method combines information from inputs and hidden states into one single prediction value. 
+
+```{r RNN_many_to_one, fig.align='center', out.width='70%', fig.cap= 'Computational graph of a many-to-one RNN.', echo=FALSE}
+
+knitr::include_graphics("images/RNN_many_to_one.jpg")
+
+#[1]F.-F. Li, J. Johnson, and S. Yeung, ‘Lecture 10: Recurrent Neural Networks’, p. 105.
+
+```
+
+```{=tex}
+\begin{align} \label{eq:RNN_many_to_one_1}
+  h_{i} & = f_{W}(h_{i-1}, x_{i}) \\
+  & = \tanh(W_{h}h_{i-1} + W_{x}x_{i} + b) \nonumber 
+\end{align}
+```
+
+Equation \ref{eq:RNN_many_to_one_1} shows how the hidden states $h_{i}$ are calculated at each time step, $i$ where $f_{W}$ is an activation function (here: hyperbolic tangent function), $h_{i-1}$ is the previous state and $x_i$ is the input vector at time step i. In some cases, a bias term $b$ is added to the parameters. $W_{h}$ represents the weight matrix for $h_{i}$ with dimension (length($h$)$\times$length($h$)). Thus, $W_{x}$ is the weight matrix for $x_{i}$ with dimension (length($h$)$\times$length($x$)).
+
+```{=tex}
+\begin{align} \label{eq:RNN_many_to_one_2}
+  \hat{y_{i}} = W_{y}h_{i}
+\end{align}
+```
+
+Looking at equation \ref{eq:RNN_many_to_one_2}, $y_{i}$ equals the output and desired prediction of the RNN. The prediction results from the matrix-vector product of the weight matrix $W_{y}$ with dimension (length($h$)$\times$length($y$)) and the hidden states vector $h$.
 
 #### 2.1.5. Long-short term memory (LSTM) {#LSTM}
 &nbsp;
 
-#### 2.1.6. Challenges
+#### 2.1.6. Challenges {#challenges}
 &nbsp;
 
--   Early stopping required to avoid overfitting to in-sample data
+##### 2.1.6.1 Overfitting {#overfitting}
+&nbsp;
 
--   Gradient vanishing problem
+We have encountered several challenges that can occur when using neural networks. One of these possible problems is called overfitting. The goal of a neural network is to build a statistical model of the training set that is capable of generating the data. In overfitting on the other hand, the exact conditions of the training data including noise are reproduced. The focus is no longer on the underlying function. Last but not least, an unnecessarily large number of parameters or epochs can be 'consumed' for this, which makes the whole process relatively inefficient [@RNN]. 
 
-Sigmoid suffers from the problem of Vanishing Gradient. The gradients of the NN's output with respect to the parameters become so small, that the NN takes smaller steps towards the minima of the loss function and eventually stop learning.
+=> still needs clarification how we solve these challenges in this thesis!
 
--   Dying Relu Problem (?)
+##### 2.1.6.2. Vanishing gradient problem {#vanishing_gradient}
+&nbsp;
 
-#### 2.1.7. Model comparison
+Another characteristic that requires our attention is the vanishing gradient problem. As explained in chapter [2.1.2.](#backpropagation_algorithm), the weights of the neural network are adjusted using the gradient of the loss function. Thereby, the problem can occur that the gradient almost vanishes. The error function's gradients become so small that the backpropagation algorithm takes smaller steps towards the loss function's minima and eventually stops learning. For example, if the derivative of an activation function such as the logistic sigmoid function approaches zero for extremely large or small values for $x$. To avoid these extreme values for $x$, the inputs are scaled and normalized in this paper. This ensures that the definition range is within the range where the gradient is still large enough for the backpropagation algorithm.  
 
-- Plot of performance
-- Sharpe Ratio
-- Diebold Mariano
+=> still needs clarification how we solve these challenges in this thesis!
+
+### 2.2. Model comparison {#model_comparison}
+&nbsp;
+
+This thesis sets the goal to compare the different neural networks presented. Besides the types of neural networks, the network architecture (number of layers and nodes) is explored. In addition, a comparison is made with the winner of the Forecasting Competition M4, which combines a standard exponential smoothing model with an LSTM network. To make the comparison meaningful enough, the following two figures are compared. 
+
+#### 2.2.1. Sharpe ratio {#sharpe_ratio}
+&nbsp;
+
+The first number refers to the performance of the trading strategy based on the sign of the prediction $t+1$ and is called Sharpe Ratio. Sharpe ratio is a very powerful and widely used ratio to measure performance and it describes return per risk.
+
+```{=tex}
+\begin{align} \label{eq:Sharpe}
+  SharpeRatio = \frac{R_{p}-R_{f}}{\sigma}
+\end{align}
+```
+
+$R_{p}$ represents the return of the portfolio, while $R_{f}$ equals the risk free rate. $\sigma$ is the standard deviation of the portfolios excess return (risk). For the comparison of different series, the Sharpe Ratio needs to be annualized with $\sqrt{365}$ as the crypto market is open 24/7.
+
+#### 2.2.2. Diebold Mariano {#diebold_mariano}
+&nbsp;
+
+The second method used is the Diebold Mariano test, which compares the predictive accuracy between two forecasts. First, the loss differential $d_{i}$ between two forecasts is defined in equation \ref{eq:DM_loss_diff} where a loss function L of one model is subtracted from another model. The proposed loss functions include absolute errors (AE) and squared errors (SE) [@DM_paper]. Given an expected value of $d = 0$, both forecasts are assumed to have the same accuracy. If the expected value differs from zero, the null hypothesis can be rejected. This would mean that the two methods have different levels of accuracy. 
+
+```{=tex}
+\begin{align} \label{eq:DM_hypothesis}
+  H_{0}: E(d_{i}) = 0 \\
+  H_{1}: E(d_{i}) \neq 0 \nonumber
+\end{align}
+```
+
+with
+
+```{=tex}
+\begin{align} \label{eq:DM_loss_diff}
+  d_{i} = L(e_{1i}) - L(e_{2i})
+\end{align}
+```
+
+and
+
+```{=tex}
+\begin{align} \label{eq:DM_error}
+  e_{ti} = \hat{y_{ti}} - y_{i} \\
+  \text{for } t={1,2} \nonumber
+\end{align}
+```
+
+Under the null hypothesis $H_{0}$, the Diebold Mariano test uses the statistics shown in equation \ref{eq:DM} and is asymptotically N(0,1) distributed. On the other hand, the null hypothesis is rejected if the calculated absolute Diebold Mariano value is outside $-z_{\alpha/2}$ and $z_{\alpha/2}$. Thus, $|DM|>z_{\alpha/2}$ is valid when there is a significant difference between the predictions where $z_{\alpha/2}$ is the positive bound of the z-value to the level $\alpha$.    
+
+```{=tex}
+\begin{align} \label{eq:DM}
+  DM = \frac{\bar{d}}{\sqrt{\frac{2*\pi*\hat{f_{d}(0)}}{T}}} \rightarrow N(0,1)
+\end{align}
+```
+
+where $\bar{d}$ is the sample mean of the loss differential and $f_{d}(0)$ is the spectral density of the loss differential at lag k [@DM_lecture].
+
+```{=tex}
+\begin{align} \label{eq:DM_definitions}
+  \bar{d} = \sum_{i = 1}^{T}d_{i} \\
+  f_{d}(0) = \frac{1}{2\pi}(\sum_{k=-\infty}^{\infty} \gamma_{d}(k))
+\end{align}
+```
+
+In conclusion, the Diebold Mariano test helps us to understand whether the predictions of one model turned out better by chance or due to statistical significance. 
 
 \newpage
 
-### 2.2. Bitcoin {#bitcoin}
+#### 2.2.3. Mean Squared Error {#MSE}
+&nbsp;
+
+The third performance measurement method is also widely used and called Mean Squared Error. Its calculation is very simple, for every timestep the estimated value is subtracted from the real empirical value, squared and then summarized and divided by the absolute number of observations as seen in equation \ref{eq:MSE}.
+
+```{=tex}
+\begin{align} \label{eq:MSE}
+  MSE = \frac{1}{N}\sum_{i = 1}^{N}(realvalue_{i}-\hat{prediciton}_{i})^2
+\end{align}  
+```
+
+Altough its wide application in many different sectors, the MSE has a problem with outliers, due to the squared term, a huge outlier could influence the MSE very strongly. Therefore one should always check for outliers.
+
+\newpage
+
+### 2.3. Bitcoin {#bitcoin}
 
 In this section bitcoin as a crypto-curreny is introduced. The historical data is analyzed and commented. Further the technology in and around crypto-currencies is briefly explained. A detailed explanation would require a paper itself, therefore the explanation is done as simple as possible.
 
 In the following work bitcoin as a cryptocurreny is mentionend in its short term BTC, by the meaning of US Dollars per Bitcoin.
 
-#### 2.2.1. Historical analysis
+#### 2.3.1. Historical analysis
 &nbsp;
 
-The story of bitcoin began with a paper published by the name of Satoshi Nakamoto [@bitcoin]. The publisher of the document cannot be assigned to a real person, therefore the technology inventor remains mysteriosly unknown until today. In 2009 the first bitcoin transaction was executed. On account of the opensource technology of bitcoin, lots of alternative currencies were created. Until 2013 the cryptocurrencies operated under the radar of most regulatory institutions. Because of the anonymity of the transactions, criminals were attracted by the newborn payment method. Headlines, such as the seizure of 26,000 bitcoins by closing the "Dark-Web" Website Silkroad through the Drug Enforcement Agency, followed moreoften in the newspapers. Nevertheless in 2014 more companys,such as :Zynga, D LasVegas Casinos, Golden Gate Hotel & Casino, TigerDirect, Overstock.com, Newegg, Dell, and even Microsoft [@A_History_of_Bitcoin]. began to accept bitcoin as a payment method. In 2014 the first derivative with bitcoin as an underlying was approved by the U.S.Commodity Futures Trading Commission. 2015 an estimated 160000 merchants used bitcoin to trade . It is observed that the value of bitcoin is very volatile, we will discuss this in a FURTHER XYXY section. Let us first look a the price in \ref{fig:price_btc} and the log(price)\ref{fig:logprice_btc} and get a sense of the chart. Note: The data in the charts start in 2014 where it was listed in coinmarket, events between 2009 and 2014 are described without visualization.
+The story of bitcoin began with a paper published by the name of Satoshi Nakamoto [@bitcoin]. The publisher of the document cannot be assigned to a real person, therefore the technology inventor remains mysteriosly unknown until today. In 2009 the first bitcoin transaction was executed. On account of the opensource technology of bitcoin, lots of alternative currencies were created. 
 
-Around 2010 bitcoin had the first increase in price as it jumped a 100% from 0.0008 USD to 0.08 Dollar [@Bitcoin_history]. In 2011 the price rose from 1 USD to 32 USD within 3 months and recessd shortly after to 2 USD this can be referred as a first price bubble in bitcoin, for the next year the pri climbed to 13 Dollars and reached a never seen level of 220 USD, only to plunge to 70 USD within a half month in April 2013. By the end of the year a rally brought btc up to a peak of 1156 USD. The following year brought bad news and the price slowly decreased to 315 USD in 2015 after an observed drop of 20% after news from the trial of Ross Ulbricht, founder of Silk road marked in Letter \textbf{A}.From this point in time, things began to change, more volume was flushed in the market and the price of BTC began to ascend and the real rally began ,the BTC rose up to 20k USD / BTC on 17th September 2017 \textbf{B}. After the rise comes the fall and BTC lost value for more than a year until \textbf{C} 2018-12-15 the trend reverted and found its peak after 6 months in \textbf{D} 2019-06-26, but oncemore it was not lasting for long as bitcoin lost \textbf{D} 2020-03-12 nearly half its value in 4 days. But the story wasn't over by now after the drop, the price of the cryptocurrency regained value, passed previous levels and shortly after exploded, after companies like tesla and signal bought a big chunk of bitcoins, into a maximum of 58000 USD per bitcoin.
+Until 2013 the cryptocurrencies operated under the radar of most regulatory institutions. Because of the anonymity of the transactions, criminals were attracted by the newborn payment method. Headlines, such as the seizure of 26,000 bitcoins by closing the "Dark-Web" Website Silkroad through the Drug Enforcement Agency, followed moreoften in the newspapers. 
+
+Nevertheless in 2014 more companys, such as: Zynga, D LasVegas Casinos, Golden Gate Hotel & Casino, TigerDirect, Overstock.com, Newegg, Dell, and even Microsoft [@A_History_of_Bitcoin], began to accept bitcoin as a payment method. In 2014 the first derivative with bitcoin as an underlying was approved by the U.S.Commodity Futures Trading Commission.
+2015 an estimated 160000 merchants used bitcoin to trade. It is observed that the value of bitcoin is very volatile, we will discuss this in a FURTHER XYXY section.
+
+
+Let us first look a the price in Figure \ref{fig:price_btc} and the log(price) in Figure \ref{fig:logprice_btc} and get a sense of the chart. Note: The data in the charts start in 2014 where it was listed in coinmarket, events between 2009 and 2014 are described without visualization.
+
+Around 2010 bitcoin had the first increase in price as it jumped a 100% from 0.0008 USD to 0.08 Dollar [@Bitcoin_history]. In 2011 the price rose from 1 USD to 32 USD within 3 months and recessd shortly after to 2 USD this can be referred as a first price bubble in bitcoin, for the next year the price climbed to 13 Dollars and reached a never seen level of 220 USD, only to plunge to 70 USD within a half month in April 2013.
+By the end of the year a rally brought btc up to a peak of 1156 USD. The following year brought bad news and the price slowly decreased to 315 USD in 2015 after an observed drop of 20% after news from the trial of Ross Ulbricht, founder of Silk road marked in Letter \textbf{A}.
+
+From this point in time, things began to change, more volume was flushed in the market and the price of BTC began to ascend and the real rally began ,the BTC rose up to 20k USD / BTC on 17th September 2017 \textbf{B}. After the rise comes the fall and BTC lost value for more than a year until \textbf{C} 2018-12-15 the trend reverted and found its peak after 6 months in \textbf{D} 2019-06-26, but oncemore it was not lasting for long as bitcoin lost \textbf{D} 2020-03-12 nearly half its value in 4 days. But the story wasn't over by now, after the drop the price of the cryptocurrency regained value, passed previous levels and shortly after exploded, after companies like tesla and signal bought a big chunk of bitcoins, into a maximum of 58000 USD per bitcoin.
 
 \newpage
 
