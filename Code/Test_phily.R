@@ -153,7 +153,12 @@ color <- 1
 in_samp_seq <- seq(1, real*2, 2)
 for(i in in_samp_seq) {
   if (i == 1) {
-    plot(mati[,i],main="In-Sample", type="l", ylim=c(min(mati[,in_samp_seq]),max(mati[,in_samp_seq])), col=color)
+    plot(mati[,i],
+         main="In-Sample",
+         type="l",
+         ylim=c(min(mati[,in_samp_seq]) ,max(mati[,in_samp_seq])),
+         col=color,
+         ylab="MSE")
     color = color + 1
   } else {
     lines(mati[,i], col=color)
@@ -169,7 +174,12 @@ color <- 1
 out_of_samp_seq <- seq(2, real*2, 2)
 for(i in out_of_samp_seq) {
   if (i == 2) {
-    plot(mati[,i],main="Out-of-Sample", type="l", ylim=c(min(mati[,out_of_samp_seq]),max(mati[,out_of_samp_seq])), col=color)
+    plot(mati[,i],
+         main="Out-of-Sample",
+         type="l",
+         ylim=c(min(mati[,out_of_samp_seq]), max(mati[,out_of_samp_seq])),
+         col=color,
+         ylab="MSE")
     color = color + 1
   } else {
     lines(mati[,i], col=color)
@@ -181,24 +191,79 @@ for (i in head(layers, -1)) {
 }
 
 
+# Fullplots in one
+# par(mfrow=c(1,1))
+# 
+# in_samp_seq <- seq(1, real*2, 2)
+# out_of_samp_seq <- seq(2, real*2, 2)
+# 
+# for(i in 1:real) {
+#   if (i == 1) {
+#     plot(mati[,in_samp_seq[i]],
+#          main="Full",
+#          type="l",
+#          ylim=c(min(mati[,out_of_samp_seq]) ,max(mati[,in_samp_seq])),
+#          col=i,
+#          ylab="MSE")
+#     
+#     lines(mati[,out_of_samp_seq[i]], col=i)
+# 
+#   } else {
+#     lines(mati[,in_samp_seq[i]], col=i)
+#     lines(mati[,out_of_samp_seq[i]], col=i)
+#   }
+# }
+# for (i in head(layers, -1)) {
+#   abline(v=(1+i), lty=2)
+# }
+
+
 # Plots by Layer####
-par(mfrow=c(1,1))
+par(mfrow=c(2,1))
 iter <- 1
 prev_it <- 1
-mini <- min(mati[,in_samp_seq])
-maxi <- max(mati[,in_samp_seq])
+mini_in <- min(mati[,in_samp_seq])
+maxi_in <- max(mati[,in_samp_seq])
+
+mini_out <- min(mati[,out_of_samp_seq])
+maxi_out <- max(mati[,out_of_samp_seq])
 
 for(i in layers) {
-  print(i)
+  color <- 1
   
   for(j in in_samp_seq) {
-    print(j)
     if (j == 1) {
-      plot(mati[prev_it:i, j], ylim=c(mini,maxi), main=paste("Layer: ", iter), type="l")
+      plot(mati[prev_it:i, j],
+           ylim=c(mini_in, maxi_in),
+           main=paste("Layer: ", iter),
+           type="l",
+           col=color,
+           ylab="MSE")
+      
+      color = color + 1
     } else {
-      lines(mati[prev_it:i, j])
+      lines(mati[prev_it:i, j], col=color)
+      color = color + 1
     }
   }
+  
+  
+  color <- 1
+  for(k in out_of_samp_seq) {
+    if (k == 2) {
+      plot(mati[prev_it:i, k],
+           ylim=c(mini_out, maxi_out),
+           main=paste("Layer: ", iter),
+           type="l",
+           col=color,
+           ylab="MSE")
+      color = color + 1 
+    } else {
+      lines(mati[prev_it:i, k], col=color)
+      color = color + 1
+    }
+  }
+  
   prev_it <- i+1
   iter <- iter + 1
 }
