@@ -51,11 +51,22 @@ acf(log_ret)
 To compare the models we choose two simple benchmarks the well known buy and hold and an Ar(1) process as you can see in Figure xy and Figure xxy.
 
 
-#### Finding best model for Neural net
+#### 3.3.xy Evaluating architecture
 
-In order to find an appropriate model to evaluate our neural net architecture we 
+In order to find an appropriate model to evaluate our neural net architecture we needed to compare different architecture of the network. Therefore we wrote a function which compares all possible combinations of neurons and layers for a given maximum.  The Insample and out of sample MSE are computed and compared. Due to the "randomness of the networks with specific numbers of layers and neurons, multiple realisations for every single network are computed to find a systematic deviation.
 
-### 3.4. Trading strategies
+
+
+
+
+
+
+
+results:
+
+- no need for more complexity, smaller architecture also does the job
+
+### 3.4. Trading strategiesg
 
 -   Define trading strategies
 

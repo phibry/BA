@@ -229,6 +229,6 @@ n <- colnames(train_set)
 f <- as.formula(paste   ("lag0 ~"   ,  paste(n[!n %in% "lag0"], collapse = " + ")  ))
 
 
-optim_10n_2l_20real=combination_in_out_MSE(maxneuron=10,maxlayer=1,real=1,train_set,data_mat,test_set,f,plot=T)
+optim_10n_2l_20real=combination_in_out_MSE(maxneuron=20,maxlayer=2,real=20,train_set,data_mat,test_set,f,plot=F)
 
 
