@@ -66,3 +66,55 @@ mat[3:6, 2] <- rep(1:n, rep(n))
 mat[7:14, 1] <- rep(1:n, rep(n*n, n))
 mat[7:14, 2] <- rep(rep(1:n, c(n,n)), n)
 mat[7:14, 3] <- rep(1:n, n*n)
+
+
+
+
+# 
+
+# Plots for single Realisation
+# Full Plot
+# plot(mati[,2],type="l", ylim=c(min(mati[,3]), max(mati[,2])))
+# lines(mati[,3],col="red")
+# for (i in head(layers, -1)) {
+#   abline(v=(1+i), lty=2)
+# }
+# 
+# iter <- 1
+# prev_it <- 1
+# for(i in layers) {
+#   plot(mati[prev_it:i,2],type="l", ylim=c(min(mati[prev_it:i,3]), max(mati[prev_it:i,2])), main=paste("Layer: ", iter))
+#   lines(mati[prev_it:i,3],col="red")
+#   
+#   prev_it <- i+1
+#   iter <- iter + 1
+# }
+
+
+
+
+# Fullplots in one
+# par(mfrow=c(1,1))
+# 
+# in_samp_seq <- seq(1, real*2, 2)
+# out_of_samp_seq <- seq(2, real*2, 2)
+# 
+# for(i in 1:real) {
+#   if (i == 1) {
+#     plot(mati[,in_samp_seq[i]],
+#          main="Full",
+#          type="l",
+#          ylim=c(min(mati[,out_of_samp_seq]) ,max(mati[,in_samp_seq])),
+#          col=i,
+#          ylab="MSE")
+#     
+#     lines(mati[,out_of_samp_seq[i]], col=i)
+# 
+#   } else {
+#     lines(mati[,in_samp_seq[i]], col=i)
+#     lines(mati[,out_of_samp_seq[i]], col=i)
+#   }
+# }
+# for (i in head(layers, -1)) {
+#   abline(v=(1+i), lty=2)
+# }

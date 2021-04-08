@@ -15,8 +15,7 @@
 
 estimate_nn<-function(train_set,number_neurons,data_mat,test_set,f)
 {
-  nn <- neuralnet(f,data=train_set,hidden=number_neurons,linear.output=T)
-  
+  nn <- neuralnet(f,data=train_set,hidden=number_neurons,linear.output=T, stepmax = 1e+08)
   
   # In sample performance
   predicted_scaled_in_sample<-nn$net.result[[1]]
@@ -27,8 +26,13 @@ estimate_nn<-function(train_set,number_neurons,data_mat,test_set,f)
   
   # Out-of-sample performance
   # Compute out-of-sample forecasts
+
+  pr.nn <- compute(nn, as.matrix(test_set[,2:ncol(test_set)]))
+  
+
   pr.nn <- retry(compute(nn,as.matrix(test_set[,2:ncol(test_set)])), when = "Fehler in cbind(1, pred) %*% weights[[num_hidden_layers + 1]] : 
   verlangt numerische/komplexe Matrix/Vektor-Argumente ")
+
   predicted_scaled<-pr.nn$net.result
   # Results from NN are normalized (scaled)
   # Descaling for comparison
