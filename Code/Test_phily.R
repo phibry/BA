@@ -56,14 +56,35 @@ anz <- n^(1:l)
 mat <- matrix(0, nrow=sum(anz), ncol=l)
 
 # Erster Schritt:
-mat[1:2, 1] <- rep(1:2);mat
+mat[1:2, 1] <- rep(1:2)
 
 # Zweiter Schritt:
 mat[3:6, 1] <- rep(1:n, rep(n, n))
-mat[3:6, 2] <- rep(1:n, rep(n));mat
+mat[3:6, 2] <- rep(1:n, rep(n))
 
 # Dritter Schritt:
 mat[7:14, 1] <- rep(1:n, rep(n*n, n))
 mat[7:14, 2] <- rep(rep(1:n, c(n,n)), n)
-mat[7:14, 3] <- rep(1:n, n*n);mat
+mat[7:14, 3] <- rep(1:n, n*n)
+
+
+res <- function(n=3, l=3) {
+  anz <- n^(1:l)
+  mat <- matrix(0, nrow=sum(anz), ncol=l)
+  
+  
+  i_end <- cumsum(anz)
+  i_start <- anz-1
+  i_start <- i_end - i_start
+  
+  
+  for(j in 0:(length(anz)-1)) {
+    for (i in (1+j):l) {
+      mat[i_start[i]:i_end[i], i-j] <- rep(1:n, rep(n^(j), n))
+    }
+  }
+  return(as.data.frame(mat))
+}
+
+res(5, 7)
 

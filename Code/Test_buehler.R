@@ -110,11 +110,10 @@ n <- colnames(train_set)
 f <- as.formula(paste   ("lag0 ~"   ,  paste(n[!n %in% "lag0"], collapse = " + ")  ))
 
 
-
-insampleres(maxlayer=1,maxneuron=10,rep=50)# function pb
+set.seed(1)
+insampleres(maxlayer=2,maxneuron=100,rep=2)# function pb
 
 #-------------------------------------------------------------------------------------------------------------#
-
 
 
 
@@ -200,12 +199,74 @@ target_out=log_ret_27_03_21["2020-05-01::"]
 perf_nn<-signal*target_out
 
 charts.PerformanceSummary(perf_nn, main="perfromance via SMA10")
-sqrt(255)*SharpeRatio(perf_nn,FUN="StdDev")
+sqrt(365)*SharpeRatio(perf_nn,FUN="StdDev")
 
 
 bah=target_out
   
 charts.PerformanceSummary(bah, main="Buy and hold")
-sqrt(255)*SharpeRatio(bah,FUN="StdDev")
+sqrt(365)*SharpeRatio(bah,FUN="StdDev")
+#### combinat###
+
+#-----------------------#
+
+load("data/log_ret_27_03_21.rda")  
+logret=log_ret_27_03_21           
+x=logret["2018-01-01::"] 
+acf(x)   
+data_mat<-cbind(x,lag(x),lag(x,k=2),lag(x,k=3),lag(x,k=4),lag(x,k=5),lag(x,k=6),lag(x,k=7),lag(x,k=8),lag(x,k=9),lag(x,k=10)) 
+data_mat<-na.exclude(data_mat)
+maxs <- apply(data_mat, 2, max)   #    creating a vector with the maximum per lag 
+mins <- apply(data_mat, 2, min)   #    creating a vector with the minimum per lag
+scaled_log_ret <- scale(data_mat, center = mins, scale = maxs - mins)  # scaling the returns   # all values betwen  0 1
+in_out_sample_separator="2020-05-01"             
+train_set <- scaled_log_ret[paste("/",in_out_sample_separator,sep=""),]
+test_set <- scaled_log_ret[paste(in_out_sample_separator,"/",sep=""),]
+train_set<-as.matrix(train_set)
+test_set<-as.matrix(test_set)
+colnames(train_set)<-paste("lag",0:(ncol(train_set)-1),sep="")
+n <- colnames(train_set)
+f <- as.formula(paste   ("lag0 ~"   ,  paste(n[!n %in% "lag0"], collapse = " + ")  ))
 
 
+
+
+
+
+
+maxneuron= 5
+l=expand.grid( 1:maxneuron, 1:maxneuron,1:maxneuron,1:maxneuron, 1:maxneuron )
+
+##generating names of rows ###
+ind=rep(NA,dim(l)[1])
+for(k in 1:dim(l)[1])
+  {
+  x=as.vector(l[k,])
+  ind[k]=toString(as.character(x[x!=0]))
+  }
+
+
+# generating empty result matrix
+mati=matrix(nrow=dim(l)[1],ncol=3,0)
+mati=as.data.frame(mati)
+
+rownames(mati)=ind
+head(mati)
+
+for( i in 1: dim(l)[1])
+{
+  x=as.vector(l[i,])       # in vektor  umwandeln
+  x= x[x!=0]
+  print("1")
+  # ohne null
+  net=estimate_nn(train_set,number_neurons=x,data_mat,test_set,f) # netz erstellen
+  mati[i,2]=net$MSE_nn[1]   # insample error
+  mati[i,3]=net$MSE_nn[2]
+  mati[i,1]=toString(as.character(x))
+  print(mati[i,])
+  # out of sample error            # namen der spalte 
+}
+
+
+plot(mati[,2],type="l", ylim=c(0.001, 0.002))
+lines(mati[,3],col="red")

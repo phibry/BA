@@ -51,7 +51,9 @@ acf(log_ret)
 To compare the models we choose two simple benchmarks the well known buy and hold and an Ar(1) process as you can see in Figure xy and Figure xxy.
 
 
+#### Finding best model for Neural net
 
+In order to find an appropriate model to evaluate our neural net architecture we 
 
 ### 3.4. Trading strategies
 
