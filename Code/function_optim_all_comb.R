@@ -23,7 +23,11 @@ f <- as.formula(paste   ("lag0 ~"   ,  paste(n[!n %in% "lag0"], collapse = " + "
 source("Code/combination_input_grid.R") # calling funcktin
 maxlayer=7
 maxneuron=5
-combmat=combination_input_grid(maxlayer,maxneuron)
+
+combmat=combination_input_grid(3,3)
+
+combmat2 <- input_grid(n=5, l=7)
+combmat2
 
 ##generating names of rows ###----------------------
 ind=rep(NA,dim(combmat)[1])

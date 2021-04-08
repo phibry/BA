@@ -268,5 +268,5 @@ for( i in 1: dim(l)[1])
 }
 
 
-plot(mati[,2],type="l")
+plot(mati[,2],type="l", ylim=c(0.001, 0.002))
 lines(mati[,3],col="red")
