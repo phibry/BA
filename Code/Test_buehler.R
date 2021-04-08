@@ -232,41 +232,5 @@ f <- as.formula(paste   ("lag0 ~"   ,  paste(n[!n %in% "lag0"], collapse = " + "
 
 
 
+combination_in_out_MSE(maxneuron=3,maxlayer=3,real=10,train_set,data_mat,test_set,f,plot=T)
 
-
-maxneuron= 5
-l=expand.grid( 1:maxneuron, 1:maxneuron,1:maxneuron,1:maxneuron, 1:maxneuron )
-
-##generating names of rows ###
-ind=rep(NA,dim(l)[1])
-for(k in 1:dim(l)[1])
-  {
-  x=as.vector(l[k,])
-  ind[k]=toString(as.character(x[x!=0]))
-  }
-
-
-# generating empty result matrix
-mati=matrix(nrow=dim(l)[1],ncol=3,0)
-mati=as.data.frame(mati)
-
-rownames(mati)=ind
-head(mati)
-
-for( i in 1: dim(l)[1])
-{
-  x=as.vector(l[i,])       # in vektor  umwandeln
-  x= x[x!=0]
-  print("1")
-  # ohne null
-  net=estimate_nn(train_set,number_neurons=x,data_mat,test_set,f) # netz erstellen
-  mati[i,2]=net$MSE_nn[1]   # insample error
-  mati[i,3]=net$MSE_nn[2]
-  mati[i,1]=toString(as.character(x))
-  print(mati[i,])
-  # out of sample error            # namen der spalte 
-}
-
-
-plot(mati[,2],type="l", ylim=c(0.001, 0.002))
-lines(mati[,3],col="red")

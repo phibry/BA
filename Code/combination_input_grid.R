@@ -6,7 +6,6 @@
 
 
 combination_input_grid=function(maxlayer,maxneuron)
-  
 { 
  starttime=Sys.time()
   
@@ -32,11 +31,6 @@ combination_input_grid=function(maxlayer,maxneuron)
    
  return(combmat)
 } 
-
-
-
-
-
 
 
 input_grid <- function(n=3, l=3) {

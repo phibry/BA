@@ -1,0 +1,81 @@
+# this function creates an input grid for all posiible combaniatioons of neurons and eliminates invalid 0 #same as above other order an much slower
+combination_input_grid=function(maxlayer,maxneuron){ 
+  starttime=Sys.time()
+  
+  input = vector(mode = "list", length = maxlayer)
+  input[[1]]=1:maxneuron
+  if( maxlayer > 1){for(i in 2:maxlayer){input[[i]]=0:maxneuron}}
+  
+  grid=expand.grid( input ) 
+  
+  
+  truevec=rep(TRUE,dim(grid)[1])
+  for(row in 1:dim(grid)[1])
+  {
+    for(col in (2:(dim(grid)[2]-1)) )
+    {
+      if  ( grid[row,col]< grid[row,col+1] & grid[row,col]==0){truevec[row]=FALSE } 
+    }
+  }
+  combmat=grid[truevec,]
+  
+  print(paste("duration: " ,Sys.time()-starttime))
+  
+  
+  return(combmat)
+} 
+
+
+#####
+
+# this function generates MLPs between 1 and max layer and 1 and maxneuron,  it 
+# showes graphically the optimization via repetition  and plots the mean and minimum of the repetitions
+
+# note that thsi function needs the inputs from wildi train set test set  formula f usw from stimate func()
+insampleres=function(maxlayer=2,maxneuron=6,rep=10)
+{
+  # function
+  resmat=matrix(nrow = maxlayer,ncol = maxneuron,0)
+  allresult=t(rep(1,maxlayer*maxneuron +2))
+  minlayer=1;minneuron=1
+  for (l in 1:rep)
+    
+  { 
+    pb <- txtProgressBar(min = 1, max = rep, style = 3)
+    for( layer_i in minlayer:maxlayer)
+    {
+      for (neuron_k in minneuron:maxneuron)
+      {
+        number_neurons=c(rep(neuron_k,layer_i))
+        net=estimate_nn(train_set,number_neurons=number_neurons,data_mat,test_set,f)
+        resmat[layer_i,neuron_k]=net$MSE_nn[1]
+        print(number_neurons)
+      }
+      
+    }
+    
+    print(paste(as.character(rep-l)," Iterations left"))
+    vec= c(as.vector(t(resmat)),mean(resmat),min(resmat)) 
+    allresult=rbind(allresult,vec)
+    setTxtProgressBar(pb, l)
+  }
+  close(pb)
+  
+  par(mfrow=c(2,1))
+  allresult=allresult[-1,] # row = layers times neurons note last 2 are mean and min of try, 
+  plot(-allresult[1,1:(maxlayer*maxneuron)],type = "l",xlab=" neurons per layer",ylab="negativ insample error", main= paste("insample error optimzation, Maxneuron:",as.character(maxneuron),"Maxlayer:",as.character(maxlayer)),ylim=c(-max(allresult),-min(allresult)) )
+  abline(v=seq(maxneuron,maxlayer*maxneuron,maxneuron), col = "red",lty= 2)
+  for(o in 2:dim(allresult)[1])
+  {lines(-allresult[o,1:(maxlayer*maxneuron)],col = o)}
+  legend("topright",lty=2,col = "red",legend = "layer batch")  
+  
+  plot(allresult[,maxlayer*maxneuron+1],main="insample error : mean over optimization",ylab= "insample error",ylim=c(min(allresult[,maxlayer*maxneuron+2]),max(allresult[,maxlayer*maxneuron+1])))
+  abline(h=mean(allresult[,maxlayer*maxneuron+1]),)
+  points(allresult[,maxlayer*maxneuron+2],main=paste("mean and min of all " ,as.character(rep)," iterations"),col = "red")
+  abline(h=mean(allresult[,maxlayer*maxneuron+2]),col="red")
+  legend("bottom",lty=c(2,2),col = c("black","red"),legend = c("mean","minimum"))
+  
+  return(allresult)
+  #which( resmat==min(resmat),arr.ind =T) #  index of value
+}
+
