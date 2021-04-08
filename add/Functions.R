@@ -26,8 +26,13 @@ estimate_nn<-function(train_set,number_neurons,data_mat,test_set,f)
   
   # Out-of-sample performance
   # Compute out-of-sample forecasts
+
   pr.nn <- compute(nn, as.matrix(test_set[,2:ncol(test_set)]))
   
+
+  pr.nn <- retry(compute(nn,as.matrix(test_set[,2:ncol(test_set)])), when = "Fehler in cbind(1, pred) %*% weights[[num_hidden_layers + 1]] : 
+  verlangt numerische/komplexe Matrix/Vektor-Argumente ")
+
   predicted_scaled<-pr.nn$net.result
   # Results from NN are normalized (scaled)
   # Descaling for comparison
@@ -92,6 +97,7 @@ combination_in_out_MSE=function(maxneuron=3,maxlayer=3,real=10,train_set,data_ma
   #creating , testing , neural net
   for( i in 1: dim(combmat)[1])
   {
+    pb <- txtProgressBar(min = 1, max = dim(combmat)[1], style = 3)
     x=as.vector(combmat[i,])
     x= x[x!=0]
     for(k in seq(1,real*2,2))
@@ -101,8 +107,12 @@ combination_in_out_MSE=function(maxneuron=3,maxlayer=3,real=10,train_set,data_ma
       mati[i,k+1]=net$MSE_nn[2]
       # out of sample error
     }
+    print(paste("Elapsed Time: " ,Sys.time()-starttime))
+    setTxtProgressBar(pb, i)
+    
   }
-  print(paste("duration: " ,Sys.time()-starttime))
+  close(pb)
+  print(paste("Overall Time: " ,Sys.time()-starttime))
   
   if( plot == T)
   {
