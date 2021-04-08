@@ -1,6 +1,4 @@
 # # feed forward nets ####
-library(neuralnet)
-# neuralnet(f,data=train_set,hidden=layer,linear.output=F) # neurnalnet function
 # feedforward estimation
 
 # this function takes the input :
@@ -17,8 +15,7 @@ library(neuralnet)
 
 estimate_nn<-function(train_set,number_neurons,data_mat,test_set,f)
 {
-  nn <- neuralnet(f,data=train_set,hidden=number_neurons,linear.output=T)
-  
+  nn <- neuralnet(f,data=train_set,hidden=number_neurons,linear.output=T, stepmax = 1e+08)
   
   # In sample performance
   predicted_scaled_in_sample<-nn$net.result[[1]]
@@ -29,7 +26,8 @@ estimate_nn<-function(train_set,number_neurons,data_mat,test_set,f)
   
   # Out-of-sample performance
   # Compute out-of-sample forecasts
-  pr.nn <- compute(nn,as.matrix(test_set[,2:ncol(test_set)]))
+  pr.nn <- compute(nn, as.matrix(test_set[,2:ncol(test_set)]))
+  
   predicted_scaled<-pr.nn$net.result
   # Results from NN are normalized (scaled)
   # Descaling for comparison
@@ -47,58 +45,140 @@ estimate_nn<-function(train_set,number_neurons,data_mat,test_set,f)
 
 
 
+# this function creates an input grid for all posiible combatioons of neurons and eliminates invalid 0
+input_grid <- function(n=3, l=3) {
+  anz <- n^(1:l)
+  mat <- matrix(0, nrow=sum(anz), ncol=l)
+  
+  
+  i_end <- cumsum(anz)
+  i_start <- anz-1
+  i_start <- i_end - i_start
+  
+  
+  for(j in 0:(length(anz)-1)) {
+    for (i in (1+j):l) {
+      mat[i_start[i]:i_end[i], i-j] <- rep(1:n, rep(n^(j), n))
+    }
+  }
+  return(as.data.frame(mat))
+}
 
-##
-#looping loiue by Pb####
 
-# this function generates MLPs between 1 and max layer and 1 and maxneuron,  it 
-# showes graphically the optimization via repetition  and plots the mean and minimum of the repetitions
-
-# note that thsi function needs the inputs from wildi train set test set  formula f usw from stimate func()
-insampleres=function(maxlayer=2,maxneuron=6,rep=10)
+# optimizing with all combinations
+# this function requires estimate_nn, grid_function
+combination_in_out_MSE=function(maxneuron=3,maxlayer=3,real=10,train_set,data_mat,test_set,f,plot=F)
 {
-  # function
-  resmat=matrix(nrow = maxlayer,ncol = maxneuron,0)
-  allresult=t(rep(1,maxlayer*maxneuron +2))
-  minlayer=1;minneuron=1
-  for (l in 1:rep)
-    
-  { 
-    pb <- txtProgressBar(min = 1, max = rep, style = 3)
-    for( layer_i in minlayer:maxlayer)
+  starttime=Sys.time()
+  # Define Input Grid
+  # needs input grid function
+  combmat <- input_grid(maxneuron,maxlayer)
+  
+  
+  # Naming the  grid with combinations
+  ind <- rep(NA,dim(combmat)[1])
+  for(k in 1:dim(combmat)[1])
+  {
+    x <- as.vector(combmat[k,])
+    ind[k] <- toString(as.character(x[x!=0]))
+  }
+  
+  # Define result matrix
+  mati <- matrix(nrow=dim(combmat)[1], ncol=real*2, 0)
+  mati <- as.data.frame(mati)
+  rownames(mati) <- ind
+  
+  
+  #creating , testing , neural net
+  for( i in 1: dim(combmat)[1])
+  {
+    x=as.vector(combmat[i,])
+    x= x[x!=0]
+    for(k in seq(1,real*2,2))
     {
-      for (neuron_k in minneuron:maxneuron)
-      {
-        number_neurons=c(rep(neuron_k,layer_i))
-        net=estimate_nn(train_set,number_neurons=number_neurons,data_mat,test_set,f)
-        resmat[layer_i,neuron_k]=net$MSE_nn[1]
-        print(number_neurons)
+      net=estimate_nn(train_set,number_neurons=x,data_mat,test_set,f) # netz erstellen
+      mati[i,k]=net$MSE_nn[1] # insample error
+      mati[i,k+1]=net$MSE_nn[2]
+      # out of sample error
+    }
+  }
+  print(paste("duration: " ,Sys.time()-starttime))
+  
+  if( plot == T)
+  {
+    # Layer Breakpoints
+    breakpoints <- unique(nchar(rownames(mati)))
+    
+    layer_breakpoints_vec <- c()
+    
+    for (i in breakpoints) {
+      layer_breakpoints_vec <- cbind(layer_breakpoints_vec, sum(nchar(rownames(mati)) == i))
+    }
+    layers <- cumsum(layer_breakpoints_vec)
+    
+    
+    # Full Plots####
+    par(mfrow=c(2,1))
+    # In-Sample
+    color <- 1
+    in_samp_seq <- seq(1, real*2, 2)
+    for(i in in_samp_seq) {
+      if (i == 1) {
+        plot(mati[,i],main="In-Sample", type="l", ylim=c(min(mati[,in_samp_seq]),max(mati[,in_samp_seq])), col=color)
+        color = color + 1
+      } else {
+        lines(mati[,i], col=color)
+        color = color + 1
       }
-      
+    }
+    for (i in head(layers, -1)) {
+      abline(v=(1+i), lty=2)
     }
     
-    print(paste(as.character(rep-l)," Iterations left"))
-    vec= c(as.vector(t(resmat)),mean(resmat),min(resmat)) 
-    allresult=rbind(allresult,vec)
-    setTxtProgressBar(pb, l)
+    # Out-of-Sample
+    color <- 1
+    out_of_samp_seq <- seq(2, real*2, 2)
+    for(i in out_of_samp_seq) {
+      if (i == 2) {
+        plot(mati[,i],main="Out-of-Sample", type="l", ylim=c(min(mati[,out_of_samp_seq]),max(mati[,out_of_samp_seq])), col=color)
+        color = color + 1
+      } else {
+        lines(mati[,i], col=color)
+        color = color + 1
+      }
+    }
+    for (i in head(layers, -1)) {
+      abline(v=(1+i), lty=2)
+    }
+    
+    
+    # Plots by Layer####
+    par(mfrow=c(1,1))
+    iter <- 1
+    prev_it <- 1
+    mini <- min(mati[,in_samp_seq])
+    maxi <- max(mati[,in_samp_seq])
+    
+    for(i in layers) {
+      print(i)
+      
+      for(j in in_samp_seq) {
+        print(j)
+        if (j == 1) {
+          plot(mati[prev_it:i, j], ylim=c(mini,maxi), main=paste("Layer: ", iter), type="l")
+        } else {
+          lines(mati[prev_it:i, j])
+        }
+      }
+      prev_it <- i+1
+      iter <- iter + 1
+    }
   }
-  close(pb)
   
-  par(mfrow=c(2,1))
-  allresult=allresult[-1,] # row = layers times neurons note last 2 are mean and min of try, 
-  plot(-allresult[1,1:(maxlayer*maxneuron)],type = "l",xlab=" neurons per layer",ylab="negativ insample error", main= paste("insample error optimzation, Maxneuron:",as.character(maxneuron),"Maxlayer:",as.character(maxlayer)),ylim=c(-max(allresult),-min(allresult)) )
-  abline(v=seq(maxneuron,maxlayer*maxneuron,maxneuron), col = "red",lty= 2)
-  for(o in 2:dim(allresult)[1])
-    {lines(-allresult[o,1:(maxlayer*maxneuron)],col = o)}
-  legend("topright",lty=2,col = "red",legend = "layer batch")  
-  
-  plot(allresult[,maxlayer*maxneuron+1],main="insample error : mean over optimization",ylab= "insample error",ylim=c(min(allresult[,maxlayer*maxneuron+2]),max(allresult[,maxlayer*maxneuron+1])))
-  abline(h=mean(allresult[,maxlayer*maxneuron+1]),)
-  points(allresult[,maxlayer*maxneuron+2],main=paste("mean and min of all " ,as.character(rep)," iterations"),col = "red")
-  abline(h=mean(allresult[,maxlayer*maxneuron+2]),col="red")
-  legend("bottom",lty=c(2,2),col = c("black","red"),legend = c("mean","minimum"))
-  
-  return(allresult)
-  #which( resmat==min(resmat),arr.ind =T) #  index of value
+  return(mati)
 }
+
+
+
+
 
