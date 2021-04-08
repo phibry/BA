@@ -26,7 +26,13 @@ maxneuron=5
 
 combmat=combination_input_grid(3,3)
 
-combmat2 <- input_grid(n=5, l=7)
+dim(combmat)
+
+library(tidyverse)
+combmat[1,] == c(1,0,0)
+combmat %>% distinct()
+
+combmat2 <- input_grid(n=5, l=5)
 combmat2
 
 ##generating names of rows ###----------------------
