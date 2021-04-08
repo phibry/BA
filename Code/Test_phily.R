@@ -1,74 +1,57 @@
 source("add/libraries.r") 
 source("add/Functions.r")
 
-# Data####
-load("data/log_ret_27_03_21.rda")  # loading logreturns closing! data xts
-load("data/BTC_USD_27_03_21.rda")
-
-lr <- log_ret_27_03_21
-cl <- BTC_USD_27_03_21$`BTC-USD.Close`
-
-par(mfrow=c(2,2))
-plot(cl)
-chart.ACF(cl)
-plot(lr)
-chart.ACF(lr)
 
 
-# l=3, n=3####
-neuron <- 3
-layer <- 3
-anz <- neuron^(1:layer)
-mat <- matrix(0, nrow=sum(anz), ncol=layer)
 
-# Erster Schritt
-mat[1:3,1] <- rep(1:3)
+# Load and prepare date####
+load("data/log_ret_27_03_21.rda")
+logret <- log_ret_27_03_21
+x <- logret["2018-01-01::"]
+colnames(x) <- "BTC-LogReturns"
+chart.ACF(x)
 
-# Zweiter Schritt
-mat[4:12, 1] <- rep(1:3, rep(3,3))
-mat[4:12, 2] <- rep(1:3, 3)
+data_mat <- cbind(x,
+                  lag(x),
+                  lag(x,k=2),
+                  lag(x,k=3),
+                  lag(x,k=4),
+                  lag(x,k=5),
+                  lag(x,k=6),
+                  lag(x,k=7),
+                  lag(x,k=8),
+                  lag(x,k=9),
+                  lag(x,k=10))
 
-# Dritter Schritt
-mat[13:39, 1] <- rep(1:3, rep(9,3))
-mat[13:39, 2] <- rep(rep(1:3, c(3,3,3)), 3)
-mat[13:39, 3] <- rep(1:3, 9)
-mat
+# remove NA's
+data_mat <- na.exclude(data_mat)
 
+# Maxs and Mins per lag
+maxs <- apply(data_mat, 2, max)
+mins <- apply(data_mat, 2, min)
 
-# l=2, n=2####
-n <- 2
-l <- 2
-anz <- n^(1:l)
-mat <- matrix(0, nrow=sum(anz), ncol=l)
+# Scaling returns between 0 and 1
+scaled_log_ret <- scale(data_mat, center = mins, scale = maxs - mins)
 
-# Erster Schritt
-mat[1:2, 1] <- rep(1:n)
+# Define train/test split
+in_out_sample_separator="2020-05-01"
+train_set <- scaled_log_ret[paste("/",in_out_sample_separator,sep=""),]
+test_set <- scaled_log_ret[paste(in_out_sample_separator,"/",sep=""),]
 
-# Zweiter Schritt
-mat[3:6, 1] <- rep(1:n, rep(n, n))
-mat[3:6, 2] <- rep(1:n, 2)
+# Transform to matrices
+train_set <- as.matrix(train_set)
+test_set <- as.matrix(test_set)
 
-
-# l=3, n=2####
-n <- 2
-l <- 3
-anz <- n^(1:l)
-mat <- matrix(0, nrow=sum(anz), ncol=l)
-
-# Erster Schritt:
-mat[1:2, 1] <- rep(1:2)
-
-# Zweiter Schritt:
-mat[3:6, 1] <- rep(1:n, rep(n, n))
-mat[3:6, 2] <- rep(1:n, rep(n))
-
-# Dritter Schritt:
-mat[7:14, 1] <- rep(1:n, rep(n*n, n))
-mat[7:14, 2] <- rep(rep(1:n, c(n,n)), n)
-mat[7:14, 3] <- rep(1:n, n*n)
+# Define formula for the neuralnet
+colnames(train_set)<-paste("lag",0:(ncol(train_set)-1),sep="")
+n <- colnames(train_set)
+f <- as.formula(paste("lag0 ~", paste(n[!n %in% "lag0"], collapse = " + ")))
 
 
-res <- function(n=3, l=3) {
+
+
+# Input-Grid-Function####
+input_grid <- function(n=3, l=3) {
   anz <- n^(1:l)
   mat <- matrix(0, nrow=sum(anz), ncol=l)
   
@@ -86,5 +69,156 @@ res <- function(n=3, l=3) {
   return(as.data.frame(mat))
 }
 
-res(5, 7)
+# Define Input Grid
+combmat <- input_grid(2,2)
+
+# Naming
+ind <- rep(NA,dim(combmat)[1])
+for(k in 1:dim(combmat)[1]) {
+  x <- as.vector(combmat[k,])
+  ind[k] <- toString(as.character(x[x!=0]))
+}
+
+# Define result matrix
+mati <- matrix(nrow=dim(combmat)[1], ncol=20, 0)
+mati <- as.data.frame(mati)
+rownames(mati) <- ind
+
+real <- 10
+
+
+# starttime <- Sys.time()
+# for (j in 1:dim(combmat)[1]) {
+#   for (i in seq(from=1, to=2*real, by=2)) {
+#     mati[j,i:(i+1)] <- c(i, i+1) # Time difference of 5.376341 secs
+#     
+#     # mati[j,i] <- c(i)
+#     # mati[j,(i+1)] <- c(i+1)
+#     
+#   }
+# }
+# print(Sys.time() - starttime)
+
+
+# starttime <- Sys.time()
+# for(i in 1:dim(combmat)[1]) {
+#   for (i in seq(from=1, to=2*real, by=2)) {
+#     x <- as.vector(combmat[i,])       # in vektor  umwandeln
+#     x <- x[x!=0]
+#     # ohne null
+#     net <- estimate_nn(train_set, number_neurons=x, data_mat, test_set,f) # netz erstellen
+#     mati[j, i:(i+1)] <- c(net$MSE_nn[1], net$MSE_nn[2])
+#     # namen der spalte
+#     print('yolo')
+#   }
+# }
+# print(Sys.time() - starttime)
+
+starttime=Sys.time()
+
+for( i in 1: dim(combmat)[1])
+{
+  x=as.vector(combmat[i,])
+  x= x[x!=0]
+  for(k in seq(1,real*2,2))
+  {
+    net=estimate_nn(train_set,number_neurons=x,data_mat,test_set,f) # netz erstellen
+    mati[i,k]=net$MSE_nn[1] # insample error
+    mati[i,k+1]=net$MSE_nn[2]
+    # out of sample error
+  }
+  print(mati[i,])
+}
+print(paste("duration: " ,Sys.time()-starttime))
+
+
+load("data/optim_5_5.rda")
+head(optim_5_5)
+mati <- optim_5_5
+# Layer Breakpoints
+breakpoints <- unique(nchar(rownames(mati)))
+
+layer_breakpoints_vec <- c()
+
+for (i in breakpoints) {
+  layer_breakpoints_vec <- cbind(layer_breakpoints_vec, sum(nchar(rownames(mati)) == i))
+}
+layers <- cumsum(layer_breakpoints_vec)
+
+
+# Full Plots####
+par(mfrow=c(2,1))
+# In-Sample
+color <- 1
+in_samp_seq <- seq(1, real*2, 2)
+for(i in in_samp_seq) {
+  if (i == 1) {
+    plot(mati[,i],main="In-Sample", type="l", ylim=c(min(mati[,in_samp_seq]),max(mati[,in_samp_seq])), col=color)
+    color = color + 1
+  } else {
+    lines(mati[,i], col=color)
+    color = color + 1
+  }
+}
+for (i in head(layers, -1)) {
+  abline(v=(1+i), lty=2)
+}
+
+# Out-of-Sample
+color <- 1
+out_of_samp_seq <- seq(2, real*2, 2)
+for(i in out_of_samp_seq) {
+  if (i == 2) {
+    plot(mati[,i],main="Out-of-Sample", type="l", ylim=c(min(mati[,out_of_samp_seq]),max(mati[,out_of_samp_seq])), col=color)
+    color = color + 1
+  } else {
+    lines(mati[,i], col=color)
+    color = color + 1
+  }
+}
+for (i in head(layers, -1)) {
+  abline(v=(1+i), lty=2)
+}
+
+
+# Plots by Layer####
+par(mfrow=c(1,1))
+iter <- 1
+prev_it <- 1
+mini <- min(mati[,in_samp_seq])
+maxi <- max(mati[,in_samp_seq])
+
+for(i in layers) {
+  print(i)
+  
+  for(j in in_samp_seq) {
+    print(j)
+    if (j == 1) {
+      plot(mati[prev_it:i, j], ylim=c(mini,maxi), main=paste("Layer: ", iter), type="l")
+    } else {
+      lines(mati[prev_it:i, j])
+    }
+  }
+  prev_it <- i+1
+  iter <- iter + 1
+}
+
+
+# Plots for single Realisation
+# Full Plot
+# plot(mati[,2],type="l", ylim=c(min(mati[,3]), max(mati[,2])))
+# lines(mati[,3],col="red")
+# for (i in head(layers, -1)) {
+#   abline(v=(1+i), lty=2)
+# }
+# 
+# iter <- 1
+# prev_it <- 1
+# for(i in layers) {
+#   plot(mati[prev_it:i,2],type="l", ylim=c(min(mati[prev_it:i,3]), max(mati[prev_it:i,2])), main=paste("Layer: ", iter))
+#   lines(mati[prev_it:i,3],col="red")
+#   
+#   prev_it <- i+1
+#   iter <- iter + 1
+# }
 
