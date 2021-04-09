@@ -138,6 +138,7 @@ plot_by_layer_rect <- function(mati, real, title="") {
 
       } else {
         lines(mati[prev_it:i, j], col=color)
+        # points(mati[prev_it:i, j], col=color)
         color = color + 1
       }
     }
@@ -162,6 +163,7 @@ plot_by_layer_rect <- function(mati, real, title="") {
         color = color + 1 
       } else {
         lines(mati[prev_it:i, k], col=color)
+        # points(mati[prev_it:i, k], col=color)
         color = color + 1
       }
     }
@@ -363,8 +365,12 @@ plot_by_layer(optim_10_2_10, 10, "10N 2L 10R")
 
 
 par_default <- par(no.readonly = TRUE)
+
 par(mfrow=c(1,1), mar=c(3,5,3,2))
+
+
 plot(cumsum(rnorm(1000)), type="l")
+par()
 par('usr')[1]
 rect(xleft=par('usr')[1],
      xright=par('usr')[2],

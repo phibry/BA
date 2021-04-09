@@ -376,6 +376,8 @@ for(i in layers) {
       
       # rownames(mati)[at]
       labels <- rownames(mati[prev_it:i,])[at]
+      prev_it:i
+      rownames(mati[130,])
       
       axis(1, at=at, labels=labels)
 
