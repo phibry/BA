@@ -349,6 +349,11 @@ maxi_out <- max(mati[,out_of_samp_seq])
 
 for(i in layers) {
   color <- 1
+  # i <- 155
+  # prev_it <- 30+1
+  length(rownames(mati[prev_it:i,])) / 5
+  
+  
   
   for(j in in_samp_seq) {
     if (j == 1) {
@@ -357,7 +362,25 @@ for(i in layers) {
            main=paste("Layer: ", iter),
            type="l",
            col=color,
-           ylab="MSE")
+           ylab="MSE",
+           xaxt="n",
+           ann=FALSE)
+      
+      par("xaxp")
+      
+      end <- par("xaxp")[2]
+      splitter <- par("xaxp")[3]
+      multi <- round(end / splitter)
+      
+      at <- c(1, cumsum(rep(multi, splitter)))
+      
+      # rownames(mati)[at]
+      labels <- rownames(mati[prev_it:i,])[at]
+      prev_it:i
+      rownames(mati[130,])
+      
+      axis(1, at=at, labels=labels)
+
       
       color = color + 1
     } else {
