@@ -36,6 +36,15 @@ By computing the autocorrelation oft the log_returns, there is still dependence 
 acf(log_ret)
 ```
 
+### 3.2. Comparison of network architecture
+
+As mentioned in chapter [2.1.3.](#MLP), choosing an appropriate network architecture for bitcoin price prediction is a crucial step in order to achieve useful forecasts while avoiding overfitting. Due to the complexity as well as the non-linearity of neural networks, the interpretation cannot be performed intuitively. For this reason, an approach is pursued in which neural networks with different numbers of layers and neurons are compared with each other by using the MSE loss. This allows us to compare accuracy and possibly see a connection with network architecture. The first plot in figure xy compares different neural networks with one layer. Networks with a maximum of six neurons are compared. These different configurations can be seen on the x-axis. The y-axis shows the MSE values obtained with the respective optimized model. We use ten different optimizations of each configuration to get a better idea of a potentially systematic relationship with the MSE. In the plot, each of the configurations is drawn using a different color. 
+
+- NN for bitcoin prediction
+- Non-linear task
+- How decide the number of layers and nodes
+- Keep in mind rule of thumb 
+- Test all possible configurations (with realizations = 10) and compare the MSE 
 
 
 ### 3.2. Defining train and test samples
