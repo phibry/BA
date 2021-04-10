@@ -2,11 +2,17 @@
 source("add/libraries.R")
 source("add/Functions.R")
 load("data/log_ret_27_03_21.rda")
+load("data/BTC_USD_27_03_21.rda")
 
 ##### Volatility prediction for trading signals: Method 1 using fGArch #####
 # Using functions from fGarch package
 
-# Data prep
+# Data prep prices
+BTC <- BTC_USD_27_03_21$`BTC-USD.Close`
+BTC <- as.data.frame(BTC)
+BTC <- na.omit(BTC)
+
+# Data prep log returns
 dat <- log_ret_27_03_21
 head(dat)
 
@@ -67,14 +73,34 @@ while(datum <= date_n){
   j <- j + 1
 }
 
-vola_mat <- na.omit(vola_mat)
 
+# Plot of log prices, log returns and predicted volatilities
+par(mfrow = c(3,1))
+
+# Plotting log prices (easier to compare relative changes)
+plot(log(BTC$`BTC-USD.Close`[(index(BTC)[which(row.names(BTC) == "2020-05-02")]
+                              :(index(BTC)[which(row.names(BTC) == "2021-03-27")]))]), type = "l",
+     main = "Bitcoin log prices", ylab = "Log prices")
+
+# Plotting log returns
+plot(dat$`BTC-USD.Close`[(index(dat)[which(row.names(dat) == "2020-05-02")]
+                          :(index(dat)[which(row.names(dat) == "2021-03-27")]))], type = "l",
+     main = "Bitcoin log returns", ylab = "Log return")
+
+
+# Plotting predicted volatility
+vola_mat <- na.omit(vola_mat)
 plot(vola_mat$GARCH_Volatility ~ vola_mat$Date, xaxt = "n", type = "l", main = "Predicted volatility measured by SD",
      xlab = "Time", ylab = "SD")
 lines(vola_mat$GJR_Volatility ~ vola_mat$Date, type = "l", col = 2)
 axis(1, vola_mat$Date, format(vola_mat$Date, "%Y-%m-%d"))
 abline(h = median(vola_mat$GARCH_Volatility), col = 4)
-legend("topleft", c("GARCH", "GJR-GARCH", "Median"), col = c(1,2,4), lty = 1, cex = 0.7)
+legend("topleft", c("GARCH", "GJR-GARCH", "Median"), col = c(1,2,4), lty = 1, cex = 0.4)
+
+
+
+
+
 
 
 
