@@ -1,6 +1,6 @@
 # Imports####
 source("add/libraries.r") 
-source("add/Functions.r")
+# source("add/Functions.r")
 
 
 # Load Data####
@@ -8,10 +8,12 @@ source("add/libraries.r")
 load("data/log_ret_27_03_21.rda")
 logret <- log_ret_27_03_21
 
+tail(logret)
+
 # Data Function
-data_function<-function(x, lags, in_out_sep, start="") {
+data_function<-function(x, lags, in_out_sep, start="", end="") {
   # Define startpoints
-  x <- x[paste(start,"::", sep="")]
+  x <- x[paste(start,"::", end, sep="")]
   data_mat <- x
   
   # Create lagged data
@@ -56,7 +58,7 @@ data_function<-function(x, lags, in_out_sep, start="") {
               f=f))
 }
 
-data_obj <- data_function(x=logret, lags=6, in_out_sep="2020-05-01", start="2018-01-01")
+data_obj <- data_function(x=logret, lags=6, in_out_sep="2020-05-01", start="2018-01-01", end="")
 
 # Estimate Fun####
 nn_estim <- function(data_obj, nl_comb) {
@@ -86,17 +88,6 @@ nn_estim <- function(data_obj, nl_comb) {
   perf_in <- (sign(pred_in))*target_in
   sharpe_in <- as.numeric(sqrt(365)*mean(perf_in)/sqrt(var(perf_in)))
   
-  # plot(train_rescaled,type="l")
-  # plot(train_set[,1], type="l")
-  # plot(pred_in_scaled, type="l")
-  # plot(pred_in, type="l")
-  # 
-  # 
-  # plot(test_set[,1], type="l")
-  # plot(test.r, type="l")
-  # plot(pred_out, type="l")
-  
-  
   # Out-of-sample performance
   # Compute out-of-sample forecasts
   # pr.nn <- compute(nn, as.matrix(test_set[,2:ncol(test_set)]))
@@ -117,12 +108,6 @@ nn_estim <- function(data_obj, nl_comb) {
   # Compare in-sample and out-of-sample
   mse_nn <- c(mse_in, mse_out)
   sharpe_nn <- c(sharpe_in, sharpe_out)
-  
-  # par(mfrow=c(1,2))
-  # plot(cumsum(pred_in), type="l")
-  # plot(cumsum(pred_out), type="l")
-  # 
-  # plot(pred_out, type="l")
   
   return(list(mse_nn=mse_nn, pred_out=pred_out, pred_in=pred_in, sharpe_nn=sharpe_nn))
 }
