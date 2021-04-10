@@ -1,3 +1,4 @@
+# Pure MSE Plots####
 plot_all_rect <- function(mati, real, title="") {
   # Layer Breakpoints
   str_splitter <- function(x) {
@@ -306,10 +307,131 @@ plot_by_layer <- function(mati, real, title="") {
 }
 
 
+#.####
+# Sharpe-MSE Plots####
+plot_all_rect_mse_sharpe <- function(mati, real, title="") {
+  # Layer Breakpoints
+  str_splitter <- function(x) {
+    return(length(as.numeric(unlist(strsplit(x, ", ")))))
+  }
+  
+  layers <- sapply(X=rownames(mati), FUN=str_splitter, USE.NAMES=FALSE)
+  layers <- as.numeric(table(layers))
+  layers <- cumsum(layers)
+  
+  
+  # Plots mit Rect
+  par_default <- par(no.readonly = TRUE)
+  par(mfrow=c(2,1), mar=c(3,5,3,2))
+  ## In-Sample
+  # color indizes for plots
+  color <- 1
+  
+  # color codes for the rect
+  colorcodes <- c("#FF00001A", # red
+                  "#0000FF1A", # blue
+                  "#80FF001A", # green
+                  "#FF80001A", # orange
+                  "#00FFFF1A", # teal
+                  "#8000FF1A") # purple
+  
+  seq_mse_in <- seq(1, real*4, 4)
+  seq_mse_out <- seq(2, real*4, 4)
+  seq_sharpe_in <- seq(3, real*4, 4)
+  seq_sharpe_out <- seq(4, real*4, 4)
+  
+  
+  
+  for(i in seq_mse_in) {
+    if (i == 1) {
+      plot(mati[,i],
+           # main="In-Sample",
+           main=paste(title, ": In-Sample", sep=""),
+           type="l",
+           ylim=c(min(mati[,seq_mse_in]) ,max(mati[,seq_mse_in])),
+           xlim=c(1, dim(mati)[1]),
+           col=color,
+           ylab="MSE",
+           frame.plot = FALSE,
+           xaxt="n",
+           xlab="")
+      color = color + 1
+    } else {
+      lines(mati[,i], col=color)
+      color = color + 1
+    }
+  }
+  # for (i in head(layers, -1)) {
+  #   abline(v=(1+i), lty=2)
+  # }
+  
+  startl <- c(1, head(layers, -1)+1)
+  endl <- layers
+  for (i in 1:length(layers)) {
+    rect(xleft = startl[i],
+         xright = endl[i],
+         ybottom = min(mati[,seq_mse_in]),
+         ytop = max(mati[,seq_mse_in]),
+         col=colorcodes[i])#,
+    # border = "transparent")
+    text(startl[i]+(endl[i]-startl[i])/2, min(mati[,seq_mse_in])*1.02, i)
+  }
+  
+  
+  ## Out-of-Sample
+  color <- 1
+  for(i in seq_mse_out) {
+    if (i == 2) {
+      plot(mati[,i],
+           main=paste(title, ": Out-of-Sample", sep=""),
+           type="l",
+           ylim=c(min(mati[,seq_mse_out]), max(mati[,seq_mse_out])),
+           col=color,
+           ylab="MSE",
+           frame.plot = FALSE,
+           xaxt="n",
+           xlab="")
+      color = color + 1
+    } else {
+      lines(mati[,i], col=color)
+      color = color + 1
+    }
+  }
+  # for (i in head(layers, -1)) {
+  #   abline(v=(1+i), lty=2)
+  # }
+  
+  for (i in 1:length(layers)) {
+    rect(xleft = startl[i],
+         xright = endl[i],
+         ybottom = min(mati[,seq_mse_out]),
+         ytop = max(mati[,seq_mse_out]),
+         col=colorcodes[i])#,
+    # border = "transparent")
+    text(startl[i]+(endl[i]-startl[i])/2, max(mati[,seq_mse_out])*0.98, i)
+  }
+  
+  par(par_default)
+}
 
 
+#.####
 # 5N 5L 10R####
 load("data/optim_5_5_10.rda")
+cor(optim_5_5_10[,1:2])
+plot(optim_5_5_10[,1:2])
+
+cor(optim_5_5_10[,3:4])
+plot(optim_5_5_10[,3:4])
+
+cor(optim_5_5_10[,5:6])
+cor(optim_5_5_10[,7:8])
+cor(optim_5_5_10[,9:10])
+
+cor(optim_5_5_10[,11:12])
+plot(optim_5_5_10[,11:12])
+
+
 # rect
 plot_all_rect(optim_5_5_10, 10, "5N 5L 10R")
 plot_by_layer_rect(optim_5_5_10, 10, "5N 5L 10R")
@@ -362,6 +484,19 @@ plot_all(optim_10_2_10, 10, "10N 2L 10R")
 plot_by_layer(optim_10_2_10, 10, "10N 2L 10R")
 
 
+
+
+
+
+#.####
+# MSE-Sharpe Plot####
+
+
+
+
+
+#.####
+# Test####
 
 
 par_default <- par(no.readonly = TRUE)
