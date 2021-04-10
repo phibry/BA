@@ -59,31 +59,43 @@ As mentioned in chapter [2.1.3.](#MLP), choosing an appropriate network architec
 
 To compare the models we choose two simple benchmarks the well known buy and hold and an Ar(1) process as you can see in Figure xy and Figure xxy.
 
+\newpage
+#### 3.3.xy.  Evaluating architecture
 
-#### 3.3.xy Evaluating architecture
+&nbsp;
 
 In order to find an appropriate model to evaluate our neural net architecture we needed to compare different architectures of the network. Therefore we wrote a function which compares all possible combinations of neurons and layers for a given maximum. 
 
 For an easier understanding here is an example:
 
-We want to know all combinations of nets for a maximum of 2 layers with maximum 2 neurons each. With formula \ref{eq:complexity} we can compute the number of combinations. In the example case it equals 6 nets, which are plotted in figure \ref{figure:examples_for_function}, the input layer is cutted down to two layers for illustration.
+We want to know all combinations of nets for a maximum of 2 layers with maximum 2 neurons each. With formula \ref{eq:complexity} we can compute the number of combinations.
 
+In this case it equals 6 nets, which are plotted in figure \ref{figure:examples_for_function}, the input layer is held simply, to two layers for illustration. For each of this 6 models We compute Insample out of sample MSE, their correlation and the In and out of sample performance ( daily trading ) with the Sharpe measure.
+
+Due to the "randomness of the networks  multiple realisations for every single network are computed in order to find a pattern or a systematic deviation.
 
 ```{=tex}
 \begin{align} \label{eq:complexity}
-\net combinations=\sum_{i=1}^{L}N^{i})
+comb=\sum_{i=1}^{L}N^{i}
 \end{align}
 ```
 with:
 
-$L = maximum of layers \in \N $
-$N = maximum of Neurons \in \N $
+
+$L =$ maximum Layer $\in$ Natural numbers without 0 
+
+$N =$ maximum Neurons  $\in$ Natural numbers without 0 
+
+$comb =$ Number of all combinations
 
 ```{r examples_for_function, fig.align='center', out.width='70%', fig.cap='Schematic diagram of a perceptron.', echo=FALSE,out.width="100%"}
 knitr::include_graphics("images/examples for function.jpg")
 ```
 
-The Insample and out of sample MSE are computed and compared. Due to the "randomness of the networks with specific numbers of layers and neurons, multiple realisations for every single network are computed to find a systematic deviation.
+
+
+
+By reason to lack of time in the frame of this bachelorthesis, we only regard maximum 5 layers and maximum 5 realisations which itself generates 3905 models which are each calculated 20 times equaling 78100 differnet nets.
 
 Regarding real life application of the model we evaluate performance over different insample - out of sample 
 
