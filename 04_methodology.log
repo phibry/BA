@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2020.12.6)  10 APR 2021 14:28
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2020.12.6)  10 APR 2021 17:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -377,8 +377,7 @@ d-pdftex.def
 File: l3backend-pdftex.def 2020-09-24 L3 backend support: PDF output (pdfTeX)
 \l__kernel_color_stack_int=\count276
 \l__pdf_internal_box=\box49
-)
-No file 04_methodology.aux.
+) (./04_methodology.aux)
 \openout1 = `04_methodology.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 64.
@@ -430,6 +429,7 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 64.
 LaTeX Info: Redefining \pageref on input line 64.
 LaTeX Info: Redefining \nameref on input line 64.
+(./04_methodology.out) (./04_methodology.out)
 \@outlinefile=\write3
 \openout3 = `04_methodology.out'.
 
@@ -508,8 +508,8 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 107
 (c:/Users/buehl/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-<04_methodology_files/figure-latex/unnamed-chunk-1-1.pdf, id=6, 469.755pt x 325
-.215pt>
+<04_methodology_files/figure-latex/unnamed-chunk-1-1.pdf, id=38, 469.755pt x 32
+5.215pt>
 File: 04_methodology_files/figure-latex/unnamed-chunk-1-1.pdf Graphic file (typ
 e pdf)
 <use 04_methodology_files/figure-latex/unnamed-chunk-1-1.pdf>
@@ -520,7 +520,7 @@ f  used on input line 118.
 
 {c:/Users/buehl/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdfte
 x.map}]
-<04_methodology_files/figure-latex/unnamed-chunk-2-1.pdf, id=27, 469.755pt x 32
+<04_methodology_files/figure-latex/unnamed-chunk-2-1.pdf, id=57, 469.755pt x 32
 5.215pt>
 File: 04_methodology_files/figure-latex/unnamed-chunk-2-1.pdf Graphic file (typ
 e pdf)
@@ -529,23 +529,58 @@ Package pdftex.def Info: 04_methodology_files/figure-latex/unnamed-chunk-2-1.pd
 f  used on input line 126.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [2 <./04_methodology_files/figure-latex/unnamed-chunk-1-1.pdf>] [3 <./04_method
-ology_files/figure-latex/unnamed-chunk-2-1.pdf>]
+ology_files/figure-latex/unnamed-chunk-2-1.pdf>] [4]
 
-LaTeX Warning: Reference `figure:examples_for_function' on page 4 undefined on 
-input line 199.
+LaTeX Warning: Reference `figure:examples_for_function' on page 5 undefined on 
+input line 205.
 
-! Undefined control sequence.
-<argument>  \label {eq:complexity} \net 
-                                        combinations=\sum _{i=1}^{L}N^{i}) 
-l.204 \end{align}
-                  
+<images/examples for function.jpg, id=88, 863.47594pt x 474.27188pt>
+File: images/examples for function.jpg Graphic file (type jpg)
+<use images/examples for function.jpg>
+Package pdftex.def Info: images/examples for function.jpg  used on input line 2
+28.
+(pdftex.def)             Requested size: 469.74841pt x 258.01352pt.
+[5 <./images/examples for function.jpg>] [6] (./04_methodology.aux)
+Package rerunfilecheck Info: File `04_methodology.out' has not changed.
+(rerunfilecheck)             Checksum: 74C9F0EDF8E4C9BDECCCE745A2A9256B;1732.
+
+LaTeX Warning: There were undefined references.
+
+ ) 
 Here is how much of TeX's memory you used:
- 10341 strings out of 481364
- 149927 string characters out of 5917580
- 431869 words of memory out of 5000000
- 27005 multiletter control sequences out of 15000+600000
+ 10398 strings out of 481364
+ 151027 string characters out of 5917580
+ 432744 words of memory out of 5000000
+ 27034 multiletter control sequences out of 15000+600000
  428032 words of font info for 48 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 66i,6n,72p,248b,327s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 66i,8n,72p,395b,385s stack positions out of 5000i,500n,10000p,200000b,80000s
+pdfTeX warning (dest): name{MLP} has been referenced but does not exist, repl
+aced by a fixed one
 
-!  ==> Fatal error occurred, no output PDF file produced!
+pdfTeX warning (dest): name{bitcoin} has been referenced but does not exist, re
+placed by a fixed one
+
+{c:/Users/buehl/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex
+.enc}{c:/Users/buehl/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-r
+m.enc}{c:/Users/buehl/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-
+mathsy.enc}{c:/Users/buehl/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/l
+m/lm-mathit.enc}{c:/Users/buehl/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dv
+ips/lm/lm-ec.enc}{c:/Users/buehl/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/d
+vips/lm/lm-ts1.enc}<c:/Users/buehl/AppData/Roaming/TinyTeX/texmf-dist/fonts/typ
+e1/public/lm/lmbx10.pfb><c:/Users/buehl/AppData/Roaming/TinyTeX/texmf-dist/font
+s/type1/public/lm/lmbx12.pfb><c:/Users/buehl/AppData/Roaming/TinyTeX/texmf-dist
+/fonts/type1/public/lm/lmex10.pfb><c:/Users/buehl/AppData/Roaming/TinyTeX/texmf
+-dist/fonts/type1/public/lm/lmmi10.pfb><c:/Users/buehl/AppData/Roaming/TinyTeX/
+texmf-dist/fonts/type1/public/lm/lmmi7.pfb><c:/Users/buehl/AppData/Roaming/Tiny
+TeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/buehl/AppData/Roaming/
+TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/buehl/AppData/Roami
+ng/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/buehl/AppData/
+Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb>
+Output written on 04_methodology.pdf (6 pages, 216843 bytes).
+PDF statistics:
+ 153 PDF objects out of 1000 (max. 8388607)
+ 129 compressed objects within 2 object streams
+ 31 named destinations out of 1000 (max. 500000)
+ 80 words of extra memory for PDF output out of 10000 (max. 10000000)
+
