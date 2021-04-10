@@ -14,3 +14,4 @@ library(boot)
 #library(plyr) 
 library(MASS)
 library(retry) # exception handling in neuralnet
+library(rugarch)
