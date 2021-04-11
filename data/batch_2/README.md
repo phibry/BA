@@ -4,7 +4,8 @@ Find optimal net architecture
 
 ## General Information
 - Datasets with lag=6
-- Starttime: 2018-01-01
+- Start: 2018-01-01
+- End: 2021-03-27
 - In-out separator: 2020-05-01
 - The in- and out-of-sample MSE and Sharpe were calculated
 
