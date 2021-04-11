@@ -1,4 +1,4 @@
-# # feed forward nets ####
+# feed forward nets ####
 # feedforward estimation
 
 # this function takes the input :
@@ -190,5 +190,796 @@ combination_in_out_MSE=function(maxneuron=3,maxlayer=3,real=10,train_set,data_ma
 
 
 
+#.####
+# NN####
+# Train/Predict various neural nets
+# - Define first the data_obj with the funtion: data_function
+#   x: data
+#   lags: amount of lags (e.g. acf(x) -> significant = 6 -> lags=6)
+#   start: Startdate (e.g. 2020-01-01)
+#   end: Enddate (eg. 2020-07-31)
+#   in_out_sep: Seperator (eg. 2020-07-01)
+#   data_function will return a few data objects which are needed for
+#   the computation of the MSE and Sharpe
+
+# - use nn_nl_comb_sharpe_mse
+#   define maxneurons/layers and the amount of realizations
+
+## MSE Sharpe Function####
+nn_nl_comb_sharpe_mse <- function(maxneuron=3, maxlayer=3, real=10, data_obj) {
+  starttime=Sys.time()
+  # Define Input Grid
+  # needs input grid function
+  combmat <- input_grid(maxneuron,maxlayer)
+  
+  
+  # Naming the  grid with combinations
+  ind <- rep(NA,dim(combmat)[1])
+  for(k in 1:dim(combmat)[1])
+  {
+    x <- as.vector(combmat[k,])
+    ind[k] <- toString(as.character(x[x!=0]))
+  }
+  
+  # Define result matrix
+  mati <- matrix(nrow=dim(combmat)[1], ncol=real*4, 0)
+  mati <- as.data.frame(mati)
+  rownames(mati) <- ind
+  
+  
+  #creating , testing , neural net
+  for( i in 1: dim(combmat)[1]) {
+    pb <- txtProgressBar(min = 1, max = dim(combmat)[1], style = 3)
+    
+    x=as.vector(combmat[i,])
+    x= x[x!=0]
+    
+    for(k in seq(1,real*4,4)) {
+      
+      net <- nn_estim(data_obj, nl_comb=x)
+      
+      mati[i, k:(k+3)] <- c(net$mse_nn, net$sharpe_nn)
+    }
+    
+    print(paste("Elapsed Time: " ,Sys.time()-starttime))
+    print(paste("Iteration: ", i, "of", dim(combmat)[1]))
+    setTxtProgressBar(pb, i)
+    
+  }
+  
+  # close(pb)
+  print(paste("Overall Time: " ,Sys.time()-starttime))
+  return(mati)
+}
+
+## Data Function####
+data_function <- function(x, lags, in_out_sep, start="", end="") {
+  # Define startpoints
+  x <- x[paste(start,"::", end, sep="")]
+  data_mat <- x
+  
+  # Create lagged data
+  for (j in 1:lags)
+    data_mat <- cbind(data_mat, lag(x, k=j))
+  
+  # Remove NA's
+  data_mat <- na.exclude(data_mat)
+  
+  
+  # Specify in- and out-of-sample episodes
+  # Target in-sample (current data)
+  target_in <- data_mat[paste("/",in_out_sep,sep=""),1]
+  # Remove last value
+  target_in <- target_in[1:(length(target_in)-1),1]
+  
+  # Target out of sample (current data)
+  target_out <- data_mat[paste(in_out_sep,"/",sep=""),1]
+  
+  # Scaling data for the NN
+  maxs <- apply(data_mat, 2, max)
+  mins <- apply(data_mat, 2, min)
+  # Transform data into [0,1]
+  scaled <- scale(data_mat, center = mins, scale = maxs - mins)
+  
+  
+  # Train-test split
+  train_set <- scaled[paste("/",in_out_sep,sep=""),]
+  # Remove last value
+  train_set <- train_set[1:(dim(train_set)[1]-1),]
+  
+  test_set <- scaled[paste(in_out_sep,"/",sep=""),]
+  
+  train_set <- as.matrix(train_set)
+  test_set <- as.matrix(test_set)
+  
+  # Formula
+  colnames(train_set) <- paste("lag",0:(ncol(train_set)-1),sep="")
+  n <- colnames(train_set)
+  f <- as.formula(paste("lag0 ~", paste(n[!n %in% "lag0"], collapse = " + ")))
+  
+  return(list(data_mat=data_mat,
+              target_in=target_in,
+              target_out=target_out,
+              train_set=train_set,
+              test_set=test_set,
+              f=f))
+}
+
+## Estimate Fun####
+nn_estim <- function(data_obj, nl_comb) {
+  
+  # Prepare data
+  train_set <- data_obj$train_set
+  test_set <- data_obj$test_set
+  data_mat <- data_obj$data_mat
+  target_in <- data_obj$target_in
+  target_out <- data_obj$target_out
+  f <- as.formula(data_obj$f)
+  
+  
+  # Train NeuralNet
+  nn <- neuralnet(f, data=train_set, hidden=nl_comb, linear.output=T, stepmax = 1e+08)
+  
+  
+  # In sample performance
+  pred_in_scaled <- nn$net.result[[1]]
+  # Scale back from interval [0,1] to original log-returns
+  pred_in <- pred_in_scaled*(max(data_mat[,1])-min(data_mat[,1]))+min(data_mat[,1])
+  # In-sample MSE
+  train_rescaled <- train_set[,1]*(max(data_mat[,1])-min(data_mat[,1]))+min(data_mat[,1])
+  mse_in <- mean((train_rescaled - pred_in)^2)
+  
+  # In-sample Sharpe
+  perf_in <- (sign(pred_in))*target_in
+  sharpe_in <- as.numeric(sqrt(365)*mean(perf_in)/sqrt(var(perf_in)))
+  
+  # Out-of-sample performance
+  # Compute out-of-sample forecasts
+  # pr.nn <- compute(nn, as.matrix(test_set[,2:ncol(test_set)]))
+  pr.nn <- predict(nn, as.matrix(test_set[,2:ncol(test_set)]))
+  
+  predicted_scaled <- pr.nn
+  # Results from NN are normalized (scaled)
+  # Descaling for comparison
+  pred_out <- predicted_scaled*(max(data_mat[,1])-min(data_mat[,1]))+min(data_mat[,1])
+  test_rescaled <- test_set[,1]*(max(data_mat[,1])-min(data_mat[,1]))+min(data_mat[,1])
+  # Calculating MSE
+  mse_out <- mean((test_rescaled - pred_out)^2)
+  
+  # Out of sample Sharpe
+  perf_out <- (sign(pred_out))*target_out
+  sharpe_out <- sqrt(365)*mean(perf_out)/sqrt(var(perf_out))
+  
+  # Compare in-sample and out-of-sample
+  mse_nn <- c(mse_in, mse_out)
+  sharpe_nn <- c(sharpe_in, sharpe_out)
+  
+  return(list(mse_nn=mse_nn, pred_out=pred_out, pred_in=pred_in, sharpe_nn=sharpe_nn))
+}
+
+## Input Grid Function####
+input_grid <- function(n=3, l=3) {
+  anz <- n^(1:l)
+  mat <- matrix(0, nrow=sum(anz), ncol=l)
+  
+  
+  i_end <- cumsum(anz)
+  i_start <- anz-1
+  i_start <- i_end - i_start
+  
+  
+  for(j in 0:(length(anz)-1)) {
+    for (i in (1+j):l) {
+      mat[i_start[i]:i_end[i], i-j] <- rep(1:n, rep(n^(j), n))
+    }
+  }
+  return(as.data.frame(mat))
+}
 
 
+
+
+#.####
+# MSE Plots####
+plot_all_rect <- function(mati, real, title="") {
+  # Layer Breakpoints
+  str_splitter <- function(x) {
+    return(length(as.numeric(unlist(strsplit(x, ", ")))))
+  }
+  
+  layers <- sapply(X=rownames(mati), FUN=str_splitter, USE.NAMES=FALSE)
+  layers <- as.numeric(table(layers))
+  layers <- cumsum(layers)
+  
+  
+  # Plots mit Rect
+  par_default <- par(no.readonly = TRUE)
+  par(mfrow=c(2,1), mar=c(3,5,3,2))
+  ## In-Sample
+  # color indizes for plots
+  color <- 1
+  
+  # color codes for the rect
+  colorcodes <- c("#FF00001A", # red
+                  "#0000FF1A", # blue
+                  "#80FF001A", # green
+                  "#FF80001A", # orange
+                  "#00FFFF1A", # teal
+                  "#8000FF1A") # purple
+  
+  in_samp_seq <- seq(1, real*2, 2)
+  for(i in in_samp_seq) {
+    if (i == 1) {
+      plot(mati[,i],
+           # main="In-Sample",
+           main=paste(title, ": In-Sample", sep=""),
+           type="l",
+           ylim=c(min(mati[,in_samp_seq]) ,max(mati[,in_samp_seq])),
+           xlim=c(1, dim(mati)[1]),
+           col=color,
+           ylab="MSE",
+           frame.plot = FALSE,
+           xaxt="n",
+           xlab="")
+      color = color + 1
+    } else {
+      lines(mati[,i], col=color)
+      color = color + 1
+    }
+  }
+  # for (i in head(layers, -1)) {
+  #   abline(v=(1+i), lty=2)
+  # }
+  
+  startl <- c(1, head(layers, -1)+1)
+  endl <- layers
+  for (i in 1:length(layers)) {
+    rect(xleft = startl[i],
+         xright = endl[i],
+         ybottom = min(mati[,in_samp_seq]),
+         ytop = max(mati[,in_samp_seq]),
+         col=colorcodes[i])#,
+    # border = "transparent")
+    text(startl[i]+(endl[i]-startl[i])/2, min(mati[,in_samp_seq])*1.02, i)
+  }
+  
+  
+  ## Out-of-Sample
+  color <- 1
+  out_of_samp_seq <- seq(2, real*2, 2)
+  for(i in out_of_samp_seq) {
+    if (i == 2) {
+      plot(mati[,i],
+           main=paste(title, ": Out-of-Sample", sep=""),
+           type="l",
+           ylim=c(min(mati[,out_of_samp_seq]), max(mati[,out_of_samp_seq])),
+           col=color,
+           ylab="MSE",
+           frame.plot = FALSE,
+           xaxt="n",
+           xlab="")
+      color = color + 1
+    } else {
+      lines(mati[,i], col=color)
+      color = color + 1
+    }
+  }
+  # for (i in head(layers, -1)) {
+  #   abline(v=(1+i), lty=2)
+  # }
+  
+  for (i in 1:length(layers)) {
+    rect(xleft = startl[i],
+         xright = endl[i],
+         ybottom = min(mati[,out_of_samp_seq]),
+         ytop = max(mati[,out_of_samp_seq]),
+         col=colorcodes[i])#,
+    # border = "transparent")
+    text(startl[i]+(endl[i]-startl[i])/2, max(mati[,out_of_samp_seq])*0.98, i)
+  }
+  
+  par(par_default)
+}
+plot_by_layer_rect <- function(mati, real, title="") {
+  str_splitter <- function(x) {
+    return(length(as.numeric(unlist(strsplit(x, ", ")))))
+  }
+  
+  layers <- sapply(X=rownames(mati), FUN=str_splitter, USE.NAMES=FALSE)
+  layers <- as.numeric(table(layers))
+  layers <- cumsum(layers)
+  # Plots by Layer
+  par_default <- par(no.readonly = TRUE)
+  par(mfrow=c(2,1), mar=c(3,5,3,2))
+  in_samp_seq <- seq(1, real*2, 2)
+  out_of_samp_seq <- seq(2, real*2, 2)
+  iter <- 1
+  prev_it <- 1
+  
+  # color codes for the rect
+  colorcodes <- c("#FF00001A", # red
+                  "#0000FF1A", # blue
+                  "#80FF001A", # green
+                  "#FF80001A", # orange
+                  "#00FFFF1A", # teal
+                  "#8000FF1A") # purple
+  
+  for(i in layers) {
+    color <- 1
+    
+    for(j in in_samp_seq) {
+      mini_in <- min(mati[prev_it:i, in_samp_seq])
+      maxi_in <- max(mati[prev_it:i, in_samp_seq])
+      if (j == 1) {
+        plot(mati[prev_it:i, j],
+             ylim=c(mini_in, maxi_in),
+             main=paste(title, " Layer: ", iter, sep=""),
+             type="l",
+             col=color,
+             ylab="MSE")
+        color = color + 1
+        
+      } else {
+        lines(mati[prev_it:i, j], col=color)
+        # points(mati[prev_it:i, j], col=color)
+        color = color + 1
+      }
+    }
+    
+    rect(xleft=par('usr')[1],
+         xright=par('usr')[2],
+         ybottom=par('usr')[3],
+         ytop=par('usr')[4],
+         col=colorcodes[iter])
+    
+    color <- 1
+    for(k in out_of_samp_seq) {
+      mini_out <- min(mati[prev_it:i, out_of_samp_seq])
+      maxi_out <- max(mati[prev_it:i, out_of_samp_seq])
+      if (k == 2) {
+        plot(mati[prev_it:i, k],
+             ylim=c(mini_out, maxi_out),
+             main=paste(title, " Layer: ", iter, sep=""),
+             type="l",
+             col=color,
+             ylab="MSE")
+        color = color + 1 
+      } else {
+        lines(mati[prev_it:i, k], col=color)
+        # points(mati[prev_it:i, k], col=color)
+        color = color + 1
+      }
+    }
+    
+    rect(xleft=par('usr')[1],
+         xright=par('usr')[2],
+         ybottom=par('usr')[3],
+         ytop=par('usr')[4],
+         col=colorcodes[iter])
+    
+    prev_it <- i+1
+    iter <- iter + 1
+  }
+  par(par_default)
+}
+
+plot_all <- function(mati, real, title="") {
+  # Layer Breakpoints
+  str_splitter <- function(x) {
+    return(length(as.numeric(unlist(strsplit(x, ", ")))))
+  }
+  
+  layers <- sapply(X=rownames(mati), FUN=str_splitter, USE.NAMES=FALSE)
+  layers <- as.numeric(table(layers))
+  layers <- cumsum(layers)
+  
+  
+  # Full Plots
+  par(mfrow=c(2,1))
+  # In-Sample
+  color <- 1
+  
+  in_samp_seq <- seq(1, real*2, 2)
+  for(i in in_samp_seq) {
+    if (i == 1) {
+      plot(mati[,i],
+           main=paste(title, ": In-Sample", sep=""),
+           type="l",
+           ylim=c(min(mati[,in_samp_seq]) ,max(mati[,in_samp_seq])),
+           xlim=c(1, dim(mati)[1]),
+           col=color,
+           ylab="MSE")
+      
+      color = color + 1
+    } else {
+      lines(mati[,i], col=color)
+      color = color + 1
+    }
+  }
+  for (i in head(layers, -1)) {
+    abline(v=(1+i), lty=2)
+  }
+  
+  
+  # Out-of-Sample
+  color <- 1
+  out_of_samp_seq <- seq(2, real*2, 2)
+  for(i in out_of_samp_seq) {
+    if (i == 2) {
+      plot(mati[,i],
+           main=paste(title, ": Out-of-Sample", sep=""),
+           type="l",
+           ylim=c(min(mati[,out_of_samp_seq]), max(mati[,out_of_samp_seq])),
+           col=color,
+           ylab="MSE")
+      color = color + 1
+    } else {
+      lines(mati[,i], col=color)
+      color = color + 1
+    }
+  }
+  for (i in head(layers, -1)) {
+    abline(v=(1+i), lty=2)
+  }
+  
+}
+plot_by_layer <- function(mati, real, title="") {
+  str_splitter <- function(x) {
+    return(length(as.numeric(unlist(strsplit(x, ", ")))))
+  }
+  
+  layers <- sapply(X=rownames(mati), FUN=str_splitter, USE.NAMES=FALSE)
+  layers <- as.numeric(table(layers))
+  layers <- cumsum(layers)
+  # Plots by Layer
+  par(mfrow=c(2,1))
+  in_samp_seq <- seq(1, real*2, 2)
+  out_of_samp_seq <- seq(2, real*2, 2)
+  iter <- 1
+  prev_it <- 1
+  # mini_in <- min(mati[,in_samp_seq])
+  # maxi_in <- max(mati[,in_samp_seq])
+  
+  # mini_out <- min(mati[,out_of_samp_seq])
+  # maxi_out <- max(mati[,out_of_samp_seq])
+  
+  for(i in layers) {
+    color <- 1
+    
+    for(j in in_samp_seq) {
+      mini_in <- min(mati[prev_it:i, in_samp_seq])
+      maxi_in <- max(mati[prev_it:i, in_samp_seq])
+      if (j == 1) {
+        plot(mati[prev_it:i, j],
+             ylim=c(mini_in, maxi_in),
+             main=paste(title, " Layer: ", iter, sep=""),
+             type="l",
+             col=color,
+             ylab="MSE")
+        
+        color = color + 1
+      } else {
+        lines(mati[prev_it:i, j], col=color)
+        color = color + 1
+      }
+    }
+    
+    
+    color <- 1
+    for(k in out_of_samp_seq) {
+      mini_out <- min(mati[prev_it:i, out_of_samp_seq])
+      maxi_out <- max(mati[prev_it:i, out_of_samp_seq])
+      if (k == 2) {
+        plot(mati[prev_it:i, k],
+             ylim=c(mini_out, maxi_out),
+             main=paste(title, " Layer: ", iter, sep=""),
+             type="l",
+             col=color,
+             ylab="MSE")
+        color = color + 1 
+      } else {
+        lines(mati[prev_it:i, k], col=color)
+        color = color + 1
+      }
+    }
+    
+    prev_it <- i+1
+    iter <- iter + 1
+  }
+}
+
+
+#.####
+# Sharpe-MSE Plots####
+plot_all_rect_mse <- function(mati, real, title="") {
+  # Layer Breakpoints
+  str_splitter <- function(x) {
+    return(length(as.numeric(unlist(strsplit(x, ", ")))))
+  }
+  
+  layers <- sapply(X=rownames(mati), FUN=str_splitter, USE.NAMES=FALSE)
+  layers <- as.numeric(table(layers))
+  layers <- cumsum(layers)
+  
+  
+  # Plots mit Rect
+  par_default <- par(no.readonly = TRUE)
+  par(mfrow=c(2,1), mar=c(3,5,3,2))
+  ## In-Sample
+  # color indizes for plots
+  color <- 1
+  
+  # color codes for the rect
+  colorcodes <- c("#FF00001A", # red
+                  "#0000FF1A", # blue
+                  "#80FF001A", # green
+                  "#FF80001A", # orange
+                  "#00FFFF1A", # teal
+                  "#8000FF1A") # purple
+  
+  seq_mse_in <- seq(1, real*4, 4)
+  seq_mse_out <- seq(2, real*4, 4)
+  seq_sharpe_in <- seq(3, real*4, 4)
+  seq_sharpe_out <- seq(4, real*4, 4)
+  
+  
+  # MSE: In-sample
+  for(i in seq_mse_in) {
+    if (i == 1) {
+      plot(mati[,i],
+           main=paste(title, ": In-Sample", sep=""),
+           type="l",
+           ylim=c(min(mati[,seq_mse_in]) ,max(mati[,seq_mse_in])),
+           xlim=c(1, dim(mati)[1]),
+           col=color,
+           ylab="MSE",
+           frame.plot = FALSE,
+           xaxt="n",
+           xlab="")
+      color = color + 1
+    } else {
+      lines(mati[,i], col=color)
+      color = color + 1
+    }
+  }
+  
+  startl <- c(1, head(layers, -1)+1)
+  endl <- layers
+  for (i in 1:length(layers)) {
+    rect(xleft = startl[i],
+         xright = endl[i],
+         ybottom = par('usr')[3],
+         ytop = par('usr')[4],
+         col=colorcodes[i])
+    
+    ydistance <- par('usr')[4] - par('usr')[3]
+    textlocation <- par('usr')[3] + (ydistance * 0.04)
+    text(startl[i]+(endl[i]-startl[i])/2, textlocation , i)
+  }
+  
+  # MSE: Out-of-sample
+  color <- 1
+  for(i in seq_mse_out) {
+    if (i == 2) {
+      plot(mati[,i],
+           main=paste(title, ": Out-of-Sample", sep=""),
+           type="l",
+           ylim=c(min(mati[,seq_mse_out]), max(mati[,seq_mse_out])),
+           col=color,
+           ylab="MSE",
+           frame.plot = FALSE,
+           xaxt="n",
+           xlab="")
+      color = color + 1
+    } else {
+      lines(mati[,i], col=color)
+      color = color + 1
+    }
+  }
+  
+  for (i in 1:length(layers)) {
+    rect(xleft = startl[i],
+         xright = endl[i],
+         ybottom = par('usr')[3],
+         ytop = par('usr')[4],
+         col=colorcodes[i])
+    
+    ydistance <- par('usr')[4] - par('usr')[3]
+    textlocation <- par('usr')[3] + (ydistance * 0.96)
+    text(startl[i]+(endl[i]-startl[i])/2, textlocation , i)
+  }
+  
+  par(par_default)
+}
+
+
+plot_all_rect_sharpe <- function(mati, real, title="") {
+  # Layer Breakpoints
+  str_splitter <- function(x) {
+    return(length(as.numeric(unlist(strsplit(x, ", ")))))
+  }
+  
+  layers <- sapply(X=rownames(mati), FUN=str_splitter, USE.NAMES=FALSE)
+  layers <- as.numeric(table(layers))
+  layers <- cumsum(layers)
+  
+  
+  # Plots mit Rect
+  par_default <- par(no.readonly = TRUE)
+  par(mfrow=c(2,1), mar=c(3,5,3,2))
+  ## In-Sample
+  # color indizes for plots
+  color <- 1
+  
+  # color codes for the rect
+  colorcodes <- c("#FF00001A", # red
+                  "#0000FF1A", # blue
+                  "#80FF001A", # green
+                  "#FF80001A", # orange
+                  "#00FFFF1A", # teal
+                  "#8000FF1A") # purple
+  
+  seq_mse_in <- seq(1, real*4, 4)
+  seq_mse_out <- seq(2, real*4, 4)
+  seq_sharpe_in <- seq(3, real*4, 4)
+  seq_sharpe_out <- seq(4, real*4, 4)
+  
+  
+  # Sharpe: In-sample
+  for(i in seq_sharpe_in) {
+    if (i == 3) {
+      plot(mati[,i],
+           main=paste(title, ": In-Sample", sep=""),
+           type="l",
+           ylim=c(min(mati[,seq_sharpe_in]) ,max(mati[,seq_sharpe_in])),
+           xlim=c(1, dim(mati)[1]),
+           col=color,
+           ylab="Sharpe",
+           frame.plot = FALSE,
+           xaxt="n",
+           xlab="")
+      color = color + 1
+    } else {
+      lines(mati[,i], col=color)
+      color = color + 1
+    }
+  }
+  
+  startl <- c(1, head(layers, -1)+1)
+  endl <- layers
+  for (i in 1:length(layers)) {
+    rect(xleft = startl[i],
+         xright = endl[i],
+         
+         ybottom = par('usr')[3],
+         ytop = par('usr')[4],
+         col=colorcodes[i])
+    
+    ydistance <- par('usr')[4] - par('usr')[3]
+    textlocation <- par('usr')[3] + (ydistance * 0.04)
+    text(startl[i]+(endl[i]-startl[i])/2, textlocation , i)
+    
+    # text(startl[i]+(endl[i]-startl[i])/2, min(mati[,seq_sharpe_in])*0.9, i)
+  }
+  
+  # MSE: Out-of-sample
+  color <- 1
+  for(i in seq_sharpe_out) {
+    if (i == 4) {
+      plot(mati[,i],
+           main=paste(title, ": Out-of-Sample", sep=""),
+           type="l",
+           ylim=c(min(mati[,seq_sharpe_out]), max(mati[,seq_sharpe_out])),
+           col=color,
+           ylab="Sharpe",
+           frame.plot = FALSE,
+           xaxt="n",
+           xlab="")
+      color = color + 1
+    } else {
+      lines(mati[,i], col=color)
+      color = color + 1
+    }
+  }
+  
+  for (i in 1:length(layers)) {
+    rect(xleft = startl[i],
+         xright = endl[i],
+         ybottom = par('usr')[3],
+         ytop = par('usr')[4],
+         col=colorcodes[i])
+    
+    ydistance <- par('usr')[4] - par('usr')[3]
+    textlocation <- par('usr')[3] + (ydistance * 0.96)
+    text(startl[i]+(endl[i]-startl[i])/2, textlocation , i)
+    
+    # text(startl[i]+(endl[i]-startl[i])/2, max(mati[,seq_sharpe_out])*0.9, i)
+  }
+  
+  par(par_default)
+}
+
+
+plot_mean <- function(mati, real, title="") {
+  # Mean over all Realisations
+  mse_in_mean <- apply(mati[,seq(1, real*4, 4)], MARGIN=1, FUN=mean)
+  mse_out_mean <- apply(mati[,seq(2, real*4, 4)], MARGIN=1, FUN=mean)
+  sharpe_in_mean <- apply(mati[,seq(3, real*4, 4)], MARGIN=1, FUN=mean)
+  sharpe_out_mean <- apply(mati[,seq(4, real*4, 4)], MARGIN=1, FUN=mean)
+  
+  # Layer Breakpoints
+  str_splitter <- function(x) {
+    return(length(as.numeric(unlist(strsplit(x, ", ")))))
+  }
+  
+  layers <- sapply(X=rownames(mati), FUN=str_splitter, USE.NAMES=FALSE)
+  layers <- as.numeric(table(layers))
+  layers <- cumsum(layers)
+  
+  # color codes for the rect
+  colorcodes <- c("#FF00001A", # red
+                  "#0000FF1A", # blue
+                  "#80FF001A", # green
+                  "#FF80001A", # orange
+                  "#00FFFF1A", # teal
+                  "#8000FF1A") # purple
+  
+  par_default <- par(no.readonly = TRUE)
+  par(mfrow=c(2,1), mar=c(3,5,3,2))
+  mini <- min(min(mse_in_mean), min(mse_out_mean))
+  maxi <- max(max(mse_in_mean), max(mse_out_mean))
+  plot(mse_in_mean,
+       type="l",
+       col="#2f4b7c",
+       ylim=c(mini, maxi),
+       ylab="MSE",
+       main=paste(title," MSE mean over ", 50, " realizations", sep=""),
+       frame.plot = FALSE,
+       xaxt="n",
+       xlab="")
+  lines(mse_out_mean, col="#ff7c43")
+  legend("top", legend=c("MSE In", "MSE Out"), lty=c(1,1), col=c("#2f4b7c","#ff7c43"), cex=0.6, bty = "n")
+  
+  # rect
+  startl <- c(1, head(layers, -1)+1)
+  endl <- layers
+  for (i in 1:length(layers)) {
+    rect(xleft = startl[i],
+         xright = endl[i],
+         ybottom = par('usr')[3],
+         ytop = par('usr')[4],
+         col=colorcodes[i])
+    
+    ydistance <- par('usr')[4] - par('usr')[3]
+    textlocation <- par('usr')[3] + (ydistance * 0.04)
+    text(startl[i]+(endl[i]-startl[i])/2, textlocation , i)
+  }
+  
+  mini <- min(min(sharpe_in_mean), min(sharpe_out_mean))
+  maxi <- max(max(sharpe_in_mean), max(sharpe_out_mean))
+  plot(sharpe_in_mean,
+       type="l",
+       col="#2f4b7c",
+       ylim=c(mini, maxi),
+       ylab="Sharpe",
+       main=paste(title, " Sharpe mean over ", 50, " realizations", sep=""),
+       frame.plot = FALSE,
+       xaxt="n",
+       xlab="")
+  lines(sharpe_out_mean, type="l", col="#ff7c43")
+  legend("top", legend=c("Sharpe In", "Sharpe Out"), lty=c(1,1), col=c("#2f4b7c","#ff7c43"), cex=0.6, bty = "n")
+  
+  for (i in 1:length(layers)) {
+    rect(xleft = startl[i],
+         xright = endl[i],
+         ybottom = par('usr')[3],
+         ytop = par('usr')[4],
+         col=colorcodes[i])
+    
+    ydistance <- par('usr')[4] - par('usr')[3]
+    textlocation <- par('usr')[3] + (ydistance * 0.96)
+    text(startl[i]+(endl[i]-startl[i])/2, textlocation , i)
+  }
+  
+  par(par_default)
+}
