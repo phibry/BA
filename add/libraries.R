@@ -15,3 +15,5 @@ library(boot)
 library(MASS)
 library(retry) # exception handling in neuralnet
 library(lubridate)
+library(rugarch)
+
