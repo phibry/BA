@@ -19,7 +19,11 @@ The data in this paper is accessed  via yahoofinance provided by coinmarket http
 
 In chapter [2.3.](#bitcoin) the bitcoin price is visualized. For processing and analyzing the data in order to fullfill the weak stationarity assumptions we transform the data into logreturns.
 
+By plotting the frequencies of the logreturns we can observe a t distribution fitting better to the data than a normaldistribution
 
+```{r histogramm_logreturns, out.width='80%', fig.cap='Distribution of Logreturns', echo=FALSE}
+knitr::include_graphics("images/histogramm_logrets.jpeg")
+```
 
 $$\mathrm{LogReturn} = \mathrm{log}(x_{t})-\mathrm{log}(x_{t-1})$$
 ```{r, echo=FALSE, message=FALSE}
@@ -28,6 +32,10 @@ ts.plot(log_ret)
 ```
 
 By computing the autocorrelation oft the log_returns, there is still dependence visible in lag 6 and 10. This indicates dependency in volatility-cluster, to cancel out the effect an ARMA-GARCH model is fitted to the data and the residuals are standardized by the model standard-deviation.
+
+
+
+
 
 ```{r, echo=FALSE, message=FALSE}
 acf(log_ret)
@@ -45,6 +53,20 @@ As mentioned in chapter [2.1.3.](#MLP), choosing an appropriate network architec
 
 
 ### 3.2. Defining train and test samples
+
+Test train split
+
+By purpose of further analysis were going to use subset of the introduced closing prices of bitcoin.
+Starting from the first of   january 2020 to the 27th of march in 2021 we only consider 15 months for our data. The reason for doing that is, we don’t believe that the historical data longer than a year is consisting any information about the price tomorrow. By optimizing our models we found that more data would bring no additional performance, therefore the selected substrata should be sufficient.
+As proposed in [@nn_trading] we choose a test train split from 6 months insample and 1 month out of sample. This split is applied to the whole substrata in form of a rolling window by stepping forward 1 month.  
+
+
+
+
+
+
+
+
 
 -   Describe different phases
 
