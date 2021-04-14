@@ -5,15 +5,12 @@ geometry: margin = 1in
 
 ## 3. Methodology
 
-The focus of this thesis is to predict historical prices of bitcoin using the models listed in Chapter XX. The predictive accuracy of these obtained predictions are compared using loss functions (Annualized Sharpe, Diebold Mariano Test, MAE, MSE, RMSE, Mincer-Zarnowitz Regressions). Then, based on the best models with the most accurate predictions, trading strategies are worked out to compare with a buy-and-hold strategy. Finally, we would like to venture into the topic of explainability and attempt to explain why the chosen models lead to these outcomes. The procedure of this quantitative study is described in this chapter.
+The focus of this thesis can be divided into two areas. First, the aim is to find an optimal neural network including a network architecture. This should perform well in the application area, in which the future log return of the Bitcoin is predicted on the basis of historical log returns. In a second step, we will focus on defining a trading strategy based on our findings. All considerations and findings will be presented in a quantitative way and compared with each other. Figure \ref{fig:flowchart_overview} helps to get an overview of the individual steps followed in this chapter.  
 
--   Data and Analysis of Bitcoin (BTC/USD)
--   Defining the train and test samples (including description about calm and volatile phases).
--   Calculate predictions with the defined models (AR, NN, RNN, LSTM, Emponential Smoothing + NN (Slavek Smyl)).
--   Compare Predictions / performance with Realized Data (Annualized Sharpe, Diebold Mariano Test, MAE, MSE, RMSE, Mincer-Zarnowitz Regressions)
--   Explain trading strategies
--   Explainability for the best models
--   (Backup: Which models work well in which market phases?)
+```{r flowchart_overview, fig.align='center', out.width='65%', fig.cap='This flowchart illustrates an overview of the individual intermediate steps that are covered in the Methodology chapter. ', echo=FALSE}
+knitr::include_graphics("images/flowchart_overview.png")
+```
+
 
 ### 3.1. Data and analysis of Bitcoin 
 
