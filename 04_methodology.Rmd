@@ -31,7 +31,7 @@ load("data/log_ret_27_03_21.rda");log_ret=    log_ret_27_03_21   # loading logre
 ts.plot(log_ret)
 ```
 
-By computing the autocorrelation oft the log_returns, there is still dependence visible in lag 6 and 10. This indicates dependency in volatility-cluster, to cancel out the effect an ARMA-GARCH model is fitted to the data and the residuals are standardized by the model standard-deviation.
+By computing the autocorrelation of the log_returns, there is still dependence visible in lag 6 and 10. This indicates dependency in volatility-cluster, to cancel out the effect an ARMA-GARCH model is fitted to the data and the residuals are standardized by the model standard-deviation.
 
 
 
@@ -56,15 +56,18 @@ As mentioned in chapter [2.1.3.](#MLP), choosing an appropriate network architec
 
 Test train split
 
-By purpose of further analysis were going to use a subset of the introduced closing prices of bitcoin.
-Starting from the first of   january 2020 to the 27th of march in 2021 we only consider 15 months for our data. The reason for doing that is, we don’t believe that the historical data longer than a year is consisting any information about the price tomorrow. By optimizing our models we found that more data would bring no additional performance, therefore the selected substrata should be sufficient.
-As proposed in [@nn_trading] we choose a test train split from 6 months insample and 1 month out of sample. This split is applied to the whole substrata in form of a rolling window by stepping forward 1 month.  
+By the purpose of further analysis, we are going to use a subset of the introduced closing prices of bitcoin.
+Starting from the first of january 2020 to the 27th of march in 2021, we only consider 15 months for our data
+
+The reason for doing so is, we don’t believe that the historical data longer than a year is consisting any information about the price tomorrow. By optimizing our models we found that more data would bring no additional performance, therefore the selected substrata should be sufficient.
+As proposed in [@nn_trading] we choose a test train split from 6 months insample and 1 month out of sample. This split is applied to the whole substrata in form of a rolling window. By stepping forward with this 6/1 split by steplength of one month we endup with 9 datasplits in total. In figure \ref{fig:test_train} this procedure is visualized, for every new timestep a new month is considered for the out of sample and the first month of the insample falls out of the frame.
 
 
-vv
 
-asdfasdfdfsghsdh
 
+```{r test_train out.width='80%', fig.cap='Distribution of Logreturns', echo=FALSE}
+knitr::include_graphics("images/test_train_split_pp.jpeg.jpg")
+```
 
 
 
