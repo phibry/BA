@@ -65,7 +65,7 @@ As proposed in [@nn_trading] we choose a test train split from 6 months insample
 
 
 
-```{r test_train out.width='80%', fig.cap='Distribution of Logreturns', echo=FALSE}
+```{r test_train, out.width='80%', fig.cap='Distribution of Logreturns', echo=FALSE}
 knitr::include_graphics("images/test_train_split_pp.jpeg.jpg")
 ```
 
