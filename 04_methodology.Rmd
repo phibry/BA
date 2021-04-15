@@ -56,14 +56,14 @@ As mentioned in chapter [2.1.3.](#MLP), choosing an appropriate network architec
 
 Test train split
 
-By purpose of further analysis were going to use subset of the introduced closing prices of bitcoin.
+By purpose of further analysis were going to use a subset of the introduced closing prices of bitcoin.
 Starting from the first of   january 2020 to the 27th of march in 2021 we only consider 15 months for our data. The reason for doing that is, we don’t believe that the historical data longer than a year is consisting any information about the price tomorrow. By optimizing our models we found that more data would bring no additional performance, therefore the selected substrata should be sufficient.
 As proposed in [@nn_trading] we choose a test train split from 6 months insample and 1 month out of sample. This split is applied to the whole substrata in form of a rolling window by stepping forward 1 month.  
 
 
+vv
 
-
-
+asdfasdfdfsghsdh
 
 
 
