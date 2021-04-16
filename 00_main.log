@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7400 64-bit) (preloaded format=pdflatex 2020.4.24)  16 APR 2021 18:23
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7400 64-bit) (preloaded format=pdflatex 2020.4.24)  16 APR 2021 19:02
 entering extended mode
 **./00_main.tex
 (00_main.tex
@@ -886,13 +886,13 @@ l.786 \newpage
 File: 00_main_files/figure-latex/log_ret-1.pdf Graphic file (type pdf)
 <use 00_main_files/figure-latex/log_ret-1.pdf>
 Package pdftex.def Info: 00_main_files/figure-latex/log_ret-1.pdf  used on inpu
-t line 811.
-(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+t line 809.
+(pdftex.def)             Requested size: 375.80452pt x 260.17235pt.
 <00_main_files/figure-latex/acf_log_ret-1.pdf, id=333, 469.755pt x 325.215pt>
 File: 00_main_files/figure-latex/acf_log_ret-1.pdf Graphic file (type pdf)
 <use 00_main_files/figure-latex/acf_log_ret-1.pdf>
 Package pdftex.def Info: 00_main_files/figure-latex/acf_log_ret-1.pdf  used on 
-input line 827.
+input line 825.
 (pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
 <images/histogram_logret_3.jpeg, id=336, 627.84563pt x 472.01344pt>
 File: images/histogram_logret_3.jpeg Graphic file (type jpg)
@@ -1114,8 +1114,8 @@ LaTeX Warning: There were undefined references.
  ) 
 Here is how much of TeX's memory you used:
  15640 strings out of 480930
- 230948 string characters out of 2909547
- 546515 words of memory out of 3000000
+ 230924 string characters out of 2909547
+ 546491 words of memory out of 3000000
  30928 multiletter control sequences out of 15000+200000
  578106 words of font info for 105 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -1137,7 +1137,7 @@ b><C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/lmr7.pfb><C:/Program Files
 /MiKTeX 2.9/fonts/type1/public/lm/lmri10.pfb><C:/Program Files/MiKTeX 2.9/fonts
 /type1/public/lm/lmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/
 lmsy7.pfb>
-Output written on 00_main.pdf (27 pages, 1712490 bytes).
+Output written on 00_main.pdf (27 pages, 1712417 bytes).
 PDF statistics:
  618 PDF objects out of 1000 (max. 8388607)
  152 named destinations out of 1000 (max. 500000)
