@@ -2,7 +2,20 @@ source("add/libraries.r")
 source("add/Functions.r")
 # 5N 5L 10R####
 load("data/batch_1/optim_5_5_10.rda")
+in_samp_seq <- seq(1, 10*2, 2)
+out_samp_seq <- seq(2, 10*2, 2)
+optim_5_5_10[1,in_samp_seq]
+optim_5_5_10[1,out_samp_seq]
+
+cor(t(optim_5_5_10[1,in_samp_seq]), t(optim_5_5_10[1,out_samp_seq]))
+?cor
+
+plot(as.numeric(optim_5_5_10[1,in_samp_seq]),as.numeric(optim_5_5_10[1,out_samp_seq]))
+
+as.numeric(optim_5_5_10[1,in_samp_seq])
+
 cor(optim_5_5_10[,1:2])
+seq(1,)
 plot(optim_5_5_10[,1:2])
 
 cor(optim_5_5_10[,3:4])

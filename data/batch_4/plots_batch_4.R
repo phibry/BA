@@ -17,13 +17,20 @@ subseti <- log_ret_27_03_21["2020-01-01::"]
 # r graph gallery
 # Create a df
 df_sub <- data.frame(date = ymd(time(subseti)), value = as.numeric(subseti))
+head(df_sub)
 
+as.numeric(df_sub[1,1])
 plot(df_sub,
      type="l",
      xaxt="n",
      xlab="",
      ylab="Log Return", ylim=c(-0.2, 0.2),
      main="Rolling in/out splits")
+
+par('xaxt')
+
+
+
 axis.Date(1, at=seq(min(df_sub$date), max(df_sub$date), by="months"), format="%m-%y")
 legend("topleft", legend=c("In-Sample", "Out-of-Sample"), pch=c(15,15), col=c("#0000FF","#80FF00"), cex=0.7, bty = "n")
 
@@ -31,6 +38,7 @@ legend("topleft", legend=c("In-Sample", "Out-of-Sample"), pch=c(15,15), col=c("#
 # Transform timestamp to numeric for the plot
 ybot <- par('usr')[3]
 ytop <- par('usr')[4]
+par('usr')
 
 ydist <- abs(ybot - ytop)
 ypartial <- ydist/9
@@ -94,3 +102,270 @@ for (i in 1:9) {
        ytop = par('usr')[4],
        col="#80FF001A")
 }
+
+
+
+
+diag(cor((nn_10_3_50_1[,in_samp_seq]), (nn_10_3_50_1[,out_samp_seq])))
+
+head(nn_10_3_50_1)
+
+in_samp_seq <- seq(1, 50*4, 4)
+out_samp_seq <- seq(2, 50*4, 4)
+nn_10_3_50_1[1,in_samp_seq]
+nn_10_3_50_1[1,out_samp_seq]
+
+cor((nn_10_3_50_1[,in_samp_seq]), (nn_10_3_50_1[,out_samp_seq]))
+?cor
+
+plot(as.numeric(nn_10_3_50_1[1,in_samp_seq]),as.numeric(nn_10_3_50_1[1,out_samp_seq]))
+
+
+#.####
+# Load Files####
+load("data/batch_4/nn_10_3_50_1.rda")
+load("data/batch_4/nn_10_3_50_2.rda")
+load("data/batch_4/nn_10_3_50_3.rda")
+load("data/batch_4/nn_10_3_50_4.rda")
+load("data/batch_4/nn_10_3_50_5.rda")
+load("data/batch_4/nn_10_3_50_6.rda")
+load("data/batch_4/nn_10_3_50_7.rda")
+load("data/batch_4/nn_10_3_50_8.rda")
+load("data/batch_4/nn_10_3_50_9.rda")
+
+# Merge Files####
+mse_in_mean_1 <- apply(X=nn_10_3_50_1[, seq(1, 200, 4)], MARGIN=1, FUN=mean)
+mse_in_mean_2 <- apply(X=nn_10_3_50_2[, seq(1, 200, 4)], MARGIN=1, FUN=mean)
+mse_in_mean_3 <- apply(X=nn_10_3_50_3[, seq(1, 200, 4)], MARGIN=1, FUN=mean)
+mse_in_mean_4 <- apply(X=nn_10_3_50_4[, seq(1, 200, 4)], MARGIN=1, FUN=mean)
+mse_in_mean_5 <- apply(X=nn_10_3_50_5[, seq(1, 200, 4)], MARGIN=1, FUN=mean)
+mse_in_mean_6 <- apply(X=nn_10_3_50_6[, seq(1, 200, 4)], MARGIN=1, FUN=mean)
+mse_in_mean_7 <- apply(X=nn_10_3_50_7[, seq(1, 200, 4)], MARGIN=1, FUN=mean)
+mse_in_mean_8 <- apply(X=nn_10_3_50_8[, seq(1, 200, 4)], MARGIN=1, FUN=mean)
+mse_in_mean_9 <- apply(X=nn_10_3_50_9[, seq(1, 200, 4)], MARGIN=1, FUN=mean)
+
+
+mse_in <- as.data.frame(cbind(
+  apply(X=nn_10_3_50_1[, seq(1, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_2[, seq(1, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_3[, seq(1, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_4[, seq(1, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_5[, seq(1, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_6[, seq(1, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_7[, seq(1, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_8[, seq(1, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_9[, seq(1, 200, 4)], MARGIN=1, FUN=mean)
+));colnames(mse_in) <- 1:9
+
+mse_out <- as.data.frame(cbind(
+  apply(X=nn_10_3_50_1[, seq(2, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_2[, seq(2, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_3[, seq(2, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_4[, seq(2, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_5[, seq(2, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_6[, seq(2, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_7[, seq(2, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_8[, seq(2, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_9[, seq(2, 200, 4)], MARGIN=1, FUN=mean)
+));colnames(mse_out) <- 1:9
+
+sharpe_in <- as.data.frame(cbind(
+  apply(X=nn_10_3_50_1[, seq(3, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_2[, seq(3, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_3[, seq(3, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_4[, seq(3, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_5[, seq(3, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_6[, seq(3, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_7[, seq(3, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_8[, seq(3, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_9[, seq(3, 200, 4)], MARGIN=1, FUN=mean)
+));colnames(sharpe_in) <- 1:9
+
+sharpe_out <- as.data.frame(cbind(
+  apply(X=nn_10_3_50_1[, seq(4, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_2[, seq(4, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_3[, seq(4, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_4[, seq(4, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_5[, seq(4, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_6[, seq(4, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_7[, seq(4, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_8[, seq(4, 200, 4)], MARGIN=1, FUN=mean),
+  apply(X=nn_10_3_50_9[, seq(4, 200, 4)], MARGIN=1, FUN=mean)
+));colnames(sharpe_out) <- 1:9
+
+min(mse_in[1,])
+
+
+which(mse_in[1,] == min(mse_in[1,]))
+which(mse_in[2,] == min(mse_in[2,]))
+
+par(mfrow=c(1,1))
+
+plot_mse_mean <- function(mse_in, mse_out, title="") {
+  # Layer Breakpoints
+  str_splitter <- function(x) {
+    return(length(as.numeric(unlist(strsplit(x, ", ")))))
+  }
+  
+  layers <- sapply(X=rownames(mse_in), FUN=str_splitter, USE.NAMES=FALSE)
+  layers <- as.numeric(table(layers))
+  layers <- cumsum(layers)
+  
+  
+  # Plots mit Rect
+  par_default <- par(no.readonly = TRUE)
+  par(mfrow=c(2,1), mar=c(3,5,3,2))
+  ## In-Sample
+  # color indizes for plots
+  
+  # color codes for the rect
+  colorcodes <- c("#FF00001A", # red
+                  "#0000FF1A", # blue
+                  "#80FF001A", # green
+                  "#FF80001A", # orange
+                  "#00FFFF1A", # teal
+                  "#8000FF1A") # purple
+  # MSE in
+  for(i in 1:dim(mse_in)[2]) {
+    if (i == 1) {
+      plot(mse_in[,i],
+           main=paste(title, ": In-Sample", sep=""),
+           type="l",
+           ylim=c(min(mse_in) ,max(mse_in)),
+           xlim=c(1, dim(mse_in)[1]),
+           col=i,
+           ylab="MSE",
+           frame.plot = FALSE,
+           xaxt="n",
+           xlab="")
+    } else {
+      lines(mse_in[,i], col=i)
+    }
+  }
+
+  
+  startl <- c(1, head(layers, -1)+1)
+  endl <- layers
+  for (i in 1:length(layers)) {
+    rect(xleft = startl[i],
+         xright = endl[i],
+         ybottom = min(mse_in),
+         ytop = max(mse_in),
+         col=colorcodes[i])
+    text(startl[i]+(endl[i]-startl[i])/2, min(mse_in)*1.02, i)
+  }
+  
+  for(i in 1:dim(mse_out)[2]) {
+    if (i == 1) {
+      plot(mse_out[,i],
+           main=paste(title, ": In-Sample", sep=""),
+           type="l",
+           ylim=c(min(mse_out) ,max(mse_out)),
+           xlim=c(1, dim(mse_out)[1]),
+           col=i,
+           ylab="MSE",
+           frame.plot = FALSE,
+           xaxt="n",
+           xlab="")
+    } else {
+      lines(mse_out[,i], col=i)
+    }
+  }
+  
+  
+  startl <- c(1, head(layers, -1)+1)
+  endl <- layers
+  for (i in 1:length(layers)) {
+    rect(xleft = startl[i],
+         xright = endl[i],
+         ybottom = min(mse_out),
+         ytop = max(mse_out),
+         col=colorcodes[i])
+    text(startl[i]+(endl[i]-startl[i])/2, min(mse_out)*1.02, i)
+  }
+  
+  
+  # ## Out-of-Sample
+  # color <- 1
+  # out_of_samp_seq <- seq(2, real*2, 2)
+  # for(i in out_of_samp_seq) {
+  #   if (i == 2) {
+  #     plot(mati[,i],
+  #          main=paste(title, ": Out-of-Sample", sep=""),
+  #          type="l",
+  #          ylim=c(min(mati[,out_of_samp_seq]), max(mati[,out_of_samp_seq])),
+  #          col=color,
+  #          ylab="MSE",
+  #          frame.plot = FALSE,
+  #          xaxt="n",
+  #          xlab="")
+  #     color = color + 1
+  #   } else {
+  #     lines(mati[,i], col=color)
+  #     color = color + 1
+  #   }
+  # }
+  # 
+  # for (i in 1:length(layers)) {
+  #   rect(xleft = startl[i],
+  #        xright = endl[i],
+  #        ybottom = min(mati[,out_of_samp_seq]),
+  #        ytop = max(mati[,out_of_samp_seq]),
+  #        col=colorcodes[i])
+  #   text(startl[i]+(endl[i]-startl[i])/2, max(mati[,out_of_samp_seq])*0.98, i)
+  # }
+  
+  par(par_default)
+}
+plot_mse_mean(mse_in=mse_in, mse_out=mse_out)
+
+#.####
+# Testerino####
+# (1)-NN-Architecture
+# In-Sample MSE
+nn_10_3_50_1[1,seq(1, 200, 4)]
+# Out-of-Sample MSE
+nn_10_3_50_1[1,seq(2, 200, 4)]
+# In-Sample Sharpe
+nn_10_3_50_1[1,seq(3, 200, 4)]
+# Out-of-Sample Sharpe
+nn_10_3_50_1[1,seq(4, 200, 4)]
+
+
+
+# MSE####
+mse_1 <- nn_10_3_50_1[,c(rbind(seq(1, 200, 4), seq(2, 200, 4)))]
+plot_all_rect(mati=mse_1, real=50, title="In/Out Split: 1")
+plot_by_layer_rect(mati=mse_1, real=50, title="In/Out Split: 1")
+
+mse_2 <- nn_10_3_50_2[,c(rbind(seq(1, 200, 4), seq(2, 200, 4)))]
+plot_all_rect(mati=mse_2, real=50, title="In/Out Split: 2")
+plot_by_layer_rect(mati=mse_2, real=50, title="In/Out Split: 2")
+
+mse_3 <- nn_10_3_50_3[,c(rbind(seq(1, 200, 4), seq(2, 200, 4)))]
+plot_all_rect(mati=mse_3, real=50, title="In/Out Split: 3")
+plot_by_layer_rect(mati=mse_3, real=50, title="In/Out Split: 3")
+
+mse_4 <- nn_10_3_50_4[,c(rbind(seq(1, 200, 4), seq(2, 200, 4)))]
+plot_all_rect(mati=mse_4, real=50, title="In/Out Split: 4")
+plot_by_layer_rect(mati=mse_4, real=50, title="In/Out Split: 4")
+
+mse_5 <- nn_10_3_50_5[,c(rbind(seq(1, 200, 4), seq(2, 200, 4)))]
+plot_all_rect(mati=mse_5, real=50, title="In/Out Split: 5")
+plot_by_layer_rect(mati=mse_5, real=50, title="In/Out Split: 5")
+
+mse_6 <- nn_10_3_50_6[,c(rbind(seq(1, 200, 4), seq(2, 200, 4)))]
+plot_all_rect(mati=mse_6, real=50, title="In/Out Split: 6")
+plot_by_layer_rect(mati=mse_6, real=50, title="In/Out Split: 6")
+
+mse_7 <- nn_10_3_50_7[,c(rbind(seq(1, 200, 4), seq(2, 200, 4)))]
+plot_all_rect(mati=mse_7, real=50, title="In/Out Split: 7")
+plot_by_layer_rect(mati=mse_7, real=50, title="In/Out Split: 7")
+
+mse_8 <- nn_10_3_50_8[,c(rbind(seq(1, 200, 4), seq(2, 200, 4)))]
+plot_all_rect(mati=mse_8, real=50, title="In/Out Split: 8")
+plot_by_layer_rect(mati=mse_8, real=50, title="In/Out Split: 8")
+
+mse_9 <- nn_10_3_50_9[,c(rbind(seq(1, 200, 4), seq(2, 200, 4)))]
+plot_all_rect(mati=mse_9, real=50, title="In/Out Split: 9")
+plot_by_layer_rect(mati=mse_9, real=50, title="In/Out Split: 9")
