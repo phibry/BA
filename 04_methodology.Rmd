@@ -11,35 +11,56 @@ The focus of this thesis can be divided into two areas. First, the aim is to fin
 knitr::include_graphics("images/flowchart_overview.png")
 ```
 
+\newpage
 
-### 3.1. Data and analysis of Bitcoin 
+### 3.1. Data exploration 
 
-The data in this paper is accessed  via yahoofinance provided by coinmarket https://coinmarketcap.com/. We use the daily "closing price" of bitcoin in US Dollars with the ticker BTC-USD. Cryptoassets are tradeble 24 hours a day  256 days a year, there is no real "closing price" for the bitcoin, therefore the "closing-Price" is just the last price of the day evaluated at last timestamp with timeformat UTC.
+The data in this paper is accessed  via yahoofinance provided by coinmarket https://coinmarketcap.com/. We use the daily "closing price" of bitcoin in US Dollars with the ticker BTC-USD.
+Cryptoassets are tradeble 24 hours a day  365 days a year. There is no real "closing price" for the bitcoin, hence the "closing-Price" is just the last price of the day evaluated at the last timestamp with timeformat UTC.
 
 
-In chapter [2.3.](#bitcoin) the bitcoin price is visualized. For processing and analyzing the data in order to fullfill the weak stationarity assumptions we transform the data into logreturns.
-
-By plotting the frequencies of the logreturns we can observe a t distribution fitting better to the data than a normaldistribution
-
-```{r histogramm_logreturns, out.width='80%', fig.cap='Distribution of Logreturns', echo=FALSE}
-knitr::include_graphics("images/histogramm_logrets.jpeg")
+In chapter [2.3.](#bitcoin) the bitcoin price and the logarithmic price is visualized.
+For processing and analyzing the data in order to fullfill the weak stationarity assumptions we transform the data into logreturns according to equation \ref{eq:logreturn}.
+```{=tex}
+\begin{align} \label{eq:logreturn}
+\mathrm{LogReturn} = \mathrm{log}(x_{t})-\mathrm{log}(x_{t-1})
+\end{align}
 ```
 
-$$\mathrm{LogReturn} = \mathrm{log}(x_{t})-\mathrm{log}(x_{t-1})$$
-```{r, echo=FALSE, message=FALSE}
+
+```{r log_ret, echo=FALSE, message=FALSE, fig.cap="logreturns BTC",out.width="80%"}
 load("data/log_ret_27_03_21.rda");log_ret=    log_ret_27_03_21   # loading logreturns
-ts.plot(log_ret)
+df_sub <- data.frame(date = ymd(time(log_ret)), value = as.numeric(log_ret))
+plot(df_sub,
+     type="l",
+     frame.plot = FALSE,
+     xaxt="n",
+     xlab="",
+     ylab="Log Return", ylim=c(-0.45, 0.2))
+axis.Date(1, at=seq(min(df_sub$date), max(df_sub$date), by="months"), format="%m-%y")
 ```
 
-By computing the autocorrelation of the log_returns, there is still dependence visible in lag 6 and 10. This indicates dependency in volatility-cluster, to cancel out the effect an ARMA-GARCH model is fitted to the data and the residuals are standardized by the model standard-deviation.
+In plot \ref{fig:log_ret} various large outliers are visible, especially one outlier towards the end catches the eye. The series seems to be very noisy, nevertheless volatility clusters are observable. By computing the ACF of the series in figure \ref{fig:acf_log_ret}, we can describe the dependency in these clusters. According to the ACF the lags 6 and 10 are significant on a 5% level. 
 
 
 
-
-
-```{r, echo=FALSE, message=FALSE}
-acf(log_ret)
+```{r acf_log_ret, echo=FALSE, message=FALSE, fig.cap="logreturns BTC"}
+acf(log_ret,main="autocorrelation Logreturns")
 ```
+
+Curios from which distribution the logreturns might originate, we are fitting a Normaldistribution and a Students-t distribution to the data in Figure \ref{fig:histogramm_logreturns}.
+
+Interestingly the mean is shifted slightly (0.002) to the positive side.By inspecting the tails, one can observe that the negativ tail is not fitted as good as the positive part by the t distribution. The two Normaldistributions either over- or underestimate the values in the tails, therefore we conclude that the proposed t-distribution fits the data better but also not perfect.
+
+Pointing at the extreme outlier discussed earlier, visible in Figure \ref{fig:log_ret} towards the end, the density plot makes clear how unimaginable small the probability of this extreme observation is. 
+
+
+```{r histogramm_logreturns, out.width='80%', fig.cap='Distribution of Logreturns', echo=FALSE,fig.align="center"}
+knitr::include_graphics("images/histogram_logret_3.jpeg")
+```
+
+
+\newpage
 
 ### 3.2. Comparison of network architecture
 
@@ -57,7 +78,7 @@ As mentioned in chapter [2.1.3.](#MLP), choosing an appropriate network architec
 Test train split
 
 By the purpose of further analysis, we are going to use a subset of the introduced closing prices of bitcoin.
-Starting from the first of january 2020 to the 27th of march in 2021, we only consider 15 months for our data
+Starting from the first of january 2020 to the 27th of march in 2021, we only consider 15 months for our data.
 
 The reason for doing so is, we don’t believe that the historical data longer than a year is consisting any information about the price tomorrow. By optimizing our models we found that more data would bring no additional performance, therefore the selected substrata should be sufficient.
 As proposed in [@nn_trading] we choose a test train split from 6 months insample and 1 month out of sample. This split is applied to the whole substrata in form of a rolling window. By stepping forward with this 6/1 split by steplength of one month we endup with 9 datasplits in total. In figure \ref{fig:test_train} this procedure is visualized, for every new timestep a new month is considered for the out of sample and the first month of the insample falls out of the frame.
