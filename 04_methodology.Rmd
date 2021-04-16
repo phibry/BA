@@ -45,7 +45,8 @@ In plot \ref{fig:log_ret} various large outliers are visible, especially one out
 
 
 ```{r acf_log_ret, echo=FALSE, message=FALSE, fig.cap="logreturns BTC"}
-acf(log_ret,main="autocorrelation Logreturns")
+# acf(log_ret,main="autocorrelation Logreturns")
+chart.ACF(log_ret,main="autocorrelation Logreturns", maxlag = 20)
 ```
 
 Curios from which distribution the logreturns might originate, we are fitting a Normaldistribution and a Students-t distribution to the data in Figure \ref{fig:histogramm_logreturns}.
@@ -62,28 +63,43 @@ knitr::include_graphics("images/histogram_logret_3.jpeg")
 
 \newpage
 
-### 3.2. Comparison of network architecture
+### 3.2. Network architecture
 
-As mentioned in chapter [2.1.3.](#MLP), choosing an appropriate network architecture for bitcoin price prediction is a crucial step in order to achieve useful forecasts while avoiding overfitting. Due to the complexity as well as the non-linearity of neural networks, the interpretation cannot be performed intuitively. For this reason, an approach is pursued in which neural networks with different numbers of layers and neurons are compared with each other by using the MSE loss. This allows us to compare accuracy and possibly see a connection with network architecture. The first plot in figure xy compares different neural networks with one layer. Networks with a maximum of six neurons are compared. These different configurations can be seen on the x-axis. The y-axis shows the MSE values obtained with the respective optimized model. We use ten different optimizations of each configuration to get a better idea of a potentially systematic relationship with the MSE. In the plot, each of the configurations is drawn using a different color. 
+As mentioned in chapter [2.1.3.](#MLP), choosing an appropriate network architecture for bitcoin price prediction is a crucial step in order to achieve useful forecasts while avoiding overfitting. Due to the complexity as well as the non-linearity of neural networks, the interpretation cannot be performed intuitively. For this reason, an approach is pursued in which neural networks with different numbers of layers and neurons are compared with each other by using the MSE loss. This allows us to compare accuracy and possibly see a connection with network architecture. The first plot in figure \ref{fig:mse_1_layer1} compares different neural networks with one layer. Networks with a maximum of ten neurons are compared. These different configurations can be seen on the x-axis. The y-axis shows the MSE values obtained with the respective optimized model. We use 50 different optimizations of each configuration to get a better idea of a potentially systematic relationship with the MSE. In the plot, each of the configurations is drawn using a different color. 
 
 - NN for bitcoin prediction
 - Non-linear task
 - How decide the number of layers and nodes
 - Keep in mind rule of thumb 
-- Test all possible configurations (with realizations = 10) and compare the MSE 
+- Test all possible configurations (with realizations = 50) and compare the MSE 
 
+```{r mse_1_layer1, out.width='100%', fig.cap='First Train/Test Split.', echo=FALSE,fig.align="center"}
+knitr::include_graphics("images/batch4/mse_1_layer1.jpeg")
+```
 
-### 3.2. Defining train and test samples
+\newpage
 
-Test train split
+- WEITER MIT DER DEFINITION VON TRAIN/TEST SPLITS
+- VISUALISIERUNG EINES TRAIN/TEST SPLITS, MIT ANALYSE.
+- ERKLÄREN, DASS ES UNMÖGLICH IST FÜR 9 VERSCHIEDENE SPLITS EIN EINE REIN VISUELLE ANALYSE DURCHZUFÜHREN
+- MITTELWERTE ÜBER SÄMTLICHE DER 9 SPLITS BERECHNEN UM DEI BESTIMMUNG DES OPTIMALEN NETZTES ZU VEREINFACHEN
+BESPIEL: Man hat 9 Splits à je 1110 Neuronen-Layer-Kombinationen. Für jede NL-Architektur wurden 50 neuronale Netzwerke trainiert. Somit kommt man auf 55500 Netze pro Splits. Also für alleine diese Versuchreihe wurden 499500 Netzwerke trainiert. Nun möchte man diejenige NL-Architektur finden, welche im Verlauf der Zeit (Verlauf der 9 Splits) am besten geblieben/am wenigsten an Performanz verloren hat/am besten geworden ist finden. Man hat herausgefunden, dass Netzte sehr zufällig sind. Somit werden die Mittelwerte über die 50 Netzte pro Layer, pro Split gebildet. Man erhält für jede NL-Kombination 9 verschiedene Mittelwerte der MSEs. Die Suche nach einer optimalen Netzwerk-Architektur ist so um einiges einfacher. (siehe \ref{fig:mse_mean})
 
-By the purpose of further analysis, we are going to use a subset of the introduced closing prices of bitcoin.
-Starting from the first of january 2020 to the 27th of march in 2021, we only consider 15 months for our data.
+```{r mse_mean, out.width='100%', fig.cap='MSE mean over all 9 splits.', echo=FALSE,fig.align="center"}
+knitr::include_graphics("images/batch4/mse_mean.jpeg")
+```
 
-The reason for doing so is, we don’t believe that the historical data longer than a year is consisting any information about the price tomorrow. By optimizing our models we found that more data would bring no additional performance, therefore the selected substrata should be sufficient.
-As proposed in [@nn_trading] we choose a test train split from 6 months insample and 1 month out of sample. This split is applied to the whole substrata in form of a rolling window. By stepping forward with this 6/1 split by steplength of one month we endup with 9 datasplits in total. In figure \ref{fig:test_train} this procedure is visualized, for every new timestep a new month is considered for the out of sample and the first month of the insample falls out of the frame.
+- Eventuell noch Sharpe hinzunehmen, wäre noch interessant (work in Progress)? oder evtl doch erst später im Trading?
 
+\newpage
 
+#### 3.2.1. Defining train and test samples
+
+For further analysis, we are going to use a subset of the introduced closing prices of bitcoin.
+Starting from the first of January 2020 to the 27th of March in 2021, we only consider 15 months for our data.
+
+The reason for doing so is, we don’t believe that the historical data longer than a year is consisting of any information about the price tomorrow. By optimizing our models we found that more data would bring no additional performance, therefore the selected subset should be sufficient.
+As proposed in [@nn_trading] we choose a test train split from 6 months in-sample and 1 month out of sample. This split is applied to the whole subset in form of a rolling window. By stepping forward with this 6/1 split by steplength of one month we end up with 9 data splits in total. In figure \ref{fig:test_train} this procedure is visualized, for every new timestep a new month is considered for the out of sample and the first month of the in sample falls out of the frame.
 
 
 ```{r test_train, out.width='80%', fig.cap='Distribution of Logreturns', echo=FALSE}
@@ -98,12 +114,8 @@ knitr::include_graphics("images/test_train_split_pp.jpeg.jpg")
 
 -   Describe stable and volatile phases and why we should keep that in mind for predictions
 
-#### 3.2.xy. Benchmark
-
-To compare the models we choose two simple benchmarks the well known buy and hold and an Ar(1) process as you can see in Figure xy and Figure xxy.
-
 \newpage
-#### 3.3.xy.  Evaluating architecture
+#### 3.2.1.  Evaluating architecture
 
 &nbsp;
 
@@ -153,6 +165,12 @@ results:
 
 - no need for more complexity, smaller architecture also does the job
 
+\newpage
+
+### 3.3. Benchmark
+
+To compare the models we choose two simple benchmarks the well known buy and hold and an Ar(1) process as you can see in Figure xy and Figure xxy.
+
 ### 3.4. Trading strategiesg
 
 -   Define trading strategies
@@ -162,16 +180,16 @@ results:
 
 -   Define realistic fee structure for trading (Coinbase Pro, Binance, Kraken etc.)
 
-### 3.4.1. Other cryptocurrency
+#### 3.5.1. Other cryptocurrency
 
 - Test our best model with another time series
 
-### 3.5. Explainability
+### 3.6. Explainability
 
 - Performing the predictions with the two (?) best models
 
 -   Include variations to find possible starting points for explainability (number of nodes, layers)
 
-### 3.6. (Relationship between accuracy and market phase)
+### 3.7. (Relationship between accuracy and market phase)
 
 -   Test
