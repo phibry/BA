@@ -13,7 +13,7 @@
 # it compares the in sample performance of the net with mse to the out of sample performance mse
 # output delivers mse in vs out of sample , predicted values insample and predicted values out of sample
 
-estimate_nn<-function(train_set,number_neurons,data_mat,test_set,f)
+estimate_nn <- function(train_set,number_neurons,data_mat,test_set,f)
 {
   nn <- neuralnet(f,data=train_set,hidden=number_neurons,linear.output=T, stepmax = 1e+08)
   
@@ -72,7 +72,7 @@ input_grid <- function(n=3, l=3) {
 
 # optimizing with all combinations
 # this function requires estimate_nn, grid_function
-combination_in_out_MSE=function(maxneuron=3,maxlayer=3,real=10,train_set,data_mat,test_set,f,plot=F)
+combination_in_out_MSE <- function(maxneuron=3,maxlayer=3,real=10,train_set,data_mat,test_set,f,plot=F)
 {
   starttime=Sys.time()
   # Define Input Grid
@@ -506,18 +506,35 @@ plot_by_layer_rect <- function(mati, real, title="") {
   
   for(i in layers) {
     color <- 1
+    # i <- 10
+    # i <- 110; prev_it <- 11; iter <- 2
     
     for(j in in_samp_seq) {
+      # j <- 1
       mini_in <- min(mati[prev_it:i, in_samp_seq])
       maxi_in <- max(mati[prev_it:i, in_samp_seq])
       if (j == 1) {
         plot(mati[prev_it:i, j],
              ylim=c(mini_in, maxi_in),
-             main=paste(title, " Layer: ", iter, sep=""),
+             main=paste(title, " Layer: ", iter, " In-Sample",sep=""),
              type="l",
              col=color,
-             ylab="MSE")
+             ylab="MSE",
+             xaxt="n")
         color = color + 1
+
+        end <- length(rownames(mati[prev_it:i, ]))
+        multi <- round((end-1)/3)
+        at <- c(1, 1+multi, 1+multi*2, end)
+        labels <- c()
+        
+        
+        for (g in at) {
+          nlcomb <- gsub("[[:blank:]]", "", rownames(mati[prev_it:i, ])[g])
+          labels <- c(labels, paste('(',nlcomb,')', sep=""))
+        }
+        
+        axis(1, at=at, labels=labels)
         
       } else {
         lines(mati[prev_it:i, j], col=color)
@@ -539,11 +556,25 @@ plot_by_layer_rect <- function(mati, real, title="") {
       if (k == 2) {
         plot(mati[prev_it:i, k],
              ylim=c(mini_out, maxi_out),
-             main=paste(title, " Layer: ", iter, sep=""),
+             main=paste(title, " Layer: ", iter, " Out-of-Sample", sep=""),
              type="l",
              col=color,
-             ylab="MSE")
+             ylab="MSE",
+             xaxt="n")
         color = color + 1 
+        
+        end <- length(rownames(mati[prev_it:i, ]))
+        multi <- round((end-1)/3)
+        at <- c(1, 1+multi, 1+multi*2, end)
+        labels <- c()
+        
+        
+        for (g in at) {
+          nlcomb <- gsub("[[:blank:]]", "", rownames(mati[prev_it:i, ])[g])
+          labels <- c(labels, paste('(',nlcomb,')', sep=""))
+        }
+        
+        axis(1, at=at, labels=labels)
       } else {
         lines(mati[prev_it:i, k], col=color)
         # points(mati[prev_it:i, k], col=color)
@@ -655,9 +686,23 @@ plot_by_layer <- function(mati, real, title="") {
              main=paste(title, " Layer: ", iter, sep=""),
              type="l",
              col=color,
-             ylab="MSE")
+             ylab="MSE",
+             xaxt="n")
         
         color = color + 1
+        
+        end <- length(rownames(mati[prev_it:i, ]))
+        multi <- round((end-1)/3)
+        at <- c(1, 1+multi, 1+multi*2, end)
+        labels <- c()
+        
+        
+        for (g in at) {
+          nlcomb <- gsub("[[:blank:]]", "", rownames(mati[prev_it:i, ])[g])
+          labels <- c(labels, paste('(',nlcomb,')', sep=""))
+        }
+        
+        axis(1, at=at, labels=labels)
       } else {
         lines(mati[prev_it:i, j], col=color)
         color = color + 1
@@ -675,7 +720,21 @@ plot_by_layer <- function(mati, real, title="") {
              main=paste(title, " Layer: ", iter, sep=""),
              type="l",
              col=color,
-             ylab="MSE")
+             ylab="MSE",
+             xaxt="n")
+        
+        end <- length(rownames(mati[prev_it:i, ]))
+        multi <- round((end-1)/3)
+        at <- c(1, 1+multi, 1+multi*2, end)
+        labels <- c()
+        
+        
+        for (g in at) {
+          nlcomb <- gsub("[[:blank:]]", "", rownames(mati[prev_it:i, ])[g])
+          labels <- c(labels, paste('(',nlcomb,')', sep=""))
+        }
+        
+        axis(1, at=at, labels=labels)
         color = color + 1 
       } else {
         lines(mati[prev_it:i, k], col=color)

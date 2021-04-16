@@ -113,7 +113,7 @@ For an easier understanding here is an example:
 
 We want to know all combinations of nets for a maximum of 2 layers with maximum 2 neurons each. With formula \ref{eq:complexity} we can compute the number of combinations.
 
-In this case it equals 6 nets, which are plotted in figure \ref{figure:examples_for_function}, the input layer is held simply, to two layers for illustration. For each of this 6 models We compute Insample out of sample MSE, their correlation and the In and out of sample performance ( daily trading ) with the Sharpe measure.
+In this case it equals 6 nets, which are plotted in figure \ref{fig:examples_for_function}, the input layer is held simply, to two layers for illustration. For each of this 6 models We compute Insample out of sample MSE, their correlation and the In and out of sample performance ( daily trading ) with the Sharpe measure.
 
 Due to the "randomness of the networks  multiple realisations for every single network are computed in order to find a pattern or a systematic deviation.
 
