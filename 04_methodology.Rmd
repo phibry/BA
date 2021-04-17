@@ -65,23 +65,92 @@ knitr::include_graphics("images/histogram_logret_3.jpeg")
 
 ### 3.2. Network architecture
 
-As mentioned in chapter [2.1.3.](#MLP), choosing an appropriate network architecture for bitcoin price prediction is a crucial step in order to achieve useful forecasts while avoiding overfitting. Due to the complexity as well as the non-linearity of neural networks, the interpretation cannot be performed intuitively. For this reason, an approach is pursued in which neural networks with different numbers of layers and neurons are compared with each other by using the MSE loss. This allows us to compare accuracy and possibly see a connection with network architecture. The first plot in figure \ref{fig:mse_1_layer1} compares different neural networks with one layer. Networks with a maximum of ten neurons are compared. These different configurations can be seen on the x-axis. The y-axis shows the MSE values obtained with the respective optimized model. We use 50 different optimizations of each configuration to get a better idea of a potentially systematic relationship with the MSE. In the plot, each of the configurations is drawn using a different color. 
+As mentioned in chapter [2.1.3.](#MLP), choosing an appropriate network architecture for bitcoin price prediction is a crucial step in order to achieve useful forecasts while avoiding overfitting. Due to the complexity as well as the non-linearity of neural networks, the interpretation cannot be performed intuitively. For this reason, an approach is pursued in which neural networks with different numbers of layers and neurons are compared with each other by using the MSE loss. This allows us to compare accuracy and possibly see a connection with network architecture.
 
-- NN for bitcoin prediction
-- Non-linear task
-- How decide the number of layers and nodes
-- Keep in mind rule of thumb 
-- Test all possible configurations (with realizations = 50) and compare the MSE 
+To find the optimal network architecture, we test a maximum of 3 layers with a maximum of 10 neurons each. We limited ourselves with this number, because on the one hand in the extent of this bachelor thesis the time lacks, and on the other hand we think that with time series, too complex models on no added value and rather to overfitting lead. The simplest network has one layer with one neuron (1), while the most complex has 3 layers with 10 neurons each (10,10,10). The total number of different combinations can be expressed as follows:
 
-```{r mse_1_layer1, out.width='100%', fig.cap='First Train/Test Split.', echo=FALSE,fig.align="center"}
-knitr::include_graphics("images/batch4/mse_1_layer1.jpeg")
+```{=tex}
+\begin{align} \label{eq:comb}
+\text{comb}=\sum_{i=1}^{L}N^{i}
+\end{align}
+```
+with:
+
+$L=\text{maximum Layer} \in \mathbb{N}^{*}$
+
+$N=\text{maximum Neuron}\in \mathbb{N}^{*}$
+
+$\text{comb} =\text{Number of all combinations}$
+
+Thus, with our initial setup, we obtain a maximum neuron-layer combination of 1110. To respond to the challenges mentioned in section [2.1.6.](#challenges), not only a single network per neuron-layer combination is trained, but a whole batch of 50 networks. So you end up with a total of 55500 trained networks. For each individual network, the in-sample and out-of-sample MSE as well as the Sharpe ratio are determined. We use these values to find an optimal network architecture based on the statistical error as well as on the trading performance (daily trading).
+
+This now leads us to our next consideration. For which period and for which in-sample and out-of-sample split should the architecture be defined.
+
+\newpage
+
+#### 3.2.1. Defining train and test samples
+&nbsp;
+
+We are looking for an optimal network, the optimal network should also provide reasonable and reliable predictions for different periods. So, for further analysis, we are going to use a subset of the introduced closing prices of bitcoin.
+Starting from the first of January 2020 to the 27th of March in 2021, we only consider 15 months for our data.
+
+The reason for doing so is, we don’t believe that the historical data longer than a year is consisting of any information about the price tomorrow. By optimizing our models we found that more data would bring no additional performance, therefore the selected subset should be sufficient.
+As proposed in [@nn_trading] we choose a test train split from 6 months in-sample and 1 month out-of-sample. This split is applied to the whole subset in form of a rolling window. By stepping forward with this 6/1 split by steplength of one month we end up with 9 data splits in total. In figure \ref{fig:test_train} this procedure is visualized, for every new timestep a new month is considered for the out of sample and the first month of the in sample falls out of the frame.
+
+```{r test_train, out.width='80%', fig.cap='Distribution of Logreturns', echo=FALSE}
+knitr::include_graphics("images/test_train_split_pp.jpeg.jpg")
+```
+
+In the course of the time series in figure \ref{fig:test_train}, one can see different periods. Strongly volatile as well as rather calm phases occur. With the rolling window, we can train and test the networks based on different phases. Thus, we can also evaluate the performance of the networks based on different phases and not only on a predefined single test and train split.
+
+The complexity of the search for the optimal network architecture increases significantly here. With the conditions defined for us, we train and test a total number of 499500 networks to define the optimal network.
+
+\newpage
+
+#### 3.2.2.  Evaluating network architecture
+&nbsp;
+
+Here we would like to focus on some findings that we discovered during the processing of the trained networks. To illustrate the results, an extract is discussed here, namely only the 5th train/test split.
+
+The plot in figure \ref{fig:mse_plot1} compares different neural networks with one layer. Networks with a maximum of ten neurons are compared. These different configurations can be seen on the x-axis. The first data point corresponds to a simple network with one neuron at only one layer. The y-axis shows the MSE values obtained with the respective trained model. As already explained, we use 50 different optimizations of each configuration to get a better idea of a potentially systematic relationship with the MSE. In the plot, each of the configurations is drawn using a different color.
+
+```{r mse_plot1, out.width='100%', fig.cap='Fifth train/test split, 1 layer with 10 different networks.', echo=FALSE,fig.align="center"}
+knitr::include_graphics("images/batch4/mse_5_layer1.jpeg")
+```
+
+What is already noticeable here is that with increasing complexity, i.e. with the increasing number of neurons, the in-sample MSE decreases. So it gets better. At the same time, you can see how the out-of-sample MSE increases with increasing complexity, which means that it tends to get worse.
+
+\newpage
+
+If you add another layer to the network architecture, the number of different networks with the same number of layers also increases. In the following figure \ref{fig:mse_plot2}, the simplest network is a (1,1) network. So 2 layers with one neuron each. The most complex is a network with a (10,10) architecture.
+
+As noted earlier in figure \ref{fig:mse_plot1}, the values for the MSE also fluctuate more and more with increasing complexity. Small in-sample MSE for more complex networks lead to rather high out-of-sample MSE. This leads us to the previously mentioned challenges in section [2.1.6.1.](#overfitting), and that is that too many estimated parameters can lead to overfitting of the network.
+
+```{r mse_plot2, out.width='100%', fig.cap='Fifth train/test split, 2 layers with 100 different networks.', echo=FALSE,fig.align="center"}
+knitr::include_graphics("images/batch4/mse_5_layer2.jpeg")
+```
+
+Looking at the out-of-sample MSE's in the graph below in figure \ref{fig:mse_plot2}, you can see lines that are outside the blue rectangle. These values are extreme outliers that indicate the randomness of neural networks. This again confirms that choosing an optimal network over several equal networks (50 in our case) makes more sense than making the choice depend on only one randomly trained network. Depending on which solution the training algorithm finds, the results can be very different. The y-axis was scaled for better comparability of in-sample and out-of-sample, but one loses the overview of how much the outliers differ from the rest.
+
+\newpage
+
+Lastly, we look at the results of the different network architectures with a third layer. In figure \ref{fig:mse_plot3}, we can see very well the inverse correlation between the in-sample and out-of-sample MSE. Again, the in-sample MSE gets better with increasing complexity while the out-of-sample MSE gets worse. There is also a certain recurring pattern that is striking. After a certain complexity, the in-sample MSE decreases steadily and then increases abruptly. The opposite pattern can also be observed out-of-sample. These patterns emerge during transitions from more complex to more simple architectures. For example, the transition from a model with (8, 10, 10), with a total of 28 neurons, to a model with (9, 1, 1) with only 11 neurons.
+
+It is interesting that at the beginning, with the rather simple model architectures, the MSE of all realizations is very constant and only varies very slightly.
+
+```{r mse_plot3, out.width='100%', fig.cap='Fifth train/test split, 3 layers with 1000 different networks.', echo=FALSE,fig.align="center"}
+knitr::include_graphics("images/batch4/mse_5_layer3.jpeg")
+```
+\newpage
+
+- ERKLÄREN, DASS ES UNMÖGLICH IST FÜR 9 VERSCHIEDENE SPLITS EIN EINE REIN VISUELLE ANALYSE DURCHZUFÜHREN
+
+```{r mse_plot5, out.width='100%', fig.cap='Fifth train/test split, all layers with 1110 different networks.', echo=FALSE,fig.align="center"}
+knitr::include_graphics("images/batch4/mse_5_all.jpeg")
 ```
 
 \newpage
 
-- WEITER MIT DER DEFINITION VON TRAIN/TEST SPLITS
-- VISUALISIERUNG EINES TRAIN/TEST SPLITS, MIT ANALYSE.
-- ERKLÄREN, DASS ES UNMÖGLICH IST FÜR 9 VERSCHIEDENE SPLITS EIN EINE REIN VISUELLE ANALYSE DURCHZUFÜHREN
 - MITTELWERTE ÜBER SÄMTLICHE DER 9 SPLITS BERECHNEN UM DEI BESTIMMUNG DES OPTIMALEN NETZTES ZU VEREINFACHEN
 BESPIEL: Man hat 9 Splits à je 1110 Neuronen-Layer-Kombinationen. Für jede NL-Architektur wurden 50 neuronale Netzwerke trainiert. Somit kommt man auf 55500 Netze pro Splits. Also für alleine diese Versuchreihe wurden 499500 Netzwerke trainiert. Nun möchte man diejenige NL-Architektur finden, welche im Verlauf der Zeit (Verlauf der 9 Splits) am besten geblieben/am wenigsten an Performanz verloren hat/am besten geworden ist finden. Man hat herausgefunden, dass Netzte sehr zufällig sind. Somit werden die Mittelwerte über die 50 Netzte pro Layer, pro Split gebildet. Man erhält für jede NL-Kombination 9 verschiedene Mittelwerte der MSEs. Die Suche nach einer optimalen Netzwerk-Architektur ist so um einiges einfacher. (siehe \ref{fig:mse_mean})
 
@@ -90,80 +159,6 @@ knitr::include_graphics("images/batch4/mse_mean.jpeg")
 ```
 
 - Eventuell noch Sharpe hinzunehmen, wäre noch interessant (work in Progress)? oder evtl doch erst später im Trading?
-
-\newpage
-
-#### 3.2.1. Defining train and test samples
-
-For further analysis, we are going to use a subset of the introduced closing prices of bitcoin.
-Starting from the first of January 2020 to the 27th of March in 2021, we only consider 15 months for our data.
-
-The reason for doing so is, we don’t believe that the historical data longer than a year is consisting of any information about the price tomorrow. By optimizing our models we found that more data would bring no additional performance, therefore the selected subset should be sufficient.
-As proposed in [@nn_trading] we choose a test train split from 6 months in-sample and 1 month out of sample. This split is applied to the whole subset in form of a rolling window. By stepping forward with this 6/1 split by steplength of one month we end up with 9 data splits in total. In figure \ref{fig:test_train} this procedure is visualized, for every new timestep a new month is considered for the out of sample and the first month of the in sample falls out of the frame.
-
-
-```{r test_train, out.width='80%', fig.cap='Distribution of Logreturns', echo=FALSE}
-knitr::include_graphics("images/test_train_split_pp.jpeg.jpg")
-```
-
-
-
--   Describe different phases
-
--   Explain why we set train and test sample like this
-
--   Describe stable and volatile phases and why we should keep that in mind for predictions
-
-\newpage
-#### 3.2.1.  Evaluating architecture
-
-&nbsp;
-
-In order to find an appropriate model to evaluate our neural net architecture we needed to compare different architectures of the network. Therefore we wrote a function which compares all possible combinations of neurons and layers for a given maximum. 
-
-For an easier understanding here is an example:
-
-We want to know all combinations of nets for a maximum of 2 layers with maximum 2 neurons each. With formula \ref{eq:complexity} we can compute the number of combinations.
-
-In this case it equals 6 nets, which are plotted in figure \ref{fig:examples_for_function}, the input layer is held simply, to two layers for illustration. For each of this 6 models We compute Insample out of sample MSE, their correlation and the In and out of sample performance ( daily trading ) with the Sharpe measure.
-
-Due to the "randomness of the networks  multiple realisations for every single network are computed in order to find a pattern or a systematic deviation.
-
-```{=tex}
-\begin{align} \label{eq:complexity}
-comb=\sum_{i=1}^{L}N^{i}
-\end{align}
-```
-with:
-
-
-$L =$ maximum Layer $\in$ Natural numbers without 0 
-
-$N =$ maximum Neurons  $\in$ Natural numbers without 0 
-
-$comb =$ Number of all combinations
-
-```{r examples_for_function, fig.align='center', out.width='70%', fig.cap='Schematic diagram of a perceptron.', echo=FALSE,out.width="100%"}
-knitr::include_graphics("images/examples for function.jpg")
-```
-
-
-
-
-By reason to lack of time in the frame of this bachelorthesis, we only regard maximum 5 layers and maximum 5 realisations which itself generates 3905 models which are each calculated 20 times equaling 78100 differnet nets.
-
-Regarding real life application of the model we evaluate performance over different insample - out of sample 
-
-
-
-
-
-
-
-
-results:
-
-- no need for more complexity, smaller architecture also does the job
 
 \newpage
 
