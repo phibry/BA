@@ -13,7 +13,7 @@ knitr::include_graphics("images/flowchart_overview.png")
 
 \newpage
 
-### 3.1. Data exploration 
+### 3.1. Data exploration {#data_exploration}
 
 The data in this paper is accessed  via yahoofinance provided by coinmarket https://coinmarketcap.com/. We use the daily "closing price" of bitcoin in US Dollars with the ticker BTC-USD.
 Cryptoassets are tradeble 24 hours a day  365 days a year. There is no real "closing price" for the bitcoin, hence the "closing-Price" is just the last price of the day evaluated at the last timestamp with timeformat UTC.
