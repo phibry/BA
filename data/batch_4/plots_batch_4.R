@@ -12,7 +12,12 @@ end_out <- c("2020-07-31", "2020-08-31", "2020-09-30", "2020-10-31", "2020-11-30
 dates_mat <- as.data.frame(cbind(start_in, end_in, start_out, end_out))
 
 # Plot Price
+load("data/log_ret_27_03_21.rda")
 subseti <- log_ret_27_03_21["2020-01-01::"]
+
+chart.ACF(log_ret_27_03_21)
+chart.ACF(subseti, maxlag = 15)
+par()
 
 # r graph gallery
 # Create a df
@@ -195,6 +200,10 @@ sharpe_out <- as.data.frame(cbind(
 
 min(mse_in[1,])
 
+
+layers <- sapply(X=rownames(nn_10_3_50_9), FUN=str_splitter, USE.NAMES=FALSE)
+layers <- as.numeric(table(layers))
+layers <- cumsum(layers)
 
 which(mse_in[1,] == min(mse_in[1,]))
 which(mse_in[2,] == min(mse_in[2,]))
