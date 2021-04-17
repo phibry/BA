@@ -201,7 +201,7 @@ which(mse_in[2,] == min(mse_in[2,]))
 
 par(mfrow=c(1,1))
 
-plot_mse_mean <- function(mse_in, mse_out, title="") {
+plot_mse_mean <- function(mse_in, mse_out, title="",scale_fac=3) {
   # Layer Breakpoints
   str_splitter <- function(x) {
     return(length(as.numeric(unlist(strsplit(x, ", ")))))
@@ -252,15 +252,18 @@ plot_mse_mean <- function(mse_in, mse_out, title="") {
          ybottom = min(mse_in),
          ytop = max(mse_in),
          col=colorcodes[i])
-    text(startl[i]+(endl[i]-startl[i])/2, min(mse_in)*1.02, i)
+    ydistance <- par('usr')[4] - par('usr')[3]
+    textlocation <- par('usr')[3] + (ydistance * 0.1)
+    text(startl[i]+(endl[i]-startl[i])/2, textlocation , i)
   }
   
+  # MSE out
   for(i in 1:dim(mse_out)[2]) {
     if (i == 1) {
       plot(mse_out[,i],
-           main=paste(title, ": In-Sample", sep=""),
+           main=paste(title, ": Out-of-Sample", sep=""),
            type="l",
-           ylim=c(min(mse_out) ,max(mse_out)),
+           ylim=c(min(mse_out) ,min(mse_out)*scale_fac),
            xlim=c(1, dim(mse_out)[1]),
            col=i,
            ylab="MSE",
@@ -278,46 +281,19 @@ plot_mse_mean <- function(mse_in, mse_out, title="") {
   for (i in 1:length(layers)) {
     rect(xleft = startl[i],
          xright = endl[i],
-         ybottom = min(mse_out),
-         ytop = max(mse_out),
+         # ybottom = min(mse_out),
+         # ytop = max(mse_out),
+         ybottom=par('usr')[3],
+         ytop=par('usr')[4],
          col=colorcodes[i])
-    text(startl[i]+(endl[i]-startl[i])/2, min(mse_out)*1.02, i)
+    ydistance <- par('usr')[4] - par('usr')[3]
+    textlocation <- par('usr')[3] + (ydistance * 0.9)
+    text(startl[i]+(endl[i]-startl[i])/2, textlocation , i)
   }
-  
-  
-  # ## Out-of-Sample
-  # color <- 1
-  # out_of_samp_seq <- seq(2, real*2, 2)
-  # for(i in out_of_samp_seq) {
-  #   if (i == 2) {
-  #     plot(mati[,i],
-  #          main=paste(title, ": Out-of-Sample", sep=""),
-  #          type="l",
-  #          ylim=c(min(mati[,out_of_samp_seq]), max(mati[,out_of_samp_seq])),
-  #          col=color,
-  #          ylab="MSE",
-  #          frame.plot = FALSE,
-  #          xaxt="n",
-  #          xlab="")
-  #     color = color + 1
-  #   } else {
-  #     lines(mati[,i], col=color)
-  #     color = color + 1
-  #   }
-  # }
-  # 
-  # for (i in 1:length(layers)) {
-  #   rect(xleft = startl[i],
-  #        xright = endl[i],
-  #        ybottom = min(mati[,out_of_samp_seq]),
-  #        ytop = max(mati[,out_of_samp_seq]),
-  #        col=colorcodes[i])
-  #   text(startl[i]+(endl[i]-startl[i])/2, max(mati[,out_of_samp_seq])*0.98, i)
-  # }
   
   par(par_default)
 }
-plot_mse_mean(mse_in=mse_in, mse_out=mse_out)
+plot_mse_mean(mse_in=mse_in, mse_out=mse_out, title="Mean MSE over all 9 splits", 20)
 
 #.####
 # Testerino####
@@ -334,38 +310,73 @@ nn_10_3_50_1[1,seq(4, 200, 4)]
 
 
 # MSE####
+# 1#### 
+# width=1400
+# height=900
 mse_1 <- nn_10_3_50_1[,c(rbind(seq(1, 200, 4), seq(2, 200, 4)))]
-plot_all_rect(mati=mse_1, real=50, title="In/Out Split: 1")
-plot_by_layer_rect(mati=mse_1, real=50, title="In/Out Split: 1")
+plot_all_rect(mati=mse_1, real=50, title="MSE Split: 1")
+plot_by_layer_rect(mati=mse_1, real=50, title="MSE Split: 1")
 
+# 2####
 mse_2 <- nn_10_3_50_2[,c(rbind(seq(1, 200, 4), seq(2, 200, 4)))]
-plot_all_rect(mati=mse_2, real=50, title="In/Out Split: 2")
-plot_by_layer_rect(mati=mse_2, real=50, title="In/Out Split: 2")
+# plot_all_rect(mati=mse_2, real=50, title="In/Out Split: 2")
+plot_all_rect_scale(mati=mse_2, real=50, title="MSE Split: 2")
+# plot_by_layer_rect(mati=mse_2, real=50, title="In/Out Split: 2")
+plot_by_layer_rect_scale(mati=mse_2, real=50, title="MSE Split: 2",
+                         scale_vec=c(2, 2, 4))
 
+# 3####
 mse_3 <- nn_10_3_50_3[,c(rbind(seq(1, 200, 4), seq(2, 200, 4)))]
-plot_all_rect(mati=mse_3, real=50, title="In/Out Split: 3")
-plot_by_layer_rect(mati=mse_3, real=50, title="In/Out Split: 3")
-
+# plot_all_rect(mati=mse_3, real=50, title="In/Out Split: 3")
+plot_all_rect_scale(mati=mse_3, real=50, title="MSE Split: 3")
+# plot_by_layer_rect(mati=mse_3, real=50, title="In/Out Split: 3")
+plot_by_layer_rect_scale(mati=mse_3, real=50, title="MSE Split: 3",
+                         scale_vec=c(5, 8, 2))
+# 4####
 mse_4 <- nn_10_3_50_4[,c(rbind(seq(1, 200, 4), seq(2, 200, 4)))]
-plot_all_rect(mati=mse_4, real=50, title="In/Out Split: 4")
-plot_by_layer_rect(mati=mse_4, real=50, title="In/Out Split: 4")
+# plot_all_rect(mati=mse_4, real=50, title="In/Out Split: 4")
+plot_all_rect_scale(mati=mse_4, real=50, title="MSE Split: 4", scale_fac=9)
+# plot_by_layer_rect(mati=mse_4, real=50, title="In/Out Split: 4")
+plot_by_layer_rect_scale(mati=mse_4, real=50, title="MSE Split: 4",
+                   scale_vec=c(4, 8, 10))
 
+# 5####
 mse_5 <- nn_10_3_50_5[,c(rbind(seq(1, 200, 4), seq(2, 200, 4)))]
-plot_all_rect(mati=mse_5, real=50, title="In/Out Split: 5")
-plot_by_layer_rect(mati=mse_5, real=50, title="In/Out Split: 5")
+# plot_all_rect(mati=mse_5, real=50, title="In/Out Split: 5")
+plot_all_rect_scale(mati=mse_5, real=50, title="MSE Split: 5", scale_fac=11)
+# plot_by_layer_rect(mati=mse_5, real=50, title="In/Out Split: 5")
+plot_by_layer_rect_scale(mati=mse_5, real=50, title="MSE Split: 5",
+                   scale_vec=c(4, 10, 10))
 
+# 6####
 mse_6 <- nn_10_3_50_6[,c(rbind(seq(1, 200, 4), seq(2, 200, 4)))]
-plot_all_rect(mati=mse_6, real=50, title="In/Out Split: 6")
-plot_by_layer_rect(mati=mse_6, real=50, title="In/Out Split: 6")
+# plot_all_rect(mati=mse_6, real=50, title="In/Out Split: 6")
+plot_all_rect_scale(mati=mse_6, real=50, title="MSE Split: 6", scale_fac=30)
+# plot_by_layer_rect(mati=mse_6, real=50, title="In/Out Split: 6")
+plot_by_layer_rect_scale(mati=mse_6, real=50, title="MSE Split: 6",
+                         scale_vec=c(10, 20, 10))
 
+# 7####
 mse_7 <- nn_10_3_50_7[,c(rbind(seq(1, 200, 4), seq(2, 200, 4)))]
-plot_all_rect(mati=mse_7, real=50, title="In/Out Split: 7")
-plot_by_layer_rect(mati=mse_7, real=50, title="In/Out Split: 7")
+# plot_all_rect(mati=mse_7, real=50, title="In/Out Split: 7")
+plot_all_rect_scale(mati=mse_7, real=50, title="MSE Split: 7", scale_fac=30)
+# plot_by_layer_rect(mati=mse_7, real=50, title="In/Out Split: 7")
+plot_by_layer_rect_scale(mati=mse_7, real=50, title="MSE Split: 7",
+                         scale_vec=c(30, 15, 5))
 
+# 8####
 mse_8 <- nn_10_3_50_8[,c(rbind(seq(1, 200, 4), seq(2, 200, 4)))]
-plot_all_rect(mati=mse_8, real=50, title="In/Out Split: 8")
-plot_by_layer_rect(mati=mse_8, real=50, title="In/Out Split: 8")
+# plot_all_rect(mati=mse_8, real=50, title="In/Out Split: 8")
+plot_all_rect_scale(mati=mse_8, real=50, title="MSE Split: 8", scale_fac=10)
+# plot_by_layer_rect(mati=mse_8, real=50, title="In/Out Split: 8")
+plot_by_layer_rect_scale(mati=mse_8, real=50, title="MSE Split: 8",
+                         scale_vec=c(30, 15, 7))
 
+# 9####
 mse_9 <- nn_10_3_50_9[,c(rbind(seq(1, 200, 4), seq(2, 200, 4)))]
-plot_all_rect(mati=mse_9, real=50, title="In/Out Split: 9")
-plot_by_layer_rect(mati=mse_9, real=50, title="In/Out Split: 9")
+# plot_all_rect(mati=mse_9, real=50, title="In/Out Split: 9")
+plot_all_rect_scale(mati=mse_9, real=50, title="MSE Split: 9", scale_fac=10)
+# plot_by_layer_rect(mati=mse_9, real=50, title="In/Out Split: 9")
+plot_by_layer_rect_scale(mati=mse_9, real=50, title="MSE Split: 9",
+                   scale_vec=c(10, 20, 8))
+
