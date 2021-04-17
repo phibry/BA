@@ -284,7 +284,7 @@ The story of bitcoin began with a paper published by the name of Satoshi Nakamot
 Until 2013 the cryptocurrencies operated under the radar of most regulatory institutions. Because of the anonymity of the transactions, criminals were attracted by the newborn payment method. Headlines, such as the seizure of 26,000 bitcoins by closing the "Dark-Web" Website Silkroad through the Drug Enforcement Agency, followed moreoften in the newspapers. 
 
 Nevertheless in 2014 more companys, such as: Zynga, D LasVegas Casinos, Golden Gate Hotel & Casino, TigerDirect, Overstock.com, Newegg, Dell, and even Microsoft [@A_History_of_Bitcoin], began to accept bitcoin as a payment method. In 2014 the first derivative with bitcoin as an underlying was approved by the U.S.Commodity Futures Trading Commission.
-2015 an estimated 160000 merchants used bitcoin to trade. It is observed that the value of bitcoin is very volatile, we will discuss this in a FURTHER XYXY section.
+2015 an estimated 160000 merchants used bitcoin to trade. 
 
 
 Let us first look a the price in Figure \ref{fig:price_btc} and the log(price) in Figure \ref{fig:logprice_btc} and get a sense of the chart. Note: The data in the charts start in 2014 where it was listed in coinmarket, events between 2009 and 2014 are described without visualization.
@@ -292,36 +292,45 @@ Let us first look a the price in Figure \ref{fig:price_btc} and the log(price) i
 Around 2010 bitcoin had the first increase in price as it jumped a 100% from 0.0008 USD to 0.08 Dollar [@Bitcoin_history]. In 2011 the price rose from 1 USD to 32 USD within 3 months and recessd shortly after to 2 USD this can be referred as a first price bubble in bitcoin, for the next year the price climbed to 13 Dollars and reached a never seen level of 220 USD, only to plunge to 70 USD within a half month in April 2013.
 By the end of the year a rally brought btc up to a peak of 1156 USD. The following year brought bad news and the price slowly decreased to 315 USD in 2015 after an observed drop of 20% after news from the trial of Ross Ulbricht, founder of Silk road marked in Letter \textbf{A}.
 
-From this point in time, things began to change, more volume was flushed in the market and the price of BTC began to ascend and the real rally began ,the BTC rose up to 20k USD / BTC on 17th September 2017 \textbf{B}. After the rise comes the fall and BTC lost value for more than a year until \textbf{C} 2018-12-15 the trend reverted and found its peak after 6 months in \textbf{D} 2019-06-26, but oncemore it was not lasting for long as bitcoin lost \textbf{D} 2020-03-12 nearly half its value in 4 days. But the story wasn't over by now, after the drop the price of the cryptocurrency regained value, passed previous levels and shortly after exploded, after companies like tesla and signal bought a big chunk of bitcoins, into a maximum of 58000 USD per bitcoin.
+From this point in time, things began to change, more volume was flushed in the market and the price of BTC began to ascend and the real rally began ,the BTC rose up to 20k USD / BTC on 17th September 2017 \textbf{B}. After the rise comes the fall and BTC lost value for more than a year until \textbf{C} 2018-12-15 the trend reverted and found its peak after 6 months in \textbf{D} 2019-06-26, but oncemore it was not lasting for long as bitcoin lost \textbf{D} 2020-03-12 nearly half its value in 4 days.
+
+But the story wasn't over by now, after the drop the price of the cryptocurrency regained value, passed previous levels and shortly after exploded, after companies like tesla and signal bought a big chunk of bitcoins, into a maximum of 58000 USD per bitcoin. It is also observed that the value of bitcoin is very volatile, we will discuss this in  section [3.2.](#data_exploration).
 
 \newpage
 
-```{r logprice_btc, out.width='80%', fig.cap='Schematic diagram of a perceptron.', echo=FALSE}
+```{r logprice_btc, out.width='80%', fig.cap='Logarithmic Bitcoin price USD', echo=FALSE}
 knitr::include_graphics("images/logbtc_usd.jpeg")
 ```
 
-```{r price_btc, out.width='80%', fig.cap='Schematic diagram of a perceptron.', echo=FALSE}
+```{r price_btc, out.width='80%', fig.cap='Bitcoin Price USD', echo=FALSE}
 knitr::include_graphics("images/btc_usd.jpeg")
 ```
 
 \newpage
 
-#### 2.3.2. Technology overview SHA256 Hash
+#### 2.3.2. Bitcoin Technology cryptocurrencies
 
 &nbsp;
 
--   Block
--   Blockchain
--   Distributed Blockchain
--   Token
--   Coinbase Transaction
--   Public/Private Key -\> Signing
--   Signature (sign, verify)
--   Transaction
 
+In this section bitcoin as a cryptocurreny based on the blockchain technology is briefly described. The term cryptocurrency as a more general term is used because bitcoin was only the first of its kind. 
 
+One may look at a cryptocurrency similar to a normal currency because you can buy and sell things and get bitcoin in exchange. But cryptocurrencies fundamentally differ to conservative currencies in merely all ways. The cryptocurrencies (not just bitcoin) are based on the blockchain technology introduced in Nakamotos paper[@bitcoin]. 
 
+The system is decentralized, where no institution or Government regulates the market in terms of the blockchain itself. The transactions are signed by the participants via  cryptographic hash functions which generates a private and public key. This means that every signature can only be accessed by the owner of the private key. 
+Once a transaction is signed, it is broadcasted into the network to all participants, so that everyone sees a transaction has been made.  Around 2400 transactions are packed in a block (the blocksize is limited by memory) which are broadcasted to all participants of the system.
+Ever block consist the transaction information, previous hash ,the special number and their resulting hash as visualized in Figure \ref{fig:blockchain}.
+Miners are now trying to approve the block by generating a hash with a certain pattern with the hashfunction f(prevhash, data of the block, special number), the so called proof of work. The first Miner who finds the according special number to the hash with the certain pattern, gets an amount of bitcoin in reward.
+The block with its new hash and the special number are now added to the chain and are broadcasted to the network. If someone manipulates transactions in a block and finds the special number to the hash he could potentially get away with it but no for long because for the next block he must be also the first to find the right hash and so on ,in Figure \ref{fig:blockchain} the red block is a false one. Only the longest chain is to be trusted, and because there are so many miners one must have more than 50 % off the calculating power to get the best chance to find the right hash. Therefore its almost impossible to manipulate the chain.
+The cryptocurrency itself is now entirely defined by a chain of approved blocks by all participants.
 
+Another interesting fact about bitcoin is that the amount of coins is determined by the rewards of the miners. The first block (genesisblock) had a reward of 50 bitcoins, every 4 years this reward gets halved. Therefore the maximum amount of bitcoins is 21 million.
 
+In recent days the cryptocurrency has come under a lot of critisicm because of its impact to the natural environment. The immense computing expenditure has a very high power consumption.
 
+ 
+
+```{r blockchain, out.width='80%', fig.cap='Blockchain schema', echo=FALSE}
+knitr::include_graphics("images/blockchain.jpg")
+```
 
