@@ -134,7 +134,7 @@ Looking at the out-of-sample MSE's in the graph below in figure \ref{fig:mse_plo
 
 \newpage
 
-Lastly, we look at the results of the different network architectures with a third layer. In figure \ref{fig:mse_plot3}, we can see very well the inverse correlation between the in-sample and out-of-sample MSE. Again, the in-sample MSE gets better with increasing complexity while the out-of-sample MSE gets worse. There is also a certain recurring pattern that is striking. After a certain complexity, the in-sample MSE decreases steadily and then increases abruptly. The opposite pattern can also be observed out-of-sample. These patterns emerge during transitions from more complex to more simple architectures. For example, the transition from a model with (8, 10, 10), with a total of 28 neurons, to a model with (9, 1, 1) with only 11 neurons.
+Lastly, we look at the results of the different network architectures with a third layer. In figure \ref{fig:mse_plot3}, we can see very well the inverse correlation between the in-sample and out-of-sample MSE. Again, the in-sample MSE gets better with increasing complexity while the out-of-sample MSE gets worse. There is also a certain recurring pattern that is striking. After a certain complexity, the in-sample MSE decreases steadily and then increases abruptly. The opposite pattern can also be observed out-of-sample. These patterns emerge during transitions from more complex to more simple architectures. For example, the transition from a model with (8,10,10), with a total of 28 neurons, to a model with (9,1,1) with only 11 neurons.
 
 It is interesting that at the beginning, with the rather simple model architectures, the MSE of all realizations is very constant and only varies very slightly.
 
@@ -143,22 +143,29 @@ knitr::include_graphics("images/batch4/mse_5_layer3.jpeg")
 ```
 \newpage
 
-- ERKLÄREN, DASS ES UNMÖGLICH IST FÜR 9 VERSCHIEDENE SPLITS EIN EINE REIN VISUELLE ANALYSE DURCHZUFÜHREN
+- ERKLÄREN, DASS ES UNMÖGLICH IST FÜR 9 VERSCHIEDENE SPLITS EINE REIN VISUELLE ANALYSE DURCHZUFÜHREN (ALSO DAS FINDEN EINER OPTIMALEN MODEL-ARCHITEKTUR ÜBER DIESE 9 VERSCHIEDENEN ZEITPERIODEN)
+- EINGEHEN AUF DEN FEHLENDEN MEHRWERT FÜR DIE WAHL VON KOMPLEXEREN NETZEN
+- INTERESSANT: NETZE WERDEN NICHT SCHLECHTER ALS EIN GEWISSER SCHWELLENWERT, ÜBER ALLE NETZTE SIND DIE MSE IM MITTEL SEHR ÄHNLICH, SPRICH STREUEN (ASYMMETRISCH) UM EINEN GEWISSEN WERT HERUM
 
 ```{r mse_plot5, out.width='100%', fig.cap='Fifth train/test split, all layers with 1110 different networks.', echo=FALSE,fig.align="center"}
-knitr::include_graphics("images/batch4/mse_5_all.jpeg")
+knitr::include_graphics("images/batch4/mse_5_all_legend.jpeg")
 ```
 
 \newpage
 
 - MITTELWERTE ÜBER SÄMTLICHE DER 9 SPLITS BERECHNEN UM DEI BESTIMMUNG DES OPTIMALEN NETZTES ZU VEREINFACHEN
 BESPIEL: Man hat 9 Splits à je 1110 Neuronen-Layer-Kombinationen. Für jede NL-Architektur wurden 50 neuronale Netzwerke trainiert. Somit kommt man auf 55500 Netze pro Splits. Also für alleine diese Versuchreihe wurden 499500 Netzwerke trainiert. Nun möchte man diejenige NL-Architektur finden, welche im Verlauf der Zeit (Verlauf der 9 Splits) am besten geblieben/am wenigsten an Performanz verloren hat/am besten geworden ist finden. Man hat herausgefunden, dass Netzte sehr zufällig sind. Somit werden die Mittelwerte über die 50 Netzte pro Layer, pro Split gebildet. Man erhält für jede NL-Kombination 9 verschiedene Mittelwerte der MSEs. Die Suche nach einer optimalen Netzwerk-Architektur ist so um einiges einfacher. (siehe \ref{fig:mse_mean})
+- OPTIMALE NETZWERK-ARCHITEKTUR FINDEN/BESTIMMEN, WIE?
 
 ```{r mse_mean, out.width='100%', fig.cap='MSE mean over all 9 splits.', echo=FALSE,fig.align="center"}
-knitr::include_graphics("images/batch4/mse_mean.jpeg")
+knitr::include_graphics("images/batch4/mean_mse_all.jpeg")
 ```
-
+\newpage
 - Eventuell noch Sharpe hinzunehmen, wäre noch interessant (work in Progress)? oder evtl doch erst später im Trading?
+
+```{r sharpe_mean, out.width='100%', fig.cap='Sharpe mean over all 9 splits.', echo=FALSE,fig.align="center"}
+knitr::include_graphics("images/batch4/mean_sharpe_all.jpeg")
+```
 
 \newpage
 
