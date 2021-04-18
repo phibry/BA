@@ -308,12 +308,7 @@ knitr::include_graphics("images/btc_usd.jpeg")
 
 \newpage
 
-<<<<<<< HEAD
 #### 2.3.2. Bitcoin technology & cryptocurrencies {#bitcoin_tec} 
-=======
-#### 2.3.2.Bitcoin technology & cryptocurrencies {#bitcoin_tec} 
->>>>>>> main
-
 &nbsp;
 
 
