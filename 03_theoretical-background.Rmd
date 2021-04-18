@@ -272,7 +272,7 @@ Altough its wide application in many different sectors, the MSE has a problem wi
 
 ### 2.3. Bitcoin {#bitcoin}
 
-In this section bitcoin as a crypto-curreny is introduced. The historical data is analyzed and commented. Further the technology in and around crypto-currencies is briefly explained. A detailed explanation would require a paper itself, therefore the explanation is done as simple as possible.
+In this section bitcoin as a crypto-curreny is introduced. The historical data is analyzed and commented. Further the technology in and around crypto-currencies in chapter [2.3.2.](#bitcoin_tec) is briefly explained. A detailed explanation would require a paper itself, therefore the explanation is done as simple as possible.
 
 In the following work bitcoin as a cryptocurreny is mentionend in its short term BTC, by the meaning of US Dollars per Bitcoin.
 
@@ -308,25 +308,25 @@ knitr::include_graphics("images/btc_usd.jpeg")
 
 \newpage
 
-#### 2.3.2. Bitcoin Technology cryptocurrencies
+#### 2.3.2. {#bitcoin_tec} Bitcoin technology & cryptocurrencies
 
 &nbsp;
 
 
-In this section bitcoin as a cryptocurreny based on the blockchain technology is briefly described. The term cryptocurrency as a more general term is used because bitcoin was only the first of its kind. 
+In this section bitcoin as a cryptocurreny based on the blockchain technology is briefly described. Cryptocurrency as a more general term is used because bitcoin was only the first of its kind. 
 
 One may look at a cryptocurrency similar to a normal currency because you can buy and sell things and get bitcoin in exchange. But cryptocurrencies fundamentally differ to conservative currencies in merely all ways. The cryptocurrencies (not just bitcoin) are based on the blockchain technology introduced in Nakamotos paper[@bitcoin]. 
 
-The system is decentralized, where no institution or Government regulates the market in terms of the blockchain itself. The transactions are signed by the participants via  cryptographic hash functions which generates a private and public key. This means that every signature can only be accessed by the owner of the private key. 
+The system is decentralized, where no institution or Government regulates the market in terms of the blockchain itself. The transactions are signed by the participants via  cryptographic hash functions which generates a private and public key. This means that every signature can only be accessed by the owner of the private key i.e. it can not be copied. 
 Once a transaction is signed, it is broadcasted into the network to all participants, so that everyone sees a transaction has been made.  Around 2400 transactions are packed in a block (the blocksize is limited by memory) which are broadcasted to all participants of the system.
-Ever block consist the transaction information, previous hash ,the special number and their resulting hash as visualized in Figure \ref{fig:blockchain}.
+Every block consists the transaction information, previous hash, the special number and their resulting hash as visualized in Figure \ref{fig:blockchain}.
 Miners are now trying to approve the block by generating a hash with a certain pattern with the hashfunction f(prevhash, data of the block, special number), the so called proof of work. The first Miner who finds the according special number to the hash with the certain pattern, gets an amount of bitcoin in reward.
-The block with its new hash and the special number are now added to the chain and are broadcasted to the network. If someone manipulates transactions in a block and finds the special number to the hash he could potentially get away with it but no for long because for the next block he must be also the first to find the right hash and so on ,in Figure \ref{fig:blockchain} the red block is a false one. Only the longest chain is to be trusted, and because there are so many miners one must have more than 50 % off the calculating power to get the best chance to find the right hash. Therefore its almost impossible to manipulate the chain.
+The block with its new hash and the special number are now added to the chain and are broadcasted to the network. If someone manipulates transactions in a block and finds the special number to the hash he could potentially get away with it but no for long because for the next block he must be also the first to find the right hash and so on. In Figure \ref{fig:blockchain} the red block is a false one which gets attached and later declined because the other branch is longer. Only the longest chain is to be trusted, and because there are so many miners one must have more than 50 % off the calculating power to get the best chance to find the right hash. Therefore its almost impossible to manipulate the chain.
 The cryptocurrency itself is now entirely defined by a chain of approved blocks by all participants.
 
 Another interesting fact about bitcoin is that the amount of coins is determined by the rewards of the miners. The first block (genesisblock) had a reward of 50 bitcoins, every 4 years this reward gets halved. Therefore the maximum amount of bitcoins is 21 million.
 
-In recent days the cryptocurrency has come under a lot of critisicm because of its impact to the natural environment. The immense computing expenditure has a very high power consumption.
+In recent days the cryptocurrency has come under a lot of critisicm. The immense computing expenditure has a very high power consumption which leads cryptomining companies to build huge farms with massive cooling aggregates. According to the article in Forbes magazine [@energy_consumption] the bitcoin mining procees uses 0.51 percent (127TWh)  of global energy consumption. The University of cambridge created an index where the live energy consumption can be observed [@energy_index]. Right now China [@energy_map] contributes 70 % to the hash rate whereas the remaining 30 are distributed ovver the rest of the world.
 
  
 
