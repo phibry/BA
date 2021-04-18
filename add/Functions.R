@@ -1250,3 +1250,210 @@ plot_mean <- function(mati, real, title="") {
   
   par(par_default)
 }
+
+
+#.####
+# Mean Plots####
+plot_mse_mean <- function(mse_in, mse_out, title="",scale_fac=3) {
+  # Layer Breakpoints
+  str_splitter <- function(x) {
+    return(length(as.numeric(unlist(strsplit(x, ", ")))))
+  }
+  
+  layers <- sapply(X=rownames(mse_in), FUN=str_splitter, USE.NAMES=FALSE)
+  layers <- as.numeric(table(layers))
+  layers <- cumsum(layers)
+  
+  
+  # Plots mit Rect
+  par_default <- par(no.readonly = TRUE)
+  par(mfrow=c(2,1), mar=c(3,5,3,2))
+  ## In-Sample
+  # color indizes for plots
+  
+  # color codes for the rect
+  colorcodes <- c("#FF00001A", # red
+                  "#0000FF1A", # blue
+                  "#80FF001A", # green
+                  "#FF80001A", # orange
+                  "#00FFFF1A", # teal
+                  "#8000FF1A") # purple
+  split_colors <- c("#59C7EB",
+                    "#E0607E",
+                    "#0A9086",
+                    "#FEA090",
+                    "#3E5496",
+                    "#EFDC60",
+                    "#8E2043",
+                    "#9AA0A7",
+                    "#AC9A8C")
+  # MSE in
+  for(i in 1:dim(mse_in)[2]) {
+    if (i == 1) {
+      plot(mse_in[,i],
+           main=paste(title, ": In-Sample", sep=""),
+           type="l",
+           ylim=c(min(mse_in) ,max(mse_in)),
+           xlim=c(1, dim(mse_in)[1]),
+           col=split_colors[i],
+           ylab="MSE",
+           frame.plot = FALSE,
+           xaxt="n",
+           xlab="")
+    } else {
+      lines(mse_in[,i], col=split_colors[i])
+    }
+  }
+  
+  
+  startl <- c(1, head(layers, -1)+1)
+  endl <- layers
+  for (i in 1:length(layers)) {
+    rect(xleft = startl[i],
+         xright = endl[i],
+         ybottom = min(mse_in),
+         ytop = max(mse_in),
+         col=colorcodes[i])
+    ydistance <- par('usr')[4] - par('usr')[3]
+    textlocation <- par('usr')[3] + (ydistance * 0.1)
+    text(startl[i]+(endl[i]-startl[i])/2, textlocation , i)
+  }
+  
+  # MSE out
+  for(i in 1:dim(mse_out)[2]) {
+    if (i == 1) {
+      plot(mse_out[,i],
+           main=paste(title, ": Out-of-Sample", sep=""),
+           type="l",
+           ylim=c(min(mse_out) ,min(mse_out)*scale_fac),
+           xlim=c(1, dim(mse_out)[1]),
+           col=split_colors[i],
+           ylab="MSE",
+           frame.plot = FALSE,
+           xaxt="n",
+           xlab="")
+    } else {
+      lines(mse_out[,i], col=split_colors[i])
+    }
+  }
+  
+  
+  startl <- c(1, head(layers, -1)+1)
+  endl <- layers
+  for (i in 1:length(layers)) {
+    rect(xleft = startl[i],
+         xright = endl[i],
+         # ybottom = min(mse_out),
+         # ytop = max(mse_out),
+         ybottom=par('usr')[3],
+         ytop=par('usr')[4],
+         col=colorcodes[i])
+    ydistance <- par('usr')[4] - par('usr')[3]
+    textlocation <- par('usr')[3] + (ydistance * 0.9)
+    text(startl[i]+(endl[i]-startl[i])/2, textlocation , i)
+  }
+  
+  par(par_default)
+}
+
+plot_sharpe_mean <- function(sharpe_in, sharpe_out, title="") {
+  # Layer Breakpoints
+  str_splitter <- function(x) {
+    return(length(as.numeric(unlist(strsplit(x, ", ")))))
+  }
+  
+  layers <- sapply(X=rownames(sharpe_in), FUN=str_splitter, USE.NAMES=FALSE)
+  layers <- as.numeric(table(layers))
+  layers <- cumsum(layers)
+  
+  
+  # Plots mit Rect
+  par_default <- par(no.readonly = TRUE)
+  par(mfrow=c(2,1), mar=c(3,5,3,2))
+  ## In-Sample
+  # color indizes for plots
+  
+  # color codes for the rect
+  colorcodes <- c("#FF00001A", # red
+                  "#0000FF1A", # blue
+                  "#80FF001A", # green
+                  "#FF80001A", # orange
+                  "#00FFFF1A", # teal
+                  "#8000FF1A") # purple
+  split_colors <- c("#59C7EB",
+                    "#E0607E",
+                    "#0A9086",
+                    "#FEA090",
+                    "#3E5496",
+                    "#EFDC60",
+                    "#8E2043",
+                    "#9AA0A7",
+                    "#AC9A8C")
+  # Sharpe in
+  for(i in 1:dim(sharpe_in)[2]) {
+    if (i == 1) {
+      plot(sharpe_in[,i],
+           main=paste(title, ": In-Sample", sep=""),
+           type="l",
+           ylim=c(min(sharpe_in) ,max(sharpe_in)),
+           xlim=c(1, dim(sharpe_in)[1]),
+           col=split_colors[i],
+           ylab="Sharpe",
+           frame.plot = FALSE,
+           xaxt="n",
+           xlab="")
+    } else {
+      lines(sharpe_in[,i], col=split_colors[i])
+    }
+  }
+  
+  
+  startl <- c(1, head(layers, -1)+1)
+  endl <- layers
+  for (i in 1:length(layers)) {
+    rect(xleft = startl[i],
+         xright = endl[i],
+         ybottom = min(sharpe_in),
+         ytop = max(sharpe_in),
+         col=colorcodes[i])
+    ydistance <- par('usr')[4] - par('usr')[3]
+    textlocation <- par('usr')[3] + (ydistance * 0.1)
+    text(startl[i]+(endl[i]-startl[i])/2, textlocation , i)
+  }
+  
+  # Sharpe out
+  for(i in 1:dim(sharpe_out)[2]) {
+    if (i == 1) {
+      plot(sharpe_out[,i],
+           main=paste(title, ": Out-of-Sample", sep=""),
+           type="l",
+           ylim=c(min(sharpe_out) ,max(sharpe_out)),
+           xlim=c(1, dim(sharpe_out)[1]),
+           col=split_colors[i],
+           ylab="Sharpe",
+           frame.plot = FALSE,
+           xaxt="n",
+           xlab="")
+    } else {
+      lines(sharpe_out[,i], col=split_colors[i])
+    }
+  }
+  
+  
+  startl <- c(1, head(layers, -1)+1)
+  endl <- layers
+  for (i in 1:length(layers)) {
+    rect(xleft = startl[i],
+         xright = endl[i],
+         # ybottom = min(mse_out),
+         # ytop = max(mse_out),
+         ybottom=par('usr')[3],
+         ytop=par('usr')[4],
+         col=colorcodes[i])
+    ydistance <- par('usr')[4] - par('usr')[3]
+    textlocation <- par('usr')[3] + (ydistance * 0.9)
+    text(startl[i]+(endl[i]-startl[i])/2, textlocation , i)
+  }
+  
+  par(par_default)
+}
