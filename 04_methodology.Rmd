@@ -143,7 +143,9 @@ knitr::include_graphics("images/batch4/mse_5_layer3.jpeg")
 ```
 \newpage
 
-- ERKLÄREN, DASS ES UNMÖGLICH IST FÜR 9 VERSCHIEDENE SPLITS EIN EINE REIN VISUELLE ANALYSE DURCHZUFÜHREN
+- ERKLÄREN, DASS ES UNMÖGLICH IST FÜR 9 VERSCHIEDENE SPLITS EINE REIN VISUELLE ANALYSE DURCHZUFÜHREN (ALSO DAS FINDEN EINER OPTIMALEN MODEL-ARCHITEKTUR ÜBER DIESE 9 VERSCHIEDENEN ZEITPERIODEN)
+- EINGEHEN AUF DEN FEHLENDEN MEHRWERT FÜR DIE WAHL VON KOMPLEXEREN NETZEN
+- INTERESSANT: NETZE WERDEN NICHT SCHLECHTER ALS EIN GEWISSER SCHWELLENWERT, ÜBER ALLE NETZTE SIND DIE MSE IM MITTEL SEHR ÄHNLICH, SPRICH STREUEN (ASYMMETRISCH) UM EINEN GEWISSEN WERT HERUM
 
 ```{r mse_plot5, out.width='100%', fig.cap='Fifth train/test split, all layers with 1110 different networks.', echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/batch4/mse_5_all_legend.jpeg")
@@ -153,6 +155,7 @@ knitr::include_graphics("images/batch4/mse_5_all_legend.jpeg")
 
 - MITTELWERTE ÜBER SÄMTLICHE DER 9 SPLITS BERECHNEN UM DEI BESTIMMUNG DES OPTIMALEN NETZTES ZU VEREINFACHEN
 BESPIEL: Man hat 9 Splits à je 1110 Neuronen-Layer-Kombinationen. Für jede NL-Architektur wurden 50 neuronale Netzwerke trainiert. Somit kommt man auf 55500 Netze pro Splits. Also für alleine diese Versuchreihe wurden 499500 Netzwerke trainiert. Nun möchte man diejenige NL-Architektur finden, welche im Verlauf der Zeit (Verlauf der 9 Splits) am besten geblieben/am wenigsten an Performanz verloren hat/am besten geworden ist finden. Man hat herausgefunden, dass Netzte sehr zufällig sind. Somit werden die Mittelwerte über die 50 Netzte pro Layer, pro Split gebildet. Man erhält für jede NL-Kombination 9 verschiedene Mittelwerte der MSEs. Die Suche nach einer optimalen Netzwerk-Architektur ist so um einiges einfacher. (siehe \ref{fig:mse_mean})
+- OPTIMALE NETZWERK-ARCHITEKTUR FINDEN/BESTIMMEN, WIE?
 
 ```{r mse_mean, out.width='100%', fig.cap='MSE mean over all 9 splits.', echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/batch4/mean_mse_all.jpeg")
