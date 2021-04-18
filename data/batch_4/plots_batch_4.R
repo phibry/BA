@@ -198,6 +198,11 @@ sharpe_out <- as.data.frame(cbind(
   apply(X=nn_10_3_50_9[, seq(4, 200, 4)], MARGIN=1, FUN=mean)
 ));colnames(sharpe_out) <- 1:9
 
+# save(mse_in, mse_out, sharpe_in, sharpe_out, file = "data/batch_4/meanerino.rda")
+
+load("data/batch_4/meanerino.rda")
+
+
 min(mse_in[1,])
 
 
@@ -234,6 +239,15 @@ plot_mse_mean <- function(mse_in, mse_out, title="",scale_fac=3) {
                   "#FF80001A", # orange
                   "#00FFFF1A", # teal
                   "#8000FF1A") # purple
+  split_colors <- c("#59C7EB",
+                    "#E0607E",
+                    "#0A9086",
+                    "#FEA090",
+                    "#3E5496",
+                    "#EFDC60",
+                    "#8E2043",
+                    "#9AA0A7",
+                    "#AC9A8C")
   # MSE in
   for(i in 1:dim(mse_in)[2]) {
     if (i == 1) {
@@ -242,13 +256,13 @@ plot_mse_mean <- function(mse_in, mse_out, title="",scale_fac=3) {
            type="l",
            ylim=c(min(mse_in) ,max(mse_in)),
            xlim=c(1, dim(mse_in)[1]),
-           col=i,
+           col=split_colors[i],
            ylab="MSE",
            frame.plot = FALSE,
            xaxt="n",
            xlab="")
     } else {
-      lines(mse_in[,i], col=i)
+      lines(mse_in[,i], col=split_colors[i])
     }
   }
 
@@ -274,13 +288,13 @@ plot_mse_mean <- function(mse_in, mse_out, title="",scale_fac=3) {
            type="l",
            ylim=c(min(mse_out) ,min(mse_out)*scale_fac),
            xlim=c(1, dim(mse_out)[1]),
-           col=i,
+           col=split_colors[i],
            ylab="MSE",
            frame.plot = FALSE,
            xaxt="n",
            xlab="")
     } else {
-      lines(mse_out[,i], col=i)
+      lines(mse_out[,i], col=split_colors[i])
     }
   }
   
@@ -303,6 +317,113 @@ plot_mse_mean <- function(mse_in, mse_out, title="",scale_fac=3) {
   par(par_default)
 }
 plot_mse_mean(mse_in=mse_in, mse_out=mse_out, title="Mean MSE over all 9 splits", 20)
+
+
+
+plot_sharpe_mean <- function(sharpe_in, sharpe_out, title="") {
+  # Layer Breakpoints
+  str_splitter <- function(x) {
+    return(length(as.numeric(unlist(strsplit(x, ", ")))))
+  }
+  
+  layers <- sapply(X=rownames(sharpe_in), FUN=str_splitter, USE.NAMES=FALSE)
+  layers <- as.numeric(table(layers))
+  layers <- cumsum(layers)
+  
+  
+  # Plots mit Rect
+  par_default <- par(no.readonly = TRUE)
+  par(mfrow=c(2,1), mar=c(3,5,3,2))
+  ## In-Sample
+  # color indizes for plots
+  
+  # color codes for the rect
+  colorcodes <- c("#FF00001A", # red
+                  "#0000FF1A", # blue
+                  "#80FF001A", # green
+                  "#FF80001A", # orange
+                  "#00FFFF1A", # teal
+                  "#8000FF1A") # purple
+  split_colors <- c("#59C7EB",
+                    "#E0607E",
+                    "#0A9086",
+                    "#FEA090",
+                    "#3E5496",
+                    "#EFDC60",
+                    "#8E2043",
+                    "#9AA0A7",
+                    "#AC9A8C")
+  # Sharpe in
+  for(i in 1:dim(sharpe_in)[2]) {
+    if (i == 1) {
+      plot(sharpe_in[,i],
+           main=paste(title, ": In-Sample", sep=""),
+           type="l",
+           ylim=c(min(sharpe_in) ,max(sharpe_in)),
+           xlim=c(1, dim(sharpe_in)[1]),
+           col=split_colors[i],
+           ylab="Sharpe",
+           frame.plot = FALSE,
+           xaxt="n",
+           xlab="")
+    } else {
+      lines(sharpe_in[,i], col=split_colors[i])
+    }
+  }
+  
+  
+  startl <- c(1, head(layers, -1)+1)
+  endl <- layers
+  for (i in 1:length(layers)) {
+    rect(xleft = startl[i],
+         xright = endl[i],
+         ybottom = min(sharpe_in),
+         ytop = max(sharpe_in),
+         col=colorcodes[i])
+    ydistance <- par('usr')[4] - par('usr')[3]
+    textlocation <- par('usr')[3] + (ydistance * 0.1)
+    text(startl[i]+(endl[i]-startl[i])/2, textlocation , i)
+  }
+  
+  # Sharpe out
+  for(i in 1:dim(sharpe_out)[2]) {
+    if (i == 1) {
+      plot(sharpe_out[,i],
+           main=paste(title, ": Out-of-Sample", sep=""),
+           type="l",
+           ylim=c(min(sharpe_out) ,max(sharpe_out)),
+           xlim=c(1, dim(sharpe_out)[1]),
+           col=split_colors[i],
+           ylab="Sharpe",
+           frame.plot = FALSE,
+           xaxt="n",
+           xlab="")
+    } else {
+      lines(sharpe_out[,i], col=split_colors[i])
+    }
+  }
+  
+  
+  startl <- c(1, head(layers, -1)+1)
+  endl <- layers
+  for (i in 1:length(layers)) {
+    rect(xleft = startl[i],
+         xright = endl[i],
+         # ybottom = min(mse_out),
+         # ytop = max(mse_out),
+         ybottom=par('usr')[3],
+         ytop=par('usr')[4],
+         col=colorcodes[i])
+    ydistance <- par('usr')[4] - par('usr')[3]
+    textlocation <- par('usr')[3] + (ydistance * 0.9)
+    text(startl[i]+(endl[i]-startl[i])/2, textlocation , i)
+  }
+  
+  par(par_default)
+}
+plot_sharpe_mean(sharpe_in=sharpe_in, sharpe_out=sharpe_out, title="Mean Sharpe over all 9 splits")
+
+
 
 #.####
 # Testerino####
@@ -353,6 +474,9 @@ plot_by_layer_rect_scale(mati=mse_4, real=50, title="MSE Split: 4",
 mse_5 <- nn_10_3_50_5[,c(rbind(seq(1, 200, 4), seq(2, 200, 4)))]
 # plot_all_rect(mati=mse_5, real=50, title="In/Out Split: 5")
 plot_all_rect_scale(mati=mse_5, real=50, title="MSE Split: 5", scale_fac=11)
+legend("center", legend=c("1 Layer", '2 Layers', '3 Layers'), pch=15, pt.cex=2, cex=0.8, bty='n',
+       col = c('#FF00004D', '#0000FF4D', '#80FF004D'), horiz=TRUE, title="Layer partitioning")
+
 # plot_by_layer_rect(mati=mse_5, real=50, title="In/Out Split: 5")
 plot_by_layer_rect_scale(mati=mse_5, real=50, title="MSE Split: 5",
                    scale_vec=c(4, 10, 10))
@@ -389,3 +513,55 @@ plot_all_rect_scale(mati=mse_9, real=50, title="MSE Split: 9", scale_fac=10)
 plot_by_layer_rect_scale(mati=mse_9, real=50, title="MSE Split: 9",
                    scale_vec=c(10, 20, 8))
 
+
+
+
+
+# Mean Plots####
+split_colors <- c("#59C7EB", "#E0607E", "#0A9086", "#FEA090", "#3E5496", "#EFDC60", "#8E2043", "#9AA0A7", "#AC9A8C")
+
+load("data/batch_4/meanerino.rda")
+plot_mse_mean(mse_in=mse_in, mse_out=mse_out, title="Mean MSE over all 9 splits", 20)
+legend("left", legend=c("1 Layer", '2 Layers', '3 Layers'), pch=15, pt.cex=2, cex=0.8, bty='n',
+       col = c('#FF00004D', '#0000FF4D', '#80FF004D'), horiz=TRUE, title="Layer partitioning")
+legend("right", legend=c("1", "2", "3", "4", "5", "6", "7", "8", "9"), pch=15, pt.cex=2, cex=0.8, bty='n',
+       col = split_colors, horiz=TRUE, title="Train/Test Splits")
+
+
+plot_sharpe_mean(sharpe_in=sharpe_in, sharpe_out=sharpe_out, title="Mean Sharpe over all 9 splits")
+legend("left", legend=c("1 Layer", '2 Layers', '3 Layers'), pch=15, pt.cex=2, cex=0.8, bty='n',
+       col = c('#FF00004D', '#0000FF4D', '#80FF004D'), horiz=TRUE, title="Layer partitioning")
+legend("right", legend=c("1", "2", "3", "4", "5", "6", "7", "8", "9"), pch=15, pt.cex=2, cex=0.8, bty='n',
+       col = split_colors, horiz=TRUE, title="Train/Test Splits")
+
+
+
+
+colorcodes <- c("#FF00001A", # red
+                "#0000FF1A", # blue
+                "#80FF001A", # green
+                "#FF80001A", # orange
+                "#00FFFF1A", # teal
+                "#8000FF1A") # purple
+plot(NULL ,xaxt='n',yaxt='n',bty='n',ylab='',xlab='', xlim=0:1, ylim=0:1)
+legend("top", legend=c("1 Layer", '2 Layers', '3 Layers'), pch=15, pt.cex=3, cex=1, bty='n',
+       col = c('#FF00004D', '#0000FF4D', '#80FF004D'), horiz=TRUE, title="Layer partitioning")
+
+plot(NULL ,xaxt='n',yaxt='n',bty='n',ylab='',xlab='', xlim=0:1, ylim=0:1)
+legend("top", legend=c("1", "2", "3", "4", "5", "6", "7", "8", "9"), pch=15, pt.cex=3,bty='n',
+       col = 1:9, horiz=TRUE, title="Train/Test Splits")
+?legend
+
+
+# library('unikn') 
+# usecol(pal_unikn_pref, n=10)
+# seecol(pal_unikn_pref, n=9)
+# seecol(pal_unikn_pref, n=10)
+split_colors <- c("#59C7EB", "#E0607E", "#0A9086", "#FEA090", "#3E5496", "#EFDC60", "#8E2043", "#9AA0A7", "#AC9A8C")
+plot(NULL ,xaxt='n',yaxt='n',bty='n',ylab='',xlab='', xlim=0:1, ylim=0:1)
+legend("topleft", legend=c("1", "2", "3", "4", "5", "6", "7", "8", "9"), pch=15, pt.cex=3,bty='n',
+       col = split_colors, horiz=TRUE, title="Train/Test Splits")
+
+
+?pch
+?legend
