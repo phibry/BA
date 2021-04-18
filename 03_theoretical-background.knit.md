@@ -34,9 +34,14 @@ Inputs are the information that is fed into the model. In the case of econometri
 
 \newpage
 
-```{r perceptron_schema, fig.align='center', out.width='70%', fig.cap='Schematic diagram of a perceptron.', echo=FALSE}
-knitr::include_graphics("images/Perceptron.jpg")
-```
+\begin{figure}
+
+{\centering \includegraphics[width=0.7\linewidth]{images/Perceptron} 
+
+}
+
+\caption{Schematic diagram of a perceptron.}\label{fig:perceptron_schema}
+\end{figure}
 
 The perceptron can also be represented as a function, which can be seen in equation \ref{eq:perceptron}. Analogous to the representation above, the inputs $x_{i}$ are multiplied by the weights $w_{i}$ in a linear combination. Then an error term is added so that the whole can be packed into the non-linear activation function $g(S)$ . $\hat{y}$ is the binary output of this perceptron. With the aid of an activation function, binary output is obtained. The Heaviside step function shown in figure \ref{fig:perceptron_schema} is usually only used in single layer perceptrons, which recognize linear separable patterns. For the multi-layer neural networks presented later, step functions are not an option, because in the course of the backpropagation algorithm the gradient descent has to be minimized. This requires derivatives of the activation function, which in the case of this Heaviside step function equals 0. Because the foundation for the optimization process is missing, functions like the sigmoid function or the hyperbolic tangent function are used [@nn_learning_theoretical_foundations]. More about this topic is discussed in chapter [2.1.2](#backprogation_algorithm).
 
@@ -68,19 +73,14 @@ Finding the optimal weights of the neural network is achieved by finding the min
 <!-- \hat{y}(v_{i})=\tanh(v_{i}) -->
 <!-- \end{align} -->
 
-```{r sigmoid, fig.align='center', echo=FALSE, fig.cap="Two common sigmoid activation functions: logistic functions and hyperbolic tangent."}
-# Define x
-v <- seq(-5, 5, 0.02)
+\begin{figure}
 
-# Calculate target variables for both functions
-l <- (1 + exp(-v))^(-1)
-t <- tanh(v)
+{\centering \includegraphics{03_theoretical-background_files/figure-latex/sigmoid-1} 
 
-# Plotting sigmoid functions
-plot(x = v, y = l, type = "l", main = "Activation functions", xlim = c(-5,5), ylim = c(-1, 1), ylab = "y")
-lines(x = v, y = t, col = 2)
-legend("bottomright", legend = c("Logistic", "Tanh"), col = c(1,2), pch = "-", cex = 1)
-```
+}
+
+\caption{Two common sigmoid activation functions: logistic functions and hyperbolic tangent.}\label{fig:sigmoid}
+\end{figure}
 
 In the course of the error analysis, the output of the neural network respectively the result from the activation function in the output layer is compared with the desired value. The most commonly used error function E is the Mean Squared Error (MSE), which is seen in equation \ref{eq:mse}. $y_{i}$ represents the actual value for the data point $i$, while $\hat{y}_{i}$ is the predicted value for data point $i$. The average of this error function is the average MSE, which is determined for a corresponding model. The learning problem is to adjust the weights $w_{i}$ within the training sample so that $MSE(w)$ is minimized [@efficient_backprop].
 
@@ -117,11 +117,14 @@ The weights get adjusted according to the following algorithm \ref{eq:weight_adj
 
 Multilayer perceptrons (MLP) are widely used feedforward neural network models and make usage of the backpropagation algorithm. They are an evolution of the original perceptron proposed by Rosenblatt in 1958 [@perceptron_paper]. The distinction is that they have at least one hidden layer between input and output layer, which means that an MLP has more neurons whose weights must be optimized. Consequently, this requires more computing power, but more complex classification problems can be handled [@mlp_architecture]. Figure \ref{fig:mlp_schema} shows the structure of an MLP with $n$ hidden layers. Compared to the perceptron, it can be seen that this neural network consists of an input layer, one or more hidden layers, and an output layer. In each layer, there is a different number of neurons, respectively nodes. These properties (number of layers and nodes) can be summarized with the term 'network architecture' and will be dealt with in this thesis.
 
-```{r mlp_schema, fig.align='center', out.width='60%', fig.cap='Schematic diagram of a multilayer perceptron', echo=FALSE}
-knitr::include_graphics("images/MLP.jpeg")
+\begin{figure}
 
-# https://assets.website-files.com/5ac6b7f2924c652fd013a891/5edab65ea64212da0ad611b7_5d52f096076d2b058e88cf0c_Artificial-neural-network-architecture-ANN-i-h-1-h-2-h-n-o.jpeg
-```
+{\centering \includegraphics[width=0.6\linewidth]{images/MLP} 
+
+}
+
+\caption{Schematic diagram of a multilayer perceptron}\label{fig:mlp_schema}
+\end{figure}
 
 Every neural network has an input layer, which consists of one or more nodes. This number is determined from the training data and tells us how many features should be delivered to the neural network. In the case of bitcoin prices, we could use today's price and the prices of the last 10 days (lags 1-10), so the input layer would consist of 11 nodes. Some configurations also require a bias term to adjust the output along with the weighted sum, which is also added to the input layer. In contrast to the scheme of the MLP, this setup can be seen in figure \ref{fig:perceptron_schema} where the bias term is defined as 'constant'. Similarly to the input layer, each neural network has exactly one output layer. This can consist of one or more nodes. In this thesis, MLP is used as a regressor and therefore only one neuron is needed in this layer.
 
@@ -132,23 +135,25 @@ In between are the hidden layers, whose number and size can be configured as des
 
 Recurrent neural networks (RNN) are a further development of conventional neural networks. While MLP use new inputs $x_i$ in each epoch, RNN also use sequential data $h_i$ in addition to $x_i$. This sequential data are called hidden states and result from the previous runs. This has the advantage that historical information stemming from past predictions is included for the prediction for $t+1$. This effect can be intuitively explained by an example in which the flight path of a scheduled flight is predicted using RNN. When predicting the exact location (coordinates) of a plane, it is of great advantage to know the location at $t-1$ and to derive the flight direction from it. With the inclusion of this information, the target area can be narrowed down, which optimally leads to more accurate results. The same principle is used in applications like machine translation and speech recognition, where the result (here possibly letter or word) of the last epoch plays a big role for the next prediction [@RNN].
 
-```{r RNN, fig.align='center', out.width='80%', fig.cap= 'Process sequences of different applicances of RNN.', echo=FALSE}
+\begin{figure}
 
-knitr::include_graphics("images/RNN.jpg")
+{\centering \includegraphics[width=0.8\linewidth]{images/RNN} 
 
-#[1]F.-F. Li, J. Johnson, and S. Yeung, ‘Lecture 10: Recurrent Neural Networks’, p. 105.
+}
 
-```
+\caption{Process sequences of different applicances of RNN.}\label{fig:RNN}
+\end{figure}
 
 Figure \ref{fig:RNN} shows different process sequences of the RNN, which vary depending on the field of application. The red rectangles at the bottom represent the number of inputs. Similarly, the blue rectangles represent the outputs that come out of the RNN. The term 'many' refers to $>1$ and is illustrated with three rectangles in the figure. The green ones represent the hidden states $h_i$ of all time steps and thus can be seen as the memory of the neural network. The green arrows show that the previous hidden state is used as input for the current step. Starting from the left: one-to-many can be used for image captioning (extracting sequence of words from images), many-to-one for sentiment classification from sequence of words, many-to-many for machine translation (sequence of words in one language to sequence of words in another language) and many-to-many for video classification on frame level [@RNN_Stanford]. For the prediction of the BTC/USD exchange rate in this paper, we deal with the process many-to-one. This method combines information from inputs and hidden states into one single prediction value. 
 
-```{r RNN_many_to_one, fig.align='center', out.width='70%', fig.cap= 'Computational graph of a many-to-one RNN.', echo=FALSE}
+\begin{figure}
 
-knitr::include_graphics("images/RNN_many_to_one.jpg")
+{\centering \includegraphics[width=0.7\linewidth]{images/RNN_many_to_one} 
 
-#[1]F.-F. Li, J. Johnson, and S. Yeung, ‘Lecture 10: Recurrent Neural Networks’, p. 105.
+}
 
-```
+\caption{Computational graph of a many-to-one RNN.}\label{fig:RNN_many_to_one}
+\end{figure}
 
 ```{=tex}
 \begin{align} \label{eq:RNN_many_to_one_1}
@@ -298,40 +303,39 @@ But the story wasn't over by now, after the drop the price of the cryptocurrency
 
 \newpage
 
-```{r logprice_btc, out.width='80%', fig.cap='Logarithmic Bitcoin price USD', echo=FALSE}
-knitr::include_graphics("images/logbtc_usd.jpeg")
-```
+\begin{figure}
+\includegraphics[width=0.8\linewidth]{images/logbtc_usd} \caption{Logarithmic Bitcoin price USD}\label{fig:logprice_btc}
+\end{figure}
 
-```{r price_btc, out.width='80%', fig.cap='Bitcoin Price USD', echo=FALSE}
-knitr::include_graphics("images/btc_usd.jpeg")
-```
+\begin{figure}
+\includegraphics[width=0.8\linewidth]{images/btc_usd} \caption{Bitcoin Price USD}\label{fig:price_btc}
+\end{figure}
 
 \newpage
 
-<<<<<<< HEAD
-#### 2.3.2. Bitcoin technology & cryptocurrencies {#bitcoin_tec} 
-=======
 #### 2.3.2.Bitcoin technology & cryptocurrencies {#bitcoin_tec} 
->>>>>>> main
 
 &nbsp;
 
 
-In this section bitcoin as a cryptocurreny based on the blockchain technology is briefly described. Cryptocurrency as a more general term is used because bitcoin was only the first of its kind. One may look at a cryptocurrency similarly to a normal currency because you can buy and sell things and get bitcoin in exchange. But cryptocurrencies fundamentally differ to conservative currencies in merely all ways. The cryptocurrencies (not just bitcoin) are based on the blockchain technology introduced in Nakamotos paper[@bitcoin]. The system is decentralized, where no institution or government regulates the market in terms of the blockchain itself. The transactions are signed by the participants via  cryptographic hash functions, which generate a private and public key. This means that every signature can only be accessed by the owner of the private key i.e. it can not be copied. Once a transaction is signed, it is broadcasted into the network to all participants, so that everyone sees a transaction has been made.  Around 2400 transactions are packed in a block (the blocksize is limited by memory) which are broadcasted to all participants of the system. Every block consists the transaction information, previous hash, the special number and their resulting hash as visualized in Figure \ref{fig:blockchain}.
-Miners are now trying to approve the block by generating a hash with a certain pattern with the hashfunction f(prevhash, data of the block, special number), the so called proof of work. The first miner who finds the according special number to the hash with the certain pattern, gets an amount of bitcoin in reward.
-The block with its new hash and the special number are now added to the chain and are broadcasted to the network. If someone manipulates transactions in a block and finds the special number to the hash, he could potentially get away with it but not for long because for the next block he must be also the first to find the right hash and so on. In figure \ref{fig:blockchain}, the red block is a false one which gets attached and later declined because the other branch is longer. Only the longest chain is to be trusted, and because there are so many miners one must have more than 50 % off the calculating power to get the best chance to find the right hash. Therefore its almost impossible to manipulate the chain. The cryptocurrency itself is now entirely defined by a chain of approved blocks by all participants.
+In this section bitcoin as a cryptocurreny based on the blockchain technology is briefly described. Cryptocurrency as a more general term is used because bitcoin was only the first of its kind. 
 
-Another interesting fact about bitcoin is that the amount of coins is determined by the rewards of the miners. The first block (genesisblock) had a reward of 50 bitcoins, every 4 years this reward gets halved. Therefore the maximum amount of bitcoins is 21 million. 
+One may look at a cryptocurrency similar to a normal currency because you can buy and sell things and get bitcoin in exchange. But cryptocurrencies fundamentally differ to conservative currencies in merely all ways. The cryptocurrencies (not just bitcoin) are based on the blockchain technology introduced in Nakamotos paper[@bitcoin]. 
 
-In recent days, the cryptocurrency has come under a lot of critisicm. The immense computing expenditure has a very high power consumption which leads cryptomining companies to build huge farms with massive cooling aggregates. According to the article in Forbes magazine [@energy_consumption] the bitcoin mining procees uses 0.51 percent (127TWh)  of global energy consumption. The University of Cambridge created an index where the live energy consumption can be observed [@energy_index]. Right now China [@energy_map] contributes 70 % to the hash rate whereas the remaining 30 are distributed ovver the rest of the world.
+The system is decentralized, where no institution or Government regulates the market in terms of the blockchain itself. The transactions are signed by the participants via  cryptographic hash functions which generates a private and public key. This means that every signature can only be accessed by the owner of the private key i.e. it can not be copied. 
+Once a transaction is signed, it is broadcasted into the network to all participants, so that everyone sees a transaction has been made.  Around 2400 transactions are packed in a block (the blocksize is limited by memory) which are broadcasted to all participants of the system.
+Every block consists the transaction information, previous hash, the special number and their resulting hash as visualized in Figure \ref{fig:blockchain}.
+Miners are now trying to approve the block by generating a hash with a certain pattern with the hashfunction f(prevhash, data of the block, special number), the so called proof of work. The first Miner who finds the according special number to the hash with the certain pattern, gets an amount of bitcoin in reward.
+The block with its new hash and the special number are now added to the chain and are broadcasted to the network. If someone manipulates transactions in a block and finds the special number to the hash he could potentially get away with it but no for long because for the next block he must be also the first to find the right hash and so on. In Figure \ref{fig:blockchain} the red block is a false one which gets attached and later declined because the other branch is longer. Only the longest chain is to be trusted, and because there are so many miners one must have more than 50 % off the calculating power to get the best chance to find the right hash. Therefore its almost impossible to manipulate the chain.
+The cryptocurrency itself is now entirely defined by a chain of approved blocks by all participants.
+
+Another interesting fact about bitcoin is that the amount of coins is determined by the rewards of the miners. The first block (genesisblock) had a reward of 50 bitcoins, every 4 years this reward gets halved. Therefore the maximum amount of bitcoins is 21 million.
+
+In recent days the cryptocurrency has come under a lot of critisicm. The immense computing expenditure has a very high power consumption which leads cryptomining companies to build huge farms with massive cooling aggregates. According to the article in Forbes magazine [@energy_consumption] the bitcoin mining procees uses 0.51 percent (127TWh)  of global energy consumption. The University of cambridge created an index where the live energy consumption can be observed [@energy_index]. Right now China [@energy_map] contributes 70 % to the hash rate whereas the remaining 30 are distributed ovver the rest of the world.
 
  
 
-```{r blockchain, out.width='80%', fig.cap='Blockchain schema', echo=FALSE}
-knitr::include_graphics("images/blockchain.jpg")
-```
+\begin{figure}
+\includegraphics[width=0.8\linewidth]{images/blockchain} \caption{Blockchain schema}\label{fig:blockchain}
+\end{figure}
 
-#### 2.3.3. Bitcoin price valuation {#bitcoin_valuation} 
-&nbsp;
-
-As mentioned in the previous chapter, the maximum possible amount of 21 million equals a fixed supply of this cryptocurrency. This leads to the question if this has an influence on the fair market value of bitcoins. Arthur Meynkhard has studied the relationship between the fixed maximum supply, the mining process, and reward halving [@bitcoin_halving]. First, it is emphasized that in a decentralized monetary system, the newly issued amount is defined by the cryptographic algorithm. Consistently, new bitcoins enter circulation when a miner sells their received reward to fund operating costs or new equipment. Unlike a central bank, which typically aims for an annual inflation target of 2%, with Bitcoin the number of new coins issued is decreased after each halving. Meynkhard describes that this decrease in newly issued Bitcoins, assuming constant demand, causes the market value to increase in the long-term. Although in contrast to stock markets, there is only a fraction of historical data available, this halving phenomenon could certainly be observed. The halving in 2016 is made responsible for the price increase from USD 500 to USD 20'000 by December 2017. The latest halving in May 2020 appears to be responsible for the present bull market, which let the price drive from USD 9000 to over USD 60'000. This deflationary characteristic of Bitcoin led to it being more and more referred to as digital gold in the broad media [@digital_gold]. 
