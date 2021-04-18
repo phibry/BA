@@ -51,7 +51,7 @@ chart.ACF(log_ret,main="autocorrelation Logreturns", maxlag = 20)
 
 Curios from which distribution the logreturns might originate, we are fitting a Normaldistribution and a Students-t distribution to the data in Figure \ref{fig:histogramm_logreturns}.
 
-Interestingly the mean is shifted slightly (0.002) to the positive side.By inspecting the tails, one can observe that the negativ tail is not fitted as good as the positive part by the t distribution. The two Normaldistributions either over- or underestimate the values in the tails, therefore we conclude that the proposed t-distribution fits the data better but also not perfect.
+Interestingly the mean is shifted slightly (0.002) to the positive side. By inspecting the tails, one can observe that the negative tail is not fitted as good as the positive part by the t distribution. The two Normaldistributions either over- or underestimate the values in the tails, therefore we conclude that the proposed t-distribution fits the data better but also not perfect.
 
 Pointing at the extreme outlier discussed earlier, visible in Figure \ref{fig:log_ret} towards the end, the density plot makes clear how unimaginable small the probability of this extreme observation is. 
 
@@ -101,9 +101,9 @@ As proposed in [@nn_trading] we choose a test train split from 6 months in-sampl
 knitr::include_graphics("images/test_train_split_pp.jpeg.jpg")
 ```
 
-In the course of the time series in figure \ref{fig:test_train}, one can see different periods. Strongly volatile as well as rather calm phases occur. With the rolling window, we can train and test the networks based on different phases. Thus, we can also evaluate the performance of the networks based on different phases and not only on a predefined single test and train split.
+In the time series in figure \ref{fig:test_train}, one can see different periods. Strongly volatile as well as rather calm phases occur. With the rolling window, we can train and test the networks based on different phases. Thus, we can also evaluate the performance of the networks based on different phases and not only on a predefined single test and train split.
 
-The complexity of the search for the optimal network architecture increases significantly here. With the conditions defined for us, we train and test a total number of 499500 networks to define the optimal network.
+The complexity of the search for the optimal network architecture increases significantly here. With the conditions defined for us, we train and test a total number of 499'500 networks to define the optimal network.
 
 \newpage
 
