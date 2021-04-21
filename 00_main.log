@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.4.18)  21 APR 2021 16:22
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.4.18)  21 APR 2021 23:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1024,284 +1024,285 @@ Package pdftex.def Info: images/batch5/mse_5_layer3.jpeg  used on input line 11
 l.1128 \newpage
                 <./images/batch5/mse_5_layer3.jpeg>]
 LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 1
-154.
+157.
 (c:/Users/kenge/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 <images/batch5/mse_5_all.jpeg, id=535, 1405.25pt x 903.375pt>
 File: images/batch5/mse_5_all.jpeg Graphic file (type jpg)
 <use images/batch5/mse_5_all.jpeg>
-Package pdftex.def Info: images/batch5/mse_5_all.jpeg  used on input line 1168.
+Package pdftex.def Info: images/batch5/mse_5_all.jpeg  used on input line 1171.
 
 (pdftex.def)             Requested size: 469.75925pt x 301.98808pt.
 [24pdfTeX warning (ext4): destination with the same identifier (name{figure.17}
 ) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.1183 
+l.1189 
         <./images/batch5/mse_5_all.jpeg>] [25]
 
-LaTeX Warning: Reference `fig:mse_mean' on page 26 undefined on input line 1210
+LaTeX Warning: Reference `fig:mse_mean' on page 26 undefined on input line 1217
 .
 
 <images/batch5/median_mse.jpeg, id=549, 1405.25pt x 903.375pt>
 File: images/batch5/median_mse.jpeg Graphic file (type jpg)
 <use images/batch5/median_mse.jpeg>
-Package pdftex.def Info: images/batch5/median_mse.jpeg  used on input line 1217
+Package pdftex.def Info: images/batch5/median_mse.jpeg  used on input line 1224
 .
 (pdftex.def)             Requested size: 469.75925pt x 301.98808pt.
 [26pdfTeX warning (ext4): destination with the same identifier (name{figure.18}
 ) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.1223 \newpage
-                <./images/batch5/median_mse.jpeg>]
-<images/batch5/median_sharpe.jpeg, id=556, 1405.25pt x 903.375pt>
+l.1243   P
+          lot von Time Splits 8 und 9 von Bitcoin Preisen einfügen. So kann <.
+/images/batch5/median_mse.jpeg>] [27]
+<images/batch5/median_sharpe.jpeg, id=561, 1405.25pt x 903.375pt>
 File: images/batch5/median_sharpe.jpeg Graphic file (type jpg)
 <use images/batch5/median_sharpe.jpeg>
 Package pdftex.def Info: images/batch5/median_sharpe.jpeg  used on input line 1
-234.
+271.
 (pdftex.def)             Requested size: 469.75925pt x 301.98808pt.
-[27pdfTeX warning (ext4): destination with the same identifier (name{figure.19}
+[28pdfTeX warning (ext4): destination with the same identifier (name{figure.19}
 ) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.1241 \newpage
-                <./images/batch5/median_sharpe.jpeg>] [28] [29] [30]
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 1330--1335
+l.1278 \newpage
+                <./images/batch5/median_sharpe.jpeg>] [29] [30] [31]
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 1367--1372
 [][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1330--1335
+Underfull \hbox (badness 10000) in paragraph at lines 1367--1372
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 1336--1340
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 1373--1377
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1336--1340
+Underfull \hbox (badness 10000) in paragraph at lines 1373--1377
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 1341--1345
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 1378--1382
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1341--1345
+Underfull \hbox (badness 10000) in paragraph at lines 1378--1382
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 1346--1351
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 1383--1388
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1346--1351
+Underfull \hbox (badness 10000) in paragraph at lines 1383--1388
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 1352--1358
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 1389--1395
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1352--1358
+Underfull \hbox (badness 10000) in paragraph at lines 1389--1395
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 1359--1365
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 1396--1402
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1359--1365
+Underfull \hbox (badness 10000) in paragraph at lines 1396--1402
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 1366--1371
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 1403--1408
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1366--1371
+Underfull \hbox (badness 10000) in paragraph at lines 1403--1408
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 1372--1376
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 1409--1413
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1372--1376
+Underfull \hbox (badness 10000) in paragraph at lines 1409--1413
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 1377--1381
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 1414--1418
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1377--1381
+Underfull \hbox (badness 10000) in paragraph at lines 1414--1418
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 1382--1386
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 1419--1423
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1382--1386
+Underfull \hbox (badness 10000) in paragraph at lines 1419--1423
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 1387--1391
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 1424--1428
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1387--1391
+Underfull \hbox (badness 10000) in paragraph at lines 1424--1428
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 1392--1396
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 1429--1433
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1392--1396
+Underfull \hbox (badness 10000) in paragraph at lines 1429--1433
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 1397--1401
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 1434--1438
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1397--1401
+Underfull \hbox (badness 10000) in paragraph at lines 1434--1438
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 1402--1407
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 1439--1444
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1402--1407
+Underfull \hbox (badness 10000) in paragraph at lines 1439--1444
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 1408--1413
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 1445--1450
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1408--1413
+Underfull \hbox (badness 10000) in paragraph at lines 1445--1450
 
  []
 
 
-Underfull \hbox (badness 1043) in paragraph at lines 1419--1419
+Underfull \hbox (badness 1043) in paragraph at lines 1456--1456
 []\T1/lmr/m/n/10 L. Win-ter-maier, ``Bit-coin's en-ergy con-sump-tion is a high
 ly charged de-bate -- who's right?''
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1419--1419
+Underfull \hbox (badness 10000) in paragraph at lines 1456--1456
 [][]$\T1/lmr/m/n/10 https : / / www . forbes . com / sites / lawrencewintermeye
 r / 2021 / 03 / 10 / bitcoins -[] energy -[] consumption -[] is -[] a -[]
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 1414--1420
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 1451--1457
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1414--1420
+Underfull \hbox (badness 10000) in paragraph at lines 1451--1457
 
  []
 
 
-Underfull \hbox (badness 6094) in paragraph at lines 1426--1426
+Underfull \hbox (badness 6094) in paragraph at lines 1463--1463
 []\T1/lmr/m/n/10 C. C. for Al-ter-na-tive Fi-nance, ``Live bit-coin elec-tric-i
 ty con-sump-tion in-dex.'' [][]$https :
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1426--1426
+Underfull \hbox (badness 10000) in paragraph at lines 1463--1463
 \T1/lmr/m/n/10 / / www . forbes . com / sites / lawrencewintermeyer / 2021 / 03
  / 10 / bitcoins -[] energy -[] consumption -[] is -[] a -[]
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 1421--1427
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 1458--1464
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1421--1427
+Underfull \hbox (badness 10000) in paragraph at lines 1458--1464
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 1428--1433
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 1465--1470
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1428--1433
+Underfull \hbox (badness 10000) in paragraph at lines 1465--1470
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 1434--1439
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 1471--1476
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1434--1439
+Underfull \hbox (badness 10000) in paragraph at lines 1471--1476
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 1440--1445
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 1477--1482
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1440--1445
+Underfull \hbox (badness 10000) in paragraph at lines 1477--1482
 
  []
 
-[31]
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 1446--1451
+[32]
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 1483--1488
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1446--1451
+Underfull \hbox (badness 10000) in paragraph at lines 1483--1488
 
  []
 
-[32] [33] (./00_main.aux)
+[33] [34] (./00_main.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -1309,8 +1310,8 @@ Package rerunfilecheck Info: File `00_main.out' has not changed.
 (rerunfilecheck)             Checksum: DCAF4A94F1676730E9D74B6298C1BB3D;6371.
  ) 
 Here is how much of TeX's memory you used:
- 12764 strings out of 480954
- 190750 string characters out of 5905840
+ 12765 strings out of 480954
+ 190757 string characters out of 5905840
  513301 words of memory out of 5000000
  29528 multiletter control sequences out of 15000+600000
  444371 words of font info for 54 fonts, out of 8000000 for 9000
@@ -1339,10 +1340,10 @@ ata/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/kenge
 /AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb><c:/Users/k
 enge/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msb
 m10.pfb>
-Output written on 00_main.pdf (37 pages, 3209924 bytes).
+Output written on 00_main.pdf (38 pages, 3212151 bytes).
 PDF statistics:
- 725 PDF objects out of 1000 (max. 8388607)
- 618 compressed objects within 7 object streams
- 176 named destinations out of 1000 (max. 500000)
+ 729 PDF objects out of 1000 (max. 8388607)
+ 621 compressed objects within 7 object streams
+ 177 named destinations out of 1000 (max. 500000)
  424 words of extra memory for PDF output out of 10000 (max. 10000000)
 
