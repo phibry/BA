@@ -111,7 +111,7 @@ Here we would like to focus on some findings that we discovered during the proce
 The plot in figure \ref{fig:mse_plot1} compares one layer networks with different numbers of neurons with each other . Networks with a maximum of ten neurons are compared. These different configurations can be seen on the x-axis. The first data point corresponds to a simple network with one neuron. The y-axis shows the MSE values obtained with the respective trained model. As already explained, we use 50 different optimizations of each configuration to get a better idea of a potentially systematic relationship with the MSE. In the plot, each of the 50 configurations is drawn using a different color.
 
 ```{r mse_plot1, out.width='100%', fig.cap='Fifth train/test split, 1 layer with 10 different networks.', echo=FALSE,fig.align="center"}
-knitr::include_graphics("images/batch4/mse_5_layer1.jpeg")
+knitr::include_graphics("images/batch5/mse_5_layer1.jpeg")
 ```
 
 What is already noticeable here is that with increasing complexity, i.e. with increasing number of neurons, the in-sample MSE decreases. The in-sample forcasts are thus becoming more accurate. At the same time, you can see how the out-of-sample MSE increases with increasing complexity, which means that the forecast accuracy tends to get worse.
@@ -125,7 +125,7 @@ If you add another layer to the network architecture, the number of different ne
 As noted earlier in figure \ref{fig:mse_plot1}, the values for the MSE also fluctuate more and more with increasing complexity. Small in-sample MSE for more complex networks lead to rather high out-of-sample MSE. This leads us to the previously mentioned challenges in section [2.1.6.1.](#overfitting), and that is that too many estimated parameters can lead to overfitting of the network.
 
 ```{r mse_plot2, out.width='100%', fig.cap='Fifth train/test split, 2 layers with 100 different networks.', echo=FALSE,fig.align="center"}
-knitr::include_graphics("images/batch4/mse_5_layer2.jpeg")
+knitr::include_graphics("images/batch5/mse_5_layer2.jpeg")
 ```
 
 Looking at the out-of-sample MSE's in the graph below in figure \ref{fig:mse_plot2}, we can see lines that are outside of the blue rectangle. These values are extreme outliers that indicate the randomness of neural networks. This again confirms that choosing an optimal network over several equal networks (50 in our case) makes more sense than making the choice depend on only one randomly trained network. Depending on which solution the training algorithm finds, the results can be very different. The y-axis was scaled for better comparability of in-sample and out-of-sample, but one loses the overview of how much the outliers differ from the rest.
@@ -137,7 +137,7 @@ Lastly, we look at the results of the different network architectures with a thi
 It is interesting that at the beginning, with the rather simple model architectures, the MSE of all realizations is very constant and only varies very slightly.
 
 ```{r mse_plot3, out.width='100%', fig.cap='Fifth train/test split, 3 layers with 1000 different networks.', echo=FALSE,fig.align="center"}
-knitr::include_graphics("images/batch4/mse_5_layer3.jpeg")
+knitr::include_graphics("images/batch5/mse_5_layer3.jpeg")
 ```
 \newpage
 
@@ -146,7 +146,7 @@ knitr::include_graphics("images/batch4/mse_5_layer3.jpeg")
 - INTERESSANT: NETZE WERDEN NICHT SCHLECHTER ALS EIN GEWISSER SCHWELLENWERT, ÜBER ALLE NETZTE SIND DIE MSE IM MITTEL SEHR ÄHNLICH, SPRICH STREUEN (ASYMMETRISCH) UM EINEN GEWISSEN WERT HERUM
 
 ```{r mse_plot5, out.width='100%', fig.cap='Fifth train/test split, all layers with 1110 different networks.', echo=FALSE,fig.align="center"}
-knitr::include_graphics("images/batch4/mse_5_all_legend.jpeg")
+knitr::include_graphics("images/batch5/mse_5_all_legend.jpeg")
 ```
 
 \newpage
@@ -156,13 +156,13 @@ BESPIEL: Man hat 9 Splits à je 1110 Neuronen-Layer-Kombinationen. Für jede NL-
 - OPTIMALE NETZWERK-ARCHITEKTUR FINDEN/BESTIMMEN, WIE?
 
 ```{r mse_mean, out.width='100%', fig.cap='MSE mean over all 9 splits.', echo=FALSE,fig.align="center"}
-knitr::include_graphics("images/batch4/mean_mse_all.jpeg")
+knitr::include_graphics("images/batch5/mean_mse_all.jpeg")
 ```
 \newpage
 - Eventuell noch Sharpe hinzunehmen, wäre noch interessant (work in Progress)? oder evtl doch erst später im Trading?
 
 ```{r sharpe_mean, out.width='100%', fig.cap='Sharpe mean over all 9 splits.', echo=FALSE,fig.align="center"}
-knitr::include_graphics("images/batch4/mean_sharpe_all.jpeg")
+knitr::include_graphics("images/batch5/mean_sharpe_all.jpeg")
 ```
 
 \newpage
