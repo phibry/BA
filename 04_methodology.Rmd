@@ -40,7 +40,7 @@ axis.Date(1, at=seq(min(df_sub$date), max(df_sub$date), by="months"), format="%m
 
 Figure \ref{fig:log_ret} displays the historical log returns. In addition to the volatility clusters typical for financial time series, large outliers are visible. The negative outlier at the beginning of 2020 is particularly noticeable. By computing the autocorrelation (ACF) of the series in figure \ref{fig:acf_log_ret}, we can describe the dependency in these clusters. According to the ACF the lags 6 and 10 are significant on a 5% level. 
 
-```{r acf_log_ret, echo=FALSE, message=FALSE, fig.cap="Autocorrelation of bitcoin log returns"}
+```{r acf_log_ret, echo=FALSE, message=FALSE, fig.cap="Autocorrelation of bitcoin log returns for the entire time window"}
 # acf(log_ret,main="autocorrelation Logreturns")
 chart.ACF(log_ret,main="Autocorrelation of log returns", maxlag = 20)
 ```
