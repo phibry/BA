@@ -45,7 +45,10 @@ Figure \ref{fig:log_ret} displays the historical log returns. In addition to the
 chart.ACF(log_ret,main="Autocorrelation of log returns", maxlag = 20)
 ```
 
-Curios from which distribution the log returns might originate, we are fitting a normal distribution and a Students-t distribution to the data in figure \ref{fig:histogramm_logreturns}. Interestingly the mean is shifted slightly (0.002) to the positive side. By inspecting the tails, one can observe that the negative tail is not fitted as good as the positive part by the t distribution. The two normal distributions either over- or underestimate the values in the tails, therefore we conclude that the proposed t-distribution fits the data better but also not perfect. Concerning the extreme outlier discussed earlier, visible in figure \ref{fig:log_ret} towards the end, the density plot makes clear how unimaginable small the probability of this extreme observation is. 
+Curios from which distribution the log returns might originate, we are fitting a normal distribution and a Students-t distribution to the data in figure \ref{fig:histogramm_logreturns}. Interestingly the mean is shifted slightly (0.002) to the positive side. By inspecting the tails, one can observe that the negative tail is not fitted as good as the positive part by the t distribution. The two normal distributions either over- or underestimate the values in the tails, therefore we conclude that the proposed t-distribution fits the data better but also not perfect. Concerning the extreme outlier discussed earlier, visible in figure \ref{fig:log_ret} towards the end, the density plot makes clear how unimaginable small the probability of this extreme observation is. Altough the histogram is might useful for value-at-risk considerations, for trading purposes its use is mitigated due to its complete loss of the dependency structure by plotting the returns in a density-distribution.
+
+
+
 
 
 ```{r histogramm_logreturns, out.width='80%', fig.cap='Distribution of bitcoin log returns', echo=FALSE,fig.align="center"}
