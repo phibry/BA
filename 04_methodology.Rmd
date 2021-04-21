@@ -45,11 +45,7 @@ Figure \ref{fig:log_ret} displays the historical log returns. In addition to the
 chart.ACF(log_ret,main="Autocorrelation of log returns", maxlag = 20)
 ```
 
-Curios from which distribution the log returns might originate, we are fitting a normal distribution and a Students-t distribution to the data in Figure \ref{fig:histogramm_logreturns}.
-
-Interestingly the mean is shifted slightly (0.002) to the positive side. By inspecting the tails, one can observe that the negative tail is not fitted as good as the positive part by the t distribution. The two normal distributions either over- or underestimate the values in the tails, therefore we conclude that the proposed t-distribution fits the data better but also not perfect.
-
-Pointing at the extreme outlier discussed earlier, visible in figure \ref{fig:log_ret} towards the end, the density plot makes clear how unimaginable small the probability of this extreme observation is. 
+Curios from which distribution the log returns might originate, we are fitting a normal distribution and a Students-t distribution to the data in figure \ref{fig:histogramm_logreturns}. Interestingly the mean is shifted slightly (0.002) to the positive side. By inspecting the tails, one can observe that the negative tail is not fitted as good as the positive part by the t distribution. The two normal distributions either over- or underestimate the values in the tails, therefore we conclude that the proposed t-distribution fits the data better but also not perfect. Concerning the extreme outlier discussed earlier, visible in figure \ref{fig:log_ret} towards the end, the density plot makes clear how unimaginable small the probability of this extreme observation is. 
 
 
 ```{r histogramm_logreturns, out.width='80%', fig.cap='Distribution of bitcoin log returns', echo=FALSE,fig.align="center"}
@@ -105,7 +101,6 @@ The complexity of the search for the optimal network architecture increases sign
 #### 3.2.2.  Evaluating network architecture
 &nbsp;
 
-In this chapter, we would like to focus on some findings that we discovered during the processing of the trained networks. To illustrate the results, the 5th train/test split is discussed.
 Here we would like to focus on some findings that we discovered during the processing of the trained networks. To illustrate the results, an extract is discussed here, namely only the 5th train/test split (in figure \ref{fig:test_train} the middle one).
 
 The plot in figure \ref{fig:mse_plot1} compares one layer networks with different numbers of neurons with each other . Networks with a maximum of ten neurons are compared. These different configurations can be seen on the x-axis. The first data point corresponds to a simple network with one neuron. The y-axis shows the MSE values obtained with the respective trained model. As already explained, we use 50 different optimizations of each configuration to get a better idea of a potentially systematic relationship with the MSE. In the plot, each of the 50 configurations is drawn using a different color.
