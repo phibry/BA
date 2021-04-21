@@ -109,9 +109,8 @@ The plot in figure \ref{fig:mse_plot1} compares one layer networks with differen
 knitr::include_graphics("images/batch5/mse_5_layer1.jpeg")
 ```
 
-What is already noticeable here is that with increasing complexity, i.e. with increasing number of neurons, the in-sample MSE decreases. The in-sample forcasts are thus becoming more accurate. At the same time, you can see how the out-of-sample MSE increases with increasing complexity, which means that the forecast accuracy tends to get worse.
+What is already noticeable here is that with increasing complexity, i.e. with increasing number of neurons, the in-sample MSE decreases. The in-sample forecasts are thus becoming more accurate. At the same time, you can see how the out-of-sample MSE increases with increasing complexity, which means that the forecast accuracy tends to get worse.
 What is already noticeable here is that with increasing complexity, i.e. with the increasing number of neurons, the in-sample MSE decreases. So it gets better. At the same time, you can see how the out-of-sample MSE increases with increasing complexity, which means that it tends to get worse.
-Such a 
 
 \newpage
 
@@ -151,13 +150,13 @@ BESPIEL: Man hat 9 Splits à je 1110 Neuronen-Layer-Kombinationen. Für jede NL-
 - OPTIMALE NETZWERK-ARCHITEKTUR FINDEN/BESTIMMEN, WIE?
 
 ```{r mse_mean, out.width='100%', fig.cap='MSE mean over all 9 splits.', echo=FALSE,fig.align="center"}
-knitr::include_graphics("images/batch5/mean_mse_all.jpeg")
+knitr::include_graphics("images/batch5/median_mse.jpeg")
 ```
 \newpage
 - Eventuell noch Sharpe hinzunehmen, wäre noch interessant (work in Progress)? oder evtl doch erst später im Trading?
 
 ```{r sharpe_mean, out.width='100%', fig.cap='Sharpe mean over all 9 splits.', echo=FALSE,fig.align="center"}
-knitr::include_graphics("images/batch5/mean_sharpe_all.jpeg")
+knitr::include_graphics("images/batch5/median_sharpe.jpeg")
 ```
 
 \newpage
