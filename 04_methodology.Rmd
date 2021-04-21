@@ -103,14 +103,13 @@ The complexity of the search for the optimal network architecture increases sign
 
 Here we would like to focus on some findings that we discovered during the processing of the trained networks. To illustrate the results, an extract is discussed here, namely only the 5th train/test split (in figure \ref{fig:test_train} the middle one).
 
-The plot in figure \ref{fig:mse_plot1} compares one layer networks with different numbers of neurons with each other . Networks with a maximum of ten neurons are compared. These different configurations can be seen on the x-axis. The first data point corresponds to a simple network with one neuron. The y-axis shows the MSE values obtained with the respective trained model. As already explained, we use 50 different optimizations of each configuration to get a better idea of a potentially systematic relationship with the MSE. In the plot, each of the 50 configurations is drawn using a different color.
+The plot in figure \ref{fig:mse_plot1} compares one layer networks with different numbers of neurons with each other. Networks with a maximum of ten neurons are compared. These different configurations can be seen on the x-axis. The first data point corresponds to a simple network with one neuron. The y-axis shows the MSE values obtained with the respective trained model. As already explained, we use 50 different optimizations of each configuration to get a better idea of a potentially systematic relationship with the MSE. In the plot, each of the 50 configurations is drawn using a different color.
 
 ```{r mse_plot1, out.width='100%', fig.cap='Fifth train/test split, 1 layer with 10 different networks.', echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/batch5/mse_5_layer1.jpeg")
 ```
 
 What is already noticeable here is that with increasing complexity, i.e. with increasing number of neurons, the in-sample MSE decreases. The in-sample forecasts are thus becoming more accurate. At the same time, you can see how the out-of-sample MSE increases with increasing complexity, which means that the forecast accuracy tends to get worse.
-What is already noticeable here is that with increasing complexity, i.e. with the increasing number of neurons, the in-sample MSE decreases. So it gets better. At the same time, you can see how the out-of-sample MSE increases with increasing complexity, which means that it tends to get worse.
 
 \newpage
 
@@ -135,6 +134,11 @@ knitr::include_graphics("images/batch5/mse_5_layer3.jpeg")
 ```
 \newpage
 
+Figure \ref{fig:mse_plot5} shows the MSE of the models with 1-3 layers, i.e. the last three plots side by side. As mentioned, it can also be seen here that the in-sample MSE decreases with more complex architectures. This does not have a positive effect on the out-of-sample, since in the same area the MSE deteriorate massively (different scaling of the y-axes). As a result, we have no real added value from more complex models. Also to be noted is that the in-sample MSE does not get worse than a certain threshold at the upper boundary. This asymmetric scattering around this value is likely due to the numerics of the optimization algorithm.  
+
+At this point it should be emphasized that only the analyses from time split 5 are visualized in this chapter. Our primary goal is to compare the performances of different network architectures using MSE in order to find the optimal network that works in every time split. However, it is noted that finding an optimal architecture using such visual analysis of the MSE seems nearly impossible. The main finding of this section is that the MSE deteriorates massively with more complex models and thus a simpler one should be chosen. Likewise, it is noticeable how the MSE's scatter differently within the same network architectures. 
+
+
 - ERKLÄREN, DASS ES UNMÖGLICH IST FÜR 9 VERSCHIEDENE SPLITS EINE REIN VISUELLE ANALYSE DURCHZUFÜHREN (ALSO DAS FINDEN EINER OPTIMALEN MODEL-ARCHITEKTUR ÜBER DIESE 9 VERSCHIEDENEN ZEITPERIODEN)
 - EINGEHEN AUF DEN FEHLENDEN MEHRWERT FÜR DIE WAHL VON KOMPLEXEREN NETZEN
 - INTERESSANT: NETZE WERDEN NICHT SCHLECHTER ALS EIN GEWISSER SCHWELLENWERT, ÜBER ALLE NETZTE SIND DIE MSE IM MITTEL SEHR ÄHNLICH, SPRICH STREUEN (ASYMMETRISCH) UM EINEN GEWISSEN WERT HERUM
@@ -143,19 +147,24 @@ knitr::include_graphics("images/batch5/mse_5_layer3.jpeg")
 knitr::include_graphics("images/batch5/mse_5_all.jpeg")
 ```
 
+What has not yet been studied is the dependence of the neural network's behavior on the different window splits of figure \ref{fig:test_train}. To compare this despite different effectiveness of optimizations of similar networks, we decide to use a robust method. We make use of the median of the MSE of all 50 equal networks over all time splits. This is because large outliers of the MSE can be seen in the in-sample and out-of-sample in figure \ref{fig:mse_plot5}. Even occasional outliers could have a large influence on the arithmetic mean. 
+
 \newpage
+
+The medians of the MSE's over all time splits just mentioned are plotted in figure \ref{fig:mse_median}. We restrict ourselves to neural networks with 1-2 layers (recognizable in rectangles 1 and 2), since it can be assumed that too complex models are not suitable for the target. The lines represent the medians of the MSE of all 50 optimized neural networks at a given network architecture (x-axis). The nine different colors specify in which of the defined time splits the neural networks were trained and tested. 
 
 - MITTELWERTE ÜBER SÄMTLICHE DER 9 SPLITS BERECHNEN UM DEI BESTIMMUNG DES OPTIMALEN NETZTES ZU VEREINFACHEN
 BESPIEL: Man hat 9 Splits à je 1110 Neuronen-Layer-Kombinationen. Für jede NL-Architektur wurden 50 neuronale Netzwerke trainiert. Somit kommt man auf 55500 Netze pro Splits. Also für alleine diese Versuchreihe wurden 499500 Netzwerke trainiert. Nun möchte man diejenige NL-Architektur finden, welche im Verlauf der Zeit (Verlauf der 9 Splits) am besten geblieben/am wenigsten an Performanz verloren hat/am besten geworden ist finden. Man hat herausgefunden, dass Netzte sehr zufällig sind. Somit werden die Mittelwerte über die 50 Netzte pro Layer, pro Split gebildet. Man erhält für jede NL-Kombination 9 verschiedene Mittelwerte der MSEs. Die Suche nach einer optimalen Netzwerk-Architektur ist so um einiges einfacher. (siehe \ref{fig:mse_mean})
+
 - OPTIMALE NETZWERK-ARCHITEKTUR FINDEN/BESTIMMEN, WIE?
 
-```{r mse_mean, out.width='100%', fig.cap='MSE mean over all 9 splits.', echo=FALSE,fig.align="center"}
+```{r mse_median, out.width='100%', fig.cap='MSE median over all 9 splits. For each network architecture, 50 neural networks were trained (55,500 models per time split). The nine colors illustrate how these models behave in the different time splits.', echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/batch5/median_mse.jpeg")
 ```
 \newpage
 - Eventuell noch Sharpe hinzunehmen, wäre noch interessant (work in Progress)? oder evtl doch erst später im Trading?
 
-```{r sharpe_mean, out.width='100%', fig.cap='Sharpe mean over all 9 splits.', echo=FALSE,fig.align="center"}
+```{r sharpe_median, out.width='100%', fig.cap='Sharpe median over all 9 splits.', echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/batch5/median_sharpe.jpeg")
 ```
 
