@@ -15,9 +15,21 @@ dates_mat <- as.data.frame(cbind(start_in, end_in, start_out, end_out))
 load("data/log_ret_27_03_21.rda")
 subseti <- log_ret_27_03_21["2020-01-01::"]
 
-chart.ACF(log_ret_27_03_21)
+chart.ACF(log_ret_27_03_21, maxlag = 15)
 chart.ACF(subseti, maxlag = 15)
 par()
+
+
+# 1
+chart.ACF(log_ret_27_03_21["2020-01-01::2020-07-31"], maxlag = 15, main=1)
+chart.ACF(log_ret_27_03_21["2020-02-01::2020-08-31"], maxlag = 15, main=2)
+chart.ACF(log_ret_27_03_21["2020-03-01::2020-09-30"], maxlag = 15, main=3)
+chart.ACF(log_ret_27_03_21["2020-04-01::2020-10-31"], maxlag = 15, main=4)
+chart.ACF(log_ret_27_03_21["2020-05-01::2020-11-30"], maxlag = 15, main=5)
+chart.ACF(log_ret_27_03_21["2020-06-01::2020-12-31"], maxlag = 15, main=6)
+chart.ACF(log_ret_27_03_21["2020-07-01::2021-01-31"], maxlag = 15, main=7)
+chart.ACF(log_ret_27_03_21["2020-08-01::2021-02-28"], maxlag = 15, main=8)
+chart.ACF(log_ret_27_03_21["2020-09-01::2021-03-27"], maxlag = 15, main=9)
 
 # r graph gallery
 # Create a df
