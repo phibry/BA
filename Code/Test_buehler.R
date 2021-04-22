@@ -38,16 +38,31 @@ acf(logret)
 
 
 # tryin a sma on logrets ####
+
 load("data/BTC_USD_27_03_21.rda")
+#sma
 btc=`BTC_USD_27_03_21`
+logret=diff(log(SMA(Cl(btc),3)))["2020-01-01::"]
+x=logret
 
-log_ret_btc_sma10=diff(log(SMA(Cl(btc),3)))["2018-01-01::"]
+#logret normal
 
-x=log_ret_btc_sma10
+#logret=log_ret_27_03_21["2020-01-01::"]
+logret=log_ret_27_03_21["2020-01-01::"]
+x=logret
 
-target_out<-data_mat[paste(in_out_sample_separator,"/",sep=""),1]
+
+
+
+in_out_sample_separator="2021-02-27" 
+target_out=log_ret_27_03_21[paste(in_out_sample_separator,"::")]
+
+
+
+
 
 plot(x)
+
 
 
 #same procedure as usual  ####
@@ -56,6 +71,9 @@ acf(x)   # check the dependency structure
 data_mat<-cbind(x,lag(x),lag(x,k=2),lag(x,k=3),lag(x,k=4),lag(x,k=5),lag(x,k=6)) # only the  6 lags
 # other lags 
 data_mat<-cbind(x,lag(x),lag(x,k=2),lag(x,k=3),lag(x,k=4),lag(x,k=5),lag(x,k=6),lag(x,k=7),lag(x,k=8),lag(x,k=9)) 
+
+
+data_mat<-cbind(x,lag(x),lag(x,k=2),lag(x,k=3),lag(x,k=4),lag(x,k=5),lag(x,k=6),lag(x,k=7)) 
 #data_mat<-cbind(x,lag(x),lag(x,k=2))    
 
 # exclude nas
@@ -69,7 +87,7 @@ mins <- apply(data_mat, 2, min)   #    creating a vector with the minimum per la
 scaled_log_ret <- scale(data_mat, center = mins, scale = maxs - mins)  # scaling the returns   # all values betwen  0 1
 ## insample out of sample split ####
 # separating in sample / out of sample
-in_out_sample_separator="2020-05-01"                  ### note this can be changed and should be fixeed by grouo
+### note this can be changed and should be fixeed by grouo
 train_set <- scaled_log_ret[paste("/",in_out_sample_separator,sep=""),]
 test_set <- scaled_log_ret[paste(in_out_sample_separator,"/",sep=""),]
 
@@ -88,45 +106,69 @@ n <- colnames(train_set)
 f <- as.formula(paste   ("lag0 ~"   ,  paste(n[!n %in% "lag0"], collapse = " + ")  ))
 
 # defining hidden layers in a vector could be anything
-layer=hidden=c(5,10,5)
+layer=hidden=c(5,2)
 
 #generating neural net
-
+set.seed(30)
 nn <- neuralnet(f,data=train_set,hidden=layer,linear.output=F)
-plot(nn)
+#plot(nn)
 
 net=estimate_nn(train_set,number_neurons=layer,data_mat,test_set,f)
 
 net$MSE_nn
 
-signal=sign(net$predicted_nn)  # vorzeichen vom netzoutput out of sample
+signal_out=sign(net$predicted_nn)  # vorzeichen vom netzoutput out of sample
 
 
-head(signal)
-head(Cl(`BTC_USD_27_03_21`)["2020-05-01::"])
-
-tail(signal)
-tail(Cl(`BTC_USD_27_03_21`)["2020-05-01::"])
-
-length(Cl(`BTC_USD_27_03_21`)["2020-05-01::"])
-length(signal)
 
 
-load("data/log_ret_27_03_21.rda")
-target_out=log_ret_27_03_21["2020-05-01::"]
-  
 
-perf_nn<-signal*target_out
 
+
+
+perf_nn_in<-signal_in*target_in
+perf_nn_out<-signal_out*target_out
+
+
+
+plot(cumsum(perf_nn_out))
 charts.PerformanceSummary(perf_nn, main="perfromance via SMA10")
 sqrt(365)*SharpeRatio(perf_nn,FUN="StdDev")
 
 
 bah=target_out
-  
+
 charts.PerformanceSummary(bah, main="Buy and hold")
 sqrt(365)*SharpeRatio(bah,FUN="StdDev")
 #------------------------------------------------------------------------#
 #fitting a distribution to the data---------------------------------------####
 
 # generating density plots form dt an normaldist
+
+
+
+
+
+#####  set seed 30
+
+max=100
+resmat=matrix(nrow=max,ncol = 1,data=0)
+
+for( i in 1:max)
+{
+  set.seed(i)
+  nn <- neuralnet(f,data=train_set,hidden=layer,linear.output=F)
+  net=estimate_nn(train_set,number_neurons=layer,data_mat,test_set,f)
+  signal=sign(net$predicted_nn)
+  perf_nn<-signal* target_out
+  resmat[i,1]=  sqrt(365)*SharpeRatio(perf_nn,FUN="StdDev")
+  print(i)
+}
+
+
+
+
+plot(resmat[,1],type="l")
+abline(h=2.983982,col= "red")
+
+mean(resmat[,1]) 

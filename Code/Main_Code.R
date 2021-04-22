@@ -71,8 +71,9 @@ n <- colnames(train_set)
 f <- as.formula(paste   ("lag0 ~"   ,  paste(n[!n %in% "lag0"], collapse = " + ")  ))
 
 # defining hidden layers in a vector could be anything
-layer=hidden=c(5,10,5)
+layer=hidden=c(7,3)
 
+set.seed(1)
 #generating neural net
 nn <- neuralnet(f,data=train_set,hidden=layer,linear.output=F)
 plot(nn)
