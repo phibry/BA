@@ -437,6 +437,7 @@ plot_mse_mean_mean <- function(mse_in, mse_out, title="",scale_fac=3) {
   layers <- as.numeric(table(layers))
   layers <- cumsum(layers)
   # Only the first two
+  layers <- c(10, 110)
   
   # Plots mit Rect
   par_default <- par(no.readonly = TRUE)
@@ -452,11 +453,11 @@ plot_mse_mean_mean <- function(mse_in, mse_out, title="",scale_fac=3) {
                   "#00FFFF1A", # teal
                   "#8000FF1A") # purple
   # MSE in
-  plot(mse_in,
+  plot(mse_in[1:110],
        main=paste(title, ": In-Sample", sep=""),
        type="l",
-       ylim=c(min(mse_in) ,max(mse_in)),
-       xlim=c(1, length(mse_in)),
+       ylim=c(min(mse_in[1:110]) ,max(mse_in[1:110])),
+       xlim=c(1, length(mse_in[1:110])),
        col="#303030",
        ylab="MSE",
        frame.plot = FALSE,
@@ -481,11 +482,11 @@ plot_mse_mean_mean <- function(mse_in, mse_out, title="",scale_fac=3) {
   }
   
   # MSE out
-  plot(mse_out,
+  plot(mse_out[1:110],
        main=paste(title, ": Out-of-Sample", sep=""),
        type="l",
-       ylim=c(min(mse_out) ,min(mse_out)*scale_fac),
-       xlim=c(1, length(mse_out)),
+       ylim=c(min(mse_out[1:110]) ,min(mse_out[1:110])*scale_fac),
+       xlim=c(1, length(mse_out[1:110])),
        col="#303030",
        ylab="MSE",
        frame.plot = FALSE,
@@ -511,7 +512,7 @@ plot_mse_mean_mean <- function(mse_in, mse_out, title="",scale_fac=3) {
   
   par(par_default)
 }
-plot_mse_mean_mean(mse_in, mse_out, title="Mean over the 9 splits",scale_fac=5)
+plot_mse_mean_mean(mse_in, mse_out, title="Mean over the 9 splits",scale_fac=10)
 
 
 
