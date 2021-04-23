@@ -308,7 +308,7 @@ knitr::include_graphics("images/btc_usd.jpeg")
 
 \newpage
 
-#### 2.3.2. Bitcoin technology & cryptocurrencies {#bitcoin_tec} 
+#### 2.3.2. Bitcoin technology and cryptocurrencies {#bitcoin_tec} 
 &nbsp;
 
 In this section Bitcoin as a cryptocurreny based on the blockchain technology is briefly described. Cryptocurrency as a more general term is used because Bitcoin was only the first of its kind. One may look at a cryptocurrency similarly to a normal currency because you can buy and sell things and get Bitcoin in exchange. But cryptocurrencies fundamentally differ to conservative currencies in merely all ways. The cryptocurrencies (not just Bitcoin) are based on the blockchain technology introduced in Nakamotos paper [@bitcoin]. The system is decentralized, where no institution or government regulates the market in terms of the blockchain itself. The transactions are signed by the participants via  cryptographic hash functions, which generate a private and public key. This means that every signature can only be accessed by the owner of the private key i.e. it can not be copied. Once a transaction is signed, it is broadcasted into the network to all participants, so that everyone sees a transaction has been made.  Around 2400 transactions are packed in a block (the blocksize is limited by memory) which are broadcasted to all participants of the system. Every block consists the transaction information, previous hash, the special number and their resulting hash as visualized in figure \ref{fig:blockchain}.
@@ -325,7 +325,13 @@ knitr::include_graphics("images/blockchain.jpg")
 
 \newpage
 
-#### 2.3.3. Bitcoin price valuation {#bitcoin_valuation} 
+#### 2.3.3. Valuation and digital gold {#bitcoin_valuation} 
 &nbsp;
 
-As mentioned in the previous chapter, the maximum possible amount of 21 million equals a fixed supply of this cryptocurrency. This leads to the question if this has an influence on the fair market value of bitcoins. Arthur Meynkhard has studied the relationship between the fixed maximum supply, the mining process, and reward halving [@bitcoin_halving]. First, it is emphasized that in a decentralized monetary system, the newly issued amount is defined by the cryptographic algorithm. Consistently, new Bitcoins enter circulation when a miner sells their received reward to fund operating costs or new equipment. Unlike a central bank, which typically aims for an annual inflation target of 2%, with Bitcoin the number of new coins issued is decreased after each halving. Meynkhard describes that this decrease in newly issued Bitcoins, assuming constant demand, causes the market value to increase in the long-term. Although in contrast to stock markets, there is only a fraction of historical data available, this halving phenomenon could certainly be observed. The halving in 2016 is made responsible for the price increase from USD 500 to USD 20'000 by December 2017. The latest halving in May 2020 appears to be responsible for the present bull market, which let the price drive from USD 9000 to over USD 60'000. This deflationary characteristic of Bitcoin led to it being more and more referred to as digital gold in the broad media [@digital_gold]. 
+As mentioned in the previous chapter, the maximum possible amount of 21 million equals a fixed supply of this cryptocurrency. This leads to the question if this has an influence on the fair market value of bitcoins. Arthur Meynkhard is conducting research in this area and has concluded that it relies on the following three factors [@bitcoin_halving]:
+
+- Fixed maximum supply
+- Mining process
+- Reward halving
+
+First, it is emphasized that in a decentralized monetary system, the newly issued amount is defined by the cryptographic algorithm. Consistently, new Bitcoins enter circulation when a miner sells their received reward to fund operating costs or new equipment. Unlike a central bank, which typically aims for an annual inflation target of 2%, with Bitcoin the number of new coins issued is decreased after each halving. Meynkhard describes that this decrease in newly issued Bitcoins, assuming constant demand, causes the market value to increase in the long-term. Although in contrast to stock markets, there is only a fraction of historical data available, this halving phenomenon could certainly be observed. The halving in 2016 is made responsible for the price increase from USD 500 to USD 20'000 by December 2017. The latest halving in May 2020 appears to be responsible for the present bull market, which let the price drive from USD 9000 to over USD 60'000. This deflationary characteristic of Bitcoin led to it being more and more referred to as digital gold in the broad media [@digital_gold]. 
