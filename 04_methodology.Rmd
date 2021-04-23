@@ -88,8 +88,8 @@ Finally, to ensure that the network architecture does not perform only for the s
 
 We are looking for an optimal network, the optimal network should also provide reasonable and reliable predictions for different periods. For further analysis, we use a subset of the introduced closing prices of the bitcoin. Starting from the first of January 2020 to the 27th of March in 2021, we only consider 15 months for our data.
 
-The reason for doing so is, we don’t believe that the historical data longer than a year consists any information about the price tomorrow. By optimizing our models we found that more data would bring no additional performance, therefore the selected subset should be sufficient.
-As proposed in [@nn_trading] we choose a test train split from 6 months in-sample and 1 month out-of-sample. This split is applied to the whole subset in form of a rolling window. By stepping forward with this 6/1 split by steplength of one month we end up with 9 data splits in total. In figure \ref{fig:test_train} this procedure is visualized, for every new timestep a new month is considered for the out of sample and the first month of the in sample, falls out of the frame.
+The reason for doing so is, we do not believe that the historical data longer than a year consists any information about the price tomorrow. By optimizing our models we found that more data would bring no additional performance, therefore the selected subset should be sufficient. Regarding consistency, the terms train and test set are used in the same sense as in-sample and out-of-sample. As proposed in [@nn_trading] we choose a test train split from 6 months in-sample and 1 month out-of-sample. This split is applied to the whole subset in form of a rolling window. By stepping forward with this 6/1 split by steplength of one month we end up with 9 data splits in total. In figure \ref{fig:test_train} this procedure is visualized, for every new timestep a new month is considered for the out of sample and the first month of the in sample, falls out of the frame. 
+
 
 ```{r test_train, out.width='80%', fig.cap='Distribution of Logreturns', echo=FALSE}
 knitr::include_graphics("images/test_train_split_pp.jpeg.jpg")
@@ -137,10 +137,9 @@ knitr::include_graphics("images/batch5/mse_5_layer3.jpeg")
 ```
 \newpage
 
-Figure \ref{fig:mse_plot5} shows the MSE of the models with 1-3 layers, i.e. the last three plots side by side. As mentioned, it can also be seen here that the in-sample MSE decreases with more complex architectures. This does not have a positive effect on the out-of-sample, since in the same area the MSE deteriorate massively (different scaling of the y-axes). As a result, we have no real added value from more complex models. Also to be noted is that the in-sample MSE does not get worse than a certain threshold at the upper boundary. This asymmetric scattering around this value is likely due to the numerics of the optimization algorithm.  
+Figure \ref{fig:mse_plot5} shows the MSE of the models with 1-3 layers, i.e. the last three plots side by side. As mentioned, it can be seen here that the in-sample MSE scatter towards the bottom respectively decreases with more complex architectures. This does not have a positive effect on the out-of-sample, since in the same area the MSE deteriorates massively (note the different scaling of the y-axes). As a result, we have no real added value from more complex models. Also to be noted is that the in-sample MSE does not get worse than a certain threshold at the upper boundary. This asymmetric scattering around this value is likely due to numerical characteristics of the optimization algorithm.  
 
-At this point it should be emphasized that only the analyses from time split 5 are visualized in this chapter. Our primary goal is to compare the performances of different network architectures using MSE in order to find the optimal network that works in every time split. However, it is noted that finding an optimal architecture using such visual analysis of the MSE seems nearly impossible. The main finding of this section is that the MSE deteriorates massively with more complex models and thus a simpler one should be chosen. Likewise, it is noticeable how the MSE's scatter differently within the same network architectures. 
-
+At this point it should be emphasized that only the analyses from time split 5 are visualized in this chapter. Our primary goal is to compare the performances of different network architectures using MSE in order to find the optimal network that works in every time split. However, finding an optimal architecture using such visual analysis of the MSE seems nearly impossible. Nevertheless, the main finding of this section is that the MSE deteriorates massively with more complex models and thus a simpler one should be considered. Equally remarkable is the fact that the same model architectures produce such different results. Whilst many models range in a more or less solid midfield, traits of overfitting can be recognized. These are reflected by the spikes in the out-of-sample MSE. 
 
 - ERKLÄREN, DASS ES UNMÖGLICH IST FÜR 9 VERSCHIEDENE SPLITS EINE REIN VISUELLE ANALYSE DURCHZUFÜHREN (ALSO DAS FINDEN EINER OPTIMALEN MODEL-ARCHITEKTUR ÜBER DIESE 9 VERSCHIEDENEN ZEITPERIODEN)
 - EINGEHEN AUF DEN FEHLENDEN MEHRWERT FÜR DIE WAHL VON KOMPLEXEREN NETZEN
@@ -150,26 +149,36 @@ At this point it should be emphasized that only the analyses from time split 5 a
 knitr::include_graphics("images/batch5/mse_5_all.jpeg")
 ```
 
-What has not yet been studied is the dependence of the neural network's behavior on the different window splits of figure \ref{fig:test_train}. To compare this despite different effectiveness of optimizations of similar networks, we decide to use a robust method. We make use of the median of the MSE of all 50 equal networks over all time splits. This is because large outliers of the MSE can be seen in the in-sample and out-of-sample in figure \ref{fig:mse_plot5}. Even occasional outliers could have a large influence on the arithmetic mean. 
+What has not yet been studied is the dependence of the neural network's behavior on the different window splits we defined in figure \ref{fig:test_train}. Considering that the same network architectures provide MSE's of different quality (including huge outliers), the results for each configuration are summarized using a robust method. We make use of the median of the MSE's of all 50 equal networks over all time splits in order to evaluate the accuracy of the corresponding model. We consider this a better method than the arithmetic mean as figure \ref{fig:mse_plot5} shows large outliers. Thus, it can be better investigated whether the corresponding network architecture provides sound results apart from this one outlier. 
 
 \newpage
 
-The medians of the MSE's over all time splits just mentioned are plotted in figure \ref{fig:mse_median}. We restrict ourselves to neural networks with 1-2 layers (recognizable in rectangles 1 and 2), since it can be assumed that too complex models are not suitable for the target. The lines represent the medians of the MSE of all 50 optimized neural networks at a given network architecture (x-axis). The nine different colors specify in which of the defined time splits the neural networks were trained and tested. 
+The medians of the MSE's of all 50 equal networks over all time splits are plotted in figure \ref{fig:mse_median}. We restrict ourselves to neural networks with 1-2 layers (recognizable in the red (1) and blue (2) rectangles), since it can be assumed that too complex models are not suitable for the target. The lines represent the medians of the MSE of all 50 optimized neural networks at a given network architecture (x-axis). The nine different colors specify the specific time split in which the neural networks have been trained and tested. We anticipate that this comparison will facilitate finding a network architecture that performs over all time splits. 
 
 - MITTELWERTE ÜBER SÄMTLICHE DER 9 SPLITS BERECHNEN UM DEI BESTIMMUNG DES OPTIMALEN NETZTES ZU VEREINFACHEN
-BESPIEL: Man hat 9 Splits à je 1110 Neuronen-Layer-Kombinationen. Für jede NL-Architektur wurden 50 neuronale Netzwerke trainiert. Somit kommt man auf 55500 Netze pro Splits. Also für alleine diese Versuchreihe wurden 499500 Netzwerke trainiert. Nun möchte man diejenige NL-Architektur finden, welche im Verlauf der Zeit (Verlauf der 9 Splits) am besten geblieben/am wenigsten an Performanz verloren hat/am besten geworden ist finden. Man hat herausgefunden, dass Netzte sehr zufällig sind. Somit werden die Mittelwerte über die 50 Netzte pro Layer, pro Split gebildet. Man erhält für jede NL-Kombination 9 verschiedene Mittelwerte der MSEs. Die Suche nach einer optimalen Netzwerk-Architektur ist so um einiges einfacher. (siehe \ref{fig:mse_mean})
+BESPIEL: Man hat 9 Splits à je 1110 Neuronen-Layer-Kombinationen. Für jede NL-Architektur wurden 50 neuronale Netzwerke trainiert. Somit kommt man auf 55500 Netze pro Splits. Also für alleine diese Versuchreihe wurden 499500 Netzwerke trainiert. Nun möchte man diejenige NL-Architektur finden, welche im Verlauf der Zeit (Verlauf der 9 Splits) am besten geblieben/am wenigsten an Performanz verloren hat/am besten geworden ist finden. Man hat herausgefunden, dass Netzte sehr zufällig sind. Somit werden die Mittelwerte über die 50 Netzte pro Layer, pro Split gebildet. Man erhält für jede NL-Kombination 9 verschiedene Mittelwerte der MSEs. Die Suche nach einer optimalen Netzwerk-Architektur ist so um einiges einfacher.
 
 - OPTIMALE NETZWERK-ARCHITEKTUR FINDEN/BESTIMMEN, WIE?
 
 ```{r mse_median, out.width='100%', fig.cap='MSE median over all 9 splits. For each network architecture, 50 neural networks were trained (55,500 models per time split). The nine colors illustrate how these models behave in the different time splits.', echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/batch5/median_mse.jpeg")
 ```
+
+First, there is evidence of overfitting in the medians as well. In particular, splits 1-6 show a somewhat expected picture: the in-sample error becomes smaller with more complex architecture, while the opposite can be seen in the out-of-sample. However, the periodically appearing spikes visible in the time splits 8 and 9 of the in-sample plot seem unnatural. The plausible difference between this and the other splits is the underlying data. Therefore, we take a look at what the initial prices of bitcoin are doing in this period. The plots with the time splits of the logarithmized prices can be found in the appendix starting with figure \ref{fig:price1}. As a rule of thumb, the neural network behaves better when the train and test pairs behave similarly. In the plots of splits 8 and 9 it is clearly visible that in each case the in-sample shows a bullish behavior. This trend is not continued in the out-of-sample part, which probably leads to biased predictions due to amplified dependence structures.
+
+- Trotz unregelmässiger Qualität der Predictions werden wir uns trotzdem auf eine Architektur einigen müssen.  
+
 \newpage
-- Eventuell noch Sharpe hinzunehmen, wäre noch interessant (work in Progress)? oder evtl doch erst später im Trading?
+
+Our goal in the second part of this thesis is to work out a trading strategy with a suitable neural network. Therefore, as a last comparison, we visualize in figure \ref{fig:sharpe_median} how well the different network architectures behave in sign trading. This is a simple trading which depends on the sign of the prediction $\hat{y}_{t+1}$ i.e. next expected log return. If a positive prediction is forecasted, the trader is in a long position, otherwise in a short position. As with the previous plot, the Sharpe ratios of each neural network realization perform differently despite having the same network architecture. Therefore, we again decided to plot the median of all Sharpe ratios with the same network architecture. The nine different colors indicate the time interval during which the neural networks were trained and tested.
 
 ```{r sharpe_median, out.width='100%', fig.cap='Sharpe median over all 9 splits.', echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/batch5/median_sharpe.jpeg")
 ```
+
+- Beschreiben: Inverse Beziehung zwischen in-sample und out-of-sample
+- Ist ein Zusammenhang mit dem MSE zu erkennen?
+- Führen möglicherweise komplexe und hypersensitive NN zu besseren Trading Performances? Ist Muster erkennbar?
 
 \newpage
 

@@ -47,7 +47,6 @@ plot(df_sub,
 par('xaxt')
 
 
-
 axis.Date(1, at=seq(min(df_sub$date), max(df_sub$date), by="months"), format="%m-%y")
 legend("topleft", legend=c("In-Sample", "Out-of-Sample"), pch=c(15,15), col=c("#0000FF","#80FF00"), cex=0.7, bty = "n")
 

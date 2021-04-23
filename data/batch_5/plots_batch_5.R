@@ -289,7 +289,6 @@ plot_mse_mean <- function(mse_in, mse_out, title="",scale_fac=3) {
   layers <- as.numeric(table(layers))
   layers <- cumsum(layers)
   # Only the first two
-  # layers <-layers[1:2]
   
   # Plots mit Rect
   par_default <- par(no.readonly = TRUE)
@@ -411,3 +410,360 @@ legend("left", legend=c("1 Layer", '2 Layers'), pch=15, pt.cex=2, cex=0.8, bty='
        col = c('#FF00004D', '#0000FF4D'), horiz=TRUE, title="Layer partitioning")
 legend("right", legend=c("1", "2", "3", "4", "5", "6", "7", "8", "9"), pch=15, pt.cex=2, cex=0.8, bty='n',
        col = split_colors, horiz=TRUE, title="Train/Test Splits")
+
+
+#.####
+# Mean of Mean####
+par(mfrow=c(2,1))
+
+mean_mean_in <- apply(mse_in, MARGIN=1, FUN=mean)
+mean_mean_out <- apply(mse_out, MARGIN=1, FUN=mean)
+
+plot_mse_mean(mse_in=mean_mean_in, mse_out=mean_mean_out, title="Median MSE over all 9 splits", 20)
+
+plot(apply(mse_in, MARGIN=1, FUN=mean), type="l")
+plot(mean_mean_out, type="l", ylim=c(min(mean_mean_out), min(mean_mean_out)*10))
+
+
+
+plot_mse_mean_mean <- function(mse_in, mse_out, title="",scale_fac=3) {
+  mse_in <- mean_mean_in
+  mse_out <- mean_mean_out
+  # Layer Breakpoints
+  str_splitter <- function(x) {
+    return(length(as.numeric(unlist(strsplit(x, ", ")))))
+  }
+  layers <- sapply(X=names(mse_in), FUN=str_splitter, USE.NAMES=FALSE)
+  layers <- as.numeric(table(layers))
+  layers <- cumsum(layers)
+  # Only the first two
+  layers <- c(10, 110)
+  
+  # Plots mit Rect
+  par_default <- par(no.readonly = TRUE)
+  par(mfrow=c(2,1), mar=c(3,5,3,2))
+  ## In-Sample
+  # color indizes for plots
+  
+  # color codes for the rect
+  colorcodes <- c("#FF00001A", # red
+                  "#0000FF1A", # blue
+                  "#80FF001A", # green
+                  "#FF80001A", # orange
+                  "#00FFFF1A", # teal
+                  "#8000FF1A") # purple
+  # MSE in
+  plot(mse_in[1:110],
+       main=paste(title, ": In-Sample", sep=""),
+       type="l",
+       ylim=c(min(mse_in[1:110]) ,max(mse_in[1:110])),
+       xlim=c(1, length(mse_in[1:110])),
+       col="#303030",
+       ylab="MSE",
+       frame.plot = FALSE,
+       xaxt="n",
+       xlab="", lwd=1.5)
+  
+  
+  startl <- c(1, head(layers, -1)+1)
+  endl <- layers
+  for (i in 1:length(layers)) {
+    rect(xleft = startl[i],
+         xright = endl[i],
+         # ybottom = min(mse_in),
+         # ytop = max(mse_in),
+         ybottom=par('usr')[3],
+         ytop=par('usr')[4],
+         col=colorcodes[i],
+         lty=3)
+    ydistance <- par('usr')[4] - par('usr')[3]
+    textlocation <- par('usr')[3] + (ydistance * 0.1)
+    text(startl[i]+(endl[i]-startl[i])/2, textlocation , i)
+  }
+  
+  # MSE out
+  plot(mse_out[1:110],
+       main=paste(title, ": Out-of-Sample", sep=""),
+       type="l",
+       ylim=c(min(mse_out[1:110]) ,min(mse_out[1:110])*scale_fac),
+       xlim=c(1, length(mse_out[1:110])),
+       col="#303030",
+       ylab="MSE",
+       frame.plot = FALSE,
+       xaxt="n",
+       xlab="")
+
+  
+  startl <- c(1, head(layers, -1)+1)
+  endl <- layers
+  for (i in 1:length(layers)) {
+    rect(xleft = startl[i],
+         xright = endl[i],
+         # ybottom = min(mse_out),
+         # ytop = max(mse_out),
+         ybottom=par('usr')[3],
+         ytop=par('usr')[4],
+         col=colorcodes[i],
+         lty=3)
+    ydistance <- par('usr')[4] - par('usr')[3]
+    textlocation <- par('usr')[3] + (ydistance * 0.9)
+    text(startl[i]+(endl[i]-startl[i])/2, textlocation , i)
+  }
+  
+  par(par_default)
+}
+plot_mse_mean_mean(mse_in, mse_out, title="Mean over the 9 splits",scale_fac=10)
+
+
+
+
+
+
+#.####
+# Time Periods####
+load("data/BTC_USD_27_03_21.rda")
+btc_price <- BTC_USD_27_03_21[,6]
+
+
+plot(btc_price)
+# ["2020-01-01::2020-07-31"]
+# ["2020-02-01::2020-08-31"]
+# ["2020-03-01::2020-09-30"]
+# ["2020-04-01::2020-10-31"]
+# ["2020-05-01::2020-11-30"]
+# ["2020-06-01::2020-12-31"]
+# ["2020-07-01::2021-01-31"]
+# ["2020-08-01::2021-02-28"]
+# ["2020-09-01::2021-03-27"]
+
+# DataFrame for the rectangle subset plots
+start_in <- c("2020-01-01", "2020-02-01", "2020-03-01", "2020-04-01", "2020-05-01", "2020-06-01", "2020-07-01", "2020-08-01", "2020-09-01")
+end_in <- c("2020-06-30", "2020-07-31", "2020-08-31", "2020-09-30", "2020-10-31", "2020-11-30", "2020-12-31", "2021-01-31", "2021-02-28")
+start_out <- c("2020-07-01", "2020-08-01", "2020-09-01", "2020-10-01", "2020-11-01", "2020-12-01", "2021-01-01", "2021-02-01", "2021-03-01")
+end_out <- c("2020-07-31", "2020-08-31", "2020-09-30", "2020-10-31", "2020-11-30", "2020-12-31", "2021-01-31", "2021-02-28", "2021-03-27")
+dates_mat <- as.data.frame(cbind(start_in, end_in, start_out, end_out))
+
+dates_mat[2, 1]
+dates_mat[2, 4]
+paste(dates_mat[2, 1], "::", dates_mat[2, 4], sep="")
+
+btc_price[paste(dates_mat[2, 1], "::", dates_mat[2, 4], sep="")]
+
+
+btc_price["2020-02-01::2020-08-31"]
+
+plot_splits_logprice <- function(btc_data, dates_mat, split, logerino=TRUE) {
+  price <- btc_data[paste(dates_mat[split, 1], "::", dates_mat[split, 4], sep="")]
+  df_sub <- data.frame(date = ymd(time(price)), value = as.numeric(price))
+  
+  # Plot
+  if (logerino) {
+    plot(x=df_sub$date,
+         y=log(df_sub$value),
+         type="l",
+         xaxt="n",
+         xlab="",
+         ylab="log(Price)",
+         main=paste("Train/Test Split ", split, sep=""), las=1)
+    axis.Date(1, at=c(seq(min(df_sub$date), max(df_sub$date), by="months"), max(df_sub$date)), format="%d-%m")
+    legend("topleft", legend=c("In-Sample", "Out-of-Sample"), pch=c(15,15), col=c("#0000FF","#80FF00"), cex=0.7, bty = "n")
+  } else {
+    plot(x=df_sub$date,
+         y=df_sub$value,
+         type="l",
+         xaxt="n",
+         xlab="",
+         ylab="Price",
+         main=paste("Train/Test Split ", split, sep=""))
+    axis.Date(1, at=c(seq(min(df_sub$date), max(df_sub$date), by="months"), max(df_sub$date)), format="%d-%m")
+    legend("topleft", legend=c("In-Sample", "Out-of-Sample"), pch=c(15,15), col=c("#0000FF","#80FF00"), cex=0.7, bty = "n")
+  }
+  
+  # Grid
+  grid(nx=NA, ny=NULL)
+  abline(v=as.numeric(c(seq(min(df_sub$date), max(df_sub$date), by="months"), max(df_sub$date))), col="lightgrey", lty="dotted")
+  
+  # Splits
+  ybot <- par('usr')[3]
+  ytop <- par('usr')[4]
+  rect_borders <- as.numeric(ymd(dates_mat[split,]))
+  rect(xleft = rect_borders[1],
+       xright = rect_borders[2],
+       ybottom = par('usr')[3],
+       ytop = par('usr')[4],
+       col="#0000FF1A", lty=0)
+  rect(xleft = rect_borders[3],
+       xright = rect_borders[4],
+       ybottom = par('usr')[3],
+       ytop = par('usr')[4],
+       col="#80FF001A", lty=0)
+}
+# log(Price)-Plots####
+plot_splits_logprice(btc_data=btc_price, dates_mat=dates_mat, split=1, logerino=TRUE)
+plot_splits_logprice(btc_data=btc_price, dates_mat=dates_mat, split=2, logerino=TRUE)
+plot_splits_logprice(btc_data=btc_price, dates_mat=dates_mat, split=3, logerino=TRUE)
+plot_splits_logprice(btc_data=btc_price, dates_mat=dates_mat, split=4, logerino=TRUE)
+plot_splits_logprice(btc_data=btc_price, dates_mat=dates_mat, split=5, logerino=TRUE)
+plot_splits_logprice(btc_data=btc_price, dates_mat=dates_mat, split=6, logerino=TRUE)
+plot_splits_logprice(btc_data=btc_price, dates_mat=dates_mat, split=7, logerino=TRUE)
+plot_splits_logprice(btc_data=btc_price, dates_mat=dates_mat, split=8, logerino=TRUE)
+plot_splits_logprice(btc_data=btc_price, dates_mat=dates_mat, split=9, logerino=TRUE)
+
+# Price-Plots####
+plot_splits_logprice(btc_data=btc_price, dates_mat=dates_mat, split=1, logerino=FALSE)
+plot_splits_logprice(btc_data=btc_price, dates_mat=dates_mat, split=2, logerino=FALSE)
+plot_splits_logprice(btc_data=btc_price, dates_mat=dates_mat, split=3, logerino=FALSE)
+plot_splits_logprice(btc_data=btc_price, dates_mat=dates_mat, split=4, logerino=FALSE)
+plot_splits_logprice(btc_data=btc_price, dates_mat=dates_mat, split=5, logerino=FALSE)
+plot_splits_logprice(btc_data=btc_price, dates_mat=dates_mat, split=6, logerino=FALSE)
+plot_splits_logprice(btc_data=btc_price, dates_mat=dates_mat, split=7, logerino=FALSE)
+plot_splits_logprice(btc_data=btc_price, dates_mat=dates_mat, split=8, logerino=FALSE)
+plot_splits_logprice(btc_data=btc_price, dates_mat=dates_mat, split=9, logerino=FALSE)
+
+
+
+# logPrice####
+# split 2
+btc_price_2 <- btc_price["2020-02-01::2020-08-31"]
+df_sub <- data.frame(date = ymd(time(btc_price_2)), value = as.numeric(btc_price_2))
+head(df_sub)
+plot(x=df_sub$date,
+     y=(df_sub$value),
+     type="l",
+     xaxt="n",
+     xlab="",
+     ylab="BTC Price",
+     main="Train/Test Split 2")
+axis.Date(1, at=seq(min(df_sub$date), max(df_sub$date), by="months"), format="%m-%y")
+legend("topleft", legend=c("In-Sample", "Out-of-Sample"), pch=c(15,15), col=c("#0000FF","#80FF00"), cex=0.7, bty = "n")
+# rect
+ybot <- par('usr')[3]
+ytop <- par('usr')[4]
+rect_borders <- as.numeric(ymd(dates_mat[2,]))
+rect(xleft = rect_borders[1],
+     xright = rect_borders[2],
+     ybottom = par('usr')[3],
+     ytop = par('usr')[4],
+     col="#0000FF1A", lty=0)
+rect(xleft = rect_borders[3],
+     xright = rect_borders[4],
+     ybottom = par('usr')[3],
+     ytop = par('usr')[4],
+     col="#80FF001A", lty=0)
+
+
+
+
+# split 7
+btc_price_7 <- btc_price["2020-07-01::2021-01-31"]
+df_sub <- data.frame(date = ymd(time(btc_price_7)), value = as.numeric(btc_price_7))
+head(df_sub)
+plot(x=df_sub$date,
+     y=log(df_sub$value),
+     type="l",
+     xaxt="n",
+     xlab="",
+     ylab="BTC Price",
+     main="Train/Test Split 7")
+axis.Date(1, at=seq(min(df_sub$date), max(df_sub$date), by="months"), format="%m-%y")
+legend("topleft", legend=c("In-Sample", "Out-of-Sample"), pch=c(15,15), col=c("#0000FF","#80FF00"), cex=0.7, bty = "n")
+grid()
+?grid()
+# rect
+ybot <- par('usr')[3]
+ytop <- par('usr')[4]
+rect_borders <- as.numeric(ymd(dates_mat[7,]))
+rect(xleft = rect_borders[1],
+     xright = rect_borders[2],
+     ybottom = par('usr')[3],
+     ytop = par('usr')[4],
+     col="#0000FF1A", lty=0)
+rect(xleft = rect_borders[3],
+     xright = rect_borders[4],
+     ybottom = par('usr')[3],
+     ytop = par('usr')[4],
+     col="#80FF001A", lty=0)
+# split 8
+btc_price_8 <- btc_price["2020-08-01::2021-02-28"]
+df_sub <- data.frame(date = ymd(time(btc_price_8)), value = as.numeric(btc_price_8))
+head(df_sub)
+plot(x=df_sub$date,
+     y=log(df_sub$value),
+     type="l",
+     xaxt="n",
+     xlab="",
+     ylab="BTC Price",
+     main="Train/Test Split 8")
+axis.Date(1, at=seq(min(df_sub$date), max(df_sub$date), by="months"), format="%m-%y")
+legend("topleft", legend=c("In-Sample", "Out-of-Sample"), pch=c(15,15), col=c("#0000FF","#80FF00"), cex=0.7, bty = "n")
+# rect
+ybot <- par('usr')[3]
+ytop <- par('usr')[4]
+rect_borders <- as.numeric(ymd(dates_mat[8,]))
+rect(xleft = rect_borders[1],
+     xright = rect_borders[2],
+     ybottom = par('usr')[3],
+     ytop = par('usr')[4],
+     col="#0000FF1A", lty=0)
+rect(xleft = rect_borders[3],
+     xright = rect_borders[4],
+     ybottom = par('usr')[3],
+     ytop = par('usr')[4],
+     col="#80FF001A", lty=0)
+
+
+# price####
+# split 2
+btc_price_2 <- btc_price["2020-02-01::2020-08-31"]
+df_sub <- data.frame(date = ymd(time(btc_price_2)), value = as.numeric(btc_price_2))
+head(df_sub)
+plot(x=df_sub$date,
+     y=(df_sub$value),
+     type="l",
+     xaxt="n",
+     xlab="",
+     ylab="BTC log(Price)",
+     main="Train/Test Split 2")
+axis.Date(1, at=seq(min(df_sub$date), max(df_sub$date), by="months"), format="%m-%y")
+legend("topleft", legend=c("In-Sample", "Out-of-Sample"), pch=c(15,15), col=c("#0000FF","#80FF00"), cex=0.7, bty = "n")
+# rect
+ybot <- par('usr')[3]
+ytop <- par('usr')[4]
+rect_borders <- as.numeric(ymd(dates_mat[2,]))
+rect(xleft = rect_borders[1],
+     xright = rect_borders[2],
+     ybottom = par('usr')[3],
+     ytop = par('usr')[4],
+     col="#0000FF1A", lty=0)
+rect(xleft = rect_borders[3],
+     xright = rect_borders[4],
+     ybottom = par('usr')[3],
+     ytop = par('usr')[4],
+     col="#80FF001A", lty=0)
+# split 7
+btc_price_7 <- btc_price["2020-07-01::2021-01-31"]
+df_sub <- data.frame(date = ymd(time(btc_price_7)), value = as.numeric(btc_price_7))
+head(df_sub)
+plot(x=df_sub$date,
+     y=(df_sub$value),
+     type="l",
+     xaxt="n",
+     xlab="",
+     ylab="BTC log(Price)",
+     main="Train/Test Split 7")
+axis.Date(1, at=seq(min(df_sub$date), max(df_sub$date), by="months"), format="%m-%y")
+legend("topleft", legend=c("In-Sample", "Out-of-Sample"), pch=c(15,15), col=c("#0000FF","#80FF00"), cex=0.7, bty = "n")
+# rect
+ybot <- par('usr')[3]
+ytop <- par('usr')[4]
+rect_borders <- as.numeric(ymd(dates_mat[7,]))
+rect(xleft = rect_borders[1],
+     xright = rect_borders[2],
+     ybottom = par('usr')[3],
+     ytop = par('usr')[4],
+     col="#0000FF1A", lty=0)
+rect(xleft = rect_borders[3],
+     xright = rect_borders[4],
+     ybottom = par('usr')[3],
+     ytop = par('usr')[4],
+     col="#80FF001A", lty=0)

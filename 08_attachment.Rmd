@@ -7,3 +7,50 @@ geometry: margin = 1in
 ## Attachment
 
 This project work is created  with R-4.0.2 , RStudio Version 1.4.904 and RMarkdown in collaborative working via Git / Github
+
+```{r meanmean1, out.width='90%', fig.cap='MSE mean over all 9 splits with all 3 layers.', echo=FALSE,fig.align="center"}
+knitr::include_graphics("images/batch5/mean_mean_3layer.jpeg")
+```
+
+```{r meanmean2, out.width='90%', fig.cap='MSE mean over all 9 splits with only 2 layers.', echo=FALSE,fig.align="center"}
+knitr::include_graphics("images/batch5/mean_mean_2layer.jpeg")
+```
+
+
+```{r price1, out.width='90%', fig.cap='Split 1.', echo=FALSE,fig.align="center"}
+knitr::include_graphics("images/splitplots/price1.jpeg")
+```
+
+```{r price2, out.width='90%', fig.cap='Split 2.', echo=FALSE,fig.align="center"}
+knitr::include_graphics("images/splitplots/price2.jpeg")
+```
+
+```{r price3, out.width='90%', fig.cap='Split 3.', echo=FALSE,fig.align="center"}
+knitr::include_graphics("images/splitplots/price3.jpeg")
+```
+
+
+```{r price4, out.width='90%', fig.cap='Split 4.', echo=FALSE,fig.align="center"}
+knitr::include_graphics("images/splitplots/price4.jpeg")
+```
+
+```{r price5, out.width='90%', fig.cap='Split 5.', echo=FALSE,fig.align="center"}
+knitr::include_graphics("images/splitplots/price5.jpeg")
+```
+
+```{r price6, out.width='90%', fig.cap='Split 6.', echo=FALSE,fig.align="center"}
+knitr::include_graphics("images/splitplots/price6.jpeg")
+```
+
+
+```{r price7, out.width='90%', fig.cap='Split 7.', echo=FALSE,fig.align="center"}
+knitr::include_graphics("images/splitplots/price7.jpeg")
+```
+
+```{r price8, out.width='90%', fig.cap='Split 8.', echo=FALSE,fig.align="center"}
+knitr::include_graphics("images/splitplots/price8.jpeg")
+```
+
+```{r price9, out.width='90%', fig.cap='Split 9.', echo=FALSE,fig.align="center"}
+knitr::include_graphics("images/splitplots/price9.jpeg")
+```
