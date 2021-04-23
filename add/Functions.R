@@ -1477,8 +1477,6 @@ plot_sharpe_mean <- function(sharpe_in, sharpe_out, title="") {
   par(par_default)
 }
 
-
-<<<<<<< HEAD
 # XAI ####
 OLPD_func<-function(x,delta,epsilon,nn)
 {
@@ -1549,11 +1547,6 @@ transform_OLPD_back_original_data_func<-function(data_xts,data_mat,OLPD_scaled_m
 #.####
 
 
-
-
-=======
-
-#.####
 # Mean of Mean####
 plot_mse_mean_mean <- function(mse_in, mse_out, title="",scale_fac=3) {
   mse_in <- mean_mean_in
@@ -1640,4 +1633,4 @@ plot_mse_mean_mean <- function(mse_in, mse_out, title="",scale_fac=3) {
   
   par(par_default)
 }
->>>>>>> main
+
