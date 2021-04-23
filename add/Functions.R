@@ -1457,3 +1457,93 @@ plot_sharpe_mean <- function(sharpe_in, sharpe_out, title="") {
   
   par(par_default)
 }
+
+
+
+#.####
+# Mean of Mean####
+plot_mse_mean_mean <- function(mse_in, mse_out, title="",scale_fac=3) {
+  mse_in <- mean_mean_in
+  mse_out <- mean_mean_out
+  # Layer Breakpoints
+  str_splitter <- function(x) {
+    return(length(as.numeric(unlist(strsplit(x, ", ")))))
+  }
+  layers <- sapply(X=names(mse_in), FUN=str_splitter, USE.NAMES=FALSE)
+  layers <- as.numeric(table(layers))
+  layers <- cumsum(layers)
+  # Only the first two
+  
+  # Plots mit Rect
+  par_default <- par(no.readonly = TRUE)
+  par(mfrow=c(2,1), mar=c(3,5,3,2))
+  ## In-Sample
+  # color indizes for plots
+  
+  # color codes for the rect
+  colorcodes <- c("#FF00001A", # red
+                  "#0000FF1A", # blue
+                  "#80FF001A", # green
+                  "#FF80001A", # orange
+                  "#00FFFF1A", # teal
+                  "#8000FF1A") # purple
+  # MSE in
+  plot(mse_in,
+       main=paste(title, ": In-Sample", sep=""),
+       type="l",
+       ylim=c(min(mse_in) ,max(mse_in)),
+       xlim=c(1, length(mse_in)),
+       col="#303030",
+       ylab="MSE",
+       frame.plot = FALSE,
+       xaxt="n",
+       xlab="")
+  
+  
+  startl <- c(1, head(layers, -1)+1)
+  endl <- layers
+  for (i in 1:length(layers)) {
+    rect(xleft = startl[i],
+         xright = endl[i],
+         # ybottom = min(mse_in),
+         # ytop = max(mse_in),
+         ybottom=par('usr')[3],
+         ytop=par('usr')[4],
+         col=colorcodes[i],
+         lty=3)
+    ydistance <- par('usr')[4] - par('usr')[3]
+    textlocation <- par('usr')[3] + (ydistance * 0.1)
+    text(startl[i]+(endl[i]-startl[i])/2, textlocation , i)
+  }
+  
+  # MSE out
+  plot(mse_out,
+       main=paste(title, ": Out-of-Sample", sep=""),
+       type="l",
+       ylim=c(min(mse_out) ,min(mse_out)*scale_fac),
+       xlim=c(1, length(mse_out)),
+       col="#303030",
+       ylab="MSE",
+       frame.plot = FALSE,
+       xaxt="n",
+       xlab="")
+  
+  
+  startl <- c(1, head(layers, -1)+1)
+  endl <- layers
+  for (i in 1:length(layers)) {
+    rect(xleft = startl[i],
+         xright = endl[i],
+         # ybottom = min(mse_out),
+         # ytop = max(mse_out),
+         ybottom=par('usr')[3],
+         ytop=par('usr')[4],
+         col=colorcodes[i],
+         lty=3)
+    ydistance <- par('usr')[4] - par('usr')[3]
+    textlocation <- par('usr')[3] + (ydistance * 0.9)
+    text(startl[i]+(endl[i]-startl[i])/2, textlocation , i)
+  }
+  
+  par(par_default)
+}
