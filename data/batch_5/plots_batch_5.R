@@ -601,7 +601,6 @@ plot_splits_logprice <- function(btc_data, dates_mat, split, logerino=TRUE) {
 # log(Price)-Plots####
 plot_splits_logprice(btc_data=btc_price, dates_mat=dates_mat, split=1, logerino=TRUE)
 plot_splits_logprice(btc_data=btc_price, dates_mat=dates_mat, split=2, logerino=TRUE)
-plot_splits_logprice(btc_data=btc_price, dates_mat=dates_mat, split=2, logerino=TRUE)
 plot_splits_logprice(btc_data=btc_price, dates_mat=dates_mat, split=3, logerino=TRUE)
 plot_splits_logprice(btc_data=btc_price, dates_mat=dates_mat, split=4, logerino=TRUE)
 plot_splits_logprice(btc_data=btc_price, dates_mat=dates_mat, split=5, logerino=TRUE)
