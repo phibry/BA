@@ -13,9 +13,11 @@
 # it compares the in sample performance of the net with mse to the out of sample performance mse
 # output delivers mse in vs out of sample , predicted values insample and predicted values out of sample
 
-estimate_nn <- function(train_set,number_neurons,data_mat,test_set,f)
+estimate_nn <- function(train_set,number_neurons,data_mat,test_set,f,newnet=T,nn=NA)
 {
-  nn <- neuralnet(f,data=train_set,hidden=number_neurons,linear.output=T, stepmax = 1e+08)
+  
+  if(newnet){nn <- neuralnet(f,data=train_set,hidden=number_neurons,linear.output=T, stepmax = 1e+08)}
+  else{nn=nn}
   
   # In sample performance
   predicted_scaled_in_sample<-nn$net.result[[1]]
@@ -26,13 +28,13 @@ estimate_nn <- function(train_set,number_neurons,data_mat,test_set,f)
   
   # Out-of-sample performance
   # Compute out-of-sample forecasts
-
+  
   pr.nn <- compute(nn, as.matrix(test_set[,2:ncol(test_set)]))
   
-
+  
   pr.nn <- retry(compute(nn,as.matrix(test_set[,2:ncol(test_set)])), when = "Fehler in cbind(1, pred) %*% weights[[num_hidden_layers + 1]] : 
   verlangt numerische/komplexe Matrix/Vektor-Argumente ")
-
+  
   predicted_scaled<-pr.nn$net.result
   # Results from NN are normalized (scaled)
   # Descaling for comparison
@@ -43,7 +45,7 @@ estimate_nn <- function(train_set,number_neurons,data_mat,test_set,f)
   
   # Compare in-sample and out-of-sample
   MSE_nn<-c(MSE.in.nn,MSE.out.nn)
- 
+  
   return(list(MSE_nn=MSE_nn,predicted_nn=predicted_nn,predicted_nn_in_sample=predicted_nn_in_sample))
   
 }
@@ -253,7 +255,7 @@ nn_nl_comb_sharpe_mse <- function(maxneuron=3, maxlayer=3, real=10, data_obj) {
 }
 
 ## Data Function####
-data_function <- function(x, lags, in_out_sep, start="", end="") {
+data_function <- function(x, lags, in_out_sep, start="", end="",autoassign=F) {
   # Define startpoints
   x <- x[paste(start,"::", end, sep="")]
   data_mat <- x
@@ -281,7 +283,8 @@ data_function <- function(x, lags, in_out_sep, start="", end="") {
   # Transform data into [0,1]
   scaled <- scale(data_mat, center = mins, scale = maxs - mins)
   
-  
+  train_set_xts <- scaled[paste("/",in_out_sep,sep=""),]
+  test_set_xts <- scaled[paste(in_out_sep,"/",sep=""),]
   # Train-test split
   train_set <- scaled[paste("/",in_out_sep,sep=""),]
   # Remove last value
@@ -297,6 +300,19 @@ data_function <- function(x, lags, in_out_sep, start="", end="") {
   n <- colnames(train_set)
   f <- as.formula(paste("lag0 ~", paste(n[!n %in% "lag0"], collapse = " + ")))
   
+  if(autoassign)
+  {
+    assign("data_mat",data_mat,.GlobalEnv)
+    assign("target_in",target_in,.GlobalEnv)
+    assign("target_out",target_out,.GlobalEnv)
+    assign("train_set",train_set,.GlobalEnv)
+    assign("test_set",test_set,.GlobalEnv)
+    assign("train_set_xts",train_set_xts,.GlobalEnv)
+    assign("test_set_xts",test_set_xts,.GlobalEnv)
+    assign("f",f,.GlobalEnv)
+  }
+  
+  
   return(list(data_mat=data_mat,
               target_in=target_in,
               target_out=target_out,
@@ -304,6 +320,9 @@ data_function <- function(x, lags, in_out_sep, start="", end="") {
               test_set=test_set,
               f=f))
 }
+
+
+
 
 ## Estimate Fun####
 nn_estim <- function(data_obj, nl_comb) {
@@ -1459,6 +1478,80 @@ plot_sharpe_mean <- function(sharpe_in, sharpe_out, title="") {
 }
 
 
+<<<<<<< HEAD
+# XAI ####
+OLPD_func<-function(x,delta,epsilon,nn)
+{
+  try_data_list<-try(out_original<-predict(nn,x),silent=T)
+  
+  if(class(try_data_list)[1]=="try-error")
+  {
+    data_list<-vector(mode="list")
+    print("Neural net singular")
+    effect<-NULL
+    return(list(effect=effect))
+    
+  } else
+  {
+    
+    
+    
+    # For each explanatory...
+    for (i in 1:ncol(x))#i<-1
+    {
+      # y will be the original explanatory plus an infinitesimal perturbation of i-th explanatory
+      y<-x
+      y[,i]<-y[,i]+delta*x[,i]
+      
+      # Generate infinitesimally perturbated output
+      out_i <-predict(nn,y)
+      
+      if (i==1)
+      {
+        effect<-(out_i-out_original)/(delta*x[,i])
+      } else
+      {
+        effect<-c(effect,(out_i-out_original)/(delta*x[,i]))
+      }
+      # Collect for each explanatory the perturbated data and the corresponding nn-output
+      #    }
+    }
+    # Virtual intercept: output of neural net minus linear regression part
+    virt_int<-out_original-as.double(x%*%effect)
+    effect<-c(virt_int,effect)
+    
+    
+    # Fit the regression to the noiseless perturbated data: as many observations as unknowns i.e. zero-residual
+    return(list(effect=effect))
+  }
+}
+transform_OLPD_back_original_data_func<-function(data_xts,data_mat,OLPD_scaled_mat,lm_obj,data)
+{
+  # Make xts-object (not trivial in this case because of monthly dates...)
+  OLPD_mat<-data_xts
+  for (i in 1:nrow(OLPD_scaled_mat))
+    OLPD_mat[i,]<-OLPD_scaled_mat[i,]
+  OLPD_scaled_mat<-OLPD_mat
+  is.xts(OLPD_mat)
+  colnames(OLPD_mat)<-c("intercept",colnames(data_xts)[2:ncol(data_xts)])
+  
+  # Transform back to original log-returns: the regression weights are not affected in this case because target and explanatory are scaled by the same constant: we nevertheless apply the (identity) scaling to be able to work in more general settings
+  for (j in 2:ncol(OLPD_mat))
+    OLPD_mat[,j]<- OLPD_scaled_mat[,j]*(max(data_mat[,1])-min(data_mat[,1]))/(max(data_mat[,j])-min(data_mat[,j]))
+  # The intercept is affected
+  #   -We center the intercept: variations about its mean value
+  #   -We scale these variations: divide by scale of transformed and multiply by scale of log-returns
+  #   -Add intercept from original regression
+  OLPD_mat[,1]<-(OLPD_scaled_mat[,1]-mean(OLPD_scaled_mat[,1],na.rm=T))*((max(data_mat[,1])-min(data_mat[,1]))/(max(data[,1])-min(data[,1]))) +lm_obj$coefficients[1]
+  
+  return(list(OLPD_mat=OLPD_mat,OLPD_scaled_mat=OLPD_scaled_mat))
+}
+#.####
+
+
+
+
+=======
 
 #.####
 # Mean of Mean####
@@ -1547,3 +1640,4 @@ plot_mse_mean_mean <- function(mse_in, mse_out, title="",scale_fac=3) {
   
   par(par_default)
 }
+>>>>>>> main
