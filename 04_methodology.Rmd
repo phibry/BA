@@ -167,28 +167,33 @@ Our goal in the second part of this thesis is to work out a trading strategy wit
 knitr::include_graphics("images/batch5/median_sharpe.jpeg")
 ```
 
-- Beschreiben: Inverse Beziehung zwischen in-sample und out-of-sample
-- Ist ein Zusammenhang mit dem MSE zu erkennen?
-- Führen möglicherweise komplexe und hypersensitive NN zu besseren Trading Performances? Ist Muster erkennbar?
+When looking at the Sharpe ratios, an inverse relationship between the in-sample and out-of-sample can be seen. The in-sample Sharpe ratio improves in most time splits with increasing complexity. In the out-of-sample, however, the medians decrease. It can also be seen that some of the Sharpe ratios show periodic spikes again. Apart from these aspects, no clear patterns or correlations could be identified. To put these number into perspective, an one-time investment in the S&P 500 PR ten years ago would have resulted in a Sharpe ratio of 0.83.
+
+#### 3.2.3. Model selection
+&nbsp;
+
+- Vorschlag: zwei Modelle (z.B. c(10,10) und c(7,7) wählen, die irgendwie Sinn machen und dann mit Diebold Mariano Predictive Accuracy vergleichen. Das bessere wird verwendet. 
+
 
 \newpage
 
-### 3.3. Benchmark
+### 3.3. Trading strategy
 
-To compare the models we choose two simple benchmarks the well known buy and hold and an Ar(1) process as you can see in Figure xy and Figure xxy.
+- Overview flowchart erstellen und Beschreibung 
+- Erklären, welche Faktoren eine Rolle spielen bei unserer Trading Strategie
 
-### 3.4. Trading strategiesg
+#### 3.3.1. Explainable artificial intelligence (XAI)
 
--   Define trading strategies
+- Begriffseinführung
+- Grosses Themengebiet in allen AI Applikationen
+- In unserem Fall: LPD prüft mit partiellen Ableitungen, ob man das NN zu diesem Zeitpunkt t brauchen kann / stabil ist
+- Anschliessend wird dem Output vom NN mehr oder weniger Gewicht zugeordnet
 
-- Sign-trading (daily)
-- Vola-gewichtet trading 
+#### 3.3.2. GARCH volatility predictions
 
--   Define realistic fee structure for trading (Coinbase Pro, Binance, Kraken etc.)
-
-#### 3.5.1. Other cryptocurrency
-
-- Test our best model with another time series
+- Aufzeigen, warum uns GARCH weiterhelfen könnte
+- Gibt Zeichen, falls die Volatilität zu t+1 grösser ausfallen sollte. 
+- In Signal umwandeln, falls z.B. signifikant grösser
 
 ### 3.6. Explainability
 
