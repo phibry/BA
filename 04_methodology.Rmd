@@ -141,10 +141,6 @@ Figure \ref{fig:mse_plot5} shows the MSE of the models with 1-3 layers, i.e. the
 
 At this point it should be emphasized that only the analyses from time split 5 are visualized in this chapter. Our primary goal is to compare the performances of different network architectures using MSE in order to find the optimal network that works in every time split. However, finding an optimal architecture using such visual analysis of the MSE seems nearly impossible. Nevertheless, the main finding of this section is that the MSE deteriorates massively with more complex models and thus a simpler one should be considered. Equally remarkable is the fact that the same model architectures produce such different results. Whilst many models range in a more or less solid midfield, traits of overfitting can be recognized. These are reflected by the spikes in the out-of-sample MSE. 
 
-- ERKLÄREN, DASS ES UNMÖGLICH IST FÜR 9 VERSCHIEDENE SPLITS EINE REIN VISUELLE ANALYSE DURCHZUFÜHREN (ALSO DAS FINDEN EINER OPTIMALEN MODEL-ARCHITEKTUR ÜBER DIESE 9 VERSCHIEDENEN ZEITPERIODEN)
-- EINGEHEN AUF DEN FEHLENDEN MEHRWERT FÜR DIE WAHL VON KOMPLEXEREN NETZEN
-- INTERESSANT: NETZE WERDEN NICHT SCHLECHTER ALS EIN GEWISSER SCHWELLENWERT, ÜBER ALLE NETZTE SIND DIE MSE IM MITTEL SEHR ÄHNLICH, SPRICH STREUEN (ASYMMETRISCH) UM EINEN GEWISSEN WERT HERUM
-
 ```{r mse_plot5, out.width='100%', fig.cap='Fifth train/test split, all layers with 1110 different networks.', echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/batch5/mse_5_all.jpeg")
 ```
@@ -155,12 +151,7 @@ What has not yet been studied is the dependence of the neural network's behavior
 
 The medians of the MSE's of all 50 equal networks over all time splits are plotted in figure \ref{fig:mse_median}. We restrict ourselves to neural networks with 1-2 layers (recognizable in the red (1) and blue (2) rectangles), since it can be assumed that too complex models are not suitable for the target. The lines represent the medians of the MSE of all 50 optimized neural networks at a given network architecture (x-axis). The nine different colors specify the specific time split in which the neural networks have been trained and tested. We anticipate that this comparison will facilitate finding a network architecture that performs over all time splits. 
 
-- MITTELWERTE ÜBER SÄMTLICHE DER 9 SPLITS BERECHNEN UM DEI BESTIMMUNG DES OPTIMALEN NETZTES ZU VEREINFACHEN
-BESPIEL: Man hat 9 Splits à je 1110 Neuronen-Layer-Kombinationen. Für jede NL-Architektur wurden 50 neuronale Netzwerke trainiert. Somit kommt man auf 55500 Netze pro Splits. Also für alleine diese Versuchreihe wurden 499500 Netzwerke trainiert. Nun möchte man diejenige NL-Architektur finden, welche im Verlauf der Zeit (Verlauf der 9 Splits) am besten geblieben/am wenigsten an Performanz verloren hat/am besten geworden ist finden. Man hat herausgefunden, dass Netzte sehr zufällig sind. Somit werden die Mittelwerte über die 50 Netzte pro Layer, pro Split gebildet. Man erhält für jede NL-Kombination 9 verschiedene Mittelwerte der MSEs. Die Suche nach einer optimalen Netzwerk-Architektur ist so um einiges einfacher.
-
-- OPTIMALE NETZWERK-ARCHITEKTUR FINDEN/BESTIMMEN, WIE?
-
-```{r mse_median, out.width='100%', fig.cap='MSE median over all 9 splits. For each network architecture, 50 neural networks were trained (55,500 models per time split). The nine colors illustrate how these models behave in the different time splits.', echo=FALSE,fig.align="center"}
+```{r mse_median, out.width='100%', fig.cap='MSE median over all 9 splits. For each network architecture, 50 neural networks were trained (55`500 models per time split). The nine colors illustrate how these models behave in the different time splits.', echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/batch5/median_mse.jpeg")
 ```
 
