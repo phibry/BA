@@ -28,7 +28,7 @@ dat <- na.omit(dat)
 # Define date from which we start to predict volatilities
 # Define index for dat (class = data frame)
 
-split <- as.Date("2020-05-01")
+split <- as.Date("2019-05-01")
 
 ind_1 <- index(dat)[which(rownames(dat) == split)]
 dat[ind_1,]
