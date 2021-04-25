@@ -195,12 +195,4 @@ When looking at the Sharpe ratios, an inverse relationship between the in-sample
 - Gibt Zeichen, falls die Volatilität zu t+1 grösser ausfallen sollte. 
 - In Signal umwandeln, falls z.B. signifikant grösser
 
-### 3.6. Explainability
 
-- Performing the predictions with the two (?) best models
-
--   Include variations to find possible starting points for explainability (number of nodes, layers)
-
-### 3.7. (Relationship between accuracy and market phase)
-
--   Test
