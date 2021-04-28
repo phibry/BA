@@ -101,7 +101,7 @@ The complexity of the search for the optimal network architecture increases sign
 
 \newpage
 
-#### 3.2.2.  Evaluating network architecture
+#### 3.2.2.  Evaluating network architecture {#evaluate_nn}
 &nbsp;
 
 Here we would like to focus on some findings that we discovered during the processing of the trained networks. To illustrate the results, an extract is discussed here, namely only the 5th train/test split (in figure \ref{fig:test_train} the middle one).
@@ -167,7 +167,7 @@ Our goal in the second part of this thesis is to work out a trading strategy wit
 knitr::include_graphics("images/batch5/median_sharpe.jpeg")
 ```
 
-When looking at the Sharpe ratios, an inverse relationship between the in-sample and out-of-sample can be seen. The in-sample Sharpe ratio improves in most time splits with increasing complexity. In the out-of-sample, however, the medians decrease. It can also be seen that some of the Sharpe ratios show periodic spikes again. Apart from these aspects, no clear patterns or correlations could be identified. To put these number into perspective, an one-time investment in the S&P 500 PR ten years ago would have resulted in a Sharpe ratio of 0.83.
+When looking at the Sharpe ratios, an inverse relationship between the in-sample and out-of-sample can be seen. The in-sample Sharpe ratio improves in most time splits with increasing complexity. In the out-of-sample, however, the medians decrease. It can also be seen that some of the Sharpe ratios show periodic spikes again. Apart from these aspects, no clear patterns or correlations could be identified. To put these numbers into perspective, an one-time investment in the S&P 500 ten years ago would have resulted in a Sharpe ratio of 0.83 [@S&P500_sharpe].
 
 #### 3.2.3. Model selection
 &nbsp;
@@ -179,8 +179,12 @@ When looking at the Sharpe ratios, an inverse relationship between the in-sample
 
 ### 3.3. Trading strategy
 
+This chapter describes the trading strategy in more detail. In basic terms, the findings of the previous chapters are extended with considerations from explainable artificial intelligence (XAI) as well as from more traditional tools used in time series analysis. The following flowchart shows a broad overview of how the different factors are combined to generate the final trading signal. 
+
 - Overview flowchart erstellen und Beschreibung 
 - Erklären, welche Faktoren eine Rolle spielen bei unserer Trading Strategie
+
+The main component is the prediction of the neural network. This reflects the expected log return of the next day and is thus an important indicator of whether the money should remain invested or not. However, the output of these neural networks are to be treated with caution, as we have seen in the chapter [3.2.2](#evaluate_nn). Therefore, we rely on XAI to detect instability and incorporate this information into the final trading signal. Furthermore, volatility persistence is observed in financial time series, i.e. large changes can be expected after large changes. Leverage effects are also probable, which means that the tendency to achieve a negative return is higher when volatility is large. A GARCH model is used to model these phenomena, whose volatility predictions provide important information for the final trading signal.
 
 #### 3.3.1. Explainable artificial intelligence (XAI)
 
