@@ -36,7 +36,7 @@ in_out_sep="2021-02-27"
 neuron_vec=c(3,2)
 
 # insample or out of sample of net ai 
-use_in_samp=T# how many standart devioatons considered for telling is stable or not
+use_in_samp=F# how many standart devioatons considered for telling is stable or not
 devi=1
 #--------------------------------------------------------------------------
 
@@ -188,7 +188,7 @@ resmat=matrix(nrow=max,ncol = 2,data=0)
 
 for( i in 1:max)
 {
-  set.seed(i)
+  #set.seed(i)
   net=estimate_nn(train_set,number_neurons=neuron_vec,data_mat,test_set,f)
   signal_out=sign(net$predicted_nn)
   perf_nn<-signal_out* target_out
