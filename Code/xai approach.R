@@ -31,14 +31,14 @@ lags=7
 in_out_sep="2021-02-27"
 # seedsadsaD
 # #set.seed(30)
-
+devi=1
 
 #neurons 
 neuron_vec=c(3,2)
 
 # insample or out of sample of net ai 
-use_in_samp=F# how many standart devioatons considered for telling is stable or not
-anz=100 # ANZAHL REEALSIATIONEN OLPD MAT
+use_in_samp=T# how many standart devioatons considered for telling is stable or not
+anz=1000 # ANZAHL REEALSIATIONEN OLPD MAT
 #--------------------------------------------------------------------------
 #xai_outp>-function(x,lags,in_out_sep,neuron_vec,use_in_samp,anz){
 
@@ -81,7 +81,7 @@ anz=100 # ANZAHL REEALSIATIONEN OLPD MAT
 for (l in 1:anz)  
 {  
   #Neural net fitting for btc with sigmoid
-  nn <- neuralnet(f,data=train_set,hidden=neuron_vec,linear.output=F)
+  nn <- neuralnet(f,data=train_set,hidden=neuron_vec,linear.output=T)
   net=estimate_nn(train_set,number_neurons=neuron_vec,data_mat,test_set,f,newnet = F,nn=nn)
   
   
@@ -150,12 +150,12 @@ deviate= function(x,deviationscaling=devi) # devi is assigned before
 }
 
 
-deviatmat=apply(OLPD_mat,2,deviate)
+deviatmat=apply(OLPD_mat[,-1],2,deviate)
 sum_explana=as.xts(apply(deviatmat,1,sum))
-decision<-sum_explana
-decision[]=1
-decision[which(sum_explana>=2 & sum_explana < 3 )]<- 0.5
-decision[which(sum_explana >= 3 )]<-0
+signal_olpd<-sum_explana
+signal_olpd[]=1
+signal_olpd[which(sum_explana>=2 & sum_explana < 3 )]<- 0.5
+signal_olpd[which(sum_explana >= 3 )]<-0
 
 
 sum(signal_out==sign(target_out))/length(signal_out) # out of sample accuracy
@@ -163,29 +163,36 @@ sum(signal_in==sign(target_in[paste("::",as.Date(in_out_sep)-1,sep="")]))/length
 
 
 
+signal_nn_and_olpd=signal_out;signal_nn_and_olpd[which(signal_olpd==0)]<-0;#signal_nn_and_olpd[which(signal_olpd==0.5)]<-0.5
+perf_nn_out_with_olpd=signal_nn_and_olpd*target_out
 
-    
-charts.PerformanceSummary(target_out, main="Buy and hold")
-sqrt(365)*SharpeRatio(target_out,FUN="StdDev")
-
-
-charts.PerformanceSummary(perf_nn_out, main="performance via SMA10")
-sqrt(365)*SharpeRatio(perf_nn_out,FUN="StdDev")
-
-
-plot(decision)
-plot(sum_explana,type="b")
+#plots####
 par(mfrow=c(3,1))
+#plot olpd
 plot(OLPD_mat,col=rainbow(ncol(OLPD_mat)))
   for (i in 1:ncol(OLPD_mat))
   mtext(colnames(OLPD_mat)[i],col=rainbow(ncol(OLPD_mat))[i],line=-i)
-plot(x_level[index(OLPD_mat)])
 
 
+#plot of decision
+plot(signal_olpd)
+
+#how many deviate
+plot(sum_explana,type="b")
+
+sharpe_bh=round(sqrt(365)*SharpeRatio(target_out,FUN="StdDev"),3)
+
+sharpe_net=round(sqrt(365)*SharpeRatio(perf_nn_out,FUN="StdDev"),3)
+sharpe_net_olpd=round(sqrt(365)*SharpeRatio(perf_nn_out_with_olpd,FUN="StdDev"),3)
 
 
+plot(cumsum(target_out),main=paste("bh, sharpe:",as.character(sharpe_bh)) )
+plot(logret <- log_ret_27_03_21["2020-01-08::2021-02-27"])
+plot(cumsum(perf_nn_out),main=paste("nn, sharpe:",as.character(sharpe_net)))
+plot(cumsum(perf_nn_out_with_olpd),main=paste("Net Olpd, sharpe:",as.character(sharpe_net_olpd)))
 
 
-
-
-
+# testing code
+par(mfrow=c(2,1))
+plot(rbind(net$predicted_nn_in_sample,net$predicted_nn),type="l")
+plot(log_ret_27_03_21["2020-01-01::"])

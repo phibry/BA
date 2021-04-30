@@ -55,14 +55,20 @@ resmat=matrix(nrow=max,ncol = 2,data=0)
 
 for( i in 1:max)
 {
-  set.seed(i)
-  net=estimate_nn(train_set,number_neurons=neuron_vec,data_mat,test_set,f)
+  #set.seed(i)
+  #net=estimate_nn(train_set,number_neurons=neuron_vec,data_mat,test_set,f)
+  
+  nn <- neuralnet(f,data=train_set,hidden=neuron_vec,linear.output=T,stepmax = 1e+08)
+  net=estimate_nn(train_set,number_neurons=neuron_vec,data_mat,test_set,f,newnet = F,nn=nn)
+  
   signal_out=sign(net$predicted_nn)
   perf_nn<-signal_out* target_out
   resmat[i,2]=sum(signal_out==sign(target_out))/length(signal_out)
   
   resmat[i,1]=  sqrt(365)*SharpeRatio(perf_nn,FUN="StdDev")
+  cat("\014")
   print(i)
+  
 }
 
 
@@ -79,3 +85,6 @@ length(which(resmat[,1]>0))/max
 plot(resmat[,2],type="l")
 
 mean(resmat[,2])
+
+
+?neuralnet

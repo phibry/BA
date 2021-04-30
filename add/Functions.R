@@ -18,6 +18,7 @@ estimate_nn <- function(train_set,number_neurons,data_mat,test_set,f,newnet=T,nn
   
   if(newnet){nn <- neuralnet(f,data=train_set,hidden=number_neurons,linear.output=T, stepmax = 1e+08)}
   else{nn=nn}
+
   
   # In sample performance
   predicted_scaled_in_sample<-nn$net.result[[1]]
