@@ -9,10 +9,10 @@ grViz(diagram = "digraph flowchart {
   node [fontname = arial, shape = rectangle, color = Black, style = 'solid', fixedsize = true, width = 4]
   tab1 [label = '@@1']
   tab2 [label = '@@2']
-  tab3 [label = '@@3', shape = oval]
+  tab3 [label = '@@3']
   tab4 [label = '@@4']
-  tab5 [label = '@@5', shape = oval]
-  tab6 [label = '@@6', shape = oval]
+  tab5 [label = '@@5']
+  tab6 [label = '@@6']
 
   tab1 -> tab3 -> tab6;
   tab2 -> tab3;
