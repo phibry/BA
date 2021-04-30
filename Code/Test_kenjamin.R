@@ -200,6 +200,7 @@ GARCH_vola <- mod@forecast$density
 load("data/GARCH_vola_predictions/GARCH_vola_predictions.rda")
 
 # Check trading performance
+split <- as.Date("2020-05-01")
 
 ind_0 <- index(dat)[which(rownames(dat) == split)]
 ind_1 <- nrow(dat)
@@ -208,5 +209,4 @@ perf <- GARCH_vola$Trading_signal * dat_xts[(ind_0+1):ind_1]
 sharpe<-sqrt(365)*mean(perf,na.rm=T)/sqrt(var(perf,na.rm=T))
 
 plot(cumsum(perf), main = "Trading performance GARCH(1,1)")
-
 
