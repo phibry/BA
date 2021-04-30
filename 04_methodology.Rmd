@@ -202,4 +202,10 @@ While these methods sound promising, it should not be forgotten that a buy-and-h
 - Gibt Zeichen, falls die Volatilität zu t+1 grösser ausfallen sollte. 
 - In Signal umwandeln, falls z.B. signifikant grösser
 
+#### 3.3.3. Kapitel: Resultat nicht wie erhofft
+
+- Vorschläge: 
+- Resultat nochmals prüfen mit "gutem" Seed
+- Versuchen auf andere Zeitreihe
+- Preise nehmen anstatt log returns 
 
