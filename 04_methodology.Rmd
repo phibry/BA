@@ -157,8 +157,6 @@ knitr::include_graphics("images/batch5/median_mse.jpeg")
 
 First, there is evidence of overfitting in the medians as well. In particular, splits 1-6 show a somewhat expected picture: the in-sample error becomes smaller with more complex architecture, while the opposite can be seen in the out-of-sample. However, the periodically appearing spikes visible in the time splits 8 and 9 of the in-sample plot seem unnatural. The plausible difference between this and the other splits is the underlying data. Therefore, we take a look at what the initial prices of bitcoin are doing in this period. The plots with the time splits of the logarithmized prices can be found in the appendix starting with figure \ref{fig:price1}. As a rule of thumb, the neural network behaves better when the train and test pairs behave similarly. In the plots of splits 8 and 9 it is clearly visible that in each case the in-sample shows a bullish behavior. This trend is not continued in the out-of-sample part, which probably leads to biased predictions due to amplified dependence structures.
 
-- Trotz unregelmässiger Qualität der Predictions werden wir uns trotzdem auf eine Architektur einigen müssen.  
-
 \newpage
 
 Our goal in the second part of this thesis is to work out a trading strategy with a suitable neural network. Therefore, as a last comparison, we visualize in figure \ref{fig:sharpe_median} how well the different network architectures behave in sign trading. This is a simple trading which depends on the sign of the prediction $\hat{y}_{t+1}$ i.e. next expected log return. If a positive prediction is forecasted, the trader is in a long position, otherwise in a short position. As with the previous plot, the Sharpe ratios of each neural network realization perform differently despite having the same network architecture. Therefore, we again decided to plot the median of all Sharpe ratios with the same network architecture. The nine different colors indicate the time interval during which the neural networks were trained and tested.
@@ -190,19 +188,37 @@ The main component is the prediction of the neural network. This reflects the ex
 While these methods sound promising, it should not be forgotten that a buy-and-hold strategy (given nerves of steel) also led to remarkable performances in the past that even outperformed traditional asset classes. The price development is described in chapters [2.3.1.](#historical_analysis) and [2.3.3.](#bitcoin_valuation). That is why buy-and-hold is frequently used as a comparison. 
 
 #### 3.3.1. Explainable artificial intelligence (XAI)
+&nbsp;
 
-- Begriffseinführung
-- Grosses Themengebiet in allen AI Applikationen
+- Kurz wiederholen, weshalb XAI angewandt wird
 - In unserem Fall: LPD prüft mit partiellen Ableitungen, ob man das NN zu diesem Zeitpunkt t brauchen kann / stabil ist
 - Anschliessend wird dem Output vom NN mehr oder weniger Gewicht zugeordnet
 
-#### 3.3.2. GARCH volatility predictions
+\newpage
 
-- Aufzeigen, warum uns GARCH weiterhelfen könnte
-- Gibt Zeichen, falls die Volatilität zu t+1 grösser ausfallen sollte. 
-- In Signal umwandeln, falls z.B. signifikant grösser
+#### 3.3.2. GARCH volatility predictions
+&nbsp;
+
+In a further step, we examine the time series with a traditional GARCH model that allows heteroskedasticity. T. Bollerslev proposes to use this to model time-dependent variance as a function of lagged shocks and lagged conditional variances [@garch]. Based on this model, we conduct one-step-ahead predictions using a rolling window of size 365 days i.e. data points and refit the model after every month. These predictions of future volatilities are presented in the appendix in figure \ref{fig:vola_forecasts} and will be used to make trading decisions. The asymmetric volatility phenomenon by F. Black describes a negative correlation between the volatility of the return and the achieved return [@leverage_effect]. Therefore, we define the following trading rule:
+
+| **FOR EACH** $i$ in $\sigma_{predicted}$ 
+|       **IF** $\sigma_{predicted, i} \ge 1.645 \sigma_{historical}$:  
+|               $signal_i = 0$;  
+|       **ELSE**
+|               $signal_i = 1$;  
+
+In other words, the code checks whether the predicted volatility is significantly greater than the 95% confidence interval (based on historical data). If this is the case, the trading signal is set to 0, i.e. the position is sold. If the expected volatility is within the normal range, we remain respectively get in a long position. To simplify, a standard normal distribution is assumed, where a z-score of 1.645 more or less corresponds to the 95% confidence interval.  
+
+```{r garch_trading, fig.align='center', out.width='70%', fig.cap='Trading performance of the GARCH trading strategy based on volatility predictions starting from 2020/01/02. The time periods where we quit the market is clearly visible as horizontal lines.', echo=FALSE}
+knitr::include_graphics("images/GARCH/garch_trading.png")
+```
+
+Figure \ref{fig:garch_trading} shows the trading performance based solely on the GARCH strategy described in this section. The horizontal performance lines indicate that the algorithm preferred a 100% allocation to cash during these phases. This effect is particularly strong in March 2020, most likely due to the uncertainty caused by the pandemic at that time. At the same time, the Covid-19 pandemic triggered a short-term bear market in global equity markets. Overall, the performance looks promising, yet resembles a buy-and-hold strategy due to the few trading signals generated. 
+
+\newpage
 
 #### 3.3.3. Kapitel: Resultat nicht wie erhofft
+&nbsp;
 
 - Vorschläge: 
 - Resultat nochmals prüfen mit "gutem" Seed
