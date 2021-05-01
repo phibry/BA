@@ -182,12 +182,15 @@ When looking at the Sharpe ratios, an inverse relationship between the in-sample
 
 ### 3.3. Trading strategy
 
-This chapter describes the trading strategy in more detail. In basic terms, the findings of the previous chapters are extended with considerations from explainable artificial intelligence (XAI) as well as from more traditional tools used in time series analysis. The following flowchart shows a broad overview of how the different factors are combined to generate the final trading signal. 
+This chapter describes the trading strategy in more detail. In basic terms, the findings of the previous chapters are extended with considerations from explainable artificial intelligence (XAI) as well as from more traditional tools used in time series analysis. The following flowchart in figure \ref{fig:flowchart_trading} shows a broad overview of how the different factors are combined to generate the final trading signal. 
 
-- Overview flowchart erstellen und Beschreibung 
-- Erklären, welche Faktoren eine Rolle spielen bei unserer Trading Strategie
+```{r flowchart_trading, fig.align='center', out.width='100%', fig.cap='This flowchart illustrates an overview of the trading strategy applied in this chapter. ', echo=FALSE}
+knitr::include_graphics("images/flowchart_trading.png")
+```
 
 The main component is the prediction of the neural network. This reflects the expected log return of the next day and is thus an important indicator of whether the money should remain invested or not. However, the output of these neural networks are to be treated with caution, as we have seen in the chapter [3.2.2](#evaluate_nn). Therefore, we rely on XAI to detect instability and incorporate this information into the final trading signal. Furthermore, volatility persistence is observed in financial time series, i.e. large changes can be expected after large changes. Leverage effects are also probable, which means that the tendency to achieve a negative return is higher when volatility is large. A GARCH model is used to model these phenomena, whose volatility predictions provide important information for the final trading signal.
+
+While these methods sound promising, it should not be forgotten that a buy-and-hold strategy (given nerves of steel) also led to remarkable performances in the past that even outperformed traditional asset classes. The price development is described in chapters [2.3.1.](#historical_analysis) and [2.3.3.](#bitcoin_valuation). That is why buy-and-hold is frequently used as a comparison. 
 
 #### 3.3.1. Explainable artificial intelligence (XAI)
 
@@ -202,4 +205,10 @@ The main component is the prediction of the neural network. This reflects the ex
 - Gibt Zeichen, falls die Volatilität zu t+1 grösser ausfallen sollte. 
 - In Signal umwandeln, falls z.B. signifikant grösser
 
+#### 3.3.3. Kapitel: Resultat nicht wie erhofft
+
+- Vorschläge: 
+- Resultat nochmals prüfen mit "gutem" Seed
+- Versuchen auf andere Zeitreihe
+- Preise nehmen anstatt log returns 
 

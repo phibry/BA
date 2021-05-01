@@ -14,7 +14,7 @@ load("C:/Users/buehl/Desktop/PA_BA/BA/data/BTC_USD_27_03_21.rda")
 load("C:/Users/buehl/Desktop/PA_BA/BA/data/log_ret_27_03_21.rda")
 
 
-
+ 
 
 # 
 x_level=log(BTC_USD_27_03_21$`BTC-USD.Close`)["2020-01-01::"]
@@ -29,96 +29,115 @@ x=logret
 lags=7
 #test train split
 in_out_sep="2021-02-27"
-# seed
+# seedsadsaD
 # #set.seed(30)
+
 
 #neurons 
 neuron_vec=c(3,2)
 
 # insample or out of sample of net ai 
 use_in_samp=F# how many standart devioatons considered for telling is stable or not
-devi=1
+anz=100 # ANZAHL REEALSIATIONEN OLPD MAT
 #--------------------------------------------------------------------------
+#xai_outp>-function(x,lags,in_out_sep,neuron_vec,use_in_samp,anz){
 
-
-#preparing data for nn with autoassign =T results directly in global env
-data_function(x, lags, in_out_sep, autoassign = T)
-
-target_in<-data_mat[paste("/",in_out_sep,sep=""),1]
-target_out<-data_mat[paste(in_out_sep,"/",sep=""),1]
-
-
-# lm only used, for coefficients
-explanatory_in<-data_mat[paste("/",in_out_sep,sep=""),2:ncol(data_mat)]
-explanatory_out<-data_mat[paste(in_out_sep,"/",sep=""),2:ncol(data_mat)]
-
-lm_obj<-lm(target_in~explanatory_in)
-#summary(lm_obj)
-
-
-
-#Neural net fitting for btc with sigmoid
-nn <- neuralnet(f,data=train_set,hidden=neuron_vec,linear.output=F)
-#plot(nn)
-
-
-# Induce infinitesimal perturbations to data and fit regression to output
-
-delta<-1.e-5
-epsilon<-1.e-4
-
-
-if (use_in_samp)
-{
-  # Smoother (in-sample data)
-  data<-train_set
-  data_xts<-train_set_xts
-} else
-{
-  # Rougher (out-sample data)
-  data<-test_set
-  data_xts<-test_set_xts
-}
-
-for (i in 1:(nrow(data)))
-{
-  x<-matrix(data[i,2:ncol(data)],nrow=1)
-  colnames(x)<-colnames(data)[2:ncol(data)]
-  OLPD_scaled_obj<-OLPD_func(x,delta,epsilon,nn)
+  data_function(x, lags, in_out_sep, autoassign = T)
   
-  if (i==1)
+  target_in<-data_mat[paste("/",in_out_sep,sep=""),1]
+  target_out<-data_mat[paste(in_out_sep,"/",sep=""),1]
+  
+  
+  # lm only used, for coefficients
+  explanatory_in<-data_mat[paste("/",in_out_sep,sep=""),2:ncol(data_mat)]
+  explanatory_out<-data_mat[paste(in_out_sep,"/",sep=""),2:ncol(data_mat)]
+  
+  lm_obj<-lm(target_in~explanatory_in)
+  #summary(lm_obj)
+  
+  
+  
+
+  
+  # Induce infinitesimal perturbations to data and fit regression to output
+  
+  delta<-1.e-5
+  epsilon<-1.e-4
+  
+  
+  
+  if (use_in_samp)
   {
-    OLPD_scaled_mat<-OLPD_scaled_obj$effect
+    # Smoother (in-sample data)
+    data<-train_set
+    data_xts<-train_set_xts
   } else
   {
-    OLPD_scaled_mat<-rbind(OLPD_scaled_mat,OLPD_scaled_obj$effect)
+    # Rougher (out-sample data)
+    data<-test_set
+    data_xts<-test_set_xts
+  } 
+
+for (l in 1:anz)  
+{  
+  #Neural net fitting for btc with sigmoid
+  nn <- neuralnet(f,data=train_set,hidden=neuron_vec,linear.output=F)
+  net=estimate_nn(train_set,number_neurons=neuron_vec,data_mat,test_set,f,newnet = F,nn=nn)
+  
+  
+  for (i in 1:(nrow(data)))
+  {
+    x<-matrix(data[i,2:ncol(data)],nrow=1)
+    colnames(x)<-colnames(data)[2:ncol(data)]
+    OLPD_scaled_obj<-OLPD_func(x,delta,epsilon,nn)
+    
+    if (i==1)
+    {
+      OLPD_scaled_mat<-OLPD_scaled_obj$effect
+    } else
+    {
+      OLPD_scaled_mat<-rbind(OLPD_scaled_mat,OLPD_scaled_obj$effect)
+    }
   }
+  OLPD_mat<-transform_OLPD_back_original_data_func(data_xts,data_mat,OLPD_scaled_mat,lm_obj,data)$OLPD_mat
   
   
-}
+ if (l==1)
+  {
+  start=OLPD_mat
+  startsignal_in=sign(net$predicted_nn_in_sample)
+  startsignal_out=sign(net$predicted_nn)  
+  }
+ else
+  {
+  start=start+OLPD_mat 
+  startsignal_in=startsignal_in+sign(net$predicted_nn_in_sample)
+  startsignal_out=startsignal_out+sign(net$predicted_nn) 
+  }
+cat("\014")   
+print(l)
+}  
+  
+  
+
+    
+index(OLPD_mat)<-index(data_xts)  
+#mean of all olpd over realisations
+OLPD_mat=na.exclude(start/anz)
+
+#signals ########################################################## 
+#the most votet gets the signal 
+signal_in=sign(startsignal_in)
+signal_out=sign(startsignal_out)
+  
+  
+
+#perf_nn_in<-signal_in*target_in
+perf_nn_out<-signal_out*target_out
+perf_nn_in<-signal_in*target_in[paste("::",as.Date(in_out_sep)-1,sep="")]
 
 
-OLPD_mat_obj<-transform_OLPD_back_original_data_func(data_xts,data_mat,OLPD_scaled_mat,lm_obj,data)
 
-OLPD_mat<-OLPD_mat_obj$OLPD_mat
-is.xts(OLPD_mat)
-index(OLPD_mat)<-index(data_xts)
-
-
-par(mfrow=c(3,1))
-plot(OLPD_mat,col=rainbow(ncol(OLPD_mat)))
-for (i in 1:ncol(OLPD_mat))
-  mtext(colnames(OLPD_mat)[i],col=rainbow(ncol(OLPD_mat))[i],line=-i)
-plot(x_level[index(OLPD_mat)])
-
-
-
-
-
-
-
-
-#####################p##################
 deviate= function(x,deviationscaling=devi) # devi is assigned before 
   #this function checks if value is > mean + scaling * std and returns 1 if true 0 if not
 {
@@ -130,85 +149,43 @@ deviate= function(x,deviationscaling=devi) # devi is assigned before
   return(x)
 }
 
-OLPD_mat=na.exclude(OLPD_mat)
+
 deviatmat=apply(OLPD_mat,2,deviate)
-
-
 sum_explana=as.xts(apply(deviatmat,1,sum))
-plot(sum_explana,type="b")
-
-
 decision<-sum_explana
 decision[]=1
 decision[which(sum_explana>=2 & sum_explana < 3 )]<- 0.5
 decision[which(sum_explana >= 3 )]<-0
-plot(decision)
-
-#################################################
-
-net=estimate_nn(train_set,number_neurons=neuron_vec,data_mat,test_set,f,newnet = F,nn=nn)
-
-signal_in=sign(net$predicted_nn_in_sample)
-signal_out=sign(net$predicted_nn)  
 
 
-#perf_nn_in<-signal_in*target_in
-perf_nn_out<-signal_out*target_out
-perf_nn_in<-signal_in*target_in
+sum(signal_out==sign(target_out))/length(signal_out) # out of sample accuracy
+sum(signal_in==sign(target_in[paste("::",as.Date(in_out_sep)-1,sep="")]))/length(signal_in) # in sample accuracy
 
 
-plot(cumsum(target_out))
-charts.PerformanceSummary(perf_nn_out, main="performance via SMA10")
-sqrt(365)*SharpeRatio(perf_nn_out,FUN="StdDev")
-
-plot(target_out)
-plot(net$predicted_nn)
 
 
+    
 charts.PerformanceSummary(target_out, main="Buy and hold")
 sqrt(365)*SharpeRatio(target_out,FUN="StdDev")
 
 
+charts.PerformanceSummary(perf_nn_out, main="performance via SMA10")
+sqrt(365)*SharpeRatio(perf_nn_out,FUN="StdDev")
+
+
+plot(decision)
+plot(sum_explana,type="b")
+par(mfrow=c(3,1))
+plot(OLPD_mat,col=rainbow(ncol(OLPD_mat)))
+  for (i in 1:ncol(OLPD_mat))
+  mtext(colnames(OLPD_mat)[i],col=rainbow(ncol(OLPD_mat))[i],line=-i)
+plot(x_level[index(OLPD_mat)])
 
 
 
-sum(signal_out==sign(target_out))/length(signal_out)
-sum(signal_in==sign(target_in))/length(signal_in)
 
 
 
 
 
 
-###########################################################
-#####  set seed 30
-
-max=300
-resmat=matrix(nrow=max,ncol = 2,data=0)
-
-for( i in 1:max)
-{
-  #set.seed(i)
-  net=estimate_nn(train_set,number_neurons=neuron_vec,data_mat,test_set,f)
-  signal_out=sign(net$predicted_nn)
-  perf_nn<-signal_out* target_out
-  resmat[i,2]=sum(signal_out==sign(target_out))/length(signal_out)
-  
-  resmat[i,1]=  sqrt(365)*SharpeRatio(perf_nn,FUN="StdDev")
-  print(i)
-}
-
-
-par(mfrow=c(2,1))
-
-plot(resmat[,1],type="l",main="")
-abline(h=sqrt(365)*SharpeRatio(target_out,FUN="StdDev"),col= "red")
-abline(h=0,col = "green")
-mean(resmat[,1]) 
-
-length(which(resmat[,1]> as.numeric(sqrt(365)*SharpeRatio(target_out,FUN="StdDev")) ))/max
-length(which(resmat[,1]>0))/max
-
-plot(resmat[,2],type="l")
-
-mean(resmat[,2])
