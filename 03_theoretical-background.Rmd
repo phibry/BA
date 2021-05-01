@@ -326,7 +326,7 @@ knitr::include_graphics("images/blockchain.jpg")
 #### 2.3.3. Valuation and digital gold {#bitcoin_valuation} 
 &nbsp;
 
-As mentioned in the previous chapter, the maximum possible amount of 21 million equals a fixed supply of this cryptocurrency. This leads to the question if this has an influence on the fair market value of bitcoins. Arthur Meynkhard is conducting research in this area and has concluded that it relies on the following three factors [@bitcoin_halving]:
+As mentioned in the previous chapter, the maximum possible amount of 21 million equals a fixed supply of this cryptocurrency. This leads to the question if this has an influence on the fair market value of bitcoins. A. Meynkhard is conducting research in this area and has concluded that it relies on the following three factors [@bitcoin_halving]:
 
 - Fixed maximum supply
 - Mining process
