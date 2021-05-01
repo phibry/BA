@@ -170,6 +170,8 @@ knitr::include_graphics("images/batch5/median_sharpe.jpeg")
 
 When looking at the Sharpe ratios, an inverse relationship between the in-sample and out-of-sample can be seen. The in-sample Sharpe ratio improves in most time splits with increasing complexity. In the out-of-sample, however, the medians decrease. It can also be seen that some of the Sharpe ratios show periodic spikes again. Apart from these aspects, no clear patterns or correlations could be identified. To put these numbers into perspective, an one-time investment in the S&P 500 ten years ago would have resulted in a Sharpe ratio of 0.83 [@S&P500_sharpe].
 
+\newpage
+
 #### 3.2.3. Model selection
 &nbsp;
 

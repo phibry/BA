@@ -154,10 +154,11 @@ length(insamp)
 chart.ACF.phil(insamp, maxlag = 15, main="All")
 pacf(insamp)
 
-arma_obj <- arima(insamp, order=c(1,0,0))
+para <- 4
+arma_obj <- arima(insamp, order=c(para,0,0))
 mat_out <- cbind(split9_out)
 
-for (k in 1:1) {
+for (k in 1:para) {
   mat_out <- cbind(mat_out, lag(split9_out, k=k))
 }
 
@@ -177,3 +178,156 @@ plot(cumsum(ret_arima), type="l", main=paste("AR(4) 9th Split, Sharpe:", round(s
 
 
 as.double(sqrt(365) * mean(logret["2020-05-02::2021-03-27"]) / sqrt(var(logret["2020-05-02::2021-03-27"])))
+
+
+
+
+
+# Test Pascal
+data_function <- function(x, lags, in_out_sep, start="", end="",autoassign=F) {
+  # Define startpoints
+  x <- x[paste(start,"::", end, sep="")]
+  data_mat <- x
+  
+  # Create lagged data
+  for (j in 1:lags)
+    data_mat <- cbind(data_mat, lag(x, k=j))
+  
+  # Remove NA's
+  data_mat <- na.exclude(data_mat)
+  
+  
+  # Specify in- and out-of-sample episodes
+  # Target in-sample (current data)
+  target_in <- data_mat[paste("/",in_out_sep,sep=""),1]
+  # Remove last value
+  target_in <- target_in[1:(length(target_in)-1),1]
+  
+  # Target out of sample (current data)
+  target_out <- data_mat[paste(in_out_sep,"/",sep=""),1]
+  
+  # Scaling data for the NN
+  maxs <- apply(data_mat, 2, max)
+  mins <- apply(data_mat, 2, min)
+  # Transform data into [0,1]
+  scaled <- scale(data_mat, center = mins, scale = maxs - mins)
+  
+  train_set_xts <- scaled[paste("/",in_out_sep,sep=""),]
+  test_set_xts <- scaled[paste(in_out_sep,"/",sep=""),]
+  # Train-test split
+  train_set <- scaled[paste("/",in_out_sep,sep=""),]
+  # Remove last value
+  train_set <- train_set[1:(dim(train_set)[1]-1),]
+  
+  test_set <- scaled[paste(in_out_sep,"/",sep=""),]
+  
+  train_set <- as.matrix(train_set)
+  test_set <- as.matrix(test_set)
+  
+  # Formula
+  colnames(train_set) <- paste("lag",0:(ncol(train_set)-1),sep="")
+  n <- colnames(train_set)
+  f <- as.formula(paste("lag0 ~", paste(n[!n %in% "lag0"], collapse = " + ")))
+  
+  if(autoassign)
+  {
+    assign("data_mat",data_mat,.GlobalEnv)
+    assign("target_in",target_in,.GlobalEnv)
+    assign("target_out",target_out,.GlobalEnv)
+    assign("train_set",train_set,.GlobalEnv)
+    assign("test_set",test_set,.GlobalEnv)
+    assign("train_set_xts",train_set_xts,.GlobalEnv)
+    assign("test_set_xts",test_set_xts,.GlobalEnv)
+    assign("f",f,.GlobalEnv)
+  }
+  
+  
+  return(list(data_mat=data_mat,
+              target_in=target_in,
+              target_out=target_out,
+              train_set=train_set,
+              test_set=test_set,
+              f=f))
+}
+
+
+## Estimate Fun####
+nn_estim <- function(data_obj, nl_comb) {
+  
+  # Prepare data
+  train_set <- data_obj$train_set
+  test_set <- data_obj$test_set
+  data_mat <- data_obj$data_mat
+  target_in <- data_obj$target_in
+  target_out <- data_obj$target_out
+  f <- as.formula(data_obj$f)
+  
+  
+  # Train NeuralNet
+  nn <- neuralnet(f, data=train_set, hidden=nl_comb, linear.output=T, stepmax = 1e+08)
+  
+  
+  # In sample performance
+  pred_in_scaled <- nn$net.result[[1]]
+  # Scale back from interval [0,1] to original log-returns
+  pred_in <- pred_in_scaled*(max(data_mat[,1])-min(data_mat[,1]))+min(data_mat[,1])
+  # In-sample MSE
+  train_rescaled <- train_set[,1]*(max(data_mat[,1])-min(data_mat[,1]))+min(data_mat[,1])
+  mse_in <- mean((train_rescaled - pred_in)^2)
+  
+  # In-sample Sharpe
+  perf_in <- (sign(pred_in))*target_in
+  sharpe_in <- as.numeric(sqrt(365)*mean(perf_in)/sqrt(var(perf_in)))
+  
+  # Out-of-sample performance
+  # Compute out-of-sample forecasts
+  # pr.nn <- compute(nn, as.matrix(test_set[,2:ncol(test_set)]))
+  pr.nn <- predict(nn, as.matrix(test_set[,2:ncol(test_set)]))
+  
+  predicted_scaled <- pr.nn
+  # Results from NN are normalized (scaled)
+  # Descaling for comparison
+  pred_out <- predicted_scaled*(max(data_mat[,1])-min(data_mat[,1]))+min(data_mat[,1])
+  test_rescaled <- test_set[,1]*(max(data_mat[,1])-min(data_mat[,1]))+min(data_mat[,1])
+  # Calculating MSE
+  mse_out <- mean((test_rescaled - pred_out)^2)
+  
+  # Out of sample Sharpe
+  perf_out <- (sign(pred_out))*target_out
+  sharpe_out <- sqrt(365)*mean(perf_out)/sqrt(var(perf_out))
+  
+  # Compare in-sample and out-of-sample
+  mse_nn <- c(mse_in, mse_out)
+  sharpe_nn <- c(sharpe_in, sharpe_out)
+  
+  return(list(mse_nn=mse_nn, pred_out=pred_out, pred_in=pred_in, sharpe_nn=sharpe_nn))
+}
+
+logret["2020-01-01::2021-03-27"]
+testi <- data_function(logret, 7, in_out_sep="2021-02-27", start="2020-01-01", end="2021-03-27")
+testi$target_in
+testi$target_out
+
+resi1 <- nn_estim(testi, c(3,2))
+resi2 <- nn_estim(testi, c(3,2))
+
+par(mfrow=c(3,1))
+plot(as.xts(rbind(resi1$pred_in, resi1$pred_out)), type="l")
+plot(as.xts(rbind(resi2$pred_in, resi2$pred_out)), type="l")
+plot(logret["2020-01-08::2021-03-27"], type="l")
+
+
+
+
+# GOOGLE
+getSymbols("GOOGL")
+tail(GOOGL)
+g.adj <- GOOGL[,6]
+par(mfrow=c(1,1))
+plot(g.adj, main="Adjusted Prices ~ Google")
+
+chart.ACF.phil(diff(log(g.adj)))
+
+par(mfrow=c(2,1))
+plot(diff(log(g.adj)), main="Google")
+plot(logret, main="Google")

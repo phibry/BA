@@ -34,7 +34,7 @@ estimate_nn <- function(train_set,number_neurons,data_mat,test_set,f,newnet=T,nn
   
   pr.nn <- retry(compute(nn,as.matrix(test_set[,2:ncol(test_set)])), when = "Fehler in cbind(1, pred) %*% weights[[num_hidden_layers + 1]] : 
   verlangt numerische/komplexe Matrix/Vektor-Argumente ")
-  
+
   predicted_scaled<-pr.nn$net.result
   # Results from NN are normalized (scaled)
   # Descaling for comparison
