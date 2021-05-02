@@ -274,7 +274,7 @@ In this section bitcoin as a crypto-curreny is introduced. The historical data i
 
 In the following work bitcoin as a cryptocurreny is mentionend in its short term BTC, by the meaning of US Dollars per Bitcoin.
 
-#### 2.3.1. Historical analysis
+#### 2.3.1. Historical analysis {#historical_analysis}
 &nbsp;
 
 The story of bitcoin began with a paper published by the name of Satoshi Nakamoto [@bitcoin]. The publisher of the document cannot be assigned to a real person, therefore the technology inventor remains mysteriosly unknown until today. In 2009 the first bitcoin transaction was executed. On account of the opensource technology of bitcoin, lots of alternative currencies were created. 
@@ -326,7 +326,7 @@ knitr::include_graphics("images/blockchain.jpg")
 #### 2.3.3. Valuation and digital gold {#bitcoin_valuation} 
 &nbsp;
 
-As mentioned in the previous chapter, the maximum possible amount of 21 million equals a fixed supply of this cryptocurrency. This leads to the question if this has an influence on the fair market value of bitcoins. Arthur Meynkhard is conducting research in this area and has concluded that it relies on the following three factors [@bitcoin_halving]:
+As mentioned in the previous chapter, the maximum possible amount of 21 million equals a fixed supply of this cryptocurrency. This leads to the question if this has an influence on the fair market value of bitcoins. A. Meynkhard is conducting research in this area and has concluded that it relies on the following three factors [@bitcoin_halving]:
 
 - Fixed maximum supply
 - Mining process

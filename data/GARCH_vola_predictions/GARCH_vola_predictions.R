@@ -28,7 +28,7 @@ dat <- na.omit(dat)
 # Define date from which we start to predict volatilities
 # Define index for dat (class = data frame)
 
-split <- as.Date("2019-05-01")
+split <- as.Date("2020-01-01")
 
 ind_1 <- index(dat)[which(rownames(dat) == split)]
 dat[ind_1,]
@@ -53,9 +53,10 @@ plot(mod)
 
 GARCH_vola <- mod@forecast$density
 
-# Adding trading signals with threshold upper CI = 0.95
+# Adding trading signals 
+# Generate trading signal if predicted vola >= 0.95 level of historical vola
 
-th <- quantile(GARCH_vola$Sigma, p = 0.95)
+th <- sd(dat$`BTC log returns`) * 1.64 # two-sided 0.95
 
 for(i in 1:nrow(GARCH_vola)){
   if(GARCH_vola$Sigma[i] >= th){
@@ -68,7 +69,7 @@ for(i in 1:nrow(GARCH_vola)){
 
 # Save as .rda file
 
-#save(GARCH_vola, file = "data/GARCH_vola_predictions/GARCH_vola_predictions.rda")
+# save(GARCH_vola, file = "data/GARCH_vola_predictions/GARCH_vola_predictions.rda")
 
 # Check trading performance
 
@@ -78,5 +79,10 @@ ind_1 <- nrow(dat)
 perf <- GARCH_vola$Trading_signal * dat_xts[(ind_0+1):ind_1]
 sharpe<-sqrt(365)*mean(perf,na.rm=T)/sqrt(var(perf,na.rm=T))
 
+# Buy and hold
+# bh <- rep(1, length(perf)) * dat_xts[(ind_0+1):ind_1]
+# sharpe_bh <- sqrt(365)*mean(bh, na.rm = T) / sqrt(var(bh, na.rm = T))
+
+par(mfrow = c(1,1))
 plot(cumsum(perf), main = "Trading performance GARCH(1,1)")
 
