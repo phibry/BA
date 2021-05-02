@@ -5,7 +5,8 @@ rm(list=ls())
 
 source("add/libraries.r") 
 # load libraries file
-source("add/Functions.r") #load functions
+source("add/Functions.r") 
+#load functions
 
 #----------!!dont do this unless you want to load fresh data!!!-------------------------------#
 # Downloading Data ####
@@ -86,5 +87,112 @@ plot(resmat[,2],type="l")
 
 mean(resmat[,2])
 
+##########################################################################################################
+#test for plotiing ouitput works only for r base plots
 
-?neuralnet
+
+
+
+lit=function(){plot(1:10) 
+p <- recordPlot()
+
+plot(1:20,col="blue")
+
+l <- recordPlot()
+
+p1 <-recordPlot()
+return(list(x11(),p,l) )
+       
+}
+
+
+par(mfrow=c(3,1))
+
+lit()
+
+
+#########################################################################################################
+
+
+
+# testfile Buehler
+# this file is only for testing purpose, does not appear in final paper
+
+rm(list=ls())
+# load libraries file
+source("add/libraries.r") 
+#load functions
+source("add/Functions.r") 
+
+source("Code/xai_outp_fun.r")
+
+#loading data
+load("C:/Users/buehl/Desktop/PA_BA/BA/data/BTC_USD_27_03_21.rda")
+load("C:/Users/buehl/Desktop/PA_BA/BA/data/log_ret_27_03_21.rda")
+
+
+
+
+# 
+x_level=log(BTC_USD_27_03_21$`BTC-USD.Close`)["2020-01-01::"]
+logret <- log_ret_27_03_21["2020-01-01::"]
+
+
+
+
+set.seed(30)
+
+
+##data
+x=logret
+# how many lags considered
+lags=7
+#test train split
+in_out_sep="2021-02-27"
+
+#how many standart deviatons for olpd threshold
+devi=1
+#
+# decision rule of nn percentage of half  if NULL majority decision is taken
+percentage= 0.1
+
+#neurons 
+neuron_vec=c(7,7)
+
+# insample or out of sample of net ai 
+use_in_samp=F# how many standart deviations considered for telling is stable or not
+anz=100
+# ANZAHL REEALSIATIONEN OLPD MAT
+
+outtarget=log_ret_27_03_21["2021-02-27::"]
+
+
+f=xai_outp(x=x,lags=lags,in_out_sep=in_out_sep,neuron_vec=neuron_vec,use_in_samp=use_in_samp,anz=anz,percentage=percentage,devi=devi,outtarget=outtarget)
+f[1]
+
+max=100
+
+resmat=matrix(nrow=max,ncol = 2, data=0)
+
+for(k in 1:max){
+  
+  f=xai_outp(x=x,lags=lags,in_out_sep=in_out_sep,neuron_vec=neuron_vec,use_in_samp=use_in_samp,anz=anz,percentage=percentage,devi=devi,outtarget=outtarget)
+  resmat[k,1:2]=f[1:2]
+  print(k)
+  cat("\014")
+}
+
+
+
+
+par(mfrow=c(1,1))
+plot(resmat[,1],col="blue",type="l")  #sharpenet olpd
+lines(resmat[,2],col="green",type="l") #sharpe net
+
+abline(h=sqrt(365)*SharpeRatio(outtarget,FUN="StdDev"),col= "red")
+abline(h=0,col= "green")
+
+mean(resmat[,1])
+mean(resmat[,2])
+
+sum(resmat[,1] > resmat[,2])

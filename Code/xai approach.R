@@ -15,13 +15,16 @@ load("C:/Users/buehl/Desktop/PA_BA/BA/data/log_ret_27_03_21.rda")
 
 
  
-
+btc=`BTC_USD_27_03_21`
 # 
 x_level=log(BTC_USD_27_03_21$`BTC-USD.Close`)["2020-01-01::"]
 logret <- log_ret_27_03_21["2020-01-01::"]
-
+logret=diff(log(SMA(Cl(btc),7)))["2020-01-01::"]
 
 # input area #####----------------------------------------------------
+
+#set.seed(30)
+
 
 ##data
 x=logret
@@ -29,18 +32,25 @@ x=logret
 lags=7
 #test train split
 in_out_sep="2021-02-27"
-# seedsadsaD
-# #set.seed(30)
+
+#how many standart deviatons for olpd threshold
 devi=1
+#
+# decision rule of nn percentage of half  if NULL majority decision is taken
+percentage= 0.1
 
 #neurons 
-neuron_vec=c(3,2)
+neuron_vec=c(5,5)
 
 # insample or out of sample of net ai 
-use_in_samp=T# how many standart devioatons considered for telling is stable or not
-anz=1000 # ANZAHL REEALSIATIONEN OLPD MAT
+use_in_samp=F# how many standart deviations considered for telling is stable or not
+anz=100# ANZAHL REEALSIATIONEN OLPD MAT
+
+
+#par(mfrow=c(4,2))
+#°xai_outp(x=x,lags=lags,in_out_sep=in_out_sep,neuron_vec=neuron_vec,use_in_samp=use_in_samp,anz=anz,percentage=percentage,devi=devi)
+
 #--------------------------------------------------------------------------
-#xai_outp>-function(x,lags,in_out_sep,neuron_vec,use_in_samp,anz){
 
   data_function(x, lags, in_out_sep, autoassign = T)
   
@@ -121,16 +131,31 @@ print(l)
   
 
     
+  
 index(OLPD_mat)<-index(data_xts)  
 #mean of all olpd over realisations
 OLPD_mat=na.exclude(start/anz)
 
-#signals ########################################################## 
-#the most votet gets the signal 
+#signals ##########################################################--------------------------------------------
+
+# neuralnet signals
+
+#signum of the most votet 50% negative + 50 % positive get a zero , >50% negative & <50%positive get a -1  
+
 signal_in=sign(startsignal_in)
 signal_out=sign(startsignal_out)
-  
-  
+
+#other rule 2  
+if( !is.null(percentage)){
+signal_in[which(abs(startsignal_in)<=percentage*anz)]<-0
+signal_out[which(abs(startsignal_out)<=percentage*anz)]<-0
+}
+
+
+target_out<-log_ret_27_03_21["2021-02-27::"]
+
+
+
 
 #perf_nn_in<-signal_in*target_in
 perf_nn_out<-signal_out*target_out
@@ -166,33 +191,42 @@ sum(signal_in==sign(target_in[paste("::",as.Date(in_out_sep)-1,sep="")]))/length
 signal_nn_and_olpd=signal_out;signal_nn_and_olpd[which(signal_olpd==0)]<-0;#signal_nn_and_olpd[which(signal_olpd==0.5)]<-0.5
 perf_nn_out_with_olpd=signal_nn_and_olpd*target_out
 
-#plots####
-par(mfrow=c(3,1))
-#plot olpd
-plot(OLPD_mat,col=rainbow(ncol(OLPD_mat)))
-  for (i in 1:ncol(OLPD_mat))
-  mtext(colnames(OLPD_mat)[i],col=rainbow(ncol(OLPD_mat))[i],line=-i)
-
-
-#plot of decision
-plot(signal_olpd)
-
-#how many deviate
-plot(sum_explana,type="b")
 
 sharpe_bh=round(sqrt(365)*SharpeRatio(target_out,FUN="StdDev"),3)
-
 sharpe_net=round(sqrt(365)*SharpeRatio(perf_nn_out,FUN="StdDev"),3)
 sharpe_net_olpd=round(sqrt(365)*SharpeRatio(perf_nn_out_with_olpd,FUN="StdDev"),3)
 
+#plots####--------------------------------------------------------------------------------------------------------------------------
 
-plot(cumsum(target_out),main=paste("bh, sharpe:",as.character(sharpe_bh)) )
-plot(logret <- log_ret_27_03_21["2020-01-08::2021-02-27"])
-plot(cumsum(perf_nn_out),main=paste("nn, sharpe:",as.character(sharpe_net)))
+
+
+#plot of decision
+par(mfrow=c(4,1))
+plot(OLPD_mat,col=rainbow(ncol(OLPD_mat)))
+for (i in 1:ncol(OLPD_mat))
+mtext(colnames(OLPD_mat)[i],col=rainbow(ncol(OLPD_mat))[i],line=-i)
+
+plot(target_out)
+
+plot(sum_explana,type="b",main=paste("lags deviateing:",as.character(devi),"from mean"))
+
+
+plot(signal_olpd,main="final signal")
+
+
+
+
+par(mfrow=c(3,1))
+
+
+
+plot(cumsum(target_out),main=paste("buy and hold, sharpe:",as.character(sharpe_bh)) )
+
+
+plot(cumsum(perf_nn_out),main=paste(as.character(anz),"n nets",as.character(neuron_vec),", sharpe:",as.character(sharpe_net)))
+
+
 plot(cumsum(perf_nn_out_with_olpd),main=paste("Net Olpd, sharpe:",as.character(sharpe_net_olpd)))
 
 
-# testing code
-par(mfrow=c(2,1))
-plot(rbind(net$predicted_nn_in_sample,net$predicted_nn),type="l")
-plot(log_ret_27_03_21["2020-01-01::"])
+
