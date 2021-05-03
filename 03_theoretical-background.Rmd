@@ -191,14 +191,14 @@ Another characteristic that requires our attention is the vanishing gradient pro
 
 This thesis sets the goal to compare the different neural networks presented. Besides the types of neural networks, the network architecture (number of layers and nodes) is explored. In addition, a comparison is made with the winner of the Forecasting Competition M4, which combines a standard exponential smoothing model with an LSTM network. To make the comparison meaningful enough, the following two figures are compared. 
 
-#### 2.2.1. Sharpe ratio {#sharpe_ratio}
+#### 2.2.1. Sharpe Ratio {#sharpe_ratio}
 &nbsp;
 
 The first number refers to the performance of the trading strategy based on the sign of the prediction $t+1$ and is called Sharpe Ratio. Sharpe ratio is a very powerful and widely used ratio to measure performance and it describes return per risk.
 
 ```{=tex}
 \begin{align} \label{eq:Sharpe}
-  SharpeRatio = \frac{R_{p}-R_{f}}{\sigma}
+  \text{Sharpe Ratio} = \frac{R_{p}-R_{f}}{\sigma}
 \end{align}
 ```
 
@@ -332,4 +332,26 @@ As mentioned in the previous chapter, the maximum possible amount of 21 million 
 - Mining process
 - Reward halving
 
-First, it is emphasized that in a decentralized monetary system, the newly issued amount is defined by the cryptographic algorithm. Consistently, new Bitcoins enter circulation when a miner sells their received reward to fund operating costs or new equipment. Unlike a central bank, which typically aims for an annual inflation target of 2%, with Bitcoin the number of new coins issued is decreased after each halving. Meynkhard describes that this decrease in newly issued Bitcoins, assuming constant demand, causes the market value to increase in the long-term. Although in contrast to stock markets, there is only a fraction of historical data available, this halving phenomenon could certainly be observed. The halving in 2016 is made responsible for the price increase from USD 500 to USD 20'000 by December 2017. The latest halving in May 2020 appears to be responsible for the present bull market, which let the price drive from USD 9000 to over USD 60'000. This deflationary characteristic of Bitcoin led to it being more and more referred to as digital gold in the broad media [@digital_gold]. 
+First, it is emphasized that in a decentralized monetary system, the newly issued amount is defined by the cryptographic algorithm. Consistently, new Bitcoins enter circulation when a miner sells their received reward to fund operating costs or new equipment. Unlike a central bank, which typically aims for an annual inflation target of 2%, with Bitcoin the number of new coins issued is decreased after each halving. Meynkhard describes that this decrease in newly issued Bitcoins, assuming constant demand, causes the market value to increase in the long-term. Although in contrast to stock markets, there is only a fraction of historical data available, this halving phenomenon could certainly be observed. The halving in 2016 is made responsible for the price increase from USD 500 to USD 20'000 by December 2017. The latest halving in May 2020 appears to be responsible for the present bull market, which let the price drive from USD 9000 to over USD 60'000. This deflationary characteristic of Bitcoin led to it being more and more referred to as digital gold in the broad media [@digital_gold].
+
+\newpage
+
+### 2.4. Explainable artificial intelligence {#xai}
+
+Depending on the model architecture, a neural network can be a very complex construct. A number of weights and biases linked to the neurons lead to an output of the network through training. Understanding how exactly the alterations of the weights and biases lead to this output is a rather complex task. Due to this difficulty in interpretation, neural networks are often referred to as black boxes.
+
+Although the networks may lead to desired results, it can be important to build an understanding of these models. Suppose one is developing a classification method in supervised learning for a particular problem. A classical approach such as linear regression is easy to understand and one can convince people with little knowledge of mathematics of the usefulness of this method. Consider that a good and simple explanation may depend on investment. Would an investor invest in something that is not understood and difficult to get a grasp of? Neural networks with their non-linearity and a large number of parameters does not make it easy for the user to convince an investor of the benefits of a neural network.
+
+#### 2.4.1. Classic Approach
+&nbsp;
+
+As mentioned earlier, it is almost impossible to explain the networks based on the weights and biases. The following methods try to find effects on the features. One tries to find out which influence a certain feature has on the prediction of the network. There are classical approaches for explaining neural networks in the applications such as image recognition or text mining.
+
+A widely used approach is the Shapley value which has its origin in game theory. With this method, one tries to find out how big the influence of a feature is. So how much a feature contributes to the prediction. The problem with this method is that it mixes the data at different points in time. In this paper, we study the prediction of financial time series, i.e. autocorrelated data. Thus, this approach is not suitable for our application to interpret the importance of individual features (lagged log returns) [@slide_xai].
+
+An approach like ALE (Accumulated Local Effects) examines how the network reacts to change [@slide_xai]. The features (lags) are plotted in order against ALE in a graph. The problem with this method is that the plotted features do not contain the dimension of time. It could be that two very high values are very close to each other in the plot, but in reality, they occurred years after each other.
+
+Another approach is the LIME (Local Interpretable Model-agnostic Explanations). This method examines the change of the forecast when changing the input data. A permuted data set is generated from the given data (for example, adding standardized noise). Using this artificially altered data set, an interpretable model (regression) is created to analyze the change in features [@xai_blackbox]. Changing the data affects the time dependence of the data. Thus, this method is also unusable for our application.
+
+#### 2.4.2. Explainability for Time Series
+&nbsp;
