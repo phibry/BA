@@ -53,3 +53,7 @@ knitr::include_graphics("images/splitplots/price8.jpeg")
 ```{r price9, out.width='90%', fig.cap='Split 9.', echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/splitplots/price9.jpeg")
 ```
+
+```{r vola_forecasts, out.width='90%', fig.cap='One-step-ahead forecasts of volatility using rolling window of size 365. Refitting model after every months.', echo=FALSE,fig.align="center"}
+knitr::include_graphics("images/GARCH/vola_forecasts.png")
+```
