@@ -35,7 +35,7 @@ estimate_nn <- function(train_set,number_neurons,data_mat,test_set,f,newnet=T,nn
   
   pr.nn <- retry(compute(nn,as.matrix(test_set[,2:ncol(test_set)])), when = "Fehler in cbind(1, pred) %*% weights[[num_hidden_layers + 1]] : 
   verlangt numerische/komplexe Matrix/Vektor-Argumente ")
-  
+
   predicted_scaled<-pr.nn$net.result
   # Results from NN are normalized (scaled)
   # Descaling for comparison
@@ -1635,3 +1635,32 @@ plot_mse_mean_mean <- function(mse_in, mse_out, title="",scale_fac=3) {
   par(par_default)
 }
 
+
+
+# ACF####
+chart.ACF.phil <- function (R, maxlag = NULL, elementcolor = "gray", main = NULL, 
+                            ...) 
+{
+  R = checkData(R)
+  data = checkData(R[, 1], method = "vector", na.rm = TRUE)
+  columns = ncol(R)
+  rows = nrow(R)
+  columnnames = colnames(R)
+  if (is.null(main)) 
+    main = columnnames[1]
+  num = length(data)
+  if (is.null(maxlag)) 
+    maxlag = ceiling(10 + sqrt(num))
+  ACF = acf(data, maxlag, plot = FALSE)$acf[-1]
+  Lag = 1:length(ACF)/frequency(data)
+  minA = min(ACF)
+  U = 2/sqrt(num)
+  L = -U
+  minu = min(minA, L) - 0.01
+  plot(Lag, ACF, type = "h", ylim = c(minu, 0.3), main = main, 
+       axes = FALSE, ...)
+  box(col = elementcolor)
+  axis(2, col = elementcolor, cex.axis = 0.8)
+  axis(1, col = elementcolor, cex.axis = 0.8)
+  abline(h = c(0, L, U), lty = c(1, 2, 2), col = c(1, 4, 4))
+}
