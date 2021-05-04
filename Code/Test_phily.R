@@ -10,7 +10,7 @@ logret <- log_ret_27_03_21
 
 
 
-# Last Period####
+# Last Period####jkfj
 # Test: Last Month
 # Training: Last 6 Months
 data_obj <- data_function(x=logret, lags=6, in_out_sep="2021-03-01", start="2020-09-01", end="2021-03-27")

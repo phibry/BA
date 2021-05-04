@@ -151,7 +151,7 @@ lags=7
 in_out_sep="2021-02-27"
 
 #how many standart deviatons for olpd threshold
-devi=1
+devi=1.3
 #
 # decision rule of nn percentage of half  if NULL majority decision is taken
 percentage= 0.1
@@ -196,3 +196,55 @@ mean(resmat[,1])
 mean(resmat[,2])
 
 sum(resmat[,1] > resmat[,2])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+par
+
+load("data/xai/9alloverperf_olpd_ 7_7_10000_20%")
+load("data/xai/9sharpmat_ 7_7_10000_20%")
+load("data/xai/9alloverperf_nn_ 7_7_10000_20%")
+load("data/xai/9alloverperf_bh_ 7_7_10000_20%")
+
+
+plot(sharpmat[,1],type="l",main="sharpe over 9 splits",ylab= "sharpe",xlab="split nr")
+
+lines(sharpmat[,2],col="red")
+lines(sharpmat[,3],col ="blue")
+legend("topleft", inset=.02,legend= c("with xai signal","only nn signals","buy and hold"),col = c("black","red","blue"),pch = c(1,1,1))
+
+
+
+sqrt(365)*SharpeRatio(alloverperf_nn,FUN="StdDev")
+sqrt(365)*SharpeRatio(alloverperf_olpd,FUN="StdDev")
+sqrt(365)*SharpeRatio(outi,FUN="StdDev")
+
+
+
+par(mfrow=c(3,1))
+plot(cumsum(alloverperf_olpd))
+plot(cumsum(alloverperf_nn))
+plot(cumsum( outi))
+
+
+
+
+
+
+

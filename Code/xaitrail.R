@@ -4,6 +4,7 @@
 # this file is only for testing purpose, does not appear in final paper
 
 rm(list=ls())
+
 # load libraries file
 source("add/libraries.r") 
 #load functions
@@ -40,10 +41,10 @@ lags=7
 
 
 #how many standart deviatons for olpd threshold
-devi=1
+devi=1.2
 #
 # decision rule of nn percentage of half  if NULL majority decision is taken
-percentage= 0.1
+percentage= 0.3
 
 #neurons 
 neuron_vec=c(7,7)
@@ -65,6 +66,7 @@ for (batch in 1:9)
 
 #test train split
 in_out_sep=dates_mat$start_out[batch]
+
 start=dates_mat$start_in[batch]
 end=dates_mat$end_out[batch]
 
@@ -98,6 +100,14 @@ alloverperf_nn=rbind(alloverperf_nn,second$perf_nn_out)
 
 sharpmat[batch,1:3]<-as.numeric(second[1:3])
 
+
+if (batch == 9){
+  save(alloverperf_olpd, file = "data/9alloverperf_olpd_7_7_1000_30%_1-2.rda")  
+  save(alloverperf_nn, file = "data/9alloverperf_nn_7_7_1000_30%_1-2.rda")  
+  save(sharpmat, file = "data/9sharpmat_7_7_1000_30%_1-2.rda")  
+  
+}
+
 }
 
 
@@ -109,50 +119,6 @@ plot(cumsum(  log_ret_27_03_21["2020-07-01::2021-03-27"]))
 
 
 #return overall performance bh nn and olpd, matrix with sharpe of all 3 per batch, sharpe of all together
-
-save(alloverperf_olpd, file = "data/xai/alloverperf_olpd")
-
-save(alloverperf_nn, file = "data/xai/alloverperf_nn")
-
-save(sharpmat, file = "data/xai/sharpmat")
-
-save(outi, file = "data/xai/outi")
-
-outi=1
-
-second_xai_7_7_1000
-
-load("data/xai/alloverperf_nn")
-
-second_xai_7_7_1000
-
-third_xai_7_7_1000
-
-
-alloverperf_nn=3
-
-alloverperf_nn_copy=alloverperf_nn
-
-
-
-load
-
-
-
-
-
-
-
-
-
-
-
-fourth_xai_7_7_1000
-
-
-
-
-
 
 
 
