@@ -21,7 +21,7 @@ devi=1
 # decision rule of nn percentage of half  if NULL majority decision is taken
 percentage= 0.3
 #anzahl
-anz=100
+anz=1000
 #-------------------------------------------------------------------------------
 
 
@@ -37,19 +37,19 @@ load(paste("data/xai/7_7/9",sharpmat_string,".rda",sep=""))
 
 #------------------------------------------------------------------------------
 
-
+# 
 # assign("olpd_1",get(olpd_string))
 # assign("nn_1",get(nn_string))
 # assign("sharpmat_1",get(sharpmat_string))
-
+# 
 
 # assign("olpd_2",get(olpd_string))
 # assign("nn_2",get(nn_string))
 # assign("sharpmat_2",get(sharpmat_string))
 
-# assign("olpd_3",get(olpd_string))
-# assign("nn_3",get(nn_string))
-# assign("sharpmat_3",get(sharpmat_string))
+assign("olpd_3",get(olpd_string))
+assign("nn_3",get(nn_string))
+assign("sharpmat_3",get(sharpmat_string))
 
 
 

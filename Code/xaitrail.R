@@ -40,7 +40,7 @@ lags=7
 
 
 #how many standart deviatons for olpd threshold
-devi=1
+devi=1.1
 #
 # decision rule of nn percentage of half  if NULL majority decision is taken
 percentage= 0.2
@@ -50,7 +50,7 @@ neuron_vec=c(7,7)
 
 # insample or out of sample of net ai 
 use_in_samp=F# how many standart deviations considered for telling is stable or not
-anz=100
+anz=1000
 # ANZAHL REEALSIATIONEN OLPD MAT
 
 
@@ -136,7 +136,7 @@ sharpmat[batch,1:3]<-as.numeric(second[1:3])
 
 
 
-#return overall performance bh nn and olpd, matrix with sharpe of all 3 per batch, sharpe of all together
+ #return overall performance bh nn and olpd, matrix with sharpe of all 3 per batch, sharpe of all together
 
 
 
