@@ -58,7 +58,6 @@ load(paste("data/xai/7_7/9",sharpmat_string,".rda",sep=""))
 #sharperatio over all
 
 
-
 sharpe_olpd_1=sqrt(365)*SharpeRatio(olpd_1,FUN="StdDev")
 sharpe_nn_1=sqrt(365)*SharpeRatio(nn_1,FUN="StdDev")
 
@@ -68,18 +67,16 @@ sharpe_nn_2=sqrt(365)*SharpeRatio(nn_2,FUN="StdDev")
 sharpe_olpd_3=sqrt(365)*SharpeRatio(olpd_3,FUN="StdDev")
 sharpe_nn_3=sqrt(365)*SharpeRatio(nn_3,FUN="StdDev")
 
-sqrt(365)*SharpeRatio(outtarget,FUN="StdDev")
+sharpe_bh=sqrt(365)*SharpeRatio(outtarget,FUN="StdDev")
 
-
-
-
-
+#all sharpmats togheter
+allsharp=cbind(sharpmat_1[,-3],sharpmat_2[,-3],sharpmat_3[,-3])
 
 #plots####
 #-----------------------------------------------------------------------------
 
 #performance cumulated
-par(mfrow=c(2,1))
+par(mfrow=c(3,1))
 
 main=paste("Performance cumulated,  2L ,7N, ",as.character(anz)," Reps , different Majority shares")
 
@@ -91,7 +88,7 @@ colnames(compare_perf)=name
 colors= c("red","pink","blue","lightblue","black","grey","green")
   
   
-plot.xts(compare_perf,main=main,col=colors)
+#plot.xts(compare_perf,main=main,col=colors)
 addLegend("topleft", 
           legend.names=name,
           col=colors,
@@ -101,17 +98,18 @@ addLegend("topleft",
           bg="white")
 
 
-#sharperatios
+#sharpe ratios over all
+
+plot(rbind(sharpe_olpd_1,sharpe_nn_1,sharpe_olpd_2,sharpe_nn_2,sharpe_olpd_3,sharpe_nn_3,sharpe_bh),main="sharpe cumulated",xaxt="n",ylab="sharpe"
+     ,col=colors,pch=19)
+axis(1, at=1:7, labels=name)
+
+
+#sharperatios per batch
 
 main=paste("Sharpe per Batch,  2L ,7N, ",as.character(anz)," Reps , different Majority shares")
-allsharp=cbind(sharpmat_1[,-3],sharpmat_2[,-3],sharpmat_3[,-3])
-
-max(allsharp)
-
 plot(sharpmat_1[,3],type="l",col="green",xlab="batch nr",ylab= "sharpe",lwd=2,ylim=c(min(allsharp),max(allsharp)),main=main)
 for (i in 1:6){lines(allsharp[,i],col=colors[i],type="l",lwd=2)}
-
-
 
 
 
