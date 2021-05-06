@@ -10,6 +10,7 @@ source("add/libraries.r")
 #load functions
 source("add/Functions.r") 
 
+source("Code/xai_outp_fun.r")
 
 #loading data
 load("C:/Users/buehl/Desktop/PA_BA/BA/data/BTC_USD_27_03_21.rda")
@@ -101,24 +102,10 @@ alloverperf_nn <- alloverperf_nn[ ! duplicated( index(alloverperf_nn) ),  ]
 sharpmat[batch,1:3]<-as.numeric(second[1:3])
 
 
-
  if (batch == 9){
-   
-  
-   
-  olpd_string=  paste("alloverperf_olpd","anz=",as.character(anz),"decision=",as.character(percentage*100),"%","dev=",as.character(devi),sep="_")
-  nn_string=  paste("alloverperf_nn","anz=",as.character(anz),"decision=",as.character(percentage*100),"%","dev=",as.character(devi),sep="_")
-  sharpmat_string=  paste("sharpmat","anz=",as.character(anz),"decision=",as.character(percentage*100),"%","dev=",as.character(devi),sep="_")
-  
-  assign(olpd_string,alloverperf_olpd) 
-  assign(nn_string,alloverperf_nn) 
-  assign(sharpmat_string,sharpmat) 
-  
-  
-  
-  save(list=olpd_string, file = paste("data/xai/7_7/9",olpd_string,".rda",sep="") ) 
-  save(list=nn_string, file = paste("data/xai/7_7/9",nn_string,".rda",sep="") )  
-  save(list=sharpmat_string, file = paste("data/xai/7_7/9",sharpmat_string,".rda",sep=""))  
+  save(alloverperf_olpd, file = paste("data/xai/7_7/9","alloverperf_olpd","anz=",as.character(anz),"decision=",as.character(percentage*100),"%","dev=",as.character(devi),".rda",sep="_") ) 
+  save(alloverperf_nn, file = paste("data/xai/7_7/9","alloverperf_nn","anz=",as.character(anz),"decision=",as.character(percentage*100),"%","dev=",as.character(devi),".rda",sep="_") )  
+  save(sharpmat, file = paste("data/xai/7_7/9","sharpmat","anz=",as.character(anz),"decision=",as.character(percentage*100),"%","dev=",as.character(devi),".rda",sep="_") )  
    
 }
 
@@ -127,17 +114,39 @@ sharpmat[batch,1:3]<-as.numeric(second[1:3])
 
 
 
+outtarget=log_ret_27_03_21["2020-07-01::"]
+     
+nnsharpe=sqrt(365)*SharpeRatio(alloverperf_nn,FUN="StdDev")
+olpdsharpe=sqrt(365)*SharpeRatio(alloverperf_olpd,FUN="StdDev")
+bhsharpe=sqrt(365)*SharpeRatio(outtarget,FUN="StdDev")
+     
+
+x=cbind(cumsum(alloverperf_olpd),cumsum(alloverperf_nn), cumsum(outtarget))
+
+par(mfrow=c(1,1))
 
 
+plot(x,col=c("black","red","blue"))
 
 
+     
+plot(sharpmat[,1],type="l",main="Sharpe out of sample splits",ylab= "sharpe",xlab="split nr")
+lines(sharpmat[,2],col="red")
+lines(sharpmat[,3],col ="blue")
+legend("topleft",legend= c("with xai deviation signal ","only nn signals","buy and hold"),col = c("black","red","blue"),pch = c(1,1,1))
+legend("bottomleft",legend= legvec,col = c("black","red","blue"),pch = c(1,1,1))
 
+     
 
-
-
+legvec= c(    paste( "overallsharpe=",as.character(round(olpdsharpe,2)) ),paste( "overallsharpe=", as.character(round(nnsharpe,2))),paste("overallsharpe=",as.character(round(bhsharpe,2))))
+     
+     
+     
+plot(cumsum(alloverperf_olpd))
+plot(cumsum(alloverperf_nn))
+plot(cumsum( outtarget))
 
 #return overall performance bh nn and olpd, matrix with sharpe of all 3 per batch, sharpe of all together
-
 
 
 
@@ -159,7 +168,6 @@ for(k in 1:max){
 
 
 par(mfrow=c(1,1))
-
 plot(resmat[,1],col="blue",type="l")  #sharpenet olpd
 lines(resmat[,2],col="green",type="l") #sharpe net
 
@@ -170,9 +178,3 @@ mean(resmat[,1])
 mean(resmat[,2])
 
 sum(resmat[,1] > resmat[,2])
-
-
-
-
-
-plot(BTC_USD_27_03_21$`BTC-USD.Close`["2020-07-01::"])

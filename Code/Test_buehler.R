@@ -215,16 +215,12 @@ sum(resmat[,1] > resmat[,2])
 
 
 
-par
 
-load("data/xai/9alloverperf_olpd_ 7_7_10000_20%")
-load("data/xai/9sharpmat_ 7_7_10000_20%")
-load("data/xai/9alloverperf_nn_ 7_7_10000_20%")
-load("data/xai/9alloverperf_bh_ 7_7_10000_20%")
+##buy and hold
+load("data/xai/9alloverperf_bh_ 7_7_10000")
 
 
 plot(sharpmat[,1],type="l",main="sharpe over 9 splits",ylab= "sharpe",xlab="split nr")
-
 lines(sharpmat[,2],col="red")
 lines(sharpmat[,3],col ="blue")
 legend("topleft", inset=.02,legend= c("with xai signal","only nn signals","buy and hold"),col = c("black","red","blue"),pch = c(1,1,1))
@@ -237,14 +233,16 @@ sqrt(365)*SharpeRatio(outi,FUN="StdDev")
 
 
 
-par(mfrow=c(3,1))
 plot(cumsum(alloverperf_olpd))
+addSeries(cumsum(alloverperf_nn), main = "", on = NA, type = "l", col = "red", lty = 1,lwd = 1, pch = 0)
+
 plot(cumsum(alloverperf_nn))
 plot(cumsum( outi))
 
+outtarget=log_ret_27_03_21["2020-07-01::"]
 
+x=cbind(cumsum(alloverperf_nn),cumsum(alloverperf_olpd), cumsum(outtarget))
 
-
-
+plot(x,col=c("red","blue","green"))
 
 
