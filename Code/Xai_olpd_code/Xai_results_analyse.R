@@ -19,7 +19,7 @@ outtarget=log_ret_27_03_21["2020-07-01::"]
 devi=1.1
 #
 # decision rule of nn percentage of half  if NULL majority decision is taken
-percentage= 0.1
+percentage= 0.2
 #anzahl
 anz=1000
 #-------------------------------------------------------------------------------

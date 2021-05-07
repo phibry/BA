@@ -40,7 +40,7 @@ lags=7
 
 
 #how many standart deviatons for olpd threshold
-devi=1
+devi=1.1
 #
 # decision rule of nn percentage of half  if NULL majority decision is taken
 percentage= 0.3
