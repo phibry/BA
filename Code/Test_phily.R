@@ -319,15 +319,238 @@ plot(logret["2020-01-08::2021-03-27"], type="l")
 
 
 
-# GOOGLE
+
+
+
+
+# # von Wildi####
+# transform_OLPD_back_original_data_func <- function(data_xts, data_mat, OLPD_scaled_mat, lm_obj, data) {
+#   # Make xts-object (not trivial in this case because of monthly dates...)
+#   OLPD_mat <- data_xts
+#   for (i in 1:nrow(OLPD_scaled_mat))
+#     OLPD_mat[i,] <- OLPD_scaled_mat[i,]
+#   OLPD_scaled_mat <- OLPD_mat
+#   is.xts(OLPD_mat)
+#   colnames(OLPD_mat) <- c("intercept",colnames(data_xts)[2:ncol(data_xts)])
+#   
+#   # Transform back to original log-returns: the regression weights are not affected in this case because target and explanatory are scaled by the same constant: we nevertheless apply the (identity) scaling to be able to work in more general settings
+#   for (j in 2:ncol(OLPD_mat))
+#     OLPD_mat[,j] <- OLPD_scaled_mat[,j]*(max(data_mat[,1])-min(data_mat[,1]))/(max(data_mat[,j])-min(data_mat[,j]))
+#   # The intercept is affected
+#   #   -We center the intercept: variations about its mean value
+#   #   -We scale these variations: divide by scale of transformed and multiply by scale of log-returns
+#   #   -Add intercept from original regression
+#   OLPD_mat[,1] <- (OLPD_scaled_mat[,1]-mean(OLPD_scaled_mat[,1],na.rm=T))*((max(data_mat[,1])-min(data_mat[,1]))/(max(data[,1])-min(data[,1]))) +lm_obj$coefficients[1]
+#   
+#   return(list(OLPD_mat=OLPD_mat,OLPD_scaled_mat=OLPD_scaled_mat))
+# }
+# OLPD_func <- function(x, delta, epsilon, nn) {
+#   try_data_list <- try(out_original <- predict(nn,x), silent=T)
+#   
+#   if(class(try_data_list)[1]=="try-error") {
+#     data_list <- vector(mode="list")
+#     print("Neural net singular")
+#     effect <- NULL
+#     return(list(effect=effect))
+#     
+#   } else {
+#     
+#     
+#     
+#     # For each explanatory...
+#     for (i in 1:ncol(x)) {
+#       # y will be the original explanatory plus an infinitesimal perturbation of i-th explanatory
+#       y <- x
+#       y[,i]<-y[,i]+delta*x[,i]
+#       
+#       # Generate infinitesimally perturbated output
+#       out_i <-predict(nn,y)
+#       
+#       if (i==1) {
+#         effect<-(out_i-out_original)/(delta*x[,i])
+#       } else {
+#         effect<-c(effect,(out_i-out_original)/(delta*x[,i]))
+#       }
+#       # Collect for each explanatory the perturbated data and the corresponding nn-output
+# 
+#     }
+#     # Virtual intercept: output of neural net minus linear regression part
+#     virt_int <- out_original-as.double(x%*%effect)
+#     effect <- c(virt_int,effect)
+#     
+#     
+#     # Fit the regression to the noiseless perturbated data: as many observations as unknowns i.e. zero-residual
+#     return(list(effect=effect))
+#   }
+# }
+# 
+# # in_out_sample_separator="2021-05-05"; neuron_vec=c(7,7)
+# OLPDphil <- function(in_out_sample_separator,data_mat,use_in_samp=T,neuron_vec) {
+# 
+#   # Regression
+#   reg_data <- data_mat
+#   colnames(reg_data) <- paste("lag",0:(ncol(reg_data)-1),sep="")
+#   lm_obj <- lm(lag0~., data=reg_data)
+#   
+#   # Scaling data for the NN
+#   maxs <- apply(data_mat, 2, max)
+#   mins <- apply(data_mat, 2, min)
+#   
+#   # Transform data into [0,1]
+#   scaled <- scale(data_mat, center = mins, scale = maxs - mins)
+#   
+#   # Train-test split
+#   train_set_xts <- scaled[paste("/",in_out_sample_separator,sep=""),]
+#   test_set_xts <- scaled[paste(in_out_sample_separator,"/",sep=""),]
+#   
+#   # Transform to matrix
+#   train_set <- as.matrix(train_set_xts)
+#   test_set <- as.matrix(test_set_xts)
+#   
+#   # Change colnames
+#   colnames(train_set) <- paste("lag",0:(ncol(train_set)-1),sep="")
+#   
+#   n <- colnames(train_set)
+#   # Model: target is current GOOGLE, all other variables are explanatory
+#   f <- as.formula(paste("lag0 ~", paste(n[!n %in% "lag0"], collapse = " + ")))
+#   
+#   # Train neural net
+#   nn <- neuralnet(f,data=train_set,hidden=neuron_vec,linear.output=F)
+#   
+#   # Original linear parameter data
+#   #   Generate new data from original data
+#   #   New data: in each time point compute the parameters of the exact infinitesimal linear regression model
+#   # Induce infinitesimal perturbations to data and fit regression to output
+#   delta <- 1.e-5
+#   epsilon <- 1.e-4
+#   
+#   
+#   if (use_in_samp) {
+#     # Smoother (in-sample data)
+#     data <- train_set
+#     data_xts <- train_set_xts
+#   } else {
+#     # Rougher (out-sample data)
+#     data <- test_set
+#     data_xts <- test_set_xts
+#   }
+# 
+#   pb <- txtProgressBar(min = 1, max = (nrow(data)-1), style = 3)
+#   for (i in 1:(nrow(data))) {
+#     x <- matrix(data[i,2:ncol(data)], nrow=1)
+#     colnames(x) <- colnames(data)[2:ncol(data)]
+#     
+#     # Wie OLPD-func
+#     OLPD_scaled_obj <- OLPD_func(x, delta, epsilon, nn)
+# 
+#     if (i==1) {
+#       OLPD_scaled_mat <- OLPD_scaled_obj$effect
+#     } else {
+#       OLPD_scaled_mat <- rbind(OLPD_scaled_mat,OLPD_scaled_obj$effect)
+#     }
+#     setTxtProgressBar(pb, i)
+# 
+#   }
+#   close(pb)
+# 
+#   # Transform data back to its original form
+#   OLPD_mat_obj <- transform_OLPD_back_original_data_func(data_xts, data_mat, OLPD_scaled_mat, lm_obj, data)
+# 
+#   OLPD_mat <- OLPD_mat_obj$OLPD_mat
+#   
+#   index(OLPD_mat) <- index(data_xts)
+#   colnames(OLPD_mat)[1] <- "(Intercept)"
+#   colnames(OLPD_mat)[2:ncol(OLPD_mat)] <- paste("lag",1:(ncol(train_set)-1),sep="")
+#   
+# 
+#   return(list(OLPD_mat=OLPD_mat, lm_obj=lm_obj))
+# }
+
+
+
+
+# XAI-GOOGLE####
 getSymbols("GOOGL")
 tail(GOOGL)
+save(GOOGL, file = "data/GOOGL.rda")
+save("google_dat.Rdat")
 g.adj <- GOOGL[,6]
 par(mfrow=c(1,1))
 plot(g.adj, main="Adjusted Prices ~ Google")
+logi_googi <- diff(log(g.adj))
+chart.ACF.phil(logi_googi)
+chart.ACFplus.phil(logi_googi, ymax=0.1, main="GOOGLE price dependency structure")
 
-chart.ACF.phil(diff(log(g.adj)))
+par(mfrow=c(1,1))
+chart.ACF.phil(logi_googi, ymax=0.1)
+# lag1, 6, 7, 12
 
+## Data Prep####
 par(mfrow=c(2,1))
 plot(diff(log(g.adj)), main="Google")
-plot(logret, main="Google")
+plot(g.adj, main="Google")
+x <- ret <- na.omit(diff(log(g.adj)))
+x_level <- log(g.adj)
+
+data_mat <- cbind(x,
+                  lag(x),
+                  lag(x,k=2),
+                  lag(x,k=3),
+                  lag(x,k=4),
+                  lag(x,k=5),
+                  lag(x,k=6),
+                  lag(x,k=7),
+                  lag(x,k=8),
+                  lag(x,k=9),
+                  lag(x,k=10),
+                  lag(x,k=11),
+                  lag(x,k=12))
+
+# Check length of time series before na.exclude
+dim(data_mat)
+data_mat <- na.exclude(data_mat)
+# Check length of time series after removal of NAs
+dim(data_mat)
+head(data_mat)
+tail(data_mat)
+
+
+# Test
+test2 <- OLPDphil("2021-05-05", data_mat, use_in_samp=TRUE, c(7,7))
+
+
+par(mfrow=c(1,1))
+colorino <- c("#003f5c", "#2f4b7c", "#520065", "#860064", "#a05195", "#665191", "#f95d6a", "#d45087", "#ff7c43", "#d6204f", "#ef4e3d", "#ffa600")
+plot(test2$OLPD_mat, main="XAI~Google", col=colorino)
+for (i in 1:ncol(test2$OLPD_mat))
+  mtext(colnames(test2$OLPD_mat)[i], col=colorino[i], line=-i)
+
+
+par(mfrow=c(1,1))
+select_acf <- test2$OLPD_mat[, c(2, 7, 8, 13)]
+plot(select_acf, main="XAI ~ Google", col=rainbow(ncol(select_acf)))
+for (i in 1:ncol(select_acf))
+  mtext(colnames(select_acf)[i], col=rainbow(ncol(select_acf))[i], line=-i)
+
+couldbe_1 <- test2
+# save(couldbe_1, file = "data/couldbe_1.rda")
+load("data/couldbe_1.rda")
+
+test2 <- couldbe_1
+
+options(scipen = 999)
+coef(test2$lm_obj)
+apply(na.omit(test2$OLPD_mat), 2, mean)
+coef(test2$lm_obj)[c(2, 7, 8, 13)]
+apply(na.omit(test2$OLPD_mat), 2, mean)[c(2, 7, 8, 13)]
+options(scipen = 0)
+
+
+par(mfrow=c(2,1))
+# colors = c("#003f5c", "#665191", "#f95d6a", "#ffa600")
+colors <- colorino[c(1, 6, 7, 12)]
+select_acf <- test2$OLPD_mat[, c(2, 7, 8, 13)]
+plot(select_acf, main="XAI~Google", col=colors)
+for (i in 1:ncol(select_acf))
+  mtext(colnames(select_acf)[i], col=colors[i], line=-i)
+plot(logi_googi, main="Adjusted log(Prices) ~ Google")

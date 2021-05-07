@@ -338,9 +338,9 @@ First, it is emphasized that in a decentralized monetary system, the newly issue
 
 ### 2.4. Explainable artificial intelligence {#xai}
 
-Depending on the model architecture, a neural network can be a very complex construct. A number of weights and biases linked to the neurons lead to an output of the network through training. Understanding how exactly the alterations of the weights and biases lead to this output is a rather complex task. Due to this difficulty in interpretation, neural networks are often referred to as black boxes.
+Depending on the model architecture, a neural network can be a very complex construct. A number of weights and biases linked to the neurons lead to an output of the network through training. Understanding how exactly the alterations of the weights and biases lead to this output is a rather complex task. Due to this difficulty in interpretation, neural networks are often referred to as black boxes [@blackbox].
 
-Although the networks may lead to desired results, it can be important to build an understanding of these models. Suppose one is developing a classification method in supervised learning for a particular problem. A classical approach such as linear regression is easy to understand and one can convince people with little knowledge of mathematics of the usefulness of this method. Consider that a good and simple explanation may depend on investment. Would an investor invest in something that is not understood and difficult to get a grasp of? Neural networks with their non-linearity and a large number of parameters does not make it easy for the user to convince an investor of the benefits of a neural network.
+Although the networks may lead to desired results, it can be important to build an understanding of these models. Suppose we are developing a classification method in supervised learning for a particular problem. A classical approach such as linear regression is easy to understand and we can convince people with little knowledge of mathematics of the usefulness of this method. Consider that a good and simple explanation may depend on investment. Would an investor invest in something that is not understood and difficult to get a grasp of? Neural networks with their non-linearity and the large number of parameters does not make it easy for the user to convince an investor of the benefits of a neural network.
 
 #### 2.4.1. Classic Approach
 &nbsp;
@@ -353,5 +353,9 @@ An approach like ALE (Accumulated Local Effects) examines how the network reacts
 
 Another approach is the LIME (Local Interpretable Model-agnostic Explanations). This method examines the change of the forecast when changing the input data. A permuted data set is generated from the given data (for example, adding standardized noise). Using this artificially altered data set, an interpretable model (regression) is created to analyze the change in features [@xai_blackbox]. Changing the data affects the time dependence of the data. Thus, this method is also unusable for our application.
 
-#### 2.4.2. Explainability for Time Series
+#### 2.4.2. Explainability for Financial Time Series
 &nbsp;
+
+For the interpretation of financial time series, we would like to keep the dependency structure. The changes in trend or variability should be maintained. The sequence should not be shuffled. When mixing up the order, a value from far back could suddenly play a bigger role for the model than a current one. Intuitively, this would not add any value to financial time series.
+
+

@@ -1544,6 +1544,86 @@ transform_OLPD_back_original_data_func<-function(data_xts,data_mat,OLPD_scaled_m
   
   return(list(OLPD_mat=OLPD_mat,OLPD_scaled_mat=OLPD_scaled_mat))
 }
+OLPDphil <- function(in_out_sample_separator,data_mat,use_in_samp=T,neuron_vec) {
+  
+  # Regression
+  reg_data <- data_mat
+  colnames(reg_data) <- paste("lag",0:(ncol(reg_data)-1),sep="")
+  lm_obj <- lm(lag0~., data=reg_data)
+  
+  # Scaling data for the NN
+  maxs <- apply(data_mat, 2, max)
+  mins <- apply(data_mat, 2, min)
+  
+  # Transform data into [0,1]
+  scaled <- scale(data_mat, center = mins, scale = maxs - mins)
+  
+  # Train-test split
+  train_set_xts <- scaled[paste("/",in_out_sample_separator,sep=""),]
+  test_set_xts <- scaled[paste(in_out_sample_separator,"/",sep=""),]
+  
+  # Transform to matrix
+  train_set <- as.matrix(train_set_xts)
+  test_set <- as.matrix(test_set_xts)
+  
+  # Change colnames
+  colnames(train_set) <- paste("lag",0:(ncol(train_set)-1),sep="")
+  
+  n <- colnames(train_set)
+  # Model: target is current GOOGLE, all other variables are explanatory
+  f <- as.formula(paste("lag0 ~", paste(n[!n %in% "lag0"], collapse = " + ")))
+  
+  # Train neural net
+  nn <- neuralnet(f,data=train_set,hidden=neuron_vec,linear.output=F)
+  
+  # Original linear parameter data
+  #   Generate new data from original data
+  #   New data: in each time point compute the parameters of the exact infinitesimal linear regression model
+  # Induce infinitesimal perturbations to data and fit regression to output
+  delta <- 1.e-5
+  epsilon <- 1.e-4
+  
+  
+  if (use_in_samp) {
+    # Smoother (in-sample data)
+    data <- train_set
+    data_xts <- train_set_xts
+  } else {
+    # Rougher (out-sample data)
+    data <- test_set
+    data_xts <- test_set_xts
+  }
+  
+  pb <- txtProgressBar(min = 1, max = (nrow(data)-1), style = 3)
+  for (i in 1:(nrow(data))) {
+    x <- matrix(data[i,2:ncol(data)], nrow=1)
+    colnames(x) <- colnames(data)[2:ncol(data)]
+    
+    # Wie OLPD-func
+    OLPD_scaled_obj <- OLPD_func(x, delta, epsilon, nn)
+    
+    if (i==1) {
+      OLPD_scaled_mat <- OLPD_scaled_obj$effect
+    } else {
+      OLPD_scaled_mat <- rbind(OLPD_scaled_mat,OLPD_scaled_obj$effect)
+    }
+    setTxtProgressBar(pb, i)
+    
+  }
+  close(pb)
+  
+  # Transform data back to its original form
+  OLPD_mat_obj <- transform_OLPD_back_original_data_func(data_xts, data_mat, OLPD_scaled_mat, lm_obj, data)
+  
+  OLPD_mat <- OLPD_mat_obj$OLPD_mat
+  
+  index(OLPD_mat) <- index(data_xts)
+  colnames(OLPD_mat)[1] <- "(Intercept)"
+  colnames(OLPD_mat)[2:ncol(OLPD_mat)] <- paste("lag",1:(ncol(train_set)-1),sep="")
+  
+  
+  return(list(OLPD_mat=OLPD_mat, lm_obj=lm_obj))
+}
 #.####
 
 
@@ -1637,7 +1717,7 @@ plot_mse_mean_mean <- function(mse_in, mse_out, title="",scale_fac=3) {
 
 
 # ACF####
-chart.ACF.phil <- function (R, maxlag = NULL, elementcolor = "gray", main = NULL, 
+chart.ACF.phil <- function (R, maxlag = NULL, elementcolor = "gray", main = NULL, ymax = 0.3,
                             ...) 
 {
   R = checkData(R)
@@ -1656,10 +1736,50 @@ chart.ACF.phil <- function (R, maxlag = NULL, elementcolor = "gray", main = NULL
   U = 2/sqrt(num)
   L = -U
   minu = min(minA, L) - 0.01
-  plot(Lag, ACF, type = "h", ylim = c(minu, 0.3), main = main, 
+  plot(Lag, ACF, type = "h", ylim = c(minu, ymax), main = main, 
        axes = FALSE, ...)
   box(col = elementcolor)
   axis(2, col = elementcolor, cex.axis = 0.8)
   axis(1, col = elementcolor, cex.axis = 0.8)
   abline(h = c(0, L, U), lty = c(1, 2, 2), col = c(1, 4, 4))
 }
+
+chart.ACFplus.phil <- function (R, maxlag = NULL, elementcolor = "gray", main = NULL, ymax = 1,
+                                ...) 
+{
+  R = checkData(R)
+  data = checkData(R[, 1, drop = FALSE], rm.na = TRUE, method = "vector")
+  columns = ncol(R)
+  rows = nrow(R)
+  columnnames = colnames(R)
+  if (is.null(main)) 
+    main = columnnames[1]
+  num = length(data)
+  if (is.null(maxlag)) 
+    maxlag = ceiling(10 + sqrt(num))
+  ACF = acf(data, maxlag, plot = FALSE)$acf[-1]
+  PACF = t(as.matrix(pacf(data, maxlag, plot = FALSE)$acf))
+  Lag = 1:length(ACF)/frequency(data)
+  minA = min(ACF)
+  minP = min(PACF)
+  U = 2/sqrt(num)
+  L = -U
+  minu = min(minA, minP, L) - 0.01
+  op <- par(no.readonly = TRUE)
+  layout(rbind(1, 2))
+  par(mar = c(0.5, 4, 4, 2) + 0.1)
+  barplot(ACF, ylim = c(minu, ymax), main = main, axes = FALSE, 
+          ylab = "ACF", ...)
+  box(col = elementcolor)
+  axis(2, col = elementcolor, cex.axis = 0.8)
+  abline(h = c(0, L, U), lty = c(1, 2, 2), col = c(1, 4, 4))
+  par(mar = c(4, 4, 0.5, 2) + 0.1)
+  barplot(PACF, ylim = c(minu, ymax), axes = FALSE, ylab = "PACF", 
+          ...)
+  box(col = elementcolor)
+  axis(1, col = elementcolor, cex.axis = 0.8, xlab = "lag")
+  axis(2, col = elementcolor, cex.axis = 0.8)
+  abline(h = c(0, L, U), lty = c(1, 2, 2), col = c(1, 4, 4))
+  par(op)
+}
+
