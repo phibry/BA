@@ -22,9 +22,23 @@ split2 <- logret["2020-02-01::2020-08-31"]
 split2_in <- split2["2020-02-01::2020-07-31"]
 split2_out <- split2["2020-08-01::2020-08-31"]
 
+<<<<<<< HEAD
+# Last Period####jkfj
+# Test: Last Month
+# Training: Last 6 Months
+data_obj <- data_function(x=logret, lags=6, in_out_sep="2021-03-01", start="2020-09-01", end="2021-03-27")
+nn_7_7_50_last <- nn_nl_comb_sharpe_mse(maxneuron=7,
+                                    maxlayer=7,
+                                    real=50,
+                                    data_obj=data_obj)
+# Don't do that
+# 960799 nets * 50 Iterations = 48039950
+# 9.2h Computation for 16482 of 960799 (2%)
+=======
 split3 <- logret["2020-03-01::2020-09-30"]
 split3_in <- split3["2020-03-01::2020-08-31"]
 split3_out <- split3["2020-09-01::2020-09-30"]
+>>>>>>> main
 
 split4 <- logret["2020-04-01::2020-10-31"]
 split4_in <- split4["2020-04-01::2020-09-30"]
