@@ -16,10 +16,10 @@ outtarget=log_ret_27_03_21["2020-07-01::"]
 
 
 #how many standart deviatons for olpd threshold
-devi=1.1
+devi=1
 #
 # decision rule of nn percentage of half  if NULL majority decision is taken
-percentage= 0.2
+percentage= 0.3
 #anzahl
 anz=1000
 #-------------------------------------------------------------------------------
@@ -30,9 +30,9 @@ nn_string=  paste("alloverperf_nn","anz=",as.character(anz),"decision=",as.chara
 sharpmat_string=  paste("sharpmat","anz=",as.character(anz),"decision=",as.character(percentage*100),"%","dev=",as.character(devi),sep="_")
 
 
-load(paste("data/xai/7_7/9",olpd_string,".rda",sep=""))
-load(paste("data/xai/7_7/9",nn_string,".rda",sep=""))
-load(paste("data/xai/7_7/9",sharpmat_string,".rda",sep=""))
+load(paste("data/xai/3_2/9",olpd_string,".rda",sep=""))
+load(paste("data/xai/3_2/9",nn_string,".rda",sep=""))
+load(paste("data/xai/3_2/9",sharpmat_string,".rda",sep=""))
 
 
 #------------------------------------------------------------------------------

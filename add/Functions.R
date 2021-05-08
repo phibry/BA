@@ -1545,128 +1545,8 @@ transform_OLPD_back_original_data_func<-function(data_xts,data_mat,OLPD_scaled_m
   
   return(list(OLPD_mat=OLPD_mat,OLPD_scaled_mat=OLPD_scaled_mat))
 }
-#.####
 
-
-# Mean of Mean####
-plot_mse_mean_mean <- function(mse_in, mse_out, title="",scale_fac=3) {
-  mse_in <- mean_mean_in
-  mse_out <- mean_mean_out
-  # Layer Breakpoints
-  str_splitter <- function(x) {
-    return(length(as.numeric(unlist(strsplit(x, ", ")))))
-  }
-  layers <- sapply(X=names(mse_in), FUN=str_splitter, USE.NAMES=FALSE)
-  layers <- as.numeric(table(layers))
-  layers <- cumsum(layers)
-  # Only the first two
-  
-  # Plots mit Rect
-  par_default <- par(no.readonly = TRUE)
-  par(mfrow=c(2,1), mar=c(3,5,3,2))
-  ## In-Sample
-  # color indizes for plots
-  
-  # color codes for the rect
-  colorcodes <- c("#FF00001A", # red
-                  "#0000FF1A", # blue
-                  "#80FF001A", # green
-                  "#FF80001A", # orange
-                  "#00FFFF1A", # teal
-                  "#8000FF1A") # purple
-  # MSE in
-  plot(mse_in,
-       main=paste(title, ": In-Sample", sep=""),
-       type="l",
-       ylim=c(min(mse_in) ,max(mse_in)),
-       xlim=c(1, length(mse_in)),
-       col="#303030",
-       ylab="MSE",
-       frame.plot = FALSE,
-       xaxt="n",
-       xlab="")
-  
-  
-  startl <- c(1, head(layers, -1)+1)
-  endl <- layers
-  for (i in 1:length(layers)) {
-    rect(xleft = startl[i],
-         xright = endl[i],
-         # ybottom = min(mse_in),
-         # ytop = max(mse_in),
-         ybottom=par('usr')[3],
-         ytop=par('usr')[4],
-         col=colorcodes[i],
-         lty=3)
-    ydistance <- par('usr')[4] - par('usr')[3]
-    textlocation <- par('usr')[3] + (ydistance * 0.1)
-    text(startl[i]+(endl[i]-startl[i])/2, textlocation , i)
-  }
-  
-  # MSE out
-  plot(mse_out,
-       main=paste(title, ": Out-of-Sample", sep=""),
-       type="l",
-       ylim=c(min(mse_out) ,min(mse_out)*scale_fac),
-       xlim=c(1, length(mse_out)),
-       col="#303030",
-       ylab="MSE",
-       frame.plot = FALSE,
-       xaxt="n",
-       xlab="")
-  
-  
-  startl <- c(1, head(layers, -1)+1)
-  endl <- layers
-  for (i in 1:length(layers)) {
-    rect(xleft = startl[i],
-         xright = endl[i],
-         # ybottom = min(mse_out),
-         # ytop = max(mse_out),
-         ybottom=par('usr')[3],
-         ytop=par('usr')[4],
-         col=colorcodes[i],
-         lty=3)
-    ydistance <- par('usr')[4] - par('usr')[3]
-    textlocation <- par('usr')[3] + (ydistance * 0.9)
-    text(startl[i]+(endl[i]-startl[i])/2, textlocation , i)
-  }
-  
-  par(par_default)
-}
-
-
-
-# ACF####
-chart.ACF.phil <- function (R, maxlag = NULL, elementcolor = "gray", main = NULL, 
-                            ...) 
-{
-  R = checkData(R)
-  data = checkData(R[, 1], method = "vector", na.rm = TRUE)
-  columns = ncol(R)
-  rows = nrow(R)
-  columnnames = colnames(R)
-  if (is.null(main)) 
-    main = columnnames[1]
-  num = length(data)
-  if (is.null(maxlag)) 
-    maxlag = ceiling(10 + sqrt(num))
-  ACF = acf(data, maxlag, plot = FALSE)$acf[-1]
-  Lag = 1:length(ACF)/frequency(data)
-  minA = min(ACF)
-  U = 2/sqrt(num)
-  L = -U
-  minu = min(minA, L) - 0.01
-  plot(Lag, ACF, type = "h", ylim = c(minu, 0.3), main = main, 
-       axes = FALSE, ...)
-  box(col = elementcolor)
-  axis(2, col = elementcolor, cex.axis = 0.8)
-  axis(1, col = elementcolor, cex.axis = 0.8)
-  abline(h = c(0, L, U), lty = c(1, 2, 2), col = c(1, 4, 4))
-}
-
-
-xai_outp<-function(x,lags,in_out_sep,neuron_vec,use_in_samp=F,anz=1000,percentage=NULL,devi=1,plot=F,outtarget)
+xai_outp<-function(x,lags,in_out_sep,neuron_vec,use_in_samp=F,anz=1000,percentage=NULL,devi=1,plot=F,outtarget,use_between=F,lower=2,upper=3)
 {
   data_function(x, lags, in_out_sep, autoassign = T)
   
@@ -1791,8 +1671,8 @@ xai_outp<-function(x,lags,in_out_sep,neuron_vec,use_in_samp=F,anz=1000,percentag
   sum_explana=as.xts(apply(deviatmat,1,sum))
   signal_olpd<-sum_explana
   signal_olpd[]=1
-  signal_olpd[which(sum_explana>=2 & sum_explana < 3 )]<- 0.5
-  signal_olpd[which(sum_explana >= 3 )]<-0
+  signal_olpd[which(sum_explana>=lower & sum_explana < upper )]<- 0.5
+  signal_olpd[which(sum_explana >= upper )]<-0
   
   
   sum(signal_out==sign(target_out))/length(signal_out) # out of sample accuracy
@@ -1800,7 +1680,13 @@ xai_outp<-function(x,lags,in_out_sep,neuron_vec,use_in_samp=F,anz=1000,percentag
   
   
   
-  signal_nn_and_olpd=signal_out;signal_nn_and_olpd[which(signal_olpd==0)]<-0;#signal_nn_and_olpd[which(signal_olpd==0.5)]<-0.5
+  signal_nn_and_olpd=signal_out
+  
+  signal_nn_and_olpd[which(signal_olpd==0)]<-0
+  if(use_between){ signal_nn_and_olpd[which(signal_olpd==0.5)]<-0.5}
+  
+  
+  
   perf_nn_out_with_olpd=signal_nn_and_olpd*target_out
   
   
@@ -1842,8 +1728,132 @@ xai_outp<-function(x,lags,in_out_sep,neuron_vec,use_in_samp=F,anz=1000,percentag
     plot(cumsum(perf_nn_out_with_olpd),main=paste("Net Olpd, sharpe:",as.character(sharpe_net_olpd)))
   }
   
-  return(list(sharpe_net_olpd=sharpe_net_olpd,sharpe_net=sharpe_net,sharpe_bh=sharpe_bh,perf_nn_out_with_olpd=perf_nn_out_with_olpd,perf_nn_out=perf_nn_out)) 
+  return(list(sharpe_net_olpd=sharpe_net_olpd,sharpe_net=sharpe_net,sharpe_bh=sharpe_bh
+              ,perf_nn_out_with_olpd=perf_nn_out_with_olpd,perf_nn_out=perf_nn_out,signal_out=signal_out,signal_olpd=signal_olpd)) 
   
+}
+
+
+
+
+#.####
+
+
+# Mean of Mean####
+plot_mse_mean_mean <- function(mse_in, mse_out, title="",scale_fac=3) {
+  mse_in <- mean_mean_in
+  mse_out <- mean_mean_out
+  # Layer Breakpoints
+  str_splitter <- function(x) {
+    return(length(as.numeric(unlist(strsplit(x, ", ")))))
+  }
+  layers <- sapply(X=names(mse_in), FUN=str_splitter, USE.NAMES=FALSE)
+  layers <- as.numeric(table(layers))
+  layers <- cumsum(layers)
+  # Only the first two
+  
+  # Plots mit Rect
+  par_default <- par(no.readonly = TRUE)
+  par(mfrow=c(2,1), mar=c(3,5,3,2))
+  ## In-Sample
+  # color indizes for plots
+  
+  # color codes for the rect
+  colorcodes <- c("#FF00001A", # red
+                  "#0000FF1A", # blue
+                  "#80FF001A", # green
+                  "#FF80001A", # orange
+                  "#00FFFF1A", # teal
+                  "#8000FF1A") # purple
+  # MSE in
+  plot(mse_in,
+       main=paste(title, ": In-Sample", sep=""),
+       type="l",
+       ylim=c(min(mse_in) ,max(mse_in)),
+       xlim=c(1, length(mse_in)),
+       col="#303030",
+       ylab="MSE",
+       frame.plot = FALSE,
+       xaxt="n",
+       xlab="")
+  
+  
+  startl <- c(1, head(layers, -1)+1)
+  endl <- layers
+  for (i in 1:length(layers)) {
+    rect(xleft = startl[i],
+         xright = endl[i],
+         # ybottom = min(mse_in),
+         # ytop = max(mse_in),
+         ybottom=par('usr')[3],
+         ytop=par('usr')[4],
+         col=colorcodes[i],
+         lty=3)
+    ydistance <- par('usr')[4] - par('usr')[3]
+    textlocation <- par('usr')[3] + (ydistance * 0.1)
+    text(startl[i]+(endl[i]-startl[i])/2, textlocation , i)
+  }
+  
+  # MSE out
+  plot(mse_out,
+       main=paste(title, ": Out-of-Sample", sep=""),
+       type="l",
+       ylim=c(min(mse_out) ,min(mse_out)*scale_fac),
+       xlim=c(1, length(mse_out)),
+       col="#303030",
+       ylab="MSE",
+       frame.plot = FALSE,
+       xaxt="n",
+       xlab="")
+  
+  
+  startl <- c(1, head(layers, -1)+1)
+  endl <- layers
+  for (i in 1:length(layers)) {
+    rect(xleft = startl[i],
+         xright = endl[i],
+         # ybottom = min(mse_out),
+         # ytop = max(mse_out),
+         ybottom=par('usr')[3],
+         ytop=par('usr')[4],
+         col=colorcodes[i],
+         lty=3)
+    ydistance <- par('usr')[4] - par('usr')[3]
+    textlocation <- par('usr')[3] + (ydistance * 0.9)
+    text(startl[i]+(endl[i]-startl[i])/2, textlocation , i)
+  }
+  
+  par(par_default)
+}
+
+
+
+# ACF####
+chart.ACF.phil <- function (R, maxlag = NULL, elementcolor = "gray", main = NULL, 
+                            ...) 
+{
+  R = checkData(R)
+  data = checkData(R[, 1], method = "vector", na.rm = TRUE)
+  columns = ncol(R)
+  rows = nrow(R)
+  columnnames = colnames(R)
+  if (is.null(main)) 
+    main = columnnames[1]
+  num = length(data)
+  if (is.null(maxlag)) 
+    maxlag = ceiling(10 + sqrt(num))
+  ACF = acf(data, maxlag, plot = FALSE)$acf[-1]
+  Lag = 1:length(ACF)/frequency(data)
+  minA = min(ACF)
+  U = 2/sqrt(num)
+  L = -U
+  minu = min(minA, L) - 0.01
+  plot(Lag, ACF, type = "h", ylim = c(minu, 0.3), main = main, 
+       axes = FALSE, ...)
+  box(col = elementcolor)
+  axis(2, col = elementcolor, cex.axis = 0.8)
+  axis(1, col = elementcolor, cex.axis = 0.8)
+  abline(h = c(0, L, U), lty = c(1, 2, 2), col = c(1, 4, 4))
 }
 
 
