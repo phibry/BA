@@ -1636,10 +1636,10 @@ xai_outp<-function(x,lags,in_out_sep,neuron_vec,use_in_samp=F,anz=1000,percentag
   # neuralnet signals
   
   #signum of the most votet 50% negative + 50 % positive get a zero , >50% negative & <50%positive get a -1  
-  
+ 
   signal_in=sign(startsignal_in)
   signal_out=sign(startsignal_out)
-  
+  majority=signal_out # return all signals from nets
   #other rule 2  
   if( !is.null(percentage)){
     signal_in[which(abs(startsignal_in)<=percentage*anz)]<-0
@@ -1729,7 +1729,7 @@ xai_outp<-function(x,lags,in_out_sep,neuron_vec,use_in_samp=F,anz=1000,percentag
   }
   
   return(list(sharpe_net_olpd=sharpe_net_olpd,sharpe_net=sharpe_net,sharpe_bh=sharpe_bh
-              ,perf_nn_out_with_olpd=perf_nn_out_with_olpd,perf_nn_out=perf_nn_out,signal_out=signal_out,signal_olpd=signal_olpd)) 
+              ,perf_nn_out_with_olpd=perf_nn_out_with_olpd,perf_nn_out=perf_nn_out,signal_out=signal_out,signal_olpd=signal_olpd,majority=majority)) 
   
 }
 

@@ -50,7 +50,7 @@ neuron_vec=c(7,7)
 
 # insample or out of sample of net ai 
 use_in_samp=F# how many standart deviations considered for telling is stable or not
-anz=10
+anz=1000
 # ANZAHL REEALSIATIONEN OLPD MAT
 
 save_separate=F
@@ -98,7 +98,7 @@ for (batch in 1:9)
   
   #alloverperformnace olpd
   alloverperf_olpd=rbind(alloverperf_olpd,second$perf_nn_out_with_olpd)
-  ### duplikate enterfenen braucht es aber nicht mehr #alloverperf_olpd <- alloverperf_olpd[ ! duplicated( index(alloverperf_olpd) ),  ]
+  ### removing of duplicate not reewuired anymore  #alloverperf_olpd <- alloverperf_olpd[ ! duplicated( index(alloverperf_olpd) ),  ]
   #alloverperformance net
   alloverperf_nn=rbind(alloverperf_nn,second$perf_nn_out)
   #alloverperf_nn <- alloverperf_nn[ ! duplicated( index(alloverperf_nn) ),  ]
@@ -119,8 +119,8 @@ for (batch in 1:9)
     olpd_string=  paste("alloverperf_olpd","anz=",as.character(anz),"decision=",as.character(percentage*100),"%","dev=",as.character(devi),sep="_")
     nn_string=  paste("alloverperf_nn","anz=",as.character(anz),"decision=",as.character(percentage*100),"%","dev=",as.character(devi),sep="_")
     sharpmat_string=  paste("sharpmat","anz=",as.character(anz),"decision=",as.character(percentage*100),"%","dev=",as.character(devi),sep="_")
-    olpd_signal_string=  paste("nn_signal","anz=",as.character(anz),"decision=",as.character(percentage*100),"%","dev=",as.character(devi),sep="_")
-    nn_signal_string=  paste("olpd_signal","anz=",as.character(anz),"decision=",as.character(percentage*100),"%","dev=",as.character(devi),sep="_")
+    olpd_signal_string=  paste("olpd_signal","anz=",as.character(anz),"decision=",as.character(percentage*100),"%","dev=",as.character(devi),sep="_")
+    nn_signal_string=  paste("nn_signal","anz=",as.character(anz),"decision=",as.character(percentage*100),"%","dev=",as.character(devi),sep="_")
     
     
     
