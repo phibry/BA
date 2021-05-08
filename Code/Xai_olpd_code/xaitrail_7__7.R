@@ -12,8 +12,8 @@ source("add/Functions.r")
 
 
 #loading data
-load("C:/Users/buehl/Desktop/PA_BA/BA/data/BTC_USD_27_03_21.rda")
-load("C:/Users/buehl/Desktop/PA_BA/BA/data/log_ret_27_03_21.rda")
+load("data/BTC_USD_27_03_21.rda")
+load("data/log_ret_27_03_21.rda")
 
 
 
@@ -40,7 +40,7 @@ lags=7
 
 
 #how many standart deviatons for olpd threshold
-devi=1.1
+devi=2
 #
 # decision rule of nn percentage of half  if NULL majority decision is taken
 percentage= 0.2
@@ -50,7 +50,7 @@ neuron_vec=c(7,7)
 
 # insample or out of sample of net ai 
 use_in_samp=F# how many standart deviations considered for telling is stable or not
-anz=1000
+anz=10
 # ANZAHL REEALSIATIONEN OLPD MAT
 
 
