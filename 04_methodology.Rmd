@@ -227,9 +227,11 @@ of nets
 
 
 
-In chapter we ve decide to fix an architecure 7 7.
+In chapter we ve decided to fix an architecure 7 7.
 
 estimate 1000 nets and interpret their decisions
+
+
 
 
 
@@ -262,13 +264,65 @@ Since we've wanted a clear decision of those thousand nets a rule is implied for
 majority decision
 
 
-$N\_{total}$ = Total Number of nets
-
+$N_{total}$ = Total Number of nets
+$percentage$ = ratio of majority decision 
 $
+
 
 ##### lpd 
 
 ##### lpd decision
+
+
+```{=tex}
+\begin{align} \label{eq:sdY}
+sdY=\sqrt{  \frac{1}{n_{in}}  \sum_{t=1}^{n_{in}}(Y_{t}-\hat{Y})^{2} }
+\end{align}
+```
+
+```{=tex}
+\begin{align} \label{eq:Yhat}
+\hat{Y}=\sum_{t=1}^{n_{in}}Y_{t}
+\end{align}
+```
+
+
+
+```{=tex}
+\begin{align} \label{eq:count}
+\text{g(x)}=\sum_{j=1}^{lag_{n}}x_{j}<\hat{Y}_{j}+sdY_{j}
+\end{align}
+```
+
+
+```{=tex}
+
+ \label{eq:net_decision}
+
+\[ l(x_{t}) =
+  \begin{cases}
+  
+  0.5    & \quad \text{if }  g(x), 2 <= 3    \\                                                                                
+  0      & \quad \text{if }  g(x) > 3  \\
+  1      & \quad \text{else}
+
+    
+  \end{cases}
+\]
+
+
+
+
+```
+
+
+$Y_{t}$ = insample lpd
+
+$X_{t}$ = outsample derivative
+
+$lag_{j}$ = which lag is important
+
+$lag_{n}$ = maximum number of lags
 
 
 
