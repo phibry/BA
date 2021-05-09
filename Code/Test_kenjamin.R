@@ -197,6 +197,14 @@ GARCH_vola <- mod@forecast$density
 
 # Load data
 
+# saving garch volas for the 9 split out of sample from 1.7.20- end
+# garch_out_signal=as.xts(GARCH_vola)$Trading_signal["2020-07-01::"]
+# save(garch_out_signal, file = "data/GARCH_vola_predictions/garch_out_signal.rda")
+# 
+
+
+
+
 load("data/GARCH_vola_predictions/GARCH_vola_predictions.rda")
 
 # Check trading performance
