@@ -219,8 +219,125 @@ knitr::include_graphics("images/GARCH/garch_trading.png")
 Figure \ref{fig:garch_trading} shows the trading performance based solely on the GARCH strategy described in this section. The horizontal performance lines indicate that the algorithm preferred a 100% allocation to cash during these phases. This effect is particularly strong in March 2020, most likely due to the uncertainty caused by the pandemic at that time. At the same time, the Covid-19 pandemic triggered a short-term bear market in global equity markets. Overall, the performance looks promising, yet resembles a buy-and-hold strategy due to the few trading signals generated. 
 
 \newpage
+#### 3.3.4 Trading the strategy
+##### nn
 
-#### 3.3.3. Kapitel: Resultat nicht wie erhofft
+elaborate convergence
+of nets
+
+
+
+In chapter we ve decided to fix an architecure 7 7.
+
+estimate 1000 nets and interpret their decisions
+
+
+
+
+
+##### nn 
+Since we've wanted a clear decision of those thousand nets a rule is implied for majority decision
+
+
+
+```{=tex}
+
+ \label{eq:net_decision}
+
+\[ f(prediction_{i},percentage) =
+  \begin{cases}
+  
+  0      & \quad \text{if } \frac{1}{N_{total}}  \sum_{j=1}^{N_{total}}\text{prediction}_{i,j} < \text{percentage} \\
+  signum(\sum_{j=1}^{N_{total}}\text{prediction}_{i,j})    & \quad \text{else}
+  
+
+    
+  \end{cases}
+\]
+
+
+
+
+```
+
+
+majority decision
+
+
+$N_{total}$ = Total Number of nets
+$percentage$ = ratio of majority decision 
+$
+
+
+##### lpd 
+
+##### lpd decision
+
+
+```{=tex}
+\begin{align} \label{eq:sdY}
+sdY=\sqrt{  \frac{1}{n_{in}}  \sum_{t=1}^{n_{in}}(Y_{t}-\hat{Y})^{2} }
+\end{align}
+```
+
+```{=tex}
+\begin{align} \label{eq:Yhat}
+\hat{Y}=\sum_{t=1}^{n_{in}}Y_{t}
+\end{align}
+```
+
+
+
+```{=tex}
+\begin{align} \label{eq:count}
+\text{g(x)}=\sum_{j=1}^{lag_{n}}x_{j}<\hat{Y}_{j}+sdY_{j}
+\end{align}
+```
+
+
+```{=tex}
+
+ \label{eq:net_decision}
+
+\[ l(x_{t}) =
+  \begin{cases}
+  
+  0.5    & \quad \text{if }  g(x), 2 <= 3    \\                                                                                
+  0      & \quad \text{if }  g(x) > 3  \\
+  1      & \quad \text{else}
+
+    
+  \end{cases}
+\]
+
+
+
+
+```
+
+
+$Y_{t}$ = insample lpd
+
+$X_{t}$ = outsample derivative
+
+$lag_{j}$ = which lag is important
+
+$lag_{n}$ = maximum number of lags
+
+
+
+##### rolling window 
+
+
+9 windows as in previous chapters
+performance 
+
+
+
+##### combination with garch
+\newpage
+
+#### 3.3.5. Kapitel: Resultat nicht wie erhofft
 &nbsp;
 
 - Vorschläge: 
