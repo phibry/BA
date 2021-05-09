@@ -485,12 +485,23 @@ par(mfrow=c(1,1))
 chart.ACF.phil(logi_googi, ymax=0.1)
 # lag1, 6, 7, 12
 
+# XAI - BTC
+load("data/log_ret_27_03_21.rda")
+load("data/BTC_USD_27_03_21.rda")
+btc <- BTC_USD_27_03_21$`BTC-USD.Adjusted`
+logret <- log_ret_27_03_21
+
+par(mfrow=c(1,1))
+chart.ACF.phil(logret, ymax=0.06, maxlag = 20, main="BTC Price Dependency Structure")
+chart.ACFplus.phil(logret, ymax=0.06, main="BTC price dependency structure")
+# lag 6 und lag 10
+
 ## Data Prep####
 par(mfrow=c(2,1))
-plot(diff(log(g.adj)), main="Google")
-plot(g.adj, main="Google")
-x <- ret <- na.omit(diff(log(g.adj)))
-x_level <- log(g.adj)
+plot(logret, main="Bitcoin")
+plot(btc, main="Bitcoin")
+
+x <- logret
 
 data_mat <- cbind(x,
                   lag(x),
@@ -502,9 +513,7 @@ data_mat <- cbind(x,
                   lag(x,k=7),
                   lag(x,k=8),
                   lag(x,k=9),
-                  lag(x,k=10),
-                  lag(x,k=11),
-                  lag(x,k=12))
+                  lag(x,k=10))
 
 # Check length of time series before na.exclude
 dim(data_mat)
@@ -515,42 +524,126 @@ head(data_mat)
 tail(data_mat)
 
 
-# Test
-test2 <- OLPDphil("2021-05-05", data_mat, use_in_samp=TRUE, c(7,7))
+# 100x####
+# res_mat <- 0
+# for (i in 1:100) {
+#   res <- na.exclude(OLPDphil("2021-03-27", data_mat, use_in_samp=TRUE, c(7,7))$OLPD_mat)
+#   res_mat <- res_mat + res
+# }
 
+# 1:
+# res_mat1 <- res_mat
 
-par(mfrow=c(1,1))
-colorino <- c("#003f5c", "#2f4b7c", "#520065", "#860064", "#a05195", "#665191", "#f95d6a", "#d45087", "#ff7c43", "#d6204f", "#ef4e3d", "#ffa600")
-plot(test2$OLPD_mat, main="XAI~Google", col=colorino)
-for (i in 1:ncol(test2$OLPD_mat))
-  mtext(colnames(test2$OLPD_mat)[i], col=colorino[i], line=-i)
+resi <- OLPDphil("2021-03-27", data_mat, use_in_samp=TRUE, c(7,7))
+# par(mfrow=c(1,1))
+# plot(res_mat, main="")
+# 
+# n <- n + 1
+# # res <- res_mat
+# res <- res + res_mat
+# # res <- res/n
+# 
+# # res10 <- res
 
-
-par(mfrow=c(1,1))
-select_acf <- test2$OLPD_mat[, c(2, 7, 8, 13)]
-plot(select_acf, main="XAI ~ Google", col=rainbow(ncol(select_acf)))
-for (i in 1:ncol(select_acf))
-  mtext(colnames(select_acf)[i], col=rainbow(ncol(select_acf))[i], line=-i)
-
-couldbe_1 <- test2
-# save(couldbe_1, file = "data/couldbe_1.rda")
-load("data/couldbe_1.rda")
-
-test2 <- couldbe_1
-
-options(scipen = 999)
-coef(test2$lm_obj)
-apply(na.omit(test2$OLPD_mat), 2, mean)
-coef(test2$lm_obj)[c(2, 7, 8, 13)]
-apply(na.omit(test2$OLPD_mat), 2, mean)[c(2, 7, 8, 13)]
-options(scipen = 0)
-
+reg_data <- data_mat
+colnames(reg_data) <- paste("lag",0:(ncol(reg_data)-1),sep="")
+lm_obj <- lm(lag0~., data=reg_data)
+xai_lm <- lm_obj
 
 par(mfrow=c(2,1))
-# colors = c("#003f5c", "#665191", "#f95d6a", "#ffa600")
-colors <- colorino[c(1, 6, 7, 12)]
-select_acf <- test2$OLPD_mat[, c(2, 7, 8, 13)]
-plot(select_acf, main="XAI~Google", col=colors)
-for (i in 1:ncol(select_acf))
-  mtext(colnames(select_acf)[i], col=colors[i], line=-i)
-plot(logi_googi, main="Adjusted log(Prices) ~ Google")
+# colorino <- c("#003f5c", "#2f4b7c", "#665191", "#a05195", "#d45087", "#f95d6a", "#f6004a", "#ff1208", "#ef4e3d", "#ffa600", "#ff7c43")
+colorino <- c("#000000", "#000000", "#000000", "#000000", "#000000", "#000000", "#f6004a", "#004c6d", "#0075b6", "#665191", "#ff7c43")
+plot(xai_data, main="XAI ~ Bitcoin", col=colorino)
+for (i in c(7,8,9,10,11))
+  mtext(colnames(xai_data)[i], col=colorino[i], line=-i)
+plot(logret, main="LogReturn ~ Bitcoin")
+
+apply(na.omit(xai_data), 2, mean)[c(7,8,9,10,11)]
+coef(xai_lm)[c(7,8,9,10,11)]
+
+# Test
+# test1 <- na.exclude(OLPDphil("2021-03-27", data_mat, use_in_samp=TRUE, c(7,7))$OLPD_mat)
+
+
+# xai_data <- res
+# save(xai_data, file = "data/xai_data.rda")
+# save(xai_lm, file = "data/xai_lm.rda")
+load("data/xai_data.rda")
+load("data/xai_lm.rda")
+xai_lm$coefficients
+
+# xai_mat <- xai_data$OLPD_mat
+# xai_lm <- xai_data$lm_obj
+# par(mfrow=c(1,1))
+# # colorino <- c("#003f5c", "#2f4b7c", "#520065", "#860064", "#a05195", "#665191", "#f95d6a", "#d45087", "#ff7c43", "#d6204f", "#ef4e3d", "#ffa600")
+# colorino <- c("#003f5c", "#2f4b7c", "#665191", "#a05195", "#d45087", "#f95d6a", "#f6004a", "#ff1208", "#ef4e3d", "#ffa600", "#ff7c43")
+# par(mfrow=c(1,1))
+# plot(xai_mat, main="XAI ~ Bitcoin", col=colorino)
+# for (i in 1:ncol(xai_mat))
+#   mtext(colnames(xai_mat)[i], col=colorino[i], line=-i)
+# 
+# 
+# options(scipen = 999)
+# coef(xai_lm)
+# apply(na.omit(xai_mat), 2, mean)
+# coef(xai_lm)[c(7, 11)]
+# apply(na.omit(xai_mat), 2, mean)[c(7, 11)]
+# options(scipen = 0)
+# 
+# 
+# par(mfrow=c(2,1))
+# colors <- colorino[c(1,6)]
+# select_acf <- test2$OLPD_mat[, c(7, 11)]
+# plot(select_acf, main="XAI ~ Bitcoin", col=colors)
+# for (i in 1:ncol(select_acf))
+#   mtext(colnames(select_acf)[i], col=colors[i], line=-i)
+# plot(logret, main="Adjusted log(Prices) ~ Bitcoin")
+# 
+# summary(na.exclude(test2$OLPD_mat[, 7]))
+# summary(na.exclude(test2$OLPD_mat[, 11]))
+# 
+# 
+# par(mfrow=c(2,1))
+# plot(test2$OLPD_mat, main="XAI ~ Bitcoin", col=colorino)
+# for (i in 1:ncol(test2$OLPD_mat))
+#   mtext(colnames(test2$OLPD_mat)[i], col=colorino[i], line=-i)
+# plot(logret, main="Adjusted log(Prices) ~ Bitcoin")
+
+
+#003f5c
+#2f4b7c
+#665191
+#a05195
+#d45087
+#f95d6a
+#ff7c43
+#f6004a
+#ff1208
+#ffa600
+
+par(mfrow=c(1,1))
+# colorino <- c("#003f5c", "#2f4b7c", "#665191", "#a05195", "#d45087", "#f95d6a", "#f6004a", "#ff1208", "#ef4e3d", "#ffa600", "#ff7c43")
+colorino <- c("#ff1208", "#003f5c", "#2f4b7c", "#a05195", "#d45087", "#f95d6a", "#f6004a", "#004c6d", "#0075b6", "#665191", "#ff7c43")
+# colorino <- c("#000000", "#000000", "#000000", "#000000", "#000000", "#000000", "#f6004a", "#004c6d", "#0075b6", "#665191", "#ff7c43")
+plot(xai_data, main="XAI ~ Bitcoin", col=colorino)
+for (i in 1:ncol(xai_data))
+  mtext(colnames(xai_data)[i], col=colorino[i], line=-i)
+
+class(xai_data)
+
+xai_dat <- as.data.frame(xai_data)
+class(xai_dat)
+
+plot(xai_dat[,1], type="l", ylim=c(min(na.exclude(xai_dat)), na.exclude(max(xai_dat))))
+c(min(na.exclude(xai_dat)), na.exclude(max(xai_dat)))
+
+# Table####
+as.numeric(round(xai_lm$coefficients,4))
+
+name <- c("Intercept", "Lag 1", "Lag 2", "Lag 3", "Lag 4", "Lag 5",
+          "Lag 6", "Lag 7", "Lag 8", "Lag 9", "Lag 10")  
+z <- as.numeric(round(xai_lm$coefficients,4))
+df <- as.data.frame(rbind(name,z))
+colnames(df) <- NULL
+rownames(df) <- c("Coefficient", "Value")
+df

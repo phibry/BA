@@ -353,9 +353,122 @@ An approach like ALE (Accumulated Local Effects) examines how the network reacts
 
 Another approach is the LIME (Local Interpretable Model-agnostic Explanations). This method examines the change of the forecast when changing the input data. A permuted data set is generated from the given data (for example, adding standardized noise). Using this artificially altered data set, an interpretable model (regression) is created to analyze the change in features [@xai_blackbox]. Changing the data affects the time dependence of the data. Thus, this method is also unusable for our application.
 
+\newpage
+
 #### 2.4.2. Explainability for Financial Time Series
 &nbsp;
 
 For the interpretation of financial time series, we would like to keep the dependency structure. The changes in trend or variability should be maintained. The sequence should not be shuffled. When mixing up the order, a value from far back could suddenly play a bigger role for the model than a current one. Intuitively, this would not add any value to financial time series.
 
+For our application, the lagged logarithmic returns of bitcoin prices, are the features to be studied. We want to find out how the features affect the output of the neural network. A network is trained with delayed values as the input layer to match the output as closely as possible to the original values (the non-delayed ones). This concept strongly resembles a linear regression. What would this look like.
 
+```{=tex}
+\begin{align} \label{eq:lm1}
+  Y_{i}=\beta_{0}+\beta_{1}*x_{i}^{(1)}+\beta_{2}*x_{i}^{(2)} + ... + \epsilon_{i}, \epsilon_{i} \sim \mathcal{N}(0, \sigma^{2})
+\end{align}  
+```
+
+In our concrete example, the equation would look like this.
+
+```{=tex}
+\begin{align} \label{eq:lm2}
+ \text{Original Data}_{t}=\text{Intercept}+\beta_{1}*\text{Data}^{(lag=1)}_{t}+\beta_{2}*\text{Data}^{(lag=2)}_{t} + ... + \epsilon_{i}
+\end{align}  
+```
+
+Now, what could the fitted regression, respectively the regression coefficients tell us about the respective lagged values. For that, we can look at the autocorrelation function of the Bitcoin log returns in figure \ref{fig:xai_acf}. Lags at 6 and 10 have a positive impact on the original data structure. In the context of the time series, this means that there is a strong 6- or 10-day dependency.
+
+```{r xai_acf, fig.align='center', echo=FALSE, fig.cap="Autocorrelation function of the Bitcoin-Prices."}
+# Load Data
+load("data/log_ret_27_03_21.rda")
+load("data/BTC_USD_27_03_21.rda")
+load("data/xai_data.rda")
+load("data/xai_lm.rda")
+
+btc <- BTC_USD_27_03_21$`BTC-USD.Adjusted`
+logret <- log_ret_27_03_21
+
+par(mfrow=c(1,1))
+chart.ACF.phil(logret, ymax=0.06, maxlag = 20, main="BTC Price Dependency Structure")
+```
+
+\newpage
+
+Looking at the regression coefficients in table \ref{tab:lm_tab}, we can discover the relationship between the ACF's and the coefficients of the regression. Again, lags 6 and 10 make the largest positive contribution to the fit of the model. Lags 7, 8, 9 make a negative contribution, as can also be seen in the ACFs.  Sign and value are in line with the ACF's.
+
+```{r lm_tab, echo=FALSE}
+library(kableExtra)
+name <- c("Intercept", "Lag 1", "Lag 2", "Lag 3", "Lag 4", "Lag 5",
+          "Lag 6", "Lag 7", "Lag 8", "Lag 9", "Lag 10")  
+z <- as.numeric(round(xai_lm$coefficients,4))
+df <- as.data.frame(rbind(name,z))
+colnames(df) <- NULL
+rownames(df) <- NULL
+kbl(df, caption="Coefficient of the linear regression of the Bitcoin Log-Returns.", booktabs = T, linesep = "") %>%
+  kable_styling(latex_options = c("striped", "hold_position")) %>%
+  column_spec(1:6, color="#000000") %>%
+  column_spec(7, color="#f6004a") %>%
+  column_spec(8, color="#004c6d") %>%
+  column_spec(9, color="#0075b6") %>%
+  column_spec(10, color="#665191") %>%
+  column_spec(11, color="#ff7c43")
+```
+
+Now we would like to create such an analogy with neural networks. In the case of linear regression, the coefficients, or the weights of the lagged data are the solutions of the partial derivatives of the optimization function. One obtains a coefficient for each lag, thus the respective weight, is time independent. We would now like to extend this concept. We want to keep the structure of the time series, the time dependence.
+
+We can now calculate the partial derivatives of the output of a neural network with the respective input data of time $t$ for each time $t$. We obtain the coefficients or weights $\beta_{it}$.
+
+```{=tex}
+\begin{align} \label{eq:xai_partial}
+\beta_{it} = \frac{\partial \text{Output}_{t}}{\partial \text{Data}^{(lag=i)}_{t}}
+\end{align}  
+```
+
+Basically, we can thus state the following relationship between output and weighted input.
+
+```{=tex}
+\begin{align} \label{eq:xai_fit}
+\text{Output}_{t} = \text{Intercept} + \beta_{1t}*\text{Data}^{(lag=1)}_{t} + \beta_{2t}*\text{Data}^{(lag=2)}_{t} + ... + \beta_{qt}*\text{Data}^{(lag=q)}_{t}
+\end{align}  
+```
+
+In simpler terms, we train a neural network with input data of length up to delay q. Now we change a data point at time $t$, we add a disturbance term by $\delta$. So we change the value of an explanatory variable, one of our features. Suppose our input data at time $t$ looks like this.
+
+$$X = x_{t-1}+x_{t-2}+...+x_{t-q}$$
+For the feature at lag 1, we now want to calculate the partial derivative. We create a new data set $Y$ and change the data point at lag 1.
+
+$$Y = x_{t-1}+(\delta*x_{t-1})+x_{t-2}+...+x_{t-q}$$
+With the trained network we now generate two predictions for time $t$. Once with the original data $NN(X)$ and once with the data with the slightly altered value $NN(Y)$. Now we can calculate the discrete approximated partial derivative.
+
+$$\beta_{1t} = \frac{\text{NN(X) - NN(Y)}}{\delta*x_{t-1}}$$
+
+The output of the neural network changes by the value $\beta_{1t}$ if the input is changed by 1. This procedure can now be done for each feature at each point in time. Then one has for each feature at each time the derivations, which possibly makes an explanation of neuronal networks possible.
+
+\newpage
+
+asdasdasd
+
+```{r xai_plot1, fig.align='center', echo=FALSE, fig.cap="XAI.", out.width='100%'}
+par(mfrow=c(1,1))
+colorino <- c("#ff1208", "#003f5c", "#2f4b7c", "#665191", "#a05195", "#d45087", "#f6004a", "#004c6d", "#0075b6", "#665191", "#ff7c43")
+plot(xai_data, main="XAI ~ Bitcoin", col=colorino)
+for (i in 1:ncol(xai_data))
+  mtext(colnames(xai_data)[i], col=colorino[i], line=-i)
+```
+
+```{r xai_plot2, fig.align='center', echo=FALSE, fig.cap="XAI compared to Logreturns of the Bitcoin.", out.width='100%'}
+# Load Data
+par(mfrow=c(2,1))
+colorino <- c("#000000", "#000000", "#000000", "#000000", "#000000", "#000000", "#f6004a", "#004c6d", "#0075b6", "#665191", "#ff7c43")
+plot(xai_data, main="XAI ~ Bitcoin", col=colorino)
+for (i in c(7,8,9,10,11))
+  mtext(colnames(xai_data)[i], col=colorino[i], line=-i)
+plot(logret, main="LogReturn ~ Bitcoin")
+```
+
+\newpage
+
+```{r}
+apply(na.omit(xai_data), 2, mean)[c(7,8,9,10,11)]
+coef(xai_lm)[c(7,8,9,10,11)]
+```
