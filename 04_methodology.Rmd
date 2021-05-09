@@ -242,7 +242,7 @@ Since we've wanted a clear decision of those thousand nets a rule is implied for
 
 ```{=tex}
 
- \label{eq:net_decision}
+ \label{eq:net_decision1}
 
 \[ f(prediction_{i},percentage) =
   \begin{cases}
@@ -297,7 +297,7 @@ sdY=\sqrt{  \frac{1}{n_{in}}  \sum_{t=1}^{n_{in}}(Y_{t}-\hat{Y})^{2} }
 
 ```{=tex}
 
- \label{eq:net_decision}
+ \label{eq:net_decision2}
 
 \[ l(x_{t}) =
   \begin{cases}
