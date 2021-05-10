@@ -308,8 +308,8 @@ plot.new()
     plot(signal_olpd,main="Final signal LPD")
     
     
-    plot.xts(),main="Sum of lags deviateing λ*sdY from Mean(Y)")
-
+    plot(sum_explana,type="b",main="Sum of lags deviateing λ*sdY from Mean(Y)")
+    abline(h=2)
 
 na.exclude(cbind(as.xts(sum_explana),lineup,linedown))
 
