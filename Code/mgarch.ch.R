@@ -1,5 +1,5 @@
 # Intro####
-## We want to trade S&P500, daily
+## We want to trade Bitcoin, daily
 ## For that purpose we rely on two forecast models and buy/sell tomorrows
 ## returns based on the sign of tomorrows forecast
 ##   - We rely on a MGARCH-Model
@@ -31,28 +31,40 @@ library(fGarch)
 
 
 ## 1.1. Plot####
-par(mfrow=c(2,2))
-plot(x_level)
-plot(log_x_level)
-plot(x_log_ret)
-
 load("data/log_ret_27_03_21.rda")
 head(log_ret_27_03_21)
 
-tail(dat$Bid)
 x_log_ret <- log_ret_27_03_21
 head(x_log_ret)
 tail(x_log_ret)
+plot(x_log_ret)
+plot(cumsum(x_log_ret))
+
+
 ## 1.2. Slicing xts-object####
 # Impose start date prior to financial crisis because GARCH-in-mean is strong
 # for the crisis (otherwise the effect vanishes)
-# start_date <- "2007-01-01"
+
+
+## Change here for other results####
 start_date <- "2017-01-01"
-# Focus on COVID break-out
-# end_date <- "2020-09-25"
-# in_sample <- "2015-01-01"
 end_date <- "2021-03-27"
 in_sample <- "2020-01-01"
+# BnH = 2.06
+# MGARCH = 2.06
+
+start_date <- "2014-09-18"
+end_date <- "2017-12-31"
+in_sample <- "2017-01-01"
+# BnH = 2.85
+# MGARCH = 2.85
+
+start_date <- "2017-01-01"
+end_date <- "2019-12-31"
+in_sample <- "2019-01-01"
+# BnH = 0.97
+# MGARCH = 0.97
+
 x_all <- na.exclude(x_log_ret[paste(start_date,"/",sep="")])
 x_all <- x_all[paste("/",end_date,sep="")]
 # Specify in-sample and out-sample time spans and fit models on in-sample span
@@ -136,8 +148,6 @@ sigma_t_in <- y.garch_11@sigma.t
 names(sigma_t_in) <- index(x_in)
 sigma_t_in <- as.xts(sigma_t_in)
 index(sigma_t_in) <- index(x_in)
-
-summary()
 
 # Note that sigma_t depends on lagged data:
 # therefore we can regress it directly onto x_in (without lagging)
