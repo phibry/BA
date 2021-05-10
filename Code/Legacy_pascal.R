@@ -308,6 +308,194 @@ plot(cumsum(perf_nn_out),main=paste(as.character(anz),"n nets",as.character(neur
 
 plot(cumsum(perf_nn_out_with_olpd),main=paste("Net Olpd, sharpe:",as.character(sharpe_net_olpd)))
 
+# extracted from functions 10.5.2021
+xai_outp<-function(x,lags,in_out_sep,neuron_vec,use_in_samp=F,anz=1000,percentage=NULL,devi=1,plot=F,outtarget,use_between=F,lower=2,upper=3)
+{
+  data_function(x, lags, in_out_sep, autoassign = T)
+  
+  target_in<-data_mat[paste("/",in_out_sep,sep=""),1]
+  target_out<-data_mat[paste(in_out_sep,"/",sep=""),1]
+  
+  
+  # lm only used, for coefficients
+  explanatory_in<-data_mat[paste("/",in_out_sep,sep=""),2:ncol(data_mat)]
+  explanatory_out<-data_mat[paste(in_out_sep,"/",sep=""),2:ncol(data_mat)]
+  
+  lm_obj<-lm(target_in~explanatory_in)
+  #summary(lm_obj)
+  
+  
+  
+  
+  
+  # Induce infinitesimal perturbations to data and fit regression to output
+  
+  delta<-1.e-5
+  epsilon<-1.e-4
+  
+  
+  
+  if (use_in_samp)
+  {
+    # Smoother (in-sample data)
+    data<-train_set
+    data_xts<-train_set_xts
+  } else
+  {
+    # Rougher (out-sample data)
+    data<-test_set
+    data_xts<-test_set_xts
+  } 
+  
+  for (l in 1:anz)  
+  {  
+    #Neural net fitting for btc with sigmoid
+    nn <- neuralnet(f,data=train_set,hidden=neuron_vec,linear.output=T)
+    net=estimate_nn(train_set,number_neurons=neuron_vec,data_mat,test_set,f,newnet = F,nn=nn)
+    
+    
+    for (i in 1:(nrow(data)))
+    {
+      x<-matrix(data[i,2:ncol(data)],nrow=1)
+      colnames(x)<-colnames(data)[2:ncol(data)]
+      OLPD_scaled_obj<-OLPD_func(x,delta,epsilon,nn)
+      
+      if (i==1)
+      {
+        OLPD_scaled_mat<-OLPD_scaled_obj$effect
+      } else
+      {
+        OLPD_scaled_mat<-rbind(OLPD_scaled_mat,OLPD_scaled_obj$effect)
+      }
+    }
+    OLPD_mat<-transform_OLPD_back_original_data_func(data_xts,data_mat,OLPD_scaled_mat,lm_obj,data)$OLPD_mat
+    
+    
+    if (l==1)
+    {
+      start=OLPD_mat
+      startsignal_in=sign(net$predicted_nn_in_sample)
+      startsignal_out=sign(net$predicted_nn)  
+    }
+    else
+    {
+      start=start+OLPD_mat 
+      startsignal_in=startsignal_in+sign(net$predicted_nn_in_sample)
+      startsignal_out=startsignal_out+sign(net$predicted_nn) 
+    }
+    cat("\014")   
+    print(l)
+  }  
+  
+  
+  
+  
+  index(OLPD_mat)<-index(data_xts)  
+  #mean of all olpd over realisations
+  OLPD_mat=na.exclude(start/anz)
+  
+  #signals ##########################################################--------------------------------------------
+  
+  # neuralnet signals
+  
+  #signum of the most votet 50% negative + 50 % positive get a zero , >50% negative & <50%positive get a -1  
+  
+  signal_in=sign(startsignal_in)
+  signal_out=sign(startsignal_out)
+  majority=signal_out # return all signals from nets
+  #other rule 2  
+  if( !is.null(percentage)){
+    signal_in[which(abs(startsignal_in)<=percentage*anz)]<-0
+    signal_out[which(abs(startsignal_out)<=percentage*anz)]<-0
+  }
+  
+  target_out<-outtarget
+  
+  
+  #perf_nn_in<-signal_in*target_in
+  perf_nn_out<-signal_out*target_out
+  perf_nn_in<-signal_in*target_in[paste("::",as.Date(in_out_sep)-1,sep="")]
+  
+  
+  
+  deviate= function(x,deviationscaling=devi) # devi is assigned before 
+    #this function checks if value is > mean + scaling * std and returns 1 if true 0 if not
+  {
+    if(sum(is.na(x))!=0){print("nas detected")}
+    x=abs(x)
+    deviatevalind=which(x>mean(x)+deviationscaling*stdev(x))
+    x[]=FALSE
+    x[deviatevalind]=TRUE
+    return(x)
+  }
+  
+  
+  deviatmat=apply(OLPD_mat[,-1],2,deviate)
+  sum_explana=as.xts(apply(deviatmat,1,sum))
+  signal_olpd<-sum_explana
+  signal_olpd[]=1
+  signal_olpd[which(sum_explana>=lower & sum_explana < upper )]<- 0.5
+  signal_olpd[which(sum_explana >= upper )]<-0
+  
+  
+  sum(signal_out==sign(target_out))/length(signal_out) # out of sample accuracy
+  sum(signal_in==sign(target_in[paste("::",as.Date(in_out_sep)-1,sep="")]))/length(signal_in) # in sample accuracy
+  
+  
+  
+  signal_nn_and_olpd=signal_out
+  
+  signal_nn_and_olpd[which(signal_olpd==0)]<-0
+  if(use_between){ signal_nn_and_olpd[which(signal_olpd==0.5)]<-0.5}
+  
+  
+  
+  perf_nn_out_with_olpd=signal_nn_and_olpd*target_out
+  
+  
+  sharpe_bh=round(sqrt(365)*SharpeRatio(target_out,FUN="StdDev"),3)
+  sharpe_net=round(sqrt(365)*SharpeRatio(perf_nn_out,FUN="StdDev"),3)
+  sharpe_net_olpd=round(sqrt(365)*SharpeRatio(perf_nn_out_with_olpd,FUN="StdDev"),3)
+  
+  #plots####--------------------------------------------------------------------------------------------------------------------------
+  
+  if(plot)
+  {
+    plot.new()
+    par(mfrow=c(4,2))
+    #plot of decision
+    
+    
+    plot(OLPD_mat,col=rainbow(ncol(OLPD_mat)))
+    for (i in 1:ncol(OLPD_mat))
+      mtext(colnames(OLPD_mat)[i],col=rainbow(ncol(OLPD_mat))[i],line=-i)
+    
+    
+    plot(signal_olpd,main="final signal")
+    
+    
+    plot(sum_explana,type="b",main=paste("lags deviateing:",as.character(devi),"from mean"))
+    
+    
+    
+    
+    plot(target_out)
+    
+    
+    plot(cumsum(target_out),main=paste("buy and hold, sharpe:",as.character(sharpe_bh)) )
+    
+    
+    plot(cumsum(perf_nn_out),main=paste(as.character(anz),"n nets",as.character(neuron_vec),", sharpe:",as.character(sharpe_net)))
+    
+    
+    plot(cumsum(perf_nn_out_with_olpd),main=paste("Net Olpd, sharpe:",as.character(sharpe_net_olpd)))
+  }
+  
+  return(list(sharpe_net_olpd=sharpe_net_olpd,sharpe_net=sharpe_net,sharpe_bh=sharpe_bh
+              ,perf_nn_out_with_olpd=perf_nn_out_with_olpd,perf_nn_out=perf_nn_out,signal_out=signal_out,signal_olpd=signal_olpd,majority=majority)) 
+  
+}
+
 
 
 

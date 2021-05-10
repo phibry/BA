@@ -84,7 +84,7 @@ for (batch in 1:9)
   
   if (batch==1)
   {
-    first=xai_outp(x=x,lags=lags,in_out_sep=in_out_sep,neuron_vec=neuron_vec,use_in_samp=use_in_samp,anz=anz,percentage=percentage,devi=devi,outtarget=outtarget)
+    first=xai_outp(x=x,lags=lags,in_out_sep=in_out_sep,neuron_vec=neuron_vec,intercept=F,anz=anz,percentage=percentage,devi=devi,outtarget=outtarget)
     alloverperf_olpd=first$perf_nn_out_with_olpd
     alloverperf_nn=first$perf_nn_out
     sharpmat[1,1:3]<-as.numeric(first[1:3])
@@ -92,7 +92,7 @@ for (batch in 1:9)
     olpd_signal=first$signal_olpd
   }
   else{
-  second=xai_outp(x=x,lags=lags,in_out_sep=in_out_sep,neuron_vec=neuron_vec,use_in_samp=use_in_samp,anz=anz,percentage=percentage,devi=devi,outtarget=outtarget)
+  second=xai_outp(x=x,lags=lags,in_out_sep=in_out_sep,neuron_vec=neuron_vec,intercept=F,anz=anz,percentage=percentage,devi=devi,outtarget=outtarget)
   
   
   
@@ -134,15 +134,15 @@ for (batch in 1:9)
     
     if(save_separate)
     {
-    save(list=olpd_string, file = paste("data/xai/7_7 with signal/9",olpd_string,".rda",sep="") ) 
-    save(list=nn_string, file = paste("data/xai/7_7 with signal/9",nn_string,".rda",sep="") )  
-    save(list=sharpmat_string, file = paste("data/xai/7_7 with signal/9",sharpmat_string,".rda",sep=""))
-    save(list=nn_signal_string, file = paste("data/xai/7_7 with signal/9",nn_signal_string,".rda",sep="") )  
-    save(list=olpd_signal_string, file = paste("data/xai/7_7 with signal/9",olpd_signal_string,".rda",sep=""))
+    save(list=olpd_string, file = paste("data/xai/7_7_withsignal_xai_in/9",olpd_string,".rda",sep="") ) 
+    save(list=nn_string, file = paste("data/xai/7_7_withsignal_xai_in/9",nn_string,".rda",sep="") )  
+    save(list=sharpmat_string, file = paste("data/xai/7_7_withsignal_xai_in/9",sharpmat_string,".rda",sep=""))
+    save(list=nn_signal_string, file = paste("data/xai/7_7_withsignal_xai_in/9",nn_signal_string,".rda",sep="") )  
+    save(list=olpd_signal_string, file = paste("data/xai/7_7_withsignal_xai_in/9",olpd_signal_string,".rda",sep=""))
     }
     
     
-    save(list=c(olpd_string, nn_string, sharpmat_string,nn_signal_string,olpd_signal_string),file = paste("data/xai/7_7 with signal/9",data_string,".rda",sep="") ) 
+    save(list=c(olpd_string, nn_string, sharpmat_string,nn_signal_string,olpd_signal_string),file = paste("data/xai/7_7_withsignal_xai_in/9",data_string,".rda",sep="") ) 
     
     
     
