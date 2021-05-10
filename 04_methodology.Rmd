@@ -276,13 +276,13 @@ $
 
 ```{=tex}
 \begin{align} \label{eq:sdY}
-sdY=\sqrt{  \frac{1}{n_{in}}  \sum_{t=1}^{n_{in}}(Y_{t}-\hat{Y})^{2} }
+sdY=\sqrt{  \frac{1}{n_{in}}  \sum_{t=1}^{n_{in}}(Y_{t}-\bar{Y})^{2} }
 \end{align}
 ```
 
 ```{=tex}
 \begin{align} \label{eq:Yhat}
-\hat{Y}=\sum_{t=1}^{n_{in}}Y_{t}
+\bar{Y}=\frac{1}{n_{in}} \sum_{t=1}^{n_{in}}Y_{t}
 \end{align}
 ```
 
@@ -290,7 +290,7 @@ sdY=\sqrt{  \frac{1}{n_{in}}  \sum_{t=1}^{n_{in}}(Y_{t}-\hat{Y})^{2} }
 
 ```{=tex}
 \begin{align} \label{eq:count}
-\text{g(x)}=\sum_{j=1}^{lag_{n}}x_{j}<\hat{Y}_{j}+sdY_{j}
+\text{g(X)}=\sum_{j=1}^{lag_{n}}X_{j}<\bar{Y}_{j}+sdY_{j}
 \end{align}
 ```
 
@@ -302,7 +302,7 @@ sdY=\sqrt{  \frac{1}{n_{in}}  \sum_{t=1}^{n_{in}}(Y_{t}-\hat{Y})^{2} }
 \[ l(x_{t}) =
   \begin{cases}
   
-  0.5    & \quad \text{if }  g(x), 2 <= 3    \\                                                                                
+  0.5    & \quad \text{if }  g(x), 2 \le 3    \\                                                                                
   0      & \quad \text{if }  g(x) > 3  \\
   1      & \quad \text{else}
 
@@ -318,9 +318,9 @@ sdY=\sqrt{  \frac{1}{n_{in}}  \sum_{t=1}^{n_{in}}(Y_{t}-\hat{Y})^{2} }
 
 $Y_{t}$ = insample lpd
 
-$X_{t}$ = outsample derivative
+$X_{t}$ = outsample lpd
 
-$lag_{j}$ = which lag is important
+$lag_{j}$ = lags 
 
 $lag_{n}$ = maximum number of lags
 
