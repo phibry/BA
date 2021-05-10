@@ -134,15 +134,15 @@ for (batch in 1:9)
     
     if(save_separate)
     {
-    save(list=olpd_string, file = paste("data/xai/7_7_withsignal_xai/9",olpd_string,".rda",sep="") ) 
-    save(list=nn_string, file = paste("data/xai/7_7_withsignal_xai/9",nn_string,".rda",sep="") )  
-    save(list=sharpmat_string, file = paste("data/xai/7_7_withsignal_xai/9",sharpmat_string,".rda",sep=""))
-    save(list=nn_signal_string, file = paste("data/xai/7_7_withsignal_xai/9",nn_signal_string,".rda",sep="") )  
-    save(list=olpd_signal_string, file = paste("data/xai/7_7_withsignal_xai/9",olpd_signal_string,".rda",sep=""))
+    save(list=olpd_string, file = paste("data/xai/7_7_withsignal_xai_in/9",olpd_string,".rda",sep="") ) 
+    save(list=nn_string, file = paste("data/xai/7_7_withsignal_xai_in/9",nn_string,".rda",sep="") )  
+    save(list=sharpmat_string, file = paste("data/xai/7_7_withsignal_xai_in/9",sharpmat_string,".rda",sep=""))
+    save(list=nn_signal_string, file = paste("data/xai/7_7_withsignal_xai_in/9",nn_signal_string,".rda",sep="") )  
+    save(list=olpd_signal_string, file = paste("data/xai/7_7_withsignal_xai_in/9",olpd_signal_string,".rda",sep=""))
     }
     
     
-    save(list=c(olpd_string, nn_string, sharpmat_string,nn_signal_string,olpd_signal_string),file = paste("data/xai/7_7_withsignal_xai/9",data_string,".rda",sep="") ) 
+    save(list=c(olpd_string, nn_string, sharpmat_string,nn_signal_string,olpd_signal_string),file = paste("data/xai/7_7_withsignal_xai_in/9",data_string,".rda",sep="") ) 
     
     
     

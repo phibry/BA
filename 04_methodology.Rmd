@@ -265,10 +265,12 @@ majority decision
 
 
 $N_{total}$ = Total Number of nets
+
 $percentage$ = ratio of majority decision 
-$
 
 
+
+\newpage
 ##### lpd 
 
 ##### lpd decision
@@ -290,7 +292,7 @@ sdY=\sqrt{  \frac{1}{n_{in}}  \sum_{t=1}^{n_{in}}(Y_{t}-\bar{Y})^{2} }
 
 ```{=tex}
 \begin{align} \label{eq:count}
-\text{g(X)}=\sum_{j=1}^{lag_{n}}X_{j}<\bar{Y}_{j}+sdY_{j}
+\text{g(X)}=\sum_{j=1}^{lag_{n}}(X_{j}>\bar{Y}_{j}+\lambda sdY_{j} )\vee( X_{j}<\bar{Y}_{j}-\lambda sdY_{j})
 \end{align}
 ```
 
@@ -299,11 +301,11 @@ sdY=\sqrt{  \frac{1}{n_{in}}  \sum_{t=1}^{n_{in}}(Y_{t}-\bar{Y})^{2} }
 
  \label{eq:net_decision2}
 
-\[ l(x_{t}) =
+\[ lpd signal(x_{t}) =
   \begin{cases}
   
-  0.5    & \quad \text{if }  g(x), 2 \le 3    \\                                                                                
-  0      & \quad \text{if }  g(x) > 3  \\
+  0.5    & \quad \text{if }  g(x), \eta_{lower} \le \eta_{upper}    \\                                                                                
+  0      & \quad \text{if }  g(x) > \eta_{upper}  \\
   1      & \quad \text{else}
 
     
@@ -316,15 +318,20 @@ sdY=\sqrt{  \frac{1}{n_{in}}  \sum_{t=1}^{n_{in}}(Y_{t}-\bar{Y})^{2} }
 ```
 
 
-$Y_{t}$ = insample lpd
+$Y_{t}$ = insample lpd observed 
 
-$X_{t}$ = outsample lpd
+$X_{t}$ = outsample lpd predicted
 
 $lag_{j}$ = lags 
 
 $lag_{n}$ = maximum number of lags
 
+$\lambda$ = scaling parameter for standard deviation
 
+$\eta_{lower},\eta_{upper}$ lower  and upper border for signal decision
+
+
+\newpage
 
 ##### rolling window 
 

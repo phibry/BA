@@ -1869,7 +1869,7 @@ xai_outp<-function(x,lags,in_out_sep,neuron_vec,intercept=F,anz=1000,percentage=
               ,perf_nn_out_with_olpd=perf_nn_out_with_olpd,perf_nn_out=perf_nn_out,signal_out=signal_out,signal_olpd=signal_olpd,majority=majority)) 
   
 }
-s
+
 
 #.####
 

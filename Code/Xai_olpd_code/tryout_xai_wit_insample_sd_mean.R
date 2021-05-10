@@ -41,7 +41,7 @@ neuron_vec=c(7,7)
 
 # insample or out of sample of net ai 
 intercept=F# use the intercept for evaluation?
-anz=100
+anz=1000
 # ANZAHL REEALSIATIONEN OLPD MAT
 
 outtarget=log_ret_27_03_21[paste(in_out_sep,"::",sep="")]
@@ -247,15 +247,52 @@ plot.new()
   
     #par(mfrow=c(4,2))
     #plot of decision
+  class (OLPD_mat_out)
     
-    
-    plot(OLPD_mat_out,col=rainbow(ncol(OLPD_mat_out)))
+    plot.xts(OLPD_mat_out,col=rainbow(ncol(OLPD_mat_out)),main="LPD Out of Sample")
     for (i in 1:ncol(OLPD_mat_out))
-      mtext(colnames(OLPD_mat_out)[i],col=rainbow(ncol(OLPD_mat_out))[i],line=-i)
+       mtext(colnames(OLPD_mat_out)[i],col=rainbow(ncol(OLPD_mat_out))[i],line=-i)
 
-    abline(h=as.numeric(mean_in[-1]))
-    abline(h=as.numeric(mean_in[-1]+devi*sd_in[-1]),col="red")
-    abline(h=as.numeric(mean_in[-1]-devi*sd_in[-1]),col="green")
+    
+    
+
+    abline(h=mean_in[-1],lwd=2)
+    
+    
+    meanline=rep(as.numeric(mean_in[4]),nrow(OLPD_mat_out))
+    meanup=rep(as.numeric(mean_in[4]+devi*sd_in[4]),nrow(OLPD_mat_out))
+    meandown=rep(as.numeric(mean_in[4]-devi*sd_in[4]),nrow(OLPD_mat_out))
+    
+    meanline=reclass(meanline,OLPD_mat_out)
+    meanup=reclass(meanup,OLPD_mat_out)
+    meandown=reclass(meandown,OLPD_mat_out)
+    
+    lines(meanline,lwd=2,col="black")
+    lines(meanup,lwd=2,col="red",lty=2)
+    lines(meandown,lwd=2,col="red",lty=2)
+    
+    name=c("arithmetic mean ffrom insample lag_j","standard deviation from insample lag_j * λ")
+    addLegend("top", 
+              legend.names=name,
+              col=c("black","red"),
+              lty=c(1,2),
+              lwd=c(1,1),
+              ncol=1,
+              bg="white")
+    
+    
+    
+    
+    
+    
+    text(x = as.POSIXct("2021-02-01"), y =0, labels = "RSquared = 0.5", cex=2)
+    
+    
+    devi=2
+    
+    
+    abline(h=as.numeric(mean_in[4]+devi*sd_in[4]),col="red",lwd=2,lty=2)
+    abline(h=as.numeric(mean_in[4]-devi*sd_in[4]),col="red",lwd=2,lty=2)
     
     
     
@@ -268,12 +305,46 @@ plot.new()
     
         
     
-    plot(signal_olpd,main="final signal")
+    plot(signal_olpd,main="Final signal LPD")
     
     
-    plot(sum_explana,type="b",main=paste("lags deviateing:",as.character(devi),"from mean"))
+    plot.xts(),main="Sum of lags deviateing λ*sdY from Mean(Y)")
+
+
+na.exclude(cbind(as.xts(sum_explana),lineup,linedown))
+
+
+    lineup=rep(3.0,nrow(OLPD_mat_out))
+    linedown=rep(2.0,nrow(OLPD_mat_out))
+    
+  
+    lineup=reclass(lineup,OLPD_mat_out)
+    linedown=reclass(linedown,OLPD_mat_out)
+    
+
+    lines(lineup,lwd=2,col="red",lty=1)
+    lines(linedown,lwd=2,col="red",lty=1)
+    
+
+    name=c("arithmetic mean ffrom insample lag_j","standard deviation from insample lag_j * λ")
+    addLegend("top", 
+              legend.names=name,
+              col=c("black","red"),
+              lty=c(1,2),
+              lwd=c(1,1),
+              ncol=1,
+              bg="white")
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+        
     
     
     plot(target_out)
