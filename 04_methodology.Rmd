@@ -205,7 +205,7 @@ The main component is the prediction of the neural network. This reflects the ex
 
 While these methods sound promising, it should not be forgotten that a buy-and-hold strategy (given nerves of steel) also led to remarkable performances in the past that even outperformed traditional asset classes. The price development is described in chapters [2.3.1.](#historical_analysis) and [2.3.3.](#bitcoin_valuation). That is why buy-and-hold is frequently used as a comparison. 
 
-
+For trading the returns, we must first define the environment and make some assumptions. Tradingcosts are crucial in high frequency trading, nevertheless we assume that transaction costs are non exsistant. Further we assume the possibility of shortselling in btc. These assumptions allow us to wether stay in the market( signal = 1), to exit the market (signal = 0)  or to sell tomorrows return (signal = -1). If in the two latter  tomorrows return is negative, a gain in performance is realized.
 
 \newpage
 
@@ -213,7 +213,7 @@ While these methods sound promising, it should not be forgotten that a buy-and-h
 
 &nbsp;
 
-In chapter 3.2.3 we have decided to fix the architecture 7 layers 7 nets.  In the following we describe how in this case the net is used, in order to create a trading signal. Further we use the LPD, explained in chapter [2.4.2.](#xai_finance), based on the computed nets to derive an additional trading signal.
+In chapter 3.2.3 we have decided to fix the architecture 7 layers 7 nets.  In the following we describe how in this case the net is used, in order to create a trading signal. Further we use the LPD, explained in chapter [2.4.2.](#xai_finance), based on the computed nets to derive an additional  signal for trading.
 
 
 
@@ -221,7 +221,7 @@ In chapter 3.2.3 we have decided to fix the architecture 7 layers 7 nets.  In th
 
 &nbsp;
 
-Due to its randomness in finding the optimum, it is proposed by the Central Limit Theorem [@central_limit_theorem] to use an approximate  $\text{number of iterations} N_{total}$ $\ge$ 100 for an accurate mean value. In order to find a balance between precision and computation time, we found 1000 iterations should be sufficient.
+Due to its randomness in finding the optimum, it is proposed by the Central Limit Theorem [@central_limit_theorem] to use an approximate   $\text{number of iterations } N_{total}$ $\ge$ 100 for an accurate mean value. In order to find a balance between precision and computation time, we found 1000 iterations should be sufficient.
 
 Let $p$ be the predicted value of the neural net in a certain time $_{t}$.
 With formula $f(p_{k})$ \ref{eq:net_decision1} in every $_{t}$ a trading signal is derived by majority decision. How clearly the decision of the forecasts must be, is decided by parameter $\beta$.
@@ -280,7 +280,7 @@ With Formula \ref{eq:count} in every $lag_{j}$ it is decided wether the predicte
 
 Function $g(X)$ \ref{eq:count} is further applied in $lpd signal(x_{t})$ to every timestep $_{t}$ in order to generate a signal with \ref{eq:net_decision2} $lpd signal(x_{t})$. The output of $g(X)$ \ref{eq:count} is between 0 and $lag_{j}$.
 
-With $\eta_{lower}$ and $\eta_{upper}$ it is decided which signal output the lpd $_{t}$ will be assigned. We have decided for values bigger than $\eta_{upper}$ we conclude a big change is likely. In chapter [3.1.](#data_exploration) last section we observed, that bigger negative returns are more likely then positive, therefore the proposed signal is 0. For values between $\eta_{lower}$ and $\eta_{upper}$ we propose a signal 0.5. 
+With $\eta_{lower}$ and $\eta_{upper}$ it is decided which signal output the lpd $_{t}$ will be assigned. We have decided; for values bigger than $\eta_{upper}$ we conclude a big change is likely. In chapter [3.1.](#data_exploration) last section we observed, that larger negative returns are more likely then positive, therefore the proposed signal is 0. For values between $\eta_{lower}$ and $\eta_{upper}$ we propose a signal 0.5. 
 
 &nbsp;
 
