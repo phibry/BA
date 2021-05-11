@@ -192,60 +192,45 @@ When looking at the Sharpe ratios, an inverse relationship between the in-sample
 
 This chapter describes the trading strategy in more detail. In basic terms, the findings of the previous chapters are extended with considerations from explainable artificial intelligence (XAI) as well as from more traditional tools used in time series analysis. The following flowchart in figure \ref{fig:flowchart_trading} shows a broad overview of how the different factors are combined to generate the final trading signal. 
 
+&nbsp;
+
+
 ```{r flowchart_trading, fig.align='center', out.width='100%', fig.cap='This flowchart illustrates an overview of the trading strategy applied in this chapter. ', echo=FALSE}
 knitr::include_graphics("images/flowchart_trading.png")
 ```
+
+&nbsp;
 
 The main component is the prediction of the neural network. This reflects the expected log return of the next day and is thus an important indicator of whether the money should remain invested or not. However, the output of these neural networks are to be treated with caution, as we have seen in the chapter [3.2.2](#evaluate_nn). Therefore, we rely on XAI to detect instability and incorporate this information into the final trading signal. Furthermore, volatility persistence is observed in financial time series, i.e. large changes can be expected after large changes. Leverage effects are also probable, which means that the tendency to achieve a negative return is higher when volatility is large. A GARCH model is used to model these phenomena, whose volatility predictions provide important information for the final trading signal.
 
 While these methods sound promising, it should not be forgotten that a buy-and-hold strategy (given nerves of steel) also led to remarkable performances in the past that even outperformed traditional asset classes. The price development is described in chapters [2.3.1.](#historical_analysis) and [2.3.3.](#bitcoin_valuation). That is why buy-and-hold is frequently used as a comparison. 
 
-#### 3.3.1. Explainable artificial intelligence (XAI)
-&nbsp;
 
-- Kurz wiederholen, weshalb XAI angewandt wird
-- In unserem Fall: LPD prüft mit partiellen Ableitungen, ob man das NN zu diesem Zeitpunkt t brauchen kann / stabil ist
-- Anschliessend wird dem Output vom NN mehr oder weniger Gewicht zugeordnet
 
 \newpage
 
-#### 3.3.2. GARCH volatility predictions
+#### 3.3.1. Trading with Neural Net and LPD 
+
 &nbsp;
-
-In a further step, we examine the time series with a traditional GARCH model that allows heteroskedasticity. T. Bollerslev proposes to use this to model time-dependent variance as a function of lagged shocks and lagged conditional variances [@garch]. Based on this model, we conduct one-step-ahead predictions using a rolling window of size 365 days i.e. data points and refit the model after every month. These predictions of future volatilities are presented in the appendix in figure \ref{fig:vola_forecasts} and will be used to make trading decisions. The asymmetric volatility phenomenon by F. Black describes a negative correlation between the volatility of the return and the achieved return [@leverage_effect]. Therefore, we define the following trading rule:
-
-| **FOR EACH** $i$ in $\sigma_{predicted}$ 
-|       **IF** $\sigma_{predicted, i} \ge 1.645 \sigma_{historical}$:  
-|               $signal_i = 0$;  
-|       **ELSE**
-|               $signal_i = 1$;  
-
-In other words, the code checks whether the predicted volatility is significantly greater than the 95% confidence interval (based on historical data). If this is the case, the trading signal is set to 0, i.e. the position is sold. If the expected volatility is within the normal range, we remain respectively get in a long position. To simplify, a standard normal distribution is assumed, where a z-score of 1.645 more or less corresponds to the 95% confidence interval.  
-
-```{r garch_trading, fig.align='center', out.width='70%', fig.cap='Trading performance of the GARCH trading strategy based on volatility predictions starting from 2020/01/02. The time periods where we quit the market is clearly visible as horizontal lines.', echo=FALSE}
-knitr::include_graphics("images/GARCH/garch_trading.png")
-```
-
-Figure \ref{fig:garch_trading} shows the trading performance based solely on the GARCH strategy described in this section. The horizontal performance lines indicate that the algorithm preferred a 100% allocation to cash during these phases. This effect is particularly strong in March 2020, most likely due to the uncertainty caused by the pandemic at that time. At the same time, the Covid-19 pandemic triggered a short-term bear market in global equity markets. Overall, the performance looks promising, yet resembles a buy-and-hold strategy due to the few trading signals generated. 
-
-\newpage
-#### 3.3.4 Trading the strategy
-
 
 In chapter 3.2.3 we have decided to fix the architecture 7 layers 7 nets.  In the following we describe how in this case the net is used, in order to create a trading signal. Further we use the LPD, explained in chapter [2.4.2.](#xai_finance), based on the computed nets to derive an additional trading signal.
 
 
 
-#### Neural Net
+#### 3.3.2. Neural Net
 
-Due to its randomness in finding the optimum, it is proposed by the Central Limit Theorem [@central_limit_theorem] to use 
-an approximate $\text{number of iterations} N_{total}$ $\ge$ 100 for an accurate mean value. In order to find a balance between precision and computation time, we found 1000 iterations should be sufficient.
+&nbsp;
 
-Let p be the predicted value of the neural net in a certain time t.
-With formula $f(p_{k})$ \ref{eq:net_decision1} in every t a trading signal is derived by majority decision. How clearly the decision of the forecasts must be is decicide by paramteter beta.
-For further evaluation of net,s beta can be used as an optimizing factor.
+Due to its randomness in finding the optimum, it is proposed by the Central Limit Theorem [@central_limit_theorem] to use an approximate  $\text{number of iterations} N_{total}$ $\ge$ 100 for an accurate mean value. In order to find a balance between precision and computation time, we found 1000 iterations should be sufficient.
+
+Let $p$ be the predicted value of the neural net in a certain time $_{t}$.
+With formula $f(p_{k})$ \ref{eq:net_decision1} in every $_{t}$ a trading signal is derived by majority decision. How clearly the decision of the forecasts must be, is decided by parameter $\beta$.
+For further evaluation of nets $\beta$ can be used as an optimizing factor.
 
 
+
+
+&nbsp;
 
 
 
@@ -269,7 +254,8 @@ For further evaluation of net,s beta can be used as an optimizing factor.
 ```
 
 
-majority decision
+&nbsp;
+
 
 
 $N_{total}$ = Total Number of nets
@@ -282,9 +268,10 @@ $p_{k}$ = predicted value from neural net
 
 
 \newpage
-#### LPD signal
 
+#### 3.3.3. LPD signal
 
+&nbsp;
 
 In the same manner as before, for every $k$ of the $N_{total}$ nets in every timestep $t$ the derivative as in chapter [2.4.2.](#xai_finance) is calculated. From the insample lpd the mean $\bar{Y}$ \ref{eq:Ybar} and the standarddeviation $sdY$ \ref{eq:sdY} for every $lag_{j}$ is derived. In the out of sample $\bar{Y}_{j}$ and $sdY_{j}$  are used to generate a signal by the following:
 
@@ -358,6 +345,8 @@ $\eta_{lower},\eta_{upper}$ = lower  and upper border for signal decision
 $g(X)$ = Function of lags exceeding band $\in$ {0..j}
 
 &nbsp;
+
+
 ```{r lpd_explain, fig.align='center', out.width='100%', fig.cap="LPD Plot for illustration", echo=FALSE}
 knitr::include_graphics("images/xailpd/out_decision_small.jpeg")
 ```
@@ -369,36 +358,68 @@ knitr::include_graphics("images/xailpd/out_sum_2.jpeg")
 
 
 
-\newpage
-
-#### rolling window 
-
-the 9 splits which were in chapter [3.2.1.](#test_train) introduce are now used for trading. the out of sample performances of every split are added together and are compared with the benchmark from [bench](#bench_mark)
-
-
-With the previuosly established architecture 3 parameters are slight
-
-
-$\lambda$
-$\eta_{lower},\eta_{upper}$
-$\beta$
-
-
-
-9 windows as in previous chapters
-performance 
-
-
-
-##### combination with garch
-
-
 
 
 
 \newpage
 
-#### 3.3.5. Kapitel: Resultat nicht wie erhofft
+#### 3.3.5. GARCH volatility predictions
+
+&nbsp;
+
+In a further step, we examine the time series with a traditional GARCH model that allows heteroskedasticity. T. Bollerslev proposes to use this to model time-dependent variance as a function of lagged shocks and lagged conditional variances [@garch]. Based on this model, we conduct one-step-ahead predictions using a rolling window of size 365 days i.e. data points and refit the model after every month. These predictions of future volatilities are presented in the appendix in figure \ref{fig:vola_forecasts} and will be used to make trading decisions. The asymmetric volatility phenomenon by F. Black describes a negative correlation between the volatility of the return and the achieved return [@leverage_effect]. Therefore, we define the following trading rule:
+
+| **FOR EACH** $i$ in $\sigma_{predicted}$ 
+|       **IF** $\sigma_{predicted, i} \ge 1.645 \sigma_{historical}$:  
+|               $signal_i = 0$;  
+|       **ELSE**
+|               $signal_i = 1$;  
+
+In other words, the code checks whether the predicted volatility is significantly greater than the 95% confidence interval (based on historical data). If this is the case, the trading signal is set to 0, i.e. the position is sold. If the expected volatility is within the normal range, we remain respectively get in a long position. To simplify, a standard normal distribution is assumed, where a z-score of 1.645 more or less corresponds to the 95% confidence interval.  
+
+```{r garch_trading, fig.align='center', out.width='70%', fig.cap='Trading performance of the GARCH trading strategy based on volatility predictions starting from 2020/01/02. The time periods where we quit the market is clearly visible as horizontal lines.', echo=FALSE}
+knitr::include_graphics("images/GARCH/garch_trading.png")
+```
+
+Figure \ref{fig:garch_trading} shows the trading performance based solely on the GARCH strategy described in this section. The horizontal performance lines indicate that the algorithm preferred a 100% allocation to cash during these phases. This effect is particularly strong in March 2020, most likely due to the uncertainty caused by the pandemic at that time. At the same time, the Covid-19 pandemic triggered a short-term bear market in global equity markets. Overall, the performance looks promising, yet resembles a buy-and-hold strategy due to the few trading signals generated. 
+
+
+\newpage
+
+
+#### 3.3.4. nn and lpd estimation
+
+&nbsp;
+
+the 9 splits which were in chapter [3.2.1.](#test_train) introduce are now used for trading. The out of sample performances of every split are added together and are compared with the benchmark from [bench](#bench_mark).
+
+
+
+
+With the previously established architecture only the three parameters $\lambda$, $\eta_{lower},\eta_{upper}$, $\beta$ are optimized for performance.
+
+
+
+
+
+
+```{r results_different_decisions, fig.align='center', out.width='100%', fig.cap="Nets LPD results", echo=FALSE}
+knitr::include_graphics("images/xailpd/xai with insignal/devi_1_all3.jpeg")
+```
+
+
+
+
+
+
+
+
+
+
+\newpage
+
+#### 3.3.6. Kapitel: Resultat nicht wie erhofft
+
 &nbsp;
 
 - Vorschläge: 

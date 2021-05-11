@@ -16,8 +16,7 @@ load("data/GARCH_vola_predictions/garch_out_signal.rda")
 devi=1
 #
 # decision rule of nn percentage of half  if NULL majority decision is taken
-percentage= 0.1
-#anzahl
+percentage= 0.25
 anz=1000
 #---------
 #-------------------------------------------------------------------------------
@@ -35,11 +34,26 @@ nn_signal_string=  paste("nn_signal","anz=",as.character(anz),"decision=",as.cha
 #------------------------------------------------------------------------------
 
 
-assign("olpd_1",get(olpd_string))
-assign("nn_1",get(nn_string))
-assign("sharpmat_1",get(sharpmat_string))
-assign("nn_signal_1",get(nn_signal_string))
-assign("olpd_signal_1",get(olpd_signal_string))
+# assign("olpd_1",get(olpd_string))
+# assign("nn_1",get(nn_string))
+# assign("sharpmat_1",get(sharpmat_string))
+# assign("nn_signal_1",get(nn_signal_string))
+# assign("olpd_signal_1",get(olpd_signal_string))
+
+
+# assign("olpd_2",get(olpd_string))
+# assign("nn_2",get(nn_string))
+# assign("sharpmat_2",get(sharpmat_string))
+# assign("nn_signal_2",get(nn_signal_string))
+# assign("olpd_signal_2",get(olpd_signal_string))
+
+
+# assign("olpd_3",get(olpd_string))
+# assign("nn_3",get(nn_string))
+# assign("sharpmat_3",get(sharpmat_string))
+# assign("nn_signal_3",get(nn_signal_string))
+# assign("olpd_signal_3",get(olpd_signal_string))
+# 
 
 
 
@@ -52,35 +66,59 @@ assign("olpd_signal_1",get(olpd_signal_string))
 cbind(nn_signal_1,garch_out_signal,olpd_signal_1)
 
 
-signal_fall3=nn_signal_1
 
-signal_fall3[which(garch_out_signal==0 || olpd_signal_1==0)]<-0
 
-signal_fall3[which(olpd_signal_1==0.5)]<-0.5
 
-perfall3=signal_fall3*outtarget
+signal_fall3_1=nn_signal_1
+signal_fall3_1[which(garch_out_signal==0 || olpd_signal_1==0)]<-0
+signal_fall3_1[which(olpd_signal_1==0.5)]<-0.5
+perfall3_1=signal_fall3_1*outtarget
+
+
+signal_fall3_2=nn_signal_2
+signal_fall3_2[which(garch_out_signal==0 || olpd_signal_2==0)]<-0
+signal_fall3_2[which(olpd_signal_2==0.5)]<-0.5
+perfall3_2=signal_fall3_2*outtarget
+
+
+signal_fall3_3=nn_signal_3
+signal_fall3_3[which(garch_out_signal==0 || olpd_signal_3==0)]<-0
+signal_fall3_3[which(olpd_signal_3==0.5)]<-0.5
+perfall3_3=signal_fall3_3*outtarget
+
+
 
 
 #sharperatio over all
 sharpe_bh=sqrt(365)*SharpeRatio(outtarget,FUN="StdDev")
 
+
+
 sharpe_olpd_1=sqrt(365)*SharpeRatio(olpd_1,FUN="StdDev")
 sharpe_nn_1=sqrt(365)*SharpeRatio(nn_1,FUN="StdDev")
+sharpe_all3_1=sqrt(365)*SharpeRatio(perfall3_1,FUN="StdDev")
 
-sharpe_all3_1=sqrt(365)*SharpeRatio(perfall3,FUN="StdDev")
+sharpe_olpd_2=sqrt(365)*SharpeRatio(olpd_2,FUN="StdDev")
+sharpe_nn_2=sqrt(365)*SharpeRatio(nn_2,FUN="StdDev")
+sharpe_all3_2=sqrt(365)*SharpeRatio(perfall3_2,FUN="StdDev")
 
-
+sharpe_olpd_3=sqrt(365)*SharpeRatio(olpd_3,FUN="StdDev")
+sharpe_nn_3=sqrt(365)*SharpeRatio(nn_3,FUN="StdDev")
+sharpe_all3_3=sqrt(365)*SharpeRatio(perfall3_3,FUN="StdDev")
 
 
 
 
 
 #all sharpmats togheter
+
 allsharp=cbind(sharpmat_1[,-3],sharpmat_2[,-3],sharpmat_3[,-3])
 
 
+c(sharpe_olpd_1,sharpe_nn_1,sharpe_all3_1)
+c(sharpe_olpd_2,sharpe_nn_2,sharpe_all3_2)
 
-
+c(sharpe_olpd_3,sharpe_nn_3,sharpe_all3_3)
 
 
 
@@ -114,7 +152,7 @@ colnames(compare_perf)=name
 colors= c("red","pink","blue","lightblue","black","grey","green")
 
 
-#plot.xts(compare_perf,main=main,col=colors)
+# plot.xts(compare_perf,main=main,col=colors)
 addLegend("topleft", 
           legend.names=name,
           col=colors,
