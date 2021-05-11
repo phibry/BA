@@ -43,7 +43,7 @@ lags=7
 devi=2
 #
 # decision rule of nn percentage of half  if NULL majority decision is taken
-percentage= 0.2
+percentage= 0.3
 
 #neurons 
 neuron_vec=c(7,7)
