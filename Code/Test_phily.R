@@ -642,17 +642,19 @@ colorino <- c("#ff1208", "#003f5c", "#2f4b7c", "#a05195", "#d45087", "#f95d6a", 
 plot(xai_data,
      main="XAI ~ Bitcoin",
      col=colorino,
-     yaxis.right=FALSE)
-for (i in 1:ncol(xai_data))
-  mtext(colnames(xai_data)[i], col=colorino[i], line=-i)
+     yaxis.right=FALSE,
+     lwd=2,
+     ylim=c(-0.025, 0.05))
+# for (i in 1:ncol(xai_data))
+#   mtext(colnames(xai_data)[i], col=colorino[i], line=-i)
 
 
-addLegend("topright", 
+addLegend("top", 
           legend.names=colnames(xai_data),
           col=colorino,
           lty=rep(1, ncol(xai_data)),
-          lwd=rep(1, ncol(xai_data)),
-          ncol=5)
+          lwd=rep(2, ncol(xai_data)),
+          ncol=3)
 
 class(xai_data)
 
