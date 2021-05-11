@@ -81,6 +81,13 @@ plot(mod)
 
 GARCH_vola <- mod@forecast$density
 
+# Transform index dates for dataframe
+
+ind_0 <- index(dat)[which(rownames(dat) == split)]
+ind_1 <- nrow(dat)
+
+rownames(GARCH_vola) <- index(dat_xts[(ind_0+1):ind_1])
+
 # Trading strategy: Trading based on historical volatility as threshold 
 # Generate trading signal if predicted vola >= 0.95 level of historical vola
 
@@ -99,17 +106,6 @@ for(i in 1:nrow(GARCH_vola)){
 
 GARCH_vola$Signum_Signal <- sign(GARCH_vola$Mu)
 
-# Save as .rda file
-
-# save(GARCH_vola, file = "data/GARCH_vola_predictions/GARCH_vola_predictions.rda")
-
-# Check trading performance
-
-ind_0 <- index(dat)[which(rownames(dat) == split)]
-ind_1 <- nrow(dat)
-
-rownames(GARCH_vola) <- index(dat_xts[(ind_0+1):ind_1])
-
 # Trading function
 
 perf <- GARCH_vola$Trading_signal * dat_xts[(ind_0+1):ind_1]
@@ -123,6 +119,10 @@ sharpe_sign <- sqrt(365)*mean(perf_sign,na.rm=T)/sqrt(var(perf_sign,na.rm=T))
 # Buy and hold
 bh <- rep(1, length(perf)) * dat_xts[(ind_0+1):ind_1]
 sharpe_bh <- sqrt(365)*mean(bh, na.rm = T) / sqrt(var(bh, na.rm = T))
+
+# Save as .rda file
+
+# save(GARCH_vola, file = "data/GARCH_vola_predictions/GARCH_vola_predictions.rda")
 
 # Plot performances
 par(mfrow = c(3,1))
