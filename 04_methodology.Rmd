@@ -175,7 +175,7 @@ When looking at the Sharpe ratios, an inverse relationship between the in-sample
 
 - Vorschlag: zwei Modelle (z.B. c(10,10) und c(7,7) wählen, die irgendwie Sinn machen und dann mit Diebold Mariano Predictive Accuracy vergleichen. Das bessere wird verwendet. 
 
-#### 3.2.3.1 Benchmark
+#### 3.2.3.1 Benchmark {#benchmark}
  
  -buy and hodl kurz erklären im out of sample ( alle grünen beim 9 split)
  
@@ -373,7 +373,7 @@ knitr::include_graphics("images/xailpd/out_sum_2.jpeg")
 
 #### rolling window 
 
-the 9 splits which were in chapter [3.2.1.](#test_train) introduce are now used for trading. the out of sample performacenes of every split are added togheter and compared withc the benchmark
+the 9 splits which were in chapter [3.2.1.](#test_train) introduce are now used for trading. the out of sample performances of every split are added together and are compared with the benchmark from [bench](#bench_mark)
 
 
 With the previuosly established architecture 3 parameters are slight
