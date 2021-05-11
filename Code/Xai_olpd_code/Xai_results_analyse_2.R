@@ -22,7 +22,7 @@ anz=1000
 #---------
 #-------------------------------------------------------------------------------
 data_string= paste("obj","anz=",as.character(anz),"decision=",as.character(percentage*100),"%","dev=",as.character(devi),sep="_")
-load(paste("data/xai/7_7 with signal/9",data_string,".rda",sep=""))
+load(paste("data/xai/7_7_withsignal_xai_in/9",data_string,".rda",sep=""))
 
 olpd_string=  paste("alloverperf_olpd","anz=",as.character(anz),"decision=",as.character(percentage*100),"%","dev=",as.character(devi),sep="_")
 nn_string=  paste("alloverperf_nn","anz=",as.character(anz),"decision=",as.character(percentage*100),"%","dev=",as.character(devi),sep="_")
