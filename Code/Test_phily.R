@@ -333,15 +333,331 @@ plot(logret["2020-01-08::2021-03-27"], type="l")
 
 
 
-# GOOGLE
+
+
+
+
+# # von Wildi####
+# transform_OLPD_back_original_data_func <- function(data_xts, data_mat, OLPD_scaled_mat, lm_obj, data) {
+#   # Make xts-object (not trivial in this case because of monthly dates...)
+#   OLPD_mat <- data_xts
+#   for (i in 1:nrow(OLPD_scaled_mat))
+#     OLPD_mat[i,] <- OLPD_scaled_mat[i,]
+#   OLPD_scaled_mat <- OLPD_mat
+#   is.xts(OLPD_mat)
+#   colnames(OLPD_mat) <- c("intercept",colnames(data_xts)[2:ncol(data_xts)])
+#   
+#   # Transform back to original log-returns: the regression weights are not affected in this case because target and explanatory are scaled by the same constant: we nevertheless apply the (identity) scaling to be able to work in more general settings
+#   for (j in 2:ncol(OLPD_mat))
+#     OLPD_mat[,j] <- OLPD_scaled_mat[,j]*(max(data_mat[,1])-min(data_mat[,1]))/(max(data_mat[,j])-min(data_mat[,j]))
+#   # The intercept is affected
+#   #   -We center the intercept: variations about its mean value
+#   #   -We scale these variations: divide by scale of transformed and multiply by scale of log-returns
+#   #   -Add intercept from original regression
+#   OLPD_mat[,1] <- (OLPD_scaled_mat[,1]-mean(OLPD_scaled_mat[,1],na.rm=T))*((max(data_mat[,1])-min(data_mat[,1]))/(max(data[,1])-min(data[,1]))) +lm_obj$coefficients[1]
+#   
+#   return(list(OLPD_mat=OLPD_mat,OLPD_scaled_mat=OLPD_scaled_mat))
+# }
+# OLPD_func <- function(x, delta, epsilon, nn) {
+#   try_data_list <- try(out_original <- predict(nn,x), silent=T)
+#   
+#   if(class(try_data_list)[1]=="try-error") {
+#     data_list <- vector(mode="list")
+#     print("Neural net singular")
+#     effect <- NULL
+#     return(list(effect=effect))
+#     
+#   } else {
+#     
+#     
+#     
+#     # For each explanatory...
+#     for (i in 1:ncol(x)) {
+#       # y will be the original explanatory plus an infinitesimal perturbation of i-th explanatory
+#       y <- x
+#       y[,i]<-y[,i]+delta*x[,i]
+#       
+#       # Generate infinitesimally perturbated output
+#       out_i <-predict(nn,y)
+#       
+#       if (i==1) {
+#         effect<-(out_i-out_original)/(delta*x[,i])
+#       } else {
+#         effect<-c(effect,(out_i-out_original)/(delta*x[,i]))
+#       }
+#       # Collect for each explanatory the perturbated data and the corresponding nn-output
+# 
+#     }
+#     # Virtual intercept: output of neural net minus linear regression part
+#     virt_int <- out_original-as.double(x%*%effect)
+#     effect <- c(virt_int,effect)
+#     
+#     
+#     # Fit the regression to the noiseless perturbated data: as many observations as unknowns i.e. zero-residual
+#     return(list(effect=effect))
+#   }
+# }
+# 
+# # in_out_sample_separator="2021-05-05"; neuron_vec=c(7,7)
+# OLPDphil <- function(in_out_sample_separator,data_mat,use_in_samp=T,neuron_vec) {
+# 
+#   # Regression
+#   reg_data <- data_mat
+#   colnames(reg_data) <- paste("lag",0:(ncol(reg_data)-1),sep="")
+#   lm_obj <- lm(lag0~., data=reg_data)
+#   
+#   # Scaling data for the NN
+#   maxs <- apply(data_mat, 2, max)
+#   mins <- apply(data_mat, 2, min)
+#   
+#   # Transform data into [0,1]
+#   scaled <- scale(data_mat, center = mins, scale = maxs - mins)
+#   
+#   # Train-test split
+#   train_set_xts <- scaled[paste("/",in_out_sample_separator,sep=""),]
+#   test_set_xts <- scaled[paste(in_out_sample_separator,"/",sep=""),]
+#   
+#   # Transform to matrix
+#   train_set <- as.matrix(train_set_xts)
+#   test_set <- as.matrix(test_set_xts)
+#   
+#   # Change colnames
+#   colnames(train_set) <- paste("lag",0:(ncol(train_set)-1),sep="")
+#   
+#   n <- colnames(train_set)
+#   # Model: target is current GOOGLE, all other variables are explanatory
+#   f <- as.formula(paste("lag0 ~", paste(n[!n %in% "lag0"], collapse = " + ")))
+#   
+#   # Train neural net
+#   nn <- neuralnet(f,data=train_set,hidden=neuron_vec,linear.output=F)
+#   
+#   # Original linear parameter data
+#   #   Generate new data from original data
+#   #   New data: in each time point compute the parameters of the exact infinitesimal linear regression model
+#   # Induce infinitesimal perturbations to data and fit regression to output
+#   delta <- 1.e-5
+#   epsilon <- 1.e-4
+#   
+#   
+#   if (use_in_samp) {
+#     # Smoother (in-sample data)
+#     data <- train_set
+#     data_xts <- train_set_xts
+#   } else {
+#     # Rougher (out-sample data)
+#     data <- test_set
+#     data_xts <- test_set_xts
+#   }
+# 
+#   pb <- txtProgressBar(min = 1, max = (nrow(data)-1), style = 3)
+#   for (i in 1:(nrow(data))) {
+#     x <- matrix(data[i,2:ncol(data)], nrow=1)
+#     colnames(x) <- colnames(data)[2:ncol(data)]
+#     
+#     # Wie OLPD-func
+#     OLPD_scaled_obj <- OLPD_func(x, delta, epsilon, nn)
+# 
+#     if (i==1) {
+#       OLPD_scaled_mat <- OLPD_scaled_obj$effect
+#     } else {
+#       OLPD_scaled_mat <- rbind(OLPD_scaled_mat,OLPD_scaled_obj$effect)
+#     }
+#     setTxtProgressBar(pb, i)
+# 
+#   }
+#   close(pb)
+# 
+#   # Transform data back to its original form
+#   OLPD_mat_obj <- transform_OLPD_back_original_data_func(data_xts, data_mat, OLPD_scaled_mat, lm_obj, data)
+# 
+#   OLPD_mat <- OLPD_mat_obj$OLPD_mat
+#   
+#   index(OLPD_mat) <- index(data_xts)
+#   colnames(OLPD_mat)[1] <- "(Intercept)"
+#   colnames(OLPD_mat)[2:ncol(OLPD_mat)] <- paste("lag",1:(ncol(train_set)-1),sep="")
+#   
+# 
+#   return(list(OLPD_mat=OLPD_mat, lm_obj=lm_obj))
+# }
+
+
+
+
+# XAI-GOOGLE####
 getSymbols("GOOGL")
 tail(GOOGL)
+save(GOOGL, file = "data/GOOGL.rda")
+save("google_dat.Rdat")
 g.adj <- GOOGL[,6]
 par(mfrow=c(1,1))
 plot(g.adj, main="Adjusted Prices ~ Google")
+logi_googi <- diff(log(g.adj))
+chart.ACF.phil(logi_googi)
+chart.ACFplus.phil(logi_googi, ymax=0.1, main="GOOGLE price dependency structure")
 
-chart.ACF.phil(diff(log(g.adj)))
+par(mfrow=c(1,1))
+chart.ACF.phil(logi_googi, ymax=0.1)
+# lag1, 6, 7, 12
+
+# XAI - BTC
+load("data/log_ret_27_03_21.rda")
+load("data/BTC_USD_27_03_21.rda")
+btc <- BTC_USD_27_03_21$`BTC-USD.Adjusted`
+logret <- log_ret_27_03_21
+
+par(mfrow=c(1,1))
+chart.ACF.phil(logret, ymax=0.06, maxlag = 20, main="BTC Price Dependency Structure")
+chart.ACFplus.phil(logret, ymax=0.06, main="BTC price dependency structure")
+# lag 6 und lag 10
+
+## Data Prep####
+par(mfrow=c(2,1))
+plot(logret, main="Bitcoin")
+plot(btc, main="Bitcoin")
+
+x <- logret
+
+data_mat <- cbind(x,
+                  lag(x),
+                  lag(x,k=2),
+                  lag(x,k=3),
+                  lag(x,k=4),
+                  lag(x,k=5),
+                  lag(x,k=6),
+                  lag(x,k=7),
+                  lag(x,k=8),
+                  lag(x,k=9),
+                  lag(x,k=10))
+
+# Check length of time series before na.exclude
+dim(data_mat)
+data_mat <- na.exclude(data_mat)
+# Check length of time series after removal of NAs
+dim(data_mat)
+head(data_mat)
+tail(data_mat)
+
+
+# 100x####
+# res_mat <- 0
+# for (i in 1:100) {
+#   res <- na.exclude(OLPDphil("2021-03-27", data_mat, use_in_samp=TRUE, c(7,7))$OLPD_mat)
+#   res_mat <- res_mat + res
+# }
+
+# 1:
+# res_mat1 <- res_mat
+
+resi <- OLPDphil("2021-03-27", data_mat, use_in_samp=TRUE, c(7,7))
+# par(mfrow=c(1,1))
+# plot(res_mat, main="")
+# 
+# n <- n + 1
+# # res <- res_mat
+# res <- res + res_mat
+# # res <- res/n
+# 
+# # res10 <- res
+
+reg_data <- data_mat
+colnames(reg_data) <- paste("lag",0:(ncol(reg_data)-1),sep="")
+lm_obj <- lm(lag0~., data=reg_data)
+xai_lm <- lm_obj
 
 par(mfrow=c(2,1))
-plot(diff(log(g.adj)), main="Google")
-plot(logret, main="Google")
+# colorino <- c("#003f5c", "#2f4b7c", "#665191", "#a05195", "#d45087", "#f95d6a", "#f6004a", "#ff1208", "#ef4e3d", "#ffa600", "#ff7c43")
+colorino <- c("#000000", "#000000", "#000000", "#000000", "#000000", "#000000", "#f6004a", "#004c6d", "#0075b6", "#665191", "#ff7c43")
+plot(xai_data, main="XAI ~ Bitcoin", col=colorino)
+for (i in c(7,8,9,10,11))
+  mtext(colnames(xai_data)[i], col=colorino[i], line=-i)
+plot(logret, main="LogReturn ~ Bitcoin")
+
+apply(na.omit(xai_data), 2, mean)[c(7,8,9,10,11)]
+coef(xai_lm)[c(7,8,9,10,11)]
+
+# Test
+# test1 <- na.exclude(OLPDphil("2021-03-27", data_mat, use_in_samp=TRUE, c(7,7))$OLPD_mat)
+
+
+# xai_data <- res
+# save(xai_data, file = "data/xai_data.rda")
+# save(xai_lm, file = "data/xai_lm.rda")
+load("data/xai_data.rda")
+load("data/xai_lm.rda")
+xai_lm$coefficients
+
+# xai_mat <- xai_data$OLPD_mat
+# xai_lm <- xai_data$lm_obj
+# par(mfrow=c(1,1))
+# # colorino <- c("#003f5c", "#2f4b7c", "#520065", "#860064", "#a05195", "#665191", "#f95d6a", "#d45087", "#ff7c43", "#d6204f", "#ef4e3d", "#ffa600")
+# colorino <- c("#003f5c", "#2f4b7c", "#665191", "#a05195", "#d45087", "#f95d6a", "#f6004a", "#ff1208", "#ef4e3d", "#ffa600", "#ff7c43")
+# par(mfrow=c(1,1))
+# plot(xai_mat, main="XAI ~ Bitcoin", col=colorino)
+# for (i in 1:ncol(xai_mat))
+#   mtext(colnames(xai_mat)[i], col=colorino[i], line=-i)
+# 
+# 
+# options(scipen = 999)
+# coef(xai_lm)
+# apply(na.omit(xai_mat), 2, mean)
+# coef(xai_lm)[c(7, 11)]
+# apply(na.omit(xai_mat), 2, mean)[c(7, 11)]
+# options(scipen = 0)
+# 
+# 
+# par(mfrow=c(2,1))
+# colors <- colorino[c(1,6)]
+# select_acf <- test2$OLPD_mat[, c(7, 11)]
+# plot(select_acf, main="XAI ~ Bitcoin", col=colors)
+# for (i in 1:ncol(select_acf))
+#   mtext(colnames(select_acf)[i], col=colors[i], line=-i)
+# plot(logret, main="Adjusted log(Prices) ~ Bitcoin")
+# 
+# summary(na.exclude(test2$OLPD_mat[, 7]))
+# summary(na.exclude(test2$OLPD_mat[, 11]))
+# 
+# 
+# par(mfrow=c(2,1))
+# plot(test2$OLPD_mat, main="XAI ~ Bitcoin", col=colorino)
+# for (i in 1:ncol(test2$OLPD_mat))
+#   mtext(colnames(test2$OLPD_mat)[i], col=colorino[i], line=-i)
+# plot(logret, main="Adjusted log(Prices) ~ Bitcoin")
+
+
+#003f5c
+#2f4b7c
+#665191
+#a05195
+#d45087
+#f95d6a
+#ff7c43
+#f6004a
+#ff1208
+#ffa600
+
+par(mfrow=c(1,1))
+# colorino <- c("#003f5c", "#2f4b7c", "#665191", "#a05195", "#d45087", "#f95d6a", "#f6004a", "#ff1208", "#ef4e3d", "#ffa600", "#ff7c43")
+colorino <- c("#ff1208", "#003f5c", "#2f4b7c", "#a05195", "#d45087", "#f95d6a", "#f6004a", "#004c6d", "#0075b6", "#665191", "#ff7c43")
+# colorino <- c("#000000", "#000000", "#000000", "#000000", "#000000", "#000000", "#f6004a", "#004c6d", "#0075b6", "#665191", "#ff7c43")
+plot(xai_data, main="XAI ~ Bitcoin", col=colorino)
+for (i in 1:ncol(xai_data))
+  mtext(colnames(xai_data)[i], col=colorino[i], line=-i)
+
+class(xai_data)
+
+xai_dat <- as.data.frame(xai_data)
+class(xai_dat)
+
+plot(xai_dat[,1], type="l", ylim=c(min(na.exclude(xai_dat)), na.exclude(max(xai_dat))))
+c(min(na.exclude(xai_dat)), na.exclude(max(xai_dat)))
+
+# Table####
+as.numeric(round(xai_lm$coefficients,4))
+
+name <- c("Intercept", "Lag 1", "Lag 2", "Lag 3", "Lag 4", "Lag 5",
+          "Lag 6", "Lag 7", "Lag 8", "Lag 9", "Lag 10")  
+z <- as.numeric(round(xai_lm$coefficients,4))
+df <- as.data.frame(rbind(name,z))
+colnames(df) <- NULL
+rownames(df) <- c("Coefficient", "Value")
+df
