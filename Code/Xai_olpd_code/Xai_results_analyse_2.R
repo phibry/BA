@@ -16,7 +16,7 @@ load("data/GARCH_vola_predictions/garch_out_signal.rda")
 devi=1
 #
 # decision rule of nn percentage of half  if NULL majority decision is taken
-percentage= 0.25
+percentage= 0.3
 anz=1000
 #---------
 #-------------------------------------------------------------------------------
@@ -54,7 +54,7 @@ nn_signal_string=  paste("nn_signal","anz=",as.character(anz),"decision=",as.cha
 # assign("nn_signal_3",get(nn_signal_string))
 # assign("olpd_signal_3",get(olpd_signal_string))
 # 
-
+# 
 
 
 
@@ -67,7 +67,7 @@ cbind(nn_signal_1,garch_out_signal,olpd_signal_1)
 
 
 
-
+##all 3 together define better rule!
 
 signal_fall3_1=nn_signal_1
 signal_fall3_1[which(garch_out_signal==0 || olpd_signal_1==0)]<-0
@@ -89,6 +89,32 @@ perfall3_3=signal_fall3_3*outtarget
 
 
 
+## only lpd ####
+
+lpdperf1=outtarget
+lpdperf1[which(olpd_signal_1==0)]<-0
+lpdperf1[which(olpd_signal_1==0.5)]<-lpdperf1[which(olpd_signal_1==0.5)]*0.5
+
+
+lpdperf2=outtarget
+lpdperf2[which(olpd_signal_2==0)]<-0
+lpdperf2[which(olpd_signal_2==0.5)]<-lpdperf1[which(olpd_signal_2==0.5)]*0.5
+
+
+lpdperf3=outtarget
+lpdperf3[which(olpd_signal_3==0)]<-0
+lpdperf3[which(olpd_signal_3==0.5)]<-lpdperf1[which(olpd_signal_3==0.5)]*0.5
+
+
+  
+
+  
+  
+  
+
+
+
+
 #sharperatio over all
 sharpe_bh=sqrt(365)*SharpeRatio(outtarget,FUN="StdDev")
 
@@ -96,14 +122,20 @@ sharpe_bh=sqrt(365)*SharpeRatio(outtarget,FUN="StdDev")
 
 sharpe_olpd_1=sqrt(365)*SharpeRatio(olpd_1,FUN="StdDev")
 sharpe_nn_1=sqrt(365)*SharpeRatio(nn_1,FUN="StdDev")
+sharpe_lpd_1=sqrt(365)*SharpeRatio(lpdperf1,FUN="StdDev")
 sharpe_all3_1=sqrt(365)*SharpeRatio(perfall3_1,FUN="StdDev")
+
+
 
 sharpe_olpd_2=sqrt(365)*SharpeRatio(olpd_2,FUN="StdDev")
 sharpe_nn_2=sqrt(365)*SharpeRatio(nn_2,FUN="StdDev")
+sharpe_lpd_2=sqrt(365)*SharpeRatio(lpdperf2,FUN="StdDev")
 sharpe_all3_2=sqrt(365)*SharpeRatio(perfall3_2,FUN="StdDev")
+
 
 sharpe_olpd_3=sqrt(365)*SharpeRatio(olpd_3,FUN="StdDev")
 sharpe_nn_3=sqrt(365)*SharpeRatio(nn_3,FUN="StdDev")
+sharpe_lpd_3=sqrt(365)*SharpeRatio(lpdperf3,FUN="StdDev")
 sharpe_all3_3=sqrt(365)*SharpeRatio(perfall3_3,FUN="StdDev")
 
 
@@ -114,14 +146,13 @@ sharpe_all3_3=sqrt(365)*SharpeRatio(perfall3_3,FUN="StdDev")
 
 allsharp=cbind(sharpmat_1[,-3],sharpmat_2[,-3],sharpmat_3[,-3])
 
-
-c(sharpe_olpd_1,sharpe_nn_1,sharpe_all3_1)
-c(sharpe_olpd_2,sharpe_nn_2,sharpe_all3_2)
-
-c(sharpe_olpd_3,sharpe_nn_3,sharpe_all3_3)
+ten=c(sharpe_olpd_1,sharpe_nn_1,sharpe_lpd_1,sharpe_all3_1,sharpe_bh) #10%
+twenty=c(sharpe_olpd_2,sharpe_nn_2,sharpe_lpd_2,sharpe_all3_2,sharpe_bh) #20%
+thirty=c(sharpe_olpd_3,sharpe_nn_3,sharpe_lpd_3,sharpe_all3_3,sharpe_bh) #20%
 
 
-
+colnames(df)=c("lpd+nn","nn","lpd","lpd+nn+garch","bh")
+df=data.frame(rbind(ten,twenty,thirty))
 
 
 
@@ -149,10 +180,10 @@ compare_perf=cbind(cumsum(olpd_1),cumsum(nn_1),cumsum(olpd_2),cumsum(nn_2),cumsu
 name=c("olpd 10%","nn 10%","olpd 20%","nn 20%","olpd 30%","nn 30%","Buy and Hold")
 colnames(compare_perf)=name
 
-colors= c("red","pink","blue","lightblue","black","grey","green")
+colors= c("red","pink","blue","lightblue","darkorange","yellow","green")
 
 
-# plot.xts(compare_perf,main=main,col=colors)
+plot.xts(compare_perf,main=main,col=colors)
 addLegend("topleft", 
           legend.names=name,
           col=colors,
