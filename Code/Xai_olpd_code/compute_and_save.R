@@ -56,7 +56,15 @@ anz=1000
 save_separate=F
 
 
-
+for(i in c(1,1.5,2))
+{
+  devi=i
+  
+  for (k in c(0.1, 0.2, 0.3))
+  {
+    percentage=k
+    
+    
 
 
 
@@ -170,7 +178,11 @@ for (batch in 1:9)
   
 }
 
+#end of loop
 
+  }
+  
+}
 
 
 

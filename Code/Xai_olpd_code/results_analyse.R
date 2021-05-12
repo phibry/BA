@@ -13,10 +13,10 @@ load("data/GARCH_vola_predictions/garch_out_signal.rda")
 #-------------------------------------------------------------------------------
 
 #how many standart deviatons for olpd threshold
-devi=2
+devi=1.5
 #
 # decision rule of nn percentage of half  if NULL majority decision is taken
-percentage= 0.1
+percentage= 0.3
 anz=1000
 #---------
 #-------------------------------------------------------------------------------
@@ -54,7 +54,7 @@ nn_signal_string=  paste("nn_signal","anz=",as.character(anz),"decision=",as.cha
 # assign("nn_signal_3",get(nn_signal_string))
 # assign("olpd_signal_3",get(olpd_signal_string))
 # 
-# 
+
 
 
 
@@ -144,6 +144,18 @@ sharpe_all3_3=sqrt(365)*SharpeRatio(perfall3_3,FUN="StdDev")
 
 #all sharpmats togheter
 
+sharpmat_1[,1:3]=sharpmat_1[,c(2,3,1)]
+colnames(sharpmat_1)=c("sharpe_net","sharpe_lpd","sharpe_nn_olpd","sharpe_bh")
+
+sharpmat_2[,1:3]=sharpmat_2[,c(2,3,1)]
+colnames(sharpmat_2)=c("sharpe_net","sharpe_lpd","sharpe_nn_olpd","sharpe_bh")
+
+sharpmat_3[,1:3]=sharpmat_3[,c(2,3,1)]
+colnames(sharpmat_3)=c("sharpe_net","sharpe_lpd","sharpe_nn_olpd","sharpe_bh")
+
+
+
+
 allsharp=cbind(sharpmat_1[,-3],sharpmat_2[,-3],sharpmat_3[,-3])
 
 ten=c(sharpe_olpd_1,sharpe_nn_1,sharpe_lpd_1,sharpe_all3_1,sharpe_bh) #10%
@@ -163,43 +175,49 @@ colnames(df)=c("lpd+nn","nn","lpd","lpd+nn+garch","bh")
 #plots####
 #-----------------------------------------------------------------------------
 
-#performance cumulated
+#performance cumulated lpdperf3
 par(mfrow=c(3,1))
 
 main=paste("Performance cumulated from 9 splits, λ=",as.character(devi))
 
-compare_perf=cbind(cumsum(olpd_1),cumsum(nn_1),cumsum(perfall3_1),cumsum(olpd_2),cumsum(nn_2),cumsum(perfall3_2),cumsum(olpd_3),cumsum(nn_3),cumsum(perfall3_3), cumsum(outtarget))
+compare_perf=cbind(cumsum(nn_1),cumsum(lpdperf1),cumsum(olpd_1),cumsum(perfall3_1),cumsum(nn_2),cumsum(lpdperf2),
+                   cumsum(olpd_2),cumsum(perfall3_2),cumsum(nn_3),cumsum(lpdperf3),cumsum(olpd_3),cumsum(perfall3_3), cumsum(outtarget))
 
-name=c("lpd+nn β=0.1","nn β=0.1","nn+lpd+garch β=0.1","lpd+nn β=0.2","nn β=0.2","nn+lpd+garch β=0.2","lpd+nn β=0.3","nn β=0.3","nn+lpd+garch β=0.3","Buy and Hold")
+name=c("nn β=0.1","lpd β=0.1","lpd+nn β=0.1","nn+lpd+garch β=0.1","nn β=0.2","lpd β=0.2","lpd+nn β=0.2",
+       "nn+lpd+garch β=0.2","nn β=0.3","lpd β=0.3","lpd+nn β=0.3","nn+lpd+garch β=0.3","Buy and Hold")
+
 colnames(compare_perf)=name
 
-colors= c("red","pink","violetred","blue","lightblue","turquoise","darkorange","goldenrod1","yellow","green")
+colors= c("red","pink","violetred","darkorchid","blue","lightblue","turquoise","dodgerblue4","darkorange","goldenrod1","yellow","darkgoldenrod1","green")
 
 
-#plot.xts(compare_perf,main=main,col=colors)
+plot.xts(compare_perf,main=main,col=colors)
 addLegend("topleft", 
           legend.names=name,
           col=colors,
-          lty=rep(1,7),
-          lwd=rep(2,7),
+          lty=c(rep(1,13),2),
+          lwd=c(rep(2,13),3),
           ncol=1,
           bg="white")
 
 
 #sharpe ratios over all
 
-plot(rbind(sharpe_olpd_1,sharpe_nn_1,sharpe_all3_1,sharpe_olpd_2,sharpe_nn_2,sharpe_all3_2,sharpe_olpd_3,sharpe_nn_3,sharpe_all3_3,sharpe_bh),main=paste("Sharpe, λ=",as.character(devi)),xaxt="n",ylab="sharpe"
+plot(rbind(sharpe_nn_1,sharpe_lpd_1,sharpe_olpd_1,sharpe_all3_1,
+           sharpe_nn_2,sharpe_lpd_2,sharpe_olpd_2,sharpe_all3_2,
+           sharpe_nn_3,sharpe_lpd_3,sharpe_olpd_3,sharpe_all3_3,
+           sharpe_bh),main=paste("Sharpe, λ=",as.character(devi)),xaxt="n",ylab="sharpe",xlab=""
      ,col=colors,pch=19,cex=2)
-axis(1, at=1:10, labels=name)
+axis(1, at=1:13, labels=name,)
 
 
 #sharperatios per batch
 
-colors= c("red","pink","blue","lightblue","darkorange","goldenrod1","green")
+
 
 main=paste("Sharpe per batch, λ=",as.character(devi))
 plot(sharpmat_1[,3],type="l",col="green",xlab="batch nr",ylab= "sharpe",lwd=2,ylim=c(min(allsharp),max(allsharp)),main=main)
-for (i in 1:6){lines(allsharp[,i],col=colors[i],type="l",lwd=2)}
+for (i in 1:12){lines(allsharp[,i],col=colors[i],type="l",lwd=2)}
 
 
 
