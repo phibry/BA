@@ -360,7 +360,7 @@ Another approach is the LIME (Local Interpretable Model-agnostic Explanations). 
 
 For the interpretation of financial time series, we would like to keep the dependency structure. The changes in trend or variability should be maintained. The sequence should not be shuffled. When mixing up the order, a value from far back could suddenly play a bigger role for the model than a current one. Intuitively, this would not add any value to financial time series.
 
-For our application, the lagged logarithmic returns of bitcoin prices, are the features to be studied. We want to find out how the features affect the output of the neural network. A network is trained with delayed values as the input layer to match the output as closely as possible to the original values (the non-delayed ones). This concept strongly resembles a linear regression. What would this look like.
+For our application, the lagged log returns of bitcoin prices, are the features to be studied. We want to find out how the features affect the output of the neural network. A network is trained with delayed values as the input layer to match the output as closely as possible to the original values (the non-delayed ones). This concept strongly resembles a linear regression. What would this look like.
 
 ```{=tex}
 \begin{align} \label{eq:lm1}
@@ -404,7 +404,7 @@ z <- as.numeric(round(xai_lm$coefficients,4))
 df <- as.data.frame(rbind(name,z))
 colnames(df) <- NULL
 rownames(df) <- NULL
-kbl(df, caption="Coefficient of the linear regression of the Bitcoin Log-Returns.", booktabs = T, linesep = "") %>%
+kbl(df, caption="Coefficient of the linear regression of the BTC log returns.", booktabs = T, linesep = "") %>%
   kable_styling(latex_options = c("striped", "hold_position")) %>%
   column_spec(1:6, color="#000000") %>%
   column_spec(7, color="#f6004a") %>%
@@ -456,14 +456,14 @@ for (i in 1:ncol(xai_data))
   mtext(colnames(xai_data)[i], col=colorino[i], line=-i)
 ```
 
-```{r xai_plot2, fig.align='center', echo=FALSE, fig.cap="XAI compared to Logreturns of the Bitcoin.", out.width='100%'}
+```{r xai_plot2, fig.align='center', echo=FALSE, fig.cap="XAI compared to log returns of BTC.", out.width='100%'}
 # Load Data
 par(mfrow=c(2,1))
 colorino <- c("#000000", "#000000", "#000000", "#000000", "#000000", "#000000", "#f6004a", "#004c6d", "#0075b6", "#665191", "#ff7c43")
 plot(xai_data, main="XAI ~ Bitcoin", col=colorino)
 for (i in c(7,8,9,10,11))
   mtext(colnames(xai_data)[i], col=colorino[i], line=-i)
-plot(logret, main="LogReturn ~ Bitcoin")
+plot(logret, main="Log return ~ Bitcoin")
 ```
 
 \newpage
