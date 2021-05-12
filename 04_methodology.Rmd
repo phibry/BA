@@ -26,7 +26,7 @@ For processing and analyzing the data in order to fulfill the weak stationarity 
 \end{align}
 ```
 
-```{r log_ret, echo=FALSE, message=FALSE, fig.cap="logreturns BTC",out.width="80%"}
+```{r log_ret, echo=FALSE, message=FALSE, fig.cap="BTC log returns",out.width="80%"}
 load("data/log_ret_27_03_21.rda");log_ret=    log_ret_27_03_21   # loading logreturns
 df_sub <- data.frame(date = ymd(time(log_ret)), value = as.numeric(log_ret))
 plot(df_sub,
@@ -34,13 +34,13 @@ plot(df_sub,
      frame.plot = FALSE,
      xaxt="n",
      xlab="",
-     ylab="Log Return", ylim=c(-0.45, 0.2))
+     ylab="log return", ylim=c(-0.45, 0.2))
 axis.Date(1, at=seq(min(df_sub$date), max(df_sub$date), by="months"), format="%m-%y")
 ```
 
 Figure \ref{fig:log_ret} displays the historical log returns. In addition to the volatility clusters typical for financial time series, large outliers are visible. The negative outlier at the beginning of 2020 is particularly noticeable. By computing the autocorrelation (ACF) of the series in figure \ref{fig:acf_log_ret}, we can describe the dependency in these clusters. According to the ACF the lags 6 and 10 are significant on a 5% level. 
 
-```{r acf_log_ret, echo=FALSE, message=FALSE, fig.cap="Autocorrelation of bitcoin log returns for the entire time window"}
+```{r acf_log_ret, echo=FALSE, message=FALSE, fig.cap="Autocorrelation of BTC log returns for the entire time window"}
 # acf(log_ret,main="autocorrelation Logreturns")
 # chart.ACF(log_ret,main="Autocorrelation of log returns", maxlag = 20)
 chart.ACF.phil(log_ret,main="Autocorrelation of log returns", maxlag = 20)
@@ -52,7 +52,7 @@ Curios from which distribution the log returns might originate, we are fitting a
 
 
 
-```{r histogramm_logreturns, out.width='80%', fig.cap='Distribution of bitcoin log returns', echo=FALSE,fig.align="center"}
+```{r histogramm_logreturns, out.width='80%', fig.cap='Distribution of BTC log returns', echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/histogram_logret_3.jpeg")
 ```
 
@@ -92,7 +92,7 @@ We are looking for an optimal network, the optimal network should also provide r
 The reason for doing so is, we do not believe that the historical data longer than a year consists any information about the price tomorrow. By optimizing our models we found that more data would bring no additional performance, therefore the selected subset should be sufficient. Regarding consistency, the terms train and test set are used in the same sense as in-sample and out-of-sample. As proposed in [@nn_trading] we choose a test train split from 6 months in-sample and 1 month out-of-sample. This split is applied to the whole subset in form of a rolling window. By stepping forward with this 6/1 split by steplength of one month we end up with 9 data splits in total. In figure \ref{fig:test_train} this procedure is visualized, for every new timestep a new month is considered for the out of sample and the first month of the in sample, falls out of the frame. 
 
 
-```{r test_train, out.width='80%', fig.cap='Distribution of Logreturns', echo=FALSE}
+```{r test_train, out.width='80%', fig.cap='Distribution of BTC log returns', echo=FALSE}
 knitr::include_graphics("images/test_train_split_pp.jpeg.jpg")
 ```
 
@@ -362,7 +362,7 @@ knitr::include_graphics("images/xailpd/out_sum_2.jpeg")
 
 In a further step, we examine the time series with a traditional GARCH model that allows heteroskedasticity. T. Bollerslev proposes to use this to model time-dependent variance as a function of lagged shocks and lagged conditional variances [@garch]. Based on an ARMA(1,1)-GARCH(1,1), we conduct one-step-ahead predictions using a rolling window of size 365 days and refit the model after 30 days. This results in two different trading strategies of which one is based on the signs of the forecasts and the other on predicted volatility. The predictions of future volatilities are presented in the appendix in figure \ref{fig:vola_forecasts}. 
 
-The first trading strategy is based on one-step-ahead rolling window forecasts (here: logarithmic return) resulting from the ARMA(1,1)-GARCH(1,1). When we predict a positive value, the algorithm decides to enter, respectively remain in a long position. When predicting a negative value, we enter a short position to benefit from the anticipated market movement. 
+The first trading strategy is based on one-step-ahead rolling window forecasts (here: log return) resulting from the ARMA(1,1)-GARCH(1,1). When we predict a positive value, the algorithm decides to enter, respectively remain in a long position. When predicting a negative value, we enter a short position to benefit from the anticipated market movement. 
 
 The second strategy is solely based on volatility predictions resulting from a GARCH(1,1) and tries to take an advantage from the asymmetric volatility phenomenon by F. Black. This phenomenon describes a negative correlation between the volatility of the return and the achieved return [@leverage_effect]. Therefore, we define the following trading rule:
 
