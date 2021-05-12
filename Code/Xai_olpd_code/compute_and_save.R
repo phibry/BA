@@ -43,7 +43,7 @@ lags=7
 devi=1
 #
 # decision rule of nn percentage of half  if NULL majority decision is taken
-percentage= 0.25
+percentage= 0.1
 
 #neurons 
 neuron_vec=c(7,7)
@@ -54,6 +54,15 @@ anz=1000
 # ANZAHL REEALSIATIONEN OLPD MAT
 
 save_separate=F
+
+
+
+
+
+
+
+
+
 
 
 ##Test
@@ -165,51 +174,3 @@ for (batch in 1:9)
 
 
 
-
-
-
-
-
-
-
-
-#return overall performance bh nn and olpd, matrix with sharpe of all 3 per batch, sharpe of all together
-
-
-
-
-
-
-wwmax=100
-
-resmat=matrix(nrow=max,ncol = 2, data=0)
-
-for(k in 1:max){
-  
-  f=xai_outp(x=x,lags=lags,in_out_sep=in_out_sep,neuron_vec=neuron_vec,use_in_samp=use_in_samp,anz=anz,percentage=percentage,devi=devi,outtarget=outtarget)
-  resmat[k,1:2]=f[1:2]
-  print(k)
-  cat("\014")
-}
-
-
-
-
-par(mfrow=c(1,1))
-
-plot(resmat[,1],col="blue",type="l")  #sharpenet olpd
-lines(resmat[,2],col="green",type="l") #sharpe net
-
-abline(h=sqrt(365)*SharpeRatio(outtarget,FUN="StdDev"),col= "red")
-abline(h=0,col= "green")
-
-mean(resmat[,1])
-mean(resmat[,2])
-
-sum(resmat[,1] > resmat[,2])
-
-
-
-
-
-plot(BTC_USD_27_03_21$`BTC-USD.Close`["2020-07-01::"])
