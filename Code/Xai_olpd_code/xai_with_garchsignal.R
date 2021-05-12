@@ -40,10 +40,10 @@ lags=7
 
 
 #how many standart deviatons for olpd threshold
-devi=1
+devi=2
 #
 # decision rule of nn percentage of half  if NULL majority decision is taken
-percentage= 0.1
+percentage= 0.3
 
 #neurons 
 neuron_vec=c(7,7)
