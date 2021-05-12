@@ -27,8 +27,8 @@ end_out <- c("2020-07-31", "2020-08-31", "2020-09-30", "2020-10-31", "2020-11-30
 
 dates_mat <- as.data.frame(cbind(start_in, end_in, start_out, end_out))
 
-sharpmat=matrix(ncol=3,nrow = 9,data=0)
-colnames(sharpmat)<-c("sharpe_olpd","sharpe_net","sharpe_bh")
+sharpmat=matrix(ncol=4,nrow = 9,data=0)
+colnames(sharpmat)<-c("sharpe_nn_olpd","sharpe_net","sharpe_bh","sharpe_lpd")
 #set.seed(30)
 
 
@@ -87,7 +87,11 @@ for (batch in 1:9)
     first=xai_outp(x=x,lags=lags,in_out_sep=in_out_sep,neuron_vec=neuron_vec,intercept=F,anz=anz,percentage=percentage,devi=devi,outtarget=outtarget)
     alloverperf_olpd=first$perf_nn_out_with_olpd
     alloverperf_nn=first$perf_nn_out
-    sharpmat[1,1:3]<-as.numeric(first[1:3])
+    alloverperf_lpd=first$perf_lpd_out
+    
+    
+    
+    sharpmat[1,1:4]<-as.numeric(first[1:4])
     nn_signal=first$signal_out
     olpd_signal=first$signal_olpd
   }
@@ -102,9 +106,11 @@ for (batch in 1:9)
   #alloverperformance net
   alloverperf_nn=rbind(alloverperf_nn,second$perf_nn_out)
   #alloverperf_nn <- alloverperf_nn[ ! duplicated( index(alloverperf_nn) ),  ]
+  alloverperf_lpd=rbind(alloverperf_lpd,second$perf_lpd_out)
+  #alloverperf_nn <- alloverperf_nn[ ! duplicated( index(alloverperf_nn) ),  ]
   
   #sharpe
-  sharpmat[batch,1:3]<-as.numeric(second[1:3])
+  sharpmat[batch,1:4]<-as.numeric(second[1:4])
   
   #
   nn_signal=rbind(nn_signal,second$signal_out)
@@ -118,6 +124,7 @@ for (batch in 1:9)
     
     olpd_string=  paste("alloverperf_olpd","anz=",as.character(anz),"decision=",as.character(percentage*100),"%","dev=",as.character(devi),sep="_")
     nn_string=  paste("alloverperf_nn","anz=",as.character(anz),"decision=",as.character(percentage*100),"%","dev=",as.character(devi),sep="_")
+    lpd_string=  paste("alloverperf_lpd","anz=",as.character(anz),"decision=",as.character(percentage*100),"%","dev=",as.character(devi),sep="_")
     sharpmat_string=  paste("sharpmat","anz=",as.character(anz),"decision=",as.character(percentage*100),"%","dev=",as.character(devi),sep="_")
     olpd_signal_string=  paste("olpd_signal","anz=",as.character(anz),"decision=",as.character(percentage*100),"%","dev=",as.character(devi),sep="_")
     nn_signal_string=  paste("nn_signal","anz=",as.character(anz),"decision=",as.character(percentage*100),"%","dev=",as.character(devi),sep="_")
@@ -126,6 +133,7 @@ for (batch in 1:9)
     
     assign(olpd_string,alloverperf_olpd) 
     assign(nn_string,alloverperf_nn) 
+    assign(lpd_string,alloverperf_lpd) 
     assign(sharpmat_string,sharpmat)
     assign(nn_signal_string,nn_signal) 
     assign(olpd_signal_string,olpd_signal)     
@@ -139,10 +147,12 @@ for (batch in 1:9)
     save(list=sharpmat_string, file = paste("data/xai/7_7_withsignal_xai_in/9",sharpmat_string,".rda",sep=""))
     save(list=nn_signal_string, file = paste("data/xai/7_7_withsignal_xai_in/9",nn_signal_string,".rda",sep="") )  
     save(list=olpd_signal_string, file = paste("data/xai/7_7_withsignal_xai_in/9",olpd_signal_string,".rda",sep=""))
+    save(list=lpd_signal_string, file = paste("data/xai/7_7_withsignal_xai_in/9",lpd_signal_string,".rda",sep=""))
+    
     }
     
     
-    save(list=c(olpd_string, nn_string, sharpmat_string,nn_signal_string,olpd_signal_string),file = paste("data/xai/7_7_withsignal_xai_in/9",data_string,".rda",sep="") ) 
+    save(list=c(olpd_string, nn_string,lpd_string, sharpmat_string,nn_signal_string,olpd_signal_string),file = paste("data/xai/7_7_withsignal_xai_in/9",data_string,".rda",sep="") ) 
     
     
     

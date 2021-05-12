@@ -13,10 +13,10 @@ load("data/GARCH_vola_predictions/garch_out_signal.rda")
 #-------------------------------------------------------------------------------
 
 #how many standart deviatons for olpd threshold
-devi=1
+devi=2
 #
 # decision rule of nn percentage of half  if NULL majority decision is taken
-percentage= 0.3
+percentage= 0.1
 anz=1000
 #---------
 #-------------------------------------------------------------------------------
@@ -151,16 +151,9 @@ twenty=c(sharpe_olpd_2,sharpe_nn_2,sharpe_lpd_2,sharpe_all3_2,sharpe_bh) #20%
 thirty=c(sharpe_olpd_3,sharpe_nn_3,sharpe_lpd_3,sharpe_all3_3,sharpe_bh) #20%
 
 
-colnames(df)=c("lpd+nn","nn","lpd","lpd+nn+garch","bh")
+
 df=data.frame(rbind(ten,twenty,thirty))
-
-
-
-
-
-
-
-
+colnames(df)=c("lpd+nn","nn","lpd","lpd+nn+garch","bh")
 
 
 
@@ -173,17 +166,17 @@ df=data.frame(rbind(ten,twenty,thirty))
 #performance cumulated
 par(mfrow=c(3,1))
 
-main=paste("Performance cumulated,  2L ,7N, ",as.character(anz)," Reps , different Majority shares")
+main=paste("Performance cumulated from 9 splits, λ=",as.character(devi))
 
-compare_perf=cbind(cumsum(olpd_1),cumsum(nn_1),cumsum(olpd_2),cumsum(nn_2),cumsum(olpd_3),cumsum(nn_3), cumsum(outtarget))
+compare_perf=cbind(cumsum(olpd_1),cumsum(nn_1),cumsum(perfall3_1),cumsum(olpd_2),cumsum(nn_2),cumsum(perfall3_2),cumsum(olpd_3),cumsum(nn_3),cumsum(perfall3_3), cumsum(outtarget))
 
-name=c("olpd 10%","nn 10%","olpd 20%","nn 20%","olpd 30%","nn 30%","Buy and Hold")
+name=c("lpd+nn β=0.1","nn β=0.1","nn+lpd+garch β=0.1","lpd+nn β=0.2","nn β=0.2","nn+lpd+garch β=0.2","lpd+nn β=0.3","nn β=0.3","nn+lpd+garch β=0.3","Buy and Hold")
 colnames(compare_perf)=name
 
-colors= c("red","pink","blue","lightblue","darkorange","yellow","green")
+colors= c("red","pink","violetred","blue","lightblue","turquoise","darkorange","goldenrod1","yellow","green")
 
 
-plot.xts(compare_perf,main=main,col=colors)
+#plot.xts(compare_perf,main=main,col=colors)
 addLegend("topleft", 
           legend.names=name,
           col=colors,
@@ -195,14 +188,16 @@ addLegend("topleft",
 
 #sharpe ratios over all
 
-plot(rbind(sharpe_olpd_1,sharpe_nn_1,sharpe_olpd_2,sharpe_nn_2,sharpe_olpd_3,sharpe_nn_3,sharpe_bh),main="sharpe cumulated",xaxt="n",ylab="sharpe"
-     ,col=colors,pch=19)
-axis(1, at=1:7, labels=name)
+plot(rbind(sharpe_olpd_1,sharpe_nn_1,sharpe_all3_1,sharpe_olpd_2,sharpe_nn_2,sharpe_all3_2,sharpe_olpd_3,sharpe_nn_3,sharpe_all3_3,sharpe_bh),main=paste("Sharpe, λ=",as.character(devi)),xaxt="n",ylab="sharpe"
+     ,col=colors,pch=19,cex=2)
+axis(1, at=1:10, labels=name)
 
 
 #sharperatios per batch
 
-main=paste("Sharpe per Batch,  2L ,7N, ",as.character(anz)," Reps , different Majority shares")
+colors= c("red","pink","blue","lightblue","darkorange","goldenrod1","green")
+
+main=paste("Sharpe per batch, λ=",as.character(devi))
 plot(sharpmat_1[,3],type="l",col="green",xlab="batch nr",ylab= "sharpe",lwd=2,ylim=c(min(allsharp),max(allsharp)),main=main)
 for (i in 1:6){lines(allsharp[,i],col=colors[i],type="l",lwd=2)}
 
