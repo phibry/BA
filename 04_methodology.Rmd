@@ -355,34 +355,31 @@ knitr::include_graphics("images/xailpd/out_decision_small.jpeg")
 knitr::include_graphics("images/xailpd/out_sum_2.jpeg")
 ```
 
-
-
-
-
-
-
 \newpage
 
 #### 3.3.5. GARCH volatility predictions
-
 &nbsp;
 
-In a further step, we examine the time series with a traditional GARCH model that allows heteroskedasticity. T. Bollerslev proposes to use this to model time-dependent variance as a function of lagged shocks and lagged conditional variances [@garch]. Based on this model, we conduct one-step-ahead predictions using a rolling window of size 365 days i.e. data points and refit the model after every month. These predictions of future volatilities are presented in the appendix in figure \ref{fig:vola_forecasts} and will be used to make trading decisions. The asymmetric volatility phenomenon by F. Black describes a negative correlation between the volatility of the return and the achieved return [@leverage_effect]. Therefore, we define the following trading rule:
+In a further step, we examine the time series with a traditional GARCH model that allows heteroskedasticity. T. Bollerslev proposes to use this to model time-dependent variance as a function of lagged shocks and lagged conditional variances [@garch]. Based on an ARMA(1,1)-GARCH(1,1), we conduct one-step-ahead predictions using a rolling window of size 365 days and refit the model after 30 days. This results in two different trading strategies of which one is based on the signs of the forecasts and the other on predicted volatility. The predictions of future volatilities are presented in the appendix in figure \ref{fig:vola_forecasts}. 
+
+The first trading strategy is based on one-step-ahead rolling window forecasts (here: logarithmic return) resulting from the ARMA(1,1)-GARCH(1,1). When we predict a positive value, the algorithm decides to enter, respectively remain in a long position. When predicting a negative value, we enter a short position to benefit from the anticipated market movement. 
+
+The second strategy is solely based on volatility predictions resulting from a GARCH(1,1) and tries to take an advantage from the asymmetric volatility phenomenon by F. Black. This phenomenon describes a negative correlation between the volatility of the return and the achieved return [@leverage_effect]. Therefore, we define the following trading rule:
+
 
 | **FOR EACH** $i$ in $\sigma_{predicted}$ 
-|       **IF** $\sigma_{predicted, i} \ge 1.645 \sigma_{historical}$:  
+|       **IF** $\sigma_{predicted, i} \ge 1.64 \sigma_{historical}$:  
 |               $signal_i = 0$;  
 |       **ELSE**
 |               $signal_i = 1$;  
 
-In other words, the code checks whether the predicted volatility is significantly greater than the 95% confidence interval (based on historical data). If this is the case, the trading signal is set to 0, i.e. the position is sold. If the expected volatility is within the normal range, we remain respectively get in a long position. To simplify, a standard normal distribution is assumed, where a z-score of 1.645 more or less corresponds to the 95% confidence interval.  
+In other words, the code checks whether the predicted volatility is significantly greater than the 95% confidence interval (based on historical data). If this is the case, the trading signal is set to 0, i.e. the position is sold respectively we stay out of the market. If the expected volatility is within the normal range, we enter respectively remain in a long position. For simplicity, a threshold of 1.64 is used, which corresponds approximately to the upper 95% confidence interval for a standard normal distribution. 
 
-```{r garch_trading, fig.align='center', out.width='70%', fig.cap='Trading performance of the GARCH trading strategy based on volatility predictions starting from 2020/01/02. The time periods where we quit the market is clearly visible as horizontal lines.', echo=FALSE}
+```{r garch_trading, fig.align='center', out.width='90%', fig.cap='Cumulative daily returns of two different GARCH trading strategies and a simple buy-and-hold strategy. The GARCH Signum strategy is based on the ARMA(1,1)-GARCH(1,1) prediction, while the GARCH Volatility strategy simply checks if the threshold is exceeded. The time periods where we quit the market is clearly visible as horizontal lines.', echo=FALSE}
 knitr::include_graphics("images/GARCH/garch_trading.png")
 ```
 
-Figure \ref{fig:garch_trading} shows the trading performance based solely on the GARCH strategy described in this section. The horizontal performance lines indicate that the algorithm preferred a 100% allocation to cash during these phases. This effect is particularly strong in March 2020, most likely due to the uncertainty caused by the pandemic at that time. At the same time, the Covid-19 pandemic triggered a short-term bear market in global equity markets. Overall, the performance looks promising, yet resembles a buy-and-hold strategy due to the few trading signals generated. 
-
+Figure \ref{fig:garch_trading} illustrates how the GARCH trading strategies shown as well as a buy-and-hold strategy would have performed in a backtesting. It is easy to see that buy-and-hold outperforms the other two. The GARCH Signum strategy misjudges the situation at key points in time and thus hurts the return and Sharpe Ratio. Only during the Covid-19 crash in March 2020, the GARCH Signum strategy suffered a smaller loss. On the other hand, we missed the following bull run. Also, the horizontal lines in the GARCH Volatility strategy are clearly visible at which the predicted volatility is too large and thus the market exits. While some draw-downs are dampened, upside moves are also avoided. 
 
 \newpage
 

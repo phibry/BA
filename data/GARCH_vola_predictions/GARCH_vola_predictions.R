@@ -29,7 +29,7 @@ dat <- na.omit(dat)
 # Define index for dat (class = data frame)
 # 1.7.2020 - 27.03.2021
 
-split <- as.Date("2017-07-01")
+split <- as.Date("2016-01-01")
 
 ind_1 <- index(dat)[which(rownames(dat) == split)]
 dat[ind_1,]
@@ -125,10 +125,15 @@ sharpe_bh <- sqrt(365)*mean(bh, na.rm = T) / sqrt(var(bh, na.rm = T))
 # save(GARCH_vola, file = "data/GARCH_vola_predictions/GARCH_vola_predictions.rda")
 
 # Plot performances
-par(mfrow = c(3,1))
-plot(cumsum(perf), main = paste("Trading performance historical with sharpe: ", sharpe))
-plot(cumsum(perf_sign), main = paste("Trading performance signum with sharpe: ", sharpe_sign))
-plot(cumsum(bh), main = paste("Buy and hold performance with sharpe: ", sharpe_bh))
+par(mfrow = c(1,1))
+plot(cumsum(bh), main = "Cumulative daily returns")
+lines(cumsum(perf_sign), col = 2)
+lines(cumsum(perf), col = 3)
+addLegend(legend.loc = "topleft", legend = c(paste("Buy-and-Hold, Sharpe:", round(sharpe_bh, 2)), 
+                                                 paste("GARCH Signum Trading, Sharpe:", round(sharpe_sign,2)),
+                                                 paste("GARCH Volatility Trading, Sharpe:", round(sharpe, 2))), 
+          col = c(1,2,3), lty = 1)
+
 
 
 
