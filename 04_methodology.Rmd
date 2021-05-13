@@ -357,7 +357,22 @@ knitr::include_graphics("images/xailpd/out_sum_2.jpeg")
 
 \newpage
 
-#### 3.3.5. GARCH volatility predictions
+#### 3.3.4. nn and lpd estimation
+
+&nbsp;
+
+the 9 splits which were in chapter [3.2.1.](#test_train) introduce are now used for trading. The out of sample performances of every split are added together and are compared with the benchmark from [bench](#bench_mark).
+
+With the previously established architecture only the three parameters $\lambda$, $\eta_{lower},\eta_{upper}$, $\beta$ are optimized for performance.
+
+```{r results_different_decisions, fig.align='center', out.width='100%', fig.cap="Neural network LPD results", echo=FALSE}
+knitr::include_graphics("images/xailpd/xai with insignal/devi_1_all3.jpeg")
+```
+
+
+\newpage
+
+#### 3.3.5. Volatility predictions with GARCH
 &nbsp;
 
 In a further step, we examine the time series with a traditional GARCH model that allows heteroskedasticity. T. Bollerslev proposes to use this to model time-dependent variance as a function of lagged shocks and lagged conditional variances [@garch]. Based on an ARMA(1,1)-GARCH(1,1), we conduct one-step-ahead predictions using a rolling window of size 365 days and refit the model after 30 days. This results in two different trading strategies of which one is based on the signs of the forecasts and the other on predicted volatility. The predictions of future volatilities are presented in the appendix in figure \ref{fig:vola_forecasts}. 
@@ -380,38 +395,6 @@ knitr::include_graphics("images/GARCH/garch_trading.png")
 ```
 
 Figure \ref{fig:garch_trading} illustrates how the GARCH trading strategies shown as well as a buy-and-hold strategy would have performed in a backtesting. It is easy to see that buy-and-hold outperforms the other two. The GARCH Signum strategy misjudges the situation at key points in time and thus hurts the return and Sharpe Ratio. Only during the Covid-19 crash in March 2020, the GARCH Signum strategy suffered a smaller loss. On the other hand, we missed the following bull run. Also, the horizontal lines in the GARCH Volatility strategy are clearly visible at which the predicted volatility is too large and thus the market exits. While some draw-downs are dampened, upside moves are also avoided. 
-
-\newpage
-
-
-#### 3.3.4. nn and lpd estimation
-
-&nbsp;
-
-the 9 splits which were in chapter [3.2.1.](#test_train) introduce are now used for trading. The out of sample performances of every split are added together and are compared with the benchmark from [bench](#bench_mark).
-
-
-
-
-With the previously established architecture only the three parameters $\lambda$, $\eta_{lower},\eta_{upper}$, $\beta$ are optimized for performance.
-
-
-
-
-
-
-```{r results_different_decisions, fig.align='center', out.width='100%', fig.cap="Neural network LPD results", echo=FALSE}
-knitr::include_graphics("images/xailpd/xai with insignal/devi_1_all3.jpeg")
-```
-
-
-
-
-
-
-
-
-
 
 \newpage
 
