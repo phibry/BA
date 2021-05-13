@@ -106,11 +106,11 @@ lpdperf3[which(olpd_signal_3==0)]<-0
 lpdperf3[which(olpd_signal_3==0.5)]<-lpdperf1[which(olpd_signal_3==0.5)]*0.5
 
 
-  
 
-  
-  
-  
+
+
+
+
 
 
 
@@ -197,7 +197,7 @@ colnames(compare_perf)=name
 colors= c("red","pink","violetred","darkorchid","blue","lightblue","turquoise","dodgerblue4","darkorange","goldenrod1","yellow","darkgoldenrod1","green")
 
 
- #plot.xts(compare_perf,main=main,col=colors)
+#plot.xts(compare_perf,main=main,col=colors)
 addLegend("topleft", 
           legend.names=name,
           col=colors,
