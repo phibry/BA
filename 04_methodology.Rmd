@@ -357,7 +357,22 @@ knitr::include_graphics("images/xailpd/out_sum_2.jpeg")
 
 \newpage
 
-#### 3.3.5. GARCH volatility predictions
+#### 3.3.4. nn and lpd estimation
+
+&nbsp;
+
+the 9 splits which were in chapter [3.2.1.](#test_train) introduce are now used for trading. The out of sample performances of every split are added together and are compared with the benchmark from [bench](#bench_mark).
+
+With the previously established architecture only the three parameters $\lambda$, $\eta_{lower},\eta_{upper}$, $\beta$ are optimized for performance.
+
+```{r results_different_decisions, fig.align='center', out.width='100%', fig.cap="Neural network LPD results", echo=FALSE}
+knitr::include_graphics("images/xailpd/xai with insignal/devi_1_all3.jpeg")
+```
+
+
+\newpage
+
+#### 3.3.5. Volatility predictions with GARCH
 &nbsp;
 
 In a further step, we examine the time series with a traditional GARCH model that allows heteroskedasticity. T. Bollerslev proposes to use this to model time-dependent variance as a function of lagged shocks and lagged conditional variances [@garch]. Based on an ARMA(1,1)-GARCH(1,1), we conduct one-step-ahead predictions using a rolling window of size 365 days and refit the model after 30 days. This results in two different trading strategies of which one is based on the signs of the forecasts and the other on predicted volatility. The predictions of future volatilities are presented in the appendix in figure \ref{fig:vola_forecasts}. 
@@ -383,6 +398,8 @@ Figure \ref{fig:garch_trading} illustrates how the GARCH trading strategies show
 
 \newpage
 
+<<<<<<< HEAD
+=======
 
 #### 3.3.4. nn and lpd estimation
 
@@ -418,6 +435,7 @@ knitr::include_graphics("images/xailpd/xai with insignal/devi_1_all3.jpeg")
 
 \newpage
 
+>>>>>>> main
 #### 3.3.6. Kapitel: Resultat nicht wie erhofft
 
 &nbsp;
