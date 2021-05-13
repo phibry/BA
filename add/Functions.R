@@ -1804,7 +1804,7 @@ xai_outp<-function(x,lags,in_out_sep,neuron_vec,intercept=F,anz=1000,percentage=
   
   
   
-  signal_nn_and_olpd=signal_out;signal_nn_and_olpd[which(signal_olpd==0)]<-0;signal_nn_and_olpd[which(signal_olpd==0.5)]<-0.5
+  signal_nn_and_olpd=signal_out;signal_nn_and_olpd[which(signal_olpd==0)]<-0;signal_nn_and_olpd[which(signal_olpd==0.5)]<-0.5 #comment out if only 1 shold be used
   perf_nn_out_with_olpd=signal_nn_and_olpd*target_out
   
   #performance lpd
