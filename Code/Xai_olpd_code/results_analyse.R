@@ -13,7 +13,7 @@ load("data/GARCH_vola_predictions/garch_out_signal.rda")
 #-------------------------------------------------------------------------------
 
 #how many standart deviatons for olpd threshold
-devi=1.5
+devi=1
 #
 # decision rule of nn percentage of half  if NULL majority decision is taken
 percentage= 0.3
@@ -21,7 +21,7 @@ anz=1000
 #---------
 #-------------------------------------------------------------------------------
 data_string= paste("obj","anz=",as.character(anz),"decision=",as.character(percentage*100),"%","dev=",as.character(devi),sep="_")
-load(paste("data/xai/7_7_withsignal_xai_in/9",data_string,".rda",sep=""))
+load(paste("data/xai/7_7_withsignal_xai_in/signal1_and_05/9",data_string,".rda",sep=""))
 
 olpd_string=  paste("alloverperf_olpd","anz=",as.character(anz),"decision=",as.character(percentage*100),"%","dev=",as.character(devi),sep="_")
 nn_string=  paste("alloverperf_nn","anz=",as.character(anz),"decision=",as.character(percentage*100),"%","dev=",as.character(devi),sep="_")
@@ -53,7 +53,7 @@ nn_signal_string=  paste("nn_signal","anz=",as.character(anz),"decision=",as.cha
 # assign("sharpmat_3",get(sharpmat_string))
 # assign("nn_signal_3",get(nn_signal_string))
 # assign("olpd_signal_3",get(olpd_signal_string))
-# 
+
 
 
 
@@ -167,8 +167,14 @@ thirty=c(sharpe_olpd_3,sharpe_nn_3,sharpe_lpd_3,sharpe_all3_3,sharpe_bh) #20%
 df=data.frame(rbind(ten,twenty,thirty))
 colnames(df)=c("lpd+nn","nn","lpd","lpd+nn+garch","bh")
 
+allsharpestring=paste("sd= ",as.numeric(devi),"sharpe_overall")
+batchsharpestring=paste("sd= ",as.numeric(devi),"sharpe_batch")
 
+assign(allsharpestring,df)
+assign(batchsharpestring,allsharp)
 
+save(list=allsharpestring, file = paste("data/xai/7_7_withsignal_xai_in/signal1_and_05/",allsharpestring,".rda",sep=""))
+save(list=batchsharpestring, file = paste("data/xai/7_7_withsignal_xai_in/signal1_and_05/",batchsharpestring,".rda",sep=""))
 
 
 
@@ -191,7 +197,7 @@ colnames(compare_perf)=name
 colors= c("red","pink","violetred","darkorchid","blue","lightblue","turquoise","dodgerblue4","darkorange","goldenrod1","yellow","darkgoldenrod1","green")
 
 
-plot.xts(compare_perf,main=main,col=colors)
+#plot.xts(compare_perf,main=main,col=colors)
 addLegend("topleft", 
           legend.names=name,
           col=colors,
