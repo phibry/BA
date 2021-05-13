@@ -229,35 +229,35 @@ For further evaluation of neural networks $\beta$ can be used as an optimizing f
 
 
 
-
+&nbsp;
+&nbsp;
 &nbsp;
 
 
-
+ 
 ```{=tex}
-\label{eq:net_decision1}
 
-\[ f(p_{k}) =
-  \begin{cases}
-  
+ 
+\begin{equation}\label{eq:net_decision1}
+ f(p_{k}) =
+\begin{cases} 
   0      & \quad \text{if } \frac{1}{N_{total}}  \sum_{k=1}^{N_{total}}signum(p_{k}) < \beta \\
   signum(\sum_{j=1}^{N_{total}}p_{k})    & \quad \text{else}
   
 
-    
-  \end{cases}
-\]
- 
-
+   \end{cases}
+\end{equation}
 
 
 ```
 
 
 &nbsp;
+&nbsp;
+&nbsp;
 
 
-
+  
 $N_{total}$ = Total number of neural networks
 
 $\beta$ = Ratio of majority decision 
@@ -308,26 +308,18 @@ sdY=\sqrt{  \frac{1}{n_{in}}  \sum_{t=1}^{n_{in}}(Y_{t}-\bar{Y})^{2} }
 ```
 
 
+
 ```{=tex}
-
- \label{eq:net_decision2}
-
-\[ lpd signal(x_{t}) =
-  \begin{cases}
-  
-  0.5    & \quad \text{if } ,  \eta_{lower} < g(x) \le \eta_{upper}    \\                                                                                
+\begin{equation}\label{eq:net_decision2}
+lpd signal(x_{t}) =
+\begin{cases} 
+  0.5    & \quad \text{if } ,  \eta_{lower} < g(x) \le \eta_{upper}    \\                                              
   0      & \quad \text{if } ,   \eta_{upper} < g(x) \\
   1      & \quad \text{else}
 
-    
-  \end{cases}
-\]
-
-
-
-
+   \end{cases}
+\end{equation}
 ```
-
 &nbsp;
 
 $Y_{t}$ = insample lpd observed 
@@ -403,7 +395,7 @@ With the previously established architecture only the three parameters $\lambda$
 
 
 ```{r results_different_decisions, fig.align='center', out.width='100%', fig.cap="Neural network LPD results", echo=FALSE}
-knitr::include_graphics("images/xailpd/xai with insignal/devi_1_all3.jpeg")
+knitr::include_graphics("images/xailpd/lambda_1_5_with0_5/all.jpeg")
 
 ```
 
