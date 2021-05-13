@@ -5,7 +5,7 @@ geometry: margin = 1in
 
 ## 3. Methodology
 
-The focus of this thesis can be divided into two areas. First, the aim is to find an optimal neural network including a network architecture. This should perform well in the application area, in which the future log return of the Bitcoin is predicted on the basis of historical log returns. In a second step, we will focus on defining a trading strategy based on our findings. All considerations and findings will be presented in a quantitative way and compared with each other. Figure \ref{fig:flowchart_overview} helps to get an overview of the individual steps followed in this chapter.  
+The focus of this thesis can be divided into two areas. First, the aim is to find an optimal neural network including a network architecture. This should perform well in the application area, in which the future log return of the bitcoin is predicted on the basis of historical log returns. In a second step, we will focus on defining a trading strategy based on our findings. All considerations and findings will be presented in a quantitative way and compared with each other. Figure \ref{fig:flowchart_overview} helps to get an overview of the individual steps followed in this chapter.  
 
 ```{r flowchart_overview, fig.align='center', out.width='65%', fig.cap='This flowchart illustrates an overview of the individual intermediate steps that are covered in the Methodology chapter. ', echo=FALSE}
 knitr::include_graphics("images/flowchart_overview.png")
@@ -26,7 +26,7 @@ For processing and analyzing the data in order to fulfill the weak stationarity 
 \end{align}
 ```
 
-```{r log_ret, echo=FALSE, message=FALSE, fig.cap="logreturns BTC",out.width="80%"}
+```{r log_ret, echo=FALSE, message=FALSE, fig.cap="BTC log returns",out.width="80%"}
 load("data/log_ret_27_03_21.rda");log_ret=    log_ret_27_03_21   # loading logreturns
 df_sub <- data.frame(date = ymd(time(log_ret)), value = as.numeric(log_ret))
 plot(df_sub,
@@ -34,13 +34,13 @@ plot(df_sub,
      frame.plot = FALSE,
      xaxt="n",
      xlab="",
-     ylab="Log Return", ylim=c(-0.45, 0.2))
+     ylab="log return", ylim=c(-0.45, 0.2))
 axis.Date(1, at=seq(min(df_sub$date), max(df_sub$date), by="months"), format="%m-%y")
 ```
 
 Figure \ref{fig:log_ret} displays the historical log returns. In addition to the volatility clusters typical for financial time series, large outliers are visible. The negative outlier at the beginning of 2020 is particularly noticeable. By computing the autocorrelation (ACF) of the series in figure \ref{fig:acf_log_ret}, we can describe the dependency in these clusters. According to the ACF the lags 6 and 10 are significant on a 5% level. 
 
-```{r acf_log_ret, echo=FALSE, message=FALSE, fig.cap="Autocorrelation of bitcoin log returns for the entire time window"}
+```{r acf_log_ret, echo=FALSE, message=FALSE, fig.cap="Autocorrelation of BTC log returns for the entire time window"}
 # acf(log_ret,main="autocorrelation Logreturns")
 # chart.ACF(log_ret,main="Autocorrelation of log returns", maxlag = 20)
 chart.ACF.phil(log_ret,main="Autocorrelation of log returns", maxlag = 20)
@@ -52,7 +52,7 @@ Curios from which distribution the log returns might originate, we are fitting a
 
 
 
-```{r histogramm_logreturns, out.width='80%', fig.cap='Distribution of bitcoin log returns', echo=FALSE,fig.align="center"}
+```{r histogramm_logreturns, out.width='80%', fig.cap='Distribution of BTC log returns', echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/histogram_logret_3.jpeg")
 ```
 
@@ -92,7 +92,7 @@ We are looking for an optimal network, the optimal network should also provide r
 The reason for doing so is, we do not believe that the historical data longer than a year consists any information about the price tomorrow. By optimizing our models we found that more data would bring no additional performance, therefore the selected subset should be sufficient. Regarding consistency, the terms train and test set are used in the same sense as in-sample and out-of-sample. As proposed in [@nn_trading] we choose a test train split from 6 months in-sample and 1 month out-of-sample. This split is applied to the whole subset in form of a rolling window. By stepping forward with this 6/1 split by steplength of one month we end up with 9 data splits in total. In figure \ref{fig:test_train} this procedure is visualized, for every new timestep a new month is considered for the out of sample and the first month of the in sample, falls out of the frame. 
 
 
-```{r test_train, out.width='80%', fig.cap='Distribution of Logreturns', echo=FALSE}
+```{r test_train, out.width='80%', fig.cap='Distribution of BTC log returns', echo=FALSE}
 knitr::include_graphics("images/test_train_split_pp.jpeg.jpg")
 ```
 
@@ -205,27 +205,27 @@ The main component is the prediction of the neural network. This reflects the ex
 
 While these methods sound promising, it should not be forgotten that a buy-and-hold strategy (given nerves of steel) also led to remarkable performances in the past that even outperformed traditional asset classes. The price development is described in chapters [2.3.1.](#historical_analysis) and [2.3.3.](#bitcoin_valuation). That is why buy-and-hold is frequently used as a comparison. 
 
-For trading the returns, we must first define the environment and make some assumptions. Tradingcosts are crucial in high frequency trading, nevertheless we assume that transaction costs are non exsistant. Further we assume the possibility of shortselling in btc. These assumptions allow us to wether stay in the market( signal = 1), to exit the market (signal = 0)  or to sell tomorrows return (signal = -1). If in the two latter  tomorrows return is negative, a gain in performance is realized.
+For trading the returns, we must first define the environment and make some assumptions. Tradingcosts are crucial in high frequency trading, nevertheless we assume that transaction costs are non exsistant. Further we assume the possibility of shortselling in BTC. These assumptions allow us to wether stay in the market( signal = 1), to exit the market (signal = 0)  or to sell tomorrows return (signal = -1). If in the two latter  tomorrows return is negative, a gain in performance is realized.
 
 \newpage
 
-#### 3.3.1. Trading with Neural Net and LPD 
+#### 3.3.1. Trading with neural networks and LPD 
 
 &nbsp;
 
-In chapter 3.2.3 we have decided to fix the architecture 7 layers 7 nets.  In the following we describe how in this case the net is used, in order to create a trading signal. Further we use the LPD, explained in chapter [2.4.2.](#xai_finance), based on the computed nets to derive an additional  signal for trading.
+In chapter 3.2.3 we have decided to fix the architecture 7 layers 7 nets.  In the following we describe how in this case the neural network is used, in order to create a trading signal. Further we use the LPD, explained in chapter [2.4.2.](#xai_finance), based on the computed neural networks to derive an additional  signal for trading.
 
 
 
-#### 3.3.2. Neural Net
+#### 3.3.2. Neural network
 
 &nbsp;
 
 Due to its randomness in finding the optimum, it is proposed by the Central Limit Theorem [@central_limit_theorem] to use an approximate   $\text{number of iterations } N_{total}$ $\ge$ 100 for an accurate mean value. In order to find a balance between precision and computation time, we found 1000 iterations should be sufficient.
 
-Let $p$ be the predicted value of the neural net in a certain time $_{t}$.
+Let $p$ be the predicted value of the neural network in a certain time $_{t}$.
 With formula $f(p_{k})$ \ref{eq:net_decision1} in every $_{t}$ a trading signal is derived by majority decision. How clearly the decision of the forecasts must be, is decided by parameter $\beta$.
-For further evaluation of nets $\beta$ can be used as an optimizing factor.
+For further evaluation of neural networks $\beta$ can be used as an optimizing factor.
 
 
 
@@ -258,11 +258,11 @@ For further evaluation of nets $\beta$ can be used as an optimizing factor.
 
 
 
-$N_{total}$ = Total Number of nets
+$N_{total}$ = Total number of neural networks
 
-$\beta$ = ratio of majority decision 
+$\beta$ = Ratio of majority decision 
 
-$p_{k}$ = predicted value from neural net
+$p_{k}$ = Predicted value from neural network
 
 
 
@@ -273,7 +273,7 @@ $p_{k}$ = predicted value from neural net
 
 &nbsp;
 
-In the same manner as before, for every $k$ of the $N_{total}$ nets in every timestep $t$ the derivative as in chapter [2.4.2.](#xai_finance) is calculated. From the insample lpd the mean $\bar{Y}$ \ref{eq:Ybar} and the standarddeviation $sdY$ \ref{eq:sdY} for every $lag_{j}$ is derived. In the out of sample $\bar{Y}_{j}$ and $sdY_{j}$  are used to generate a signal by the following:
+In the same manner as before, for every $k$ of the $N_{total}$ network in every time step $t$ the derivative as in chapter [2.4.2.](#xai_finance) is calculated. From the insample lpd the mean $\bar{Y}$ \ref{eq:Ybar} and the standarddeviation $sdY$ \ref{eq:sdY} for every $lag_{j}$ is derived. In the out of sample $\bar{Y}_{j}$ and $sdY_{j}$  are used to generate a signal by the following:
 
 
 With Formula \ref{eq:count} in every $lag_{j}$ it is decided wether the predicted lpd exceeds $\bar{Y}_{j} \pm   \lambda sdY_{j}$. In Figure \ref{fig:lpd_explain} this procedure is visualized, just for one lag due to a smoother visualisation. 
@@ -355,34 +355,31 @@ knitr::include_graphics("images/xailpd/out_decision_small.jpeg")
 knitr::include_graphics("images/xailpd/out_sum_2.jpeg")
 ```
 
-
-
-
-
-
-
 \newpage
 
 #### 3.3.5. GARCH volatility predictions
-
 &nbsp;
 
-In a further step, we examine the time series with a traditional GARCH model that allows heteroskedasticity. T. Bollerslev proposes to use this to model time-dependent variance as a function of lagged shocks and lagged conditional variances [@garch]. Based on this model, we conduct one-step-ahead predictions using a rolling window of size 365 days i.e. data points and refit the model after every month. These predictions of future volatilities are presented in the appendix in figure \ref{fig:vola_forecasts} and will be used to make trading decisions. The asymmetric volatility phenomenon by F. Black describes a negative correlation between the volatility of the return and the achieved return [@leverage_effect]. Therefore, we define the following trading rule:
+In a further step, we examine the time series with a traditional GARCH model that allows heteroskedasticity. T. Bollerslev proposes to use this to model time-dependent variance as a function of lagged shocks and lagged conditional variances [@garch]. Based on an ARMA(1,1)-GARCH(1,1), we conduct one-step-ahead predictions using a rolling window of size 365 days and refit the model after 30 days. This results in two different trading strategies of which one is based on the signs of the forecasts and the other on predicted volatility. The predictions of future volatilities are presented in the appendix in figure \ref{fig:vola_forecasts}. 
+
+The first trading strategy is based on one-step-ahead rolling window forecasts (here: log return) resulting from the ARMA(1,1)-GARCH(1,1). When we predict a positive value, the algorithm decides to enter, respectively remain in a long position. When predicting a negative value, we enter a short position to benefit from the anticipated market movement. 
+
+The second strategy is solely based on volatility predictions resulting from a GARCH(1,1) and tries to take an advantage from the asymmetric volatility phenomenon by F. Black. This phenomenon describes a negative correlation between the volatility of the return and the achieved return [@leverage_effect]. Therefore, we define the following trading rule:
+
 
 | **FOR EACH** $i$ in $\sigma_{predicted}$ 
-|       **IF** $\sigma_{predicted, i} \ge 1.645 \sigma_{historical}$:  
+|       **IF** $\sigma_{predicted, i} \ge 1.64 \sigma_{historical}$:  
 |               $signal_i = 0$;  
 |       **ELSE**
 |               $signal_i = 1$;  
 
-In other words, the code checks whether the predicted volatility is significantly greater than the 95% confidence interval (based on historical data). If this is the case, the trading signal is set to 0, i.e. the position is sold. If the expected volatility is within the normal range, we remain respectively get in a long position. To simplify, a standard normal distribution is assumed, where a z-score of 1.645 more or less corresponds to the 95% confidence interval.  
+In other words, the code checks whether the predicted volatility is significantly greater than the 95% confidence interval (based on historical data). If this is the case, the trading signal is set to 0, i.e. the position is sold respectively we stay out of the market. If the expected volatility is within the normal range, we enter respectively remain in a long position. For simplicity, a threshold of 1.64 is used, which corresponds approximately to the upper 95% confidence interval for a standard normal distribution. 
 
-```{r garch_trading, fig.align='center', out.width='70%', fig.cap='Trading performance of the GARCH trading strategy based on volatility predictions starting from 2020/01/02. The time periods where we quit the market is clearly visible as horizontal lines.', echo=FALSE}
+```{r garch_trading, fig.align='center', out.width='90%', fig.cap='Cumulative daily returns of two different GARCH trading strategies and a simple buy-and-hold strategy. The GARCH Signum strategy is based on the ARMA(1,1)-GARCH(1,1) prediction, while the GARCH Volatility strategy simply checks if the threshold is exceeded. The time periods where we quit the market is clearly visible as horizontal lines.', echo=FALSE}
 knitr::include_graphics("images/GARCH/garch_trading.png")
 ```
 
-Figure \ref{fig:garch_trading} shows the trading performance based solely on the GARCH strategy described in this section. The horizontal performance lines indicate that the algorithm preferred a 100% allocation to cash during these phases. This effect is particularly strong in March 2020, most likely due to the uncertainty caused by the pandemic at that time. At the same time, the Covid-19 pandemic triggered a short-term bear market in global equity markets. Overall, the performance looks promising, yet resembles a buy-and-hold strategy due to the few trading signals generated. 
-
+Figure \ref{fig:garch_trading} illustrates how the GARCH trading strategies shown as well as a buy-and-hold strategy would have performed in a backtesting. It is easy to see that buy-and-hold outperforms the other two. The GARCH Signum strategy misjudges the situation at key points in time and thus hurts the return and Sharpe Ratio. Only during the Covid-19 crash in March 2020, the GARCH Signum strategy suffered a smaller loss. On the other hand, we missed the following bull run. Also, the horizontal lines in the GARCH Volatility strategy are clearly visible at which the predicted volatility is too large and thus the market exits. While some draw-downs are dampened, upside moves are also avoided. 
 
 \newpage
 
@@ -403,8 +400,13 @@ With the previously established architecture only the three parameters $\lambda$
 
 
 
+<<<<<<< HEAD
 ```{r results_different_decisions, fig.align='center', out.width='100%', fig.cap="Nets LPD results", echo=FALSE}
 knitr::include_graphics("images/xailpd/lambda_1_5_with0_5/all.jpeg")
+=======
+```{r results_different_decisions, fig.align='center', out.width='100%', fig.cap="Neural network LPD results", echo=FALSE}
+knitr::include_graphics("images/xailpd/xai with insignal/devi_1_all3.jpeg")
+>>>>>>> main
 ```
 
 

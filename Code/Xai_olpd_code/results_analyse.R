@@ -13,7 +13,11 @@ load("data/GARCH_vola_predictions/garch_out_signal.rda")
 #-------------------------------------------------------------------------------
 
 #how many standart deviatons for olpd threshold
+<<<<<<< HEAD
 devi=1
+=======
+devi=2
+>>>>>>> main
 #
 # decision rule of nn percentage of half  if NULL majority decision is taken
 percentage= 0.3
@@ -33,14 +37,22 @@ nn_signal_string=  paste("nn_signal","anz=",as.character(anz),"decision=",as.cha
 
 #------------------------------------------------------------------------------
 
+<<<<<<< HEAD
 
+=======
+#
+>>>>>>> main
 # assign("olpd_1",get(olpd_string))
 # assign("nn_1",get(nn_string))
 # assign("sharpmat_1",get(sharpmat_string))
 # assign("nn_signal_1",get(nn_signal_string))
 # assign("olpd_signal_1",get(olpd_signal_string))
 
+<<<<<<< HEAD
 
+=======
+# 
+>>>>>>> main
 # assign("olpd_2",get(olpd_string))
 # assign("nn_2",get(nn_string))
 # assign("sharpmat_2",get(sharpmat_string))
@@ -53,7 +65,11 @@ nn_signal_string=  paste("nn_signal","anz=",as.character(anz),"decision=",as.cha
 # assign("sharpmat_3",get(sharpmat_string))
 # assign("nn_signal_3",get(nn_signal_string))
 # assign("olpd_signal_3",get(olpd_signal_string))
+<<<<<<< HEAD
 
+=======
+# 
+>>>>>>> main
 
 
 
@@ -156,7 +172,11 @@ colnames(sharpmat_3)=c("sharpe_net","sharpe_lpd","sharpe_nn_olpd","sharpe_bh")
 
 
 
+<<<<<<< HEAD
 allsharp=cbind(sharpmat_1[,-3],sharpmat_2[,-3],sharpmat_3[,-3])
+=======
+allsharp=cbind(sharpmat_1[,-4],sharpmat_2[,-4],sharpmat_3[,-4])
+>>>>>>> main
 
 ten=c(sharpe_olpd_1,sharpe_nn_1,sharpe_lpd_1,sharpe_all3_1,sharpe_bh) #10%
 twenty=c(sharpe_olpd_2,sharpe_nn_2,sharpe_lpd_2,sharpe_all3_2,sharpe_bh) #20%
@@ -197,7 +217,11 @@ colnames(compare_perf)=name
 colors= c("red","pink","violetred","darkorchid","blue","lightblue","turquoise","dodgerblue4","darkorange","goldenrod1","yellow","darkgoldenrod1","green")
 
 
+<<<<<<< HEAD
 #plot.xts(compare_perf,main=main,col=colors)
+=======
+ #plot.xts(compare_perf,main=main,col=colors)
+>>>>>>> main
 addLegend("topleft", 
           legend.names=name,
           col=colors,
@@ -219,11 +243,20 @@ axis(1, at=1:13, labels=name,)
 
 #sharperatios per batch
 
+<<<<<<< HEAD
 
 
 main=paste("Sharpe per batch, λ=",as.character(devi))
 plot(sharpmat_1[,3],type="l",col="green",xlab="batch nr",ylab= "sharpe",lwd=2,ylim=c(min(allsharp),max(allsharp)),main=main)
 for (i in 1:12){lines(allsharp[,i],col=colors[i],type="l",lwd=2)}
+=======
+colorsbatch= c("red","pink","violetred","blue","lightblue","turquoise","darkorange","goldenrod1","yellow","green")
+
+
+main=paste("Sharpe per batch, λ=",as.character(devi))
+plot(sharpmat_1[,4],type="l",col="green",xlab="batch nr",ylab= "sharpe",lwd=4,ylim=c(min(allsharp),max(allsharp)),main=main)
+for (i in 1:8){lines(allsharp[,i],col=colorsbatch[i],type="l",lwd=2)}
+>>>>>>> main
 
 
 
