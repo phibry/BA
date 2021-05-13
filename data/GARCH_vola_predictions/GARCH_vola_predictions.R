@@ -123,6 +123,7 @@ sharpe_bh <- sqrt(365)*mean(bh, na.rm = T) / sqrt(var(bh, na.rm = T))
 # Save as .rda file
 
 # save(GARCH_vola, file = "data/GARCH_vola_predictions/GARCH_vola_predictions.rda")
+# save(GARCH_Signals)
 
 # Plot performances
 par(mfrow = c(1,1))
@@ -136,7 +137,10 @@ addLegend(legend.loc = "topleft", legend = c(paste("Buy-and-Hold, Sharpe:", roun
 
 
 
+# Save trading signals only
 
+garch_out_signal=as.xts(GARCH_vola)$Trading_signal["2020-07-01::"]
+save(garch_out_signal, file = "data/GARCH_vola_predictions/garch_out_signal.rda")
 
 
 
