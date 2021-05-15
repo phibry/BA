@@ -432,7 +432,7 @@ Basically, we can thus state the following relationship between output and weigh
 \end{align}  
 ```
 
-In simpler terms, we train a neural network with input data of length up to delay q. Now we change a data point at time $t$, we add a disturbance term by $\delta$. So we change the value of an explanatory variable, one of our features. Suppose our input data at time $t$ looks like this.
+In simpler terms, we train a neural network with input data of length up to lag $q$. Now we change a data point at time $t$, we add a disturbance term by $\delta$. So we change the value of an explanatory variable, one of our features. Suppose our input data at time $t$ looks like this.
 
 $$X = x_{t-1}+x_{t-2}+...+x_{t-q}$$
 For the feature at lag 1, we now want to calculate the partial derivative. We create a new data set $Y$ and change the data point at lag 1.
