@@ -1750,20 +1750,12 @@ xai_outp<-function(x,lags,in_out_sep,neuron_vec,intercept=F,anz=1000,percentage=
   OLPD_mat_out_deviator[]<-0
   
   for (k in 1:dim(OLPD_mat_out_deviator)[2])
-    
-    
-    OLPD_mat_out_deviator[which(OLPD_mat_out[,k]   > mean_in[k] + devi*sd_in[k] | OLPD_mat_out[,k]   < mean_in[k] - devi*sd_in[k]),k]<-1
+  {OLPD_mat_out_deviator[which(OLPD_mat_out[,k]   > mean_in[k] + devi*sd_in[k] | OLPD_mat_out[,k]   < mean_in[k] - devi*sd_in[k]),k]<-1}
   
   
   
   
   
-  
-  sum_explana=as.xts(apply(OLPD_mat_out_deviator,1,sum))
-  signal_olpd<-sum_explana
-  signal_olpd[]=1
-  signal_olpd[which(sum_explana>=lower & sum_explana < upper )]<- 0.5
-  signal_olpd[which(sum_explana >= upper )]<-0
   
   
   
@@ -1775,9 +1767,14 @@ xai_outp<-function(x,lags,in_out_sep,neuron_vec,intercept=F,anz=1000,percentage=
   
   
   #signals ##########################################################--------------------------------------------
+  #signal olpd
+  sum_explana=as.xts(apply(OLPD_mat_out_deviator,1,sum))
+  signal_olpd<-sum_explana
+  signal_olpd[]=1
+  signal_olpd[which(sum_explana>=lower & sum_explana < upper )]<- 0.5
+  signal_olpd[which(sum_explana >= upper )]<-0
   
   # neuralnet signals
-  
   #signum of the most votet 50% negative + 50 % positive get a zero , >50% negative & <50%positive get a -1  
   
   signal_in=sign(startsignal_in)
@@ -1804,13 +1801,25 @@ xai_outp<-function(x,lags,in_out_sep,neuron_vec,intercept=F,anz=1000,percentage=
   
   
   
-  signal_nn_and_olpd=signal_out;signal_nn_and_olpd[which(signal_olpd==0)]<-0;#signal_nn_and_olpd[which(signal_olpd==0.5)]<-0.5
+  signal_nn_and_olpd=signal_out;signal_nn_and_olpd[which(signal_olpd==0)]<-0;signal_nn_and_olpd[which(signal_olpd==0.5)]<-0.5 #comment out if only 1 shold be used
   perf_nn_out_with_olpd=signal_nn_and_olpd*target_out
+  
+  #performance lpd
+  perf_lpd_out=outtarget
+  perf_lpd_out[which(signal_olpd==0)]<-0
+  perf_lpd_out[which(signal_olpd==0.5)]<-perf_lpd_out[which(signal_olpd==0.5)]*0.5
+  
+  
+  
   
   
   sharpe_bh=round(sqrt(365)*SharpeRatio(target_out,FUN="StdDev"),3)
   sharpe_net=round(sqrt(365)*SharpeRatio(perf_nn_out,FUN="StdDev"),3)
   sharpe_net_olpd=round(sqrt(365)*SharpeRatio(perf_nn_out_with_olpd,FUN="StdDev"),3)
+  sharpe_lpd=round(sqrt(365)*SharpeRatio(perf_lpd_out,FUN="StdDev"),3)
+  
+  
+  
   
   #plots####--------------------------------------------------------------------------------------------------------------------------
   plot.new()  
@@ -1862,7 +1871,7 @@ xai_outp<-function(x,lags,in_out_sep,neuron_vec,intercept=F,anz=1000,percentage=
   
   
   
-  return(list(sharpe_net_olpd=sharpe_net_olpd,sharpe_net=sharpe_net,sharpe_bh=sharpe_bh
+  return(list(sharpe_net_olpd=sharpe_net_olpd,sharpe_net=sharpe_net,sharpe_bh=sharpe_bh,sharpe_lpd=sharpe_lpd,perf_lpd_out=perf_lpd_out
               ,perf_nn_out_with_olpd=perf_nn_out_with_olpd,perf_nn_out=perf_nn_out,signal_out=signal_out,signal_olpd=signal_olpd,majority=majority)) 
   
 }

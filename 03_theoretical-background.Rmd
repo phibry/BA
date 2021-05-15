@@ -9,7 +9,7 @@ bibliography: add/doc.bib
 
 ## 2. Theory {#theory}
 
-The following chapter is intended to provide the theoretical foundations necessary for our work. It is divided into a part that provides an overview of artificial neural networks. Followed by section [2.2.](#bitcoin) which shows the background and the ecosystem of Bitcoin. This knowledge should be kept in mind, which should help in understanding the price formation of Bitcoin.
+The following chapter is intended to provide the theoretical foundations necessary for our work. It is divided into a part that provides an overview of artificial neural networks. Followed by section [2.2.](#bitcoin) which shows the background and the ecosystem of Bitcoin. This knowledge should be kept in mind, which should help in understanding the price formation of bitcoin.
 
 ### 2.1. Neural network {#neural_network}
 
@@ -272,7 +272,7 @@ The application of MSE is widely used in statistical modeling and supervised lea
 
 In this section bitcoin as a crypto-curreny is introduced. The historical data is analyzed and commented. Further the technology in and around crypto-currencies in chapter [2.3.2.](#bitcoin_tec) is briefly explained. A detailed explanation would require a paper itself, therefore the explanation is done as simple as possible.
 
-In the following work bitcoin as a cryptocurreny is mentionend in its short term BTC, by the meaning of US Dollars per Bitcoin.
+In the following work bitcoin as a cryptocurreny is mentionend in its short term BTC, by the meaning of US Dollars per bitcoin.
 
 #### 2.3.1. Historical analysis {#historical_analysis}
 &nbsp;
@@ -296,11 +296,11 @@ But the story was not over by now, after the drop the price of the cryptocurrenc
 
 \newpage
 
-```{r logprice_btc, out.width='80%', fig.cap='Logarithmic Bitcoin price USD', echo=FALSE}
+```{r logprice_btc, out.width='80%', fig.cap='Logarithmic BTC/USD', echo=FALSE}
 knitr::include_graphics("images/logbtc_usd.jpeg")
 ```
 
-```{r price_btc, out.width='80%', fig.cap='Bitcoin Price USD', echo=FALSE}
+```{r price_btc, out.width='80%', fig.cap='BTC/USD', echo=FALSE}
 knitr::include_graphics("images/btc_usd.jpeg")
 ```
 
@@ -309,13 +309,13 @@ knitr::include_graphics("images/btc_usd.jpeg")
 #### 2.3.2. Bitcoin technology and cryptocurrencies {#bitcoin_tec} 
 &nbsp;
 
-This chapter focuses on the technical aspects of the cryptocurrency Bitcoin. It describes the role that blockchain technology plays in cryptocurrencies and how this manifests itself in the case of Bitcoin. Cryptocurrency as a more general term is used because Bitcoin was only the first of its kind. One may look at a cryptocurrency similarly to a normal currency because you can buy and sell things and get Bitcoin in exchange. But cryptocurrencies fundamentally differ to conservative currencies in merely all ways. The cryptocurrencies (not just Bitcoin) are based on the blockchain technology introduced in Nakamotos paper [@bitcoin]. The system is decentralized, where no institution or government regulates the market in terms of the blockchain itself. The transactions are signed by the participants via  cryptographic hash functions, which generate a private and public key. This means that every signature can only be accessed by the owner of the private key i.e. it can not be copied. Once a transaction is signed, it is broadcasted into the network to all participants, so that everyone sees a transaction has been made.  Around 2400 transactions are packed in a block (the blocksize is limited by memory) which are broadcasted to all participants of the system. Every block consists the transaction information, previous hash, the special number and their resulting hash as visualized in figure \ref{fig:blockchain}.
-Miners are now trying to approve the block by generating a hash with a certain pattern with the hashfunction f(prevhash, data of the block, special number), the so called proof of work. The first miner who finds the according special number to the hash with the certain pattern, gets an amount of Bitcoin in reward.
+This chapter focuses on the technical aspects of the cryptocurrency bitcoin. It describes the role that blockchain technology plays in cryptocurrencies and how this manifests itself in the case of bitcoin. Cryptocurrency as a more general term is used because bitcoin was only the first of its kind. One may look at a cryptocurrency similarly to a normal currency because you can buy and sell things and get bitcoin in exchange. But cryptocurrencies fundamentally differ to conservative currencies in merely all ways. The cryptocurrencies (not just bitcoin) are based on the blockchain technology introduced in Nakamotos paper [@bitcoin]. The system is decentralized, where no institution or government regulates the market in terms of the blockchain itself. The transactions are signed by the participants via  cryptographic hash functions, which generate a private and public key. This means that every signature can only be accessed by the owner of the private key i.e. it can not be copied. Once a transaction is signed, it is broadcasted into the network to all participants, so that everyone sees a transaction has been made.  Around 2400 transactions are packed in a block (the blocksize is limited by memory) which are broadcasted to all participants of the system. Every block consists the transaction information, previous hash, the special number and their resulting hash as visualized in figure \ref{fig:blockchain}.
+Miners are now trying to approve the block by generating a hash with a certain pattern with the hashfunction f(prevhash, data of the block, special number), the so called proof of work. The first miner who finds the according special number to the hash with the certain pattern, gets an amount of bitcoin in reward.
 The block with its new hash and the special number are now added to the chain and are broadcasted to the network. If someone manipulates transactions in a block and finds the special number to the hash, he could potentially get away with it but not for long because for the next block he must be also the first to find the right hash and so on. In figure \ref{fig:blockchain}, the red block is a false one which gets attached and later declined because the other branch is longer. Only the longest chain is to be trusted, and because there are so many miners one must have more than 50 % off the calculating power to get the best chance to find the right hash. Therefore its almost impossible to manipulate the chain. The cryptocurrency itself is now entirely defined by a chain of approved blocks by all participants.
 
-Another interesting fact about Bitcoin is that the amount of coins is determined by the rewards of the miners. The first block (genesisblock) had a reward of 50 Bitcoins, every 210'000 blocks this reward gets halved. Since a new block is added every 10 minutes (this is the average time to solve a hash) the halving of the block rewards occurs approximately every 4 years. Under these conditions, one expects a block reward of zero in 2140 with a maximum number of Bitcoins of 21 million [@blockrewards].
+Another interesting fact about bitcoin is that the amount of coins is determined by the rewards of the miners. The first block (genesisblock) had a reward of 50 Bitcoins, every 210'000 blocks this reward gets halved. Since a new block is added every 10 minutes (this is the average time to solve a hash) the halving of the block rewards occurs approximately every 4 years. Under these conditions, one expects a block reward of zero in 2140 with a maximum number of Bitcoins of 21 million [@blockrewards].
 
-In recent days, the cryptocurrency has come under a lot of criticism. The immense computing expenditure has a very high power consumption which leads cryptomining companies to build huge farms with massive cooling aggregates. According to the article in Forbes magazine [@energy_consumption] the Bitcoin mining process uses 0.51 percent (127TWh) of global energy consumption. The University of Cambridge created an index where the live energy consumption can be observed [@energy_index]. Right now China [@energy_map] contributes 70 % to the hash rate whereas the remaining 30 percent are distributed over the rest of the world.
+In recent days, the cryptocurrency has come under a lot of criticism. The immense computing expenditure has a very high power consumption which leads cryptomining companies to build huge farms with massive cooling aggregates. According to the article in Forbes magazine [@energy_consumption] the bitcoin mining process uses 0.51 percent (127TWh) of global energy consumption. The University of Cambridge created an index where the live energy consumption can be observed [@energy_index]. Right now China [@energy_map] contributes 70 % to the hash rate whereas the remaining 30 percent are distributed over the rest of the world.
 
 ```{r blockchain, out.width='80%', fig.cap='Blockchain schema', echo=FALSE}
 knitr::include_graphics("images/blockchain.jpg")
@@ -332,7 +332,7 @@ As mentioned in the previous chapter, the maximum possible amount of 21 million 
 - Mining process
 - Reward halving
 
-First, it is emphasized that in a decentralized monetary system, the newly issued amount is defined by the cryptographic algorithm. Consistently, new Bitcoins enter circulation when a miner sells their received reward to fund operating costs or new equipment. Unlike a central bank, which typically aims for an annual inflation target of 2%, with Bitcoin the number of new coins issued is decreased after each halving. Meynkhard describes that this decrease in newly issued Bitcoins, assuming constant demand, causes the market value to increase in the long-term. Although in contrast to stock markets, there is only a fraction of historical data available, this halving phenomenon could certainly be observed. The halving in 2016 is made responsible for the price increase from USD 500 to USD 20'000 by December 2017. The latest halving in May 2020 appears to be responsible for the present bull market, which let the price drive from USD 9000 to over USD 60'000. This deflationary characteristic of Bitcoin led to it being more and more referred to as digital gold in the broad media [@digital_gold].
+First, it is emphasized that in a decentralized monetary system, the newly issued amount is defined by the cryptographic algorithm. Consistently, new Bitcoins enter circulation when a miner sells their received reward to fund operating costs or new equipment. Unlike a central bank, which typically aims for an annual inflation target of 2%, with bitcoin the number of new coins issued is decreased after each halving. Meynkhard describes that this decrease in newly issued Bitcoins, assuming constant demand, causes the market value to increase in the long-term. Although in contrast to stock markets, there is only a fraction of historical data available, this halving phenomenon could certainly be observed. The halving in 2016 is made responsible for the price increase from USD 500 to USD 20'000 by December 2017. The latest halving in May 2020 appears to be responsible for the present bull market, which let the price drive from USD 9000 to over USD 60'000. This deflationary characteristic of bitcoin led to it being more and more referred to as digital gold in the broad media [@digital_gold].
 
 \newpage
 
@@ -360,7 +360,7 @@ Another approach is the LIME (Local Interpretable Model-agnostic Explanations). 
 
 For the interpretation of financial time series, we would like to keep the dependency structure. The changes in trend or variability should be maintained. The sequence should not be shuffled. When mixing up the order, a value from far back could suddenly play a bigger role for the model than a current one. Intuitively, this would not add any value to financial time series.
 
-For our application, the lagged logarithmic returns of bitcoin prices, are the features to be studied. We want to find out how the features affect the output of the neural network. A network is trained with delayed values as the input layer to match the output as closely as possible to the original values (the non-delayed ones). This concept strongly resembles a linear regression. What would this look like.
+For our application, the lagged log returns of bitcoin prices, are the features to be studied. We want to find out how the features affect the output of the neural network. A network is trained with delayed values as the input layer to match the output as closely as possible to the original values (the non-delayed ones). This concept strongly resembles a linear regression. What would this look like.
 
 ```{=tex}
 \begin{align} \label{eq:lm1}
@@ -376,9 +376,9 @@ In our concrete example, the equation would look like this.
 \end{align}  
 ```
 
-Now, what could the fitted regression, respectively the regression coefficients tell us about the respective lagged values. For that, we can look at the autocorrelation function of the Bitcoin log returns in figure \ref{fig:xai_acf}. Lags at 6 and 10 have a positive impact on the original data structure. In the context of the time series, this means that there is a strong 6- or 10-day dependency.
+Now, what could the fitted regression, respectively the regression coefficients tell us about the respective lagged values. For that, we can look at the autocorrelation function of the bitcoin log returns in figure \ref{fig:xai_acf}. Lags at 6 and 10 have a positive impact on the original data structure. In the context of the time series, this means that there is a strong 6- or 10-day dependency.
 
-```{r xai_acf, fig.align='center', echo=FALSE, fig.cap="Autocorrelation function of the Bitcoin-Prices."}
+```{r xai_acf, fig.align='center', echo=FALSE, fig.cap="Autocorrelation function of BTC/USD."}
 # Load Data
 load("data/log_ret_27_03_21.rda")
 load("data/BTC_USD_27_03_21.rda")
@@ -404,7 +404,7 @@ z <- as.numeric(round(xai_lm$coefficients,4))
 df <- as.data.frame(rbind(name,z))
 colnames(df) <- NULL
 rownames(df) <- NULL
-kbl(df, caption="Coefficient of the linear regression of the Bitcoin Log-Returns.", booktabs = T, linesep = "") %>%
+kbl(df, caption="Coefficient of the linear regression of the BTC log returns.", booktabs = T, linesep = "") %>%
   kable_styling(latex_options = c("striped", "hold_position")) %>%
   column_spec(1:6, color="#000000") %>%
   column_spec(7, color="#f6004a") %>%
@@ -456,14 +456,14 @@ for (i in 1:ncol(xai_data))
   mtext(colnames(xai_data)[i], col=colorino[i], line=-i)
 ```
 
-```{r xai_plot2, fig.align='center', echo=FALSE, fig.cap="XAI compared to Logreturns of the Bitcoin.", out.width='100%'}
+```{r xai_plot2, fig.align='center', echo=FALSE, fig.cap="XAI compared to log returns of BTC.", out.width='100%'}
 # Load Data
 par(mfrow=c(2,1))
 colorino <- c("#000000", "#000000", "#000000", "#000000", "#000000", "#000000", "#f6004a", "#004c6d", "#0075b6", "#665191", "#ff7c43")
 plot(xai_data, main="XAI ~ Bitcoin", col=colorino)
 for (i in c(7,8,9,10,11))
   mtext(colnames(xai_data)[i], col=colorino[i], line=-i)
-plot(logret, main="LogReturn ~ Bitcoin")
+plot(logret, main="Log return ~ Bitcoin")
 ```
 
 \newpage
