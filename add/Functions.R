@@ -208,7 +208,7 @@ combination_in_out_MSE <- function(maxneuron=3,maxlayer=3,real=10,train_set,data
 # - use nn_nl_comb_sharpe_mse
 #   define maxneurons/layers and the amount of realizations
 
-## MSE Sharpe Function####
+## MSE Sharpe Function FFN####
 nn_nl_comb_sharpe_mse <- function(maxneuron=3, maxlayer=3, real=10, data_obj) {
   starttime=Sys.time()
   # Define Input Grid
@@ -321,9 +321,6 @@ data_function <- function(x, lags, in_out_sep, start="", end="",autoassign=F) {
               test_set=test_set,
               f=f))
 }
-
-
-
 
 ## Estimate Fun####
 nn_estim <- function(data_obj, nl_comb) {
