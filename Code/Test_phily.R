@@ -22,7 +22,7 @@ split2 <- logret["2020-02-01::2020-08-31"]
 split2_in <- split2["2020-02-01::2020-07-31"]
 split2_out <- split2["2020-08-01::2020-08-31"]
 
-<<<<<<< HEAD
+
 # Last Period####jkfj
 # Test: Last Month
 # Training: Last 6 Months
@@ -34,11 +34,11 @@ nn_7_7_50_last <- nn_nl_comb_sharpe_mse(maxneuron=7,
 # Don't do that
 # 960799 nets * 50 Iterations = 48039950
 # 9.2h Computation for 16482 of 960799 (2%)
-=======
+
 split3 <- logret["2020-03-01::2020-09-30"]
 split3_in <- split3["2020-03-01::2020-08-31"]
 split3_out <- split3["2020-09-01::2020-09-30"]
->>>>>>> main
+
 
 split4 <- logret["2020-04-01::2020-10-31"]
 split4_in <- split4["2020-04-01::2020-09-30"]
@@ -639,17 +639,53 @@ par(mfrow=c(1,1))
 # colorino <- c("#003f5c", "#2f4b7c", "#665191", "#a05195", "#d45087", "#f95d6a", "#f6004a", "#ff1208", "#ef4e3d", "#ffa600", "#ff7c43")
 colorino <- c("#ff1208", "#003f5c", "#2f4b7c", "#a05195", "#d45087", "#f95d6a", "#f6004a", "#004c6d", "#0075b6", "#665191", "#ff7c43")
 # colorino <- c("#000000", "#000000", "#000000", "#000000", "#000000", "#000000", "#f6004a", "#004c6d", "#0075b6", "#665191", "#ff7c43")
-plot(xai_data, main="XAI ~ Bitcoin", col=colorino)
-for (i in 1:ncol(xai_data))
-  mtext(colnames(xai_data)[i], col=colorino[i], line=-i)
+plot(xai_data,
+     main="XAI ~ Bitcoin",
+     col=colorino,
+     yaxis.right=FALSE,
+     lwd=2,
+     ylim=c(-0.025, 0.05))
+# for (i in 1:ncol(xai_data))
+#   mtext(colnames(xai_data)[i], col=colorino[i], line=-i)
+
+
+addLegend("top", 
+          legend.names=colnames(xai_data),
+          col=colorino,
+          lty=rep(1, ncol(xai_data)),
+          lwd=rep(2, ncol(xai_data)),
+          ncol=3)
 
 class(xai_data)
 
 xai_dat <- as.data.frame(xai_data)
 class(xai_dat)
 
-plot(xai_dat[,1], type="l", ylim=c(min(na.exclude(xai_dat)), na.exclude(max(xai_dat))))
-c(min(na.exclude(xai_dat)), na.exclude(max(xai_dat)))
+# date = ymd(time(rownames(xai_dat)))
+# class(subseti)
+# time(xai_data)
+# df_sub <- data.frame(date = ymd(time(xai_data)), value = as.numeric(xai_data))
+
+daterino <- ymd(time(xai_data))
+str(daterino)
+
+plot(xai_dat[,1],
+     type="l",
+     ylim=c(min(na.exclude(xai_dat)), max(na.exclude(xai_dat))),
+     col=colorino[1],
+     xaxt="n")
+
+axis.Date(1, at=seq(min(daterino), max(daterino), by="years"), format="%m-%y")
+?axis.Date
+
+axis(1, at=1:nrow(xai_dat), labels=daterino)
+axis(1, daterino, format(daterino, "%m-%y"), cex.axis = .7)
+
+for (i in 2:ncol(xai_dat)) {
+  lines(xai_dat[,i], type="l", col=colorino[i])
+}
+
+grid()
 
 # Table####
 as.numeric(round(xai_lm$coefficients,4))

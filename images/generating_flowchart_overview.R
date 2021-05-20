@@ -20,17 +20,7 @@ grViz(diagram = "digraph flowchart {
   [2]: 'Definition of time splits'
   [3]: 'Evaluation of different network architectures'    
   [4]: 'Selection of a suitable neural network' 
-  [5]: 'Conduct check for predicive accuracy'
+  [5]: 'Conduct check for predictive accuracy'
   [6]: 'Implementation of trading strategy'
   ")
 
-
-'''
-Data exploration
-Definition of time splits
-Evaluation of network architecture
-Selection of a suitable neural network 
-Conduct check for predicive accuracy
-Implementation of trading strategy
-Discussion of results
-'''

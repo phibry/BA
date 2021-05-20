@@ -11,7 +11,7 @@ df_sub <- data.frame(date = ymd(time(subseti)), value = as.numeric(subseti))
 
 plot(df_sub
      ,type="l",lwd=1.5,
-     frame.plot = FALSE,
+     frame.plot = TRUE,
      xaxt="n",
      xlab="Time:  Month-Year",
      ylab="Log Return BTC", ylim=c(-0.2, 0.2),main= "Train/ Test Split")
