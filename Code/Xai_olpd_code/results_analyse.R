@@ -13,7 +13,7 @@ load("data/GARCH_vola_predictions/garch_out_signal.rda")
 #-------------------------------------------------------------------------------
 
 #how many standart deviatons for olpd threshold
-devi=2
+devi=1
 #
 # decision rule of nn percentage of half  if NULL majority decision is taken
 percentage= 0.3
@@ -53,7 +53,7 @@ nn_signal_string=  paste("nn_signal","anz=",as.character(anz),"decision=",as.cha
 # assign("sharpmat_3",get(sharpmat_string))
 # assign("nn_signal_3",get(nn_signal_string))
 # assign("olpd_signal_3",get(olpd_signal_string))
-# 
+
 
 
 
@@ -173,8 +173,8 @@ batchsharpestring=paste("sd= ",as.numeric(devi),"sharpe_batch")
 assign(allsharpestring,df)
 assign(batchsharpestring,allsharp)
 
-save(list=allsharpestring, file = paste("data/xai/7_7_withsignal_xai_in/signal1_and_05/",allsharpestring,".rda",sep=""))
-save(list=batchsharpestring, file = paste("data/xai/7_7_withsignal_xai_in/signal1_and_05/",batchsharpestring,".rda",sep=""))
+#save(list=allsharpestring, file = paste("data/xai/7_7_withsignal_xai_in/signal1_and_05/",allsharpestring,".rda",sep=""))
+#save(list=batchsharpestring, file = paste("data/xai/7_7_withsignal_xai_in/signal1_and_05/",batchsharpestring,".rda",sep=""))
 
 
 

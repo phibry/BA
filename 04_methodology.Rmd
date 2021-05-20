@@ -303,7 +303,7 @@ sdY=\sqrt{  \frac{1}{n_{in}}  \sum_{t=1}^{n_{in}}(Y_{t}-\bar{Y})^{2} }
 
 ```{=tex}
 \begin{align} \label{eq:count}
-\text{g(X)}=\sum_{j=1}^{lag_{n}}(X_{j}>\bar{Y}_{j}+\lambda sdY_{j} )\vee( X_{j}<\bar{Y}_{j}-\lambda sdY_{j})
+\text{g(X)}=\sum_{j=1}^{lag_{n}}X_{j}\Big((X_{j}>\bar{Y}_{j}+\lambda sdY_{j} )\vee( X_{j}<\bar{Y}_{j}-\lambda sdY_{j})\Big)
 \end{align}
 ```
 
