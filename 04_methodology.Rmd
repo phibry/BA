@@ -22,7 +22,7 @@ For processing and analyzing the data in order to fulfill the weak stationarity 
 
 ```{=tex}
 \begin{align} \label{eq:logreturn}
-\mathrm{LogReturn} = \mathrm{log}(x_{t})-\mathrm{log}(x_{t-1})
+\mathrm{LogReturn_{t}} = \mathrm{log}(x_{t})-\mathrm{log}(x_{t-1})
 \end{align}
 ```
 
@@ -394,12 +394,8 @@ With the previously established architecture only the three parameters $\lambda$
 
 
 
-```{r results_different_decisions, fig.align='center', out.width='100%', fig.cap="Neural network LPD results", echo=FALSE}
-knitr::include_graphics("images/xailpd/lambda_1_5_with0_5/all.jpeg")
-<<<<<<< HEAD
-
-=======
->>>>>>> main
+```{r results_different_decisions, fig.align='center', out.width='100%', fig.cap="Neural network LPD results",dev = "svg",echo=FALSE}
+knitr::include_graphics("images/xailpd/lambda_1_5_with0_5/all.svg")
 ```
 
 
