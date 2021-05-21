@@ -120,30 +120,33 @@ lpdperf3[which(olpd_signal_3==0.5)]<-lpdperf1[which(olpd_signal_3==0.5)]*0.5
 
 
 
-#lpd signal with only 1
+# trading with ether ####----------------------------------------------------------------------
 
 
-# trading rule: just buy ether when btc signal is 0 "no rule"
+# trading rule1: just buy ether when btc signal is 0 "no rule"
 
 #lpd performed better with only zeroes therefore all 0.5 signals are 1
 olpd_signal_1_only1=olpd_signal_1
 olpd_signal_1_only1[which(olpd_signal_1==0.5)]<-1
 
+#lpd performed better with only zeroes therefore all 0.5 signals are 1
+olpd_signal_2_only1=olpd_signal_2
+olpd_signal_2_only1[which(olpd_signal_2==0.5)]<-1
+
+#lpd performed better with only zeroes therefore all 0.5 signals are 1
+olpd_signal_3_only1=olpd_signal_3
+olpd_signal_3_only1[which(olpd_signal_3==0.5)]<-1
+
+
+
+#lpd signal with only 1--------------------------------------
 olpd_1_eth=olpd_1
 dummy1=which(olpd_1_eth==0)
 olpd_1_eth[dummy1,]=outtarget_eth[dummy1,]
 
-#lpd performed better with only zeroes therefore all 0.5 signals are 1
-olpd_signal_2_only1=olpd_signal_2
-olpd_signal_2_only1[which(olpd_signal_2==0.5)]<-1
-
 olpd_2_eth=olpd_2
 dummy2=which(olpd_2_eth==0)
 olpd_2_eth[dummy2,]=outtarget_eth[dummy2,]
-
-#lpd performed better with only zeroes therefore all 0.5 signals are 1
-olpd_signal_3_only1=olpd_signal_3
-olpd_signal_3_only1[which(olpd_signal_3==0.5)]<-1
 
 olpd_3_eth=olpd_3
 dummy3=which(olpd_3_eth==0)
@@ -151,32 +154,46 @@ olpd_3_eth[dummy3,]=outtarget_eth[dummy3,]
 
 
 
-#lpd signal with only 1
 
-
-# trading rule: signal lpd nn is zero -> ether if the last 5 returns were positive -> negative
+# trading rule2: signal lpd nn is zero -> ether if the last 5 returns were positive -> negative
 # if last 5 were positive -> negative else just buy 
 
-#lpd performed better with only zeroes therefore all 0.5 signals are 1
-#
+
+### consecutive rule ####-------------------------------------------------------------------------------
+## if 5 consecutive values the next value is - sign of the nconsecutives
+checkdata=sign(logret_eth["2020-06-26::2021-03-27"])
+filler=checkdata
+filler[]<-0
+cons=6
+for(i in (cons):length(checkdata))
+{
+   if(i==cons){filler[i]=100}
+   if(abs(sum(checkdata[i-1],checkdata[i-2],checkdata[i-3],checkdata[i-4],checkdata[i-5])) == 5)
+   {filler[i]=-sign(checkdata[i-1])}
+}
+filler=filler["2020-07-01::2021-03-27"]
 
 
 
-#lpd performed better with only zeroes therefore all 0.5 signals are 1
-olpd_signal_2_only1=olpd_signal_2
-olpd_signal_2_only1[which(olpd_signal_2==0.5)]<-1
+olpd_1_eth=olpd_1
+dummy1=which(olpd_1_eth==0)
+olpd_1_eth[dummy1,]=outtarget_eth[dummy1,]
+com1=which(filler!= 0 & olpd_1_eth==0)
+olpd_1_eth[dummy2]<-filler[com1]*outtarget_eth[com1]
+
 
 olpd_2_eth=olpd_2
 dummy2=which(olpd_2_eth==0)
 olpd_2_eth[dummy2,]=outtarget_eth[dummy2,]
+com2=which(filler!= 0 & olpd_2_eth==0)
+olpd_2_eth[dummy2]<-filler[com2]*outtarget_eth[com2]
 
-#lpd performed better with only zeroes therefore all 0.5 signals are 1
-olpd_signal_3_only1=olpd_signal_3
-olpd_signal_3_only1[which(olpd_signal_3==0.5)]<-1
 
 olpd_3_eth=olpd_3
 dummy3=which(olpd_3_eth==0)
 olpd_3_eth[dummy3,]=outtarget_eth[dummy3,]
+com3=which(filler!= 0 & olpd_3_eth==0)
+olpd_3_eth[dummy3]<-filler[com3]*outtarget_eth[com3]
 
 
 
@@ -185,7 +202,7 @@ olpd_3_eth[dummy3,]=outtarget_eth[dummy3,]
 
 
 
-#sharperatio over all
+#sharperatio over all-------------------------------------------------------------------------------------
 sharpe_bh=sqrt(365)*SharpeRatio(outtarget,FUN="StdDev")
 
 
