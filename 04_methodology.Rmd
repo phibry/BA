@@ -205,7 +205,7 @@ The main component is the prediction of the neural network. This reflects the ex
 
 While these methods sound promising, it should not be forgotten that a buy-and-hold strategy (given nerves of steel) also led to remarkable performances in the past that even outperformed traditional asset classes. The price development is described in chapters [2.3.1.](#historical_analysis) and [2.3.3.](#bitcoin_valuation). That is why buy-and-hold is frequently used as a comparison. 
 
-For trading the returns, we must first define the environment and make some assumptions. Tradingcosts are crucial in high frequency trading, nevertheless we assume that transaction costs are non exsistant. Further we assume the possibility of shortselling in BTC. These assumptions allow us to wether stay in the market( signal = 1), to exit the market (signal = 0)  or to sell tomorrows return (signal = -1). If in the two latter  tomorrows return is negative, a gain in performance is realized. By exiting the market with signal 0, there are several opportunities to invest the money elsewhere or just stay out of the market. Therefore we chose a simple rule, if our model predicts a zero we invest in ETH.
+For trading the returns, we must first define the environment and make some assumptions. Tradingcosts are crucial in high frequency trading, nevertheless we assume that transaction costs are non exsistant. Further we assume the possibility of shortselling in BTC. These assumptions allow us to wether stay in the market( signal = 1), to exit the market (signal = 0)  or to sell tomorrows return (signal = -1). If in the two latter  tomorrows return is negative, a gain in performance is realized. By exiting the market with signal 0, there are several opportunities to invest the money elsewhere or just stay out of the market and therefore eliminate market exposure. 
 
 \newpage
 
@@ -213,7 +213,7 @@ For trading the returns, we must first define the environment and make some assu
 
 &nbsp;
 
-In chapter 3.2.3 we have decided to fix the architecture 7 layers 7 nets.  In the following we describe how in this case the neural network is used, in order to create a trading signal. Further we use the LPD, explained in chapter [2.4.2.](#xai_finance), based on the computed neural networks to derive an additional  signal for trading.
+In the following we describe how in this case the neural network is used, in order to create a trading signal. Further we use the LPD, explained in chapter [2.4.2.](#xai_finance), based on the computed neural networks to derive an additional  signal for trading.
 
 
 
@@ -379,32 +379,68 @@ Figure \ref{fig:garch_trading} illustrates how the GARCH trading strategies show
 #### 3.3.4. nn and lpd estimation
 
 &nbsp;
+In chapter 3.2.3 we have decided to fix the architecture 7 layers 7 nets, all
+the 9 splits which were introduced in chapter [3.2.1.](#test_train), are now used for trading. The out of sample performances of every split are added together and are compared with the benchmark from [bench](#bench_mark).
 
-the 9 splits which were in chapter [3.2.1.](#test_train) introduce are now used for trading. The out of sample performances of every split are added together and are compared with the benchmark from [bench](#bench_mark).
+Our findings from the garch model were not very promising, nevertheless we combine their signals with the neuralnet output and the signals from lpd.
 
+With the previously established architecture, different values for the parameters: $\lambda$, $\eta_{lower},\eta_{upper}$ and $\beta$  are used and the performance is compared to each other.
 
+The most promising performance is found with $\lambda = 1$,$\eta_{lower} > \eta_{upper}$ (no 0.5 signals were used) $\eta_{upper}=3$ and $\beta = 0.2$.
+In figure \ref{fig:perf} different combinations are visualized nn is simply trading the forecast of neuralnet based on their sign. The signals of lpd are all 1 except off all those which are predict 0. nn+lpd is the performance as described in 3.3.3. .The combination with garch nn+lpd+garch takes in account the garch signals from 3.3.5. If lpd or garch signal 0 -> the signal is also 0. 
 
-
-With the previously established architecture only the three parameters $\lambda$, $\eta_{lower},\eta_{upper}$, $\beta$ are optimized for performance.
-
-
-
-
-
-
+By investigating the plot it seems that some combinations perform better than the others. The garch application appears to worsen the performance. ligthblue and the yellow line catches our eye, their perfomance seems to be better than the rest and as we can see, those are combinations of nn+lpd.
 
 
-```{r results_different_decisions, fig.align='center', out.width='100%', fig.cap="Neural network LPD results",dev = "svg",echo=FALSE}
-knitr::include_graphics("images/xailpd/lambda_1_5_with0_5/all.svg")
+
+
+
+
+
+
+
+```{r perf, fig.align='center', out.width='100%', fig.cap="Different signal combinations: performance plot",dev = "svg",echo=FALSE}
+knitr::include_graphics("images/xailpd/lambda_1/perf.svg")
+```
+\newpage
+
+Regarding the sharpe in figure \ref{fig:sharpe} our findings from before are confirmed. the nn+lpd with $\beta = 0.2$ has even  a better sharpe ratio than buy and Hold. But another observations is seemingly more interesting, the lpd is alway better than just nn. By investigating the other calculations we have done, we find the same pattern, therefore we conclude that lpd brings us a real benefit.
+
+
+
+```{r sharpe, fig.align='center', out.width='80%', fig.cap="Different signal combinations: Sharpe",dev = "svg",echo=FALSE}
+knitr::include_graphics("images/xailpd/lambda_1/sharpe.svg")
 ```
 
+Figure \ref{fig:batch} gives a insight on how the indivudal combinations performed in each of the 9 splits. the nn+lpd with $\beta = 0.2$ is predominantly better in the first three splits, in the middle section its worse and towards the end the sharpe is again better than Buy and Hold.
+But lets take this plot not to serious because these splits are just one month out of sample i.e the sharpe ratio is sensitive to outliers, this effect is even stronger when there is little data present.
 
 
 
 
 
+```{r batch, fig.align='center', out.width='80%', fig.cap="Different signal combinations: Sharpe per split",dev = "svg",echo=FALSE}
+knitr::include_graphics("images/xailpd/lambda_1/batch.svg")
+```
+\newpage
+#### 3.3.5. Adding Ether
+
+In the performance plot \ref{fig:perf}, we have still left out what to do with 0 signals.  one opportunity in as 3.3.3. shortly mentioned is to invest the money in another asset. By reason of staying in the same asset class we choose ether to invest in. According to [@correlation_btc] the correlation between the two assets is 0.91. This is not a braking factor to us, because the 0 signal of the lpd is just indicating that something is changing in the data or the neural net is not stable. 
+
+Due to the similarity of the data we are not going to further elaborate on ether. The serie is imported in the same way as btc e.g. the logreturns are derived.
+
+That said, we use a simple rule to integrate ether. if the signal of lpd is 0 -> go long on ether, as soon as the signal from lpd changes back to 1 or -1 , ether is sold.
 
 
+
+In figure \ref{fig:with_eth} we observe the outperforming of buy and hold, by adding the ether rule to the previous nn+lpd combinations.
+
+
+
+
+```{r with_eth, fig.align='center', out.width='100%', fig.cap="Added Eth signal",dev = "svg",echo=FALSE}
+knitr::include_graphics("images/xailpd/lambda_1/lpd_nn_eth_perf.svg")
+```
 
 
 \newpage

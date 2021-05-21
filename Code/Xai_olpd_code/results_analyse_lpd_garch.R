@@ -53,7 +53,7 @@ nn_signal_string=  paste("nn_signal","anz=",as.character(anz),"decision=",as.cha
 # assign("sharpmat_3",get(sharpmat_string))
 # assign("nn_signal_3",get(nn_signal_string))
 # assign("olpd_signal_3",get(olpd_signal_string))
-# 
+
 
 
 
@@ -182,6 +182,7 @@ assign(batchsharpestring,allsharp)
 #-----------------------------------------------------------------------------
 
 #performance cumulated lpdperf3
+
 par(mfrow=c(3,1))
 
 main=paste("Performance cumulated from 9 splits, λ=",as.character(devi))
@@ -197,13 +198,13 @@ colnames(compare_perf)=name
 colors= c("red","pink","violetred","darkorchid","blue","lightblue","turquoise","dodgerblue4","darkorange","goldenrod1","yellow","darkgoldenrod1","green")
 
 
-plot.xts(compare_perf,main=main,col=colors)
+#plot.xts(compare_perf,main=main,col=colors)
 addLegend("topleft", 
           legend.names=name,
           col=colors,
           lty=c(rep(1,13),2),
           lwd=c(rep(2,13),3),
-          ncol=1,
+          ncol=2,
           bg="white")
 
 
