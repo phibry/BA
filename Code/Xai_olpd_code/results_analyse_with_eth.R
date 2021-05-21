@@ -21,13 +21,14 @@ tail(logret_eth)
 
 outtarget_eth=logret_eth["2020-07-01::2021-03-27"]
 
+
 #-------------------------------------------------------------------------------
 
 #how many standart deviatons for olpd threshold
 devi=1
 #
 # decision rule of nn percentage of half  if NULL majority decision is taken
-percentage= 0.2
+percentage= 0.3
 anz=1000
 #---------
 #-------------------------------------------------------------------------------
@@ -51,7 +52,7 @@ nn_signal_string=  paste("nn_signal","anz=",as.character(anz),"decision=",as.cha
 # assign("nn_signal_1",get(nn_signal_string))
 # assign("olpd_signal_1",get(olpd_signal_string))
 
-
+# 
 # assign("olpd_2",get(olpd_string))
 # assign("nn_2",get(nn_string))
 # assign("sharpmat_2",get(sharpmat_string))
@@ -64,7 +65,7 @@ nn_signal_string=  paste("nn_signal","anz=",as.character(anz),"decision=",as.cha
 # assign("sharpmat_3",get(sharpmat_string))
 # assign("nn_signal_3",get(nn_signal_string))
 # assign("olpd_signal_3",get(olpd_signal_string))
-# 
+
 
 
 
@@ -120,17 +121,69 @@ lpdperf3[which(olpd_signal_3==0.5)]<-lpdperf1[which(olpd_signal_3==0.5)]*0.5
 
 
 #lpd signal with only 1
-olpd_signal_2_only1=olpd_signal_2
 
+
+# trading rule: just buy ether when btc signal is 0 "no rule"
+
+#lpd performed better with only zeroes therefore all 0.5 signals are 1
+olpd_signal_1_only1=olpd_signal_1
+olpd_signal_1_only1[which(olpd_signal_1==0.5)]<-1
+
+olpd_1_eth=olpd_1
+dummy1=which(olpd_1_eth==0)
+olpd_1_eth[dummy1,]=outtarget_eth[dummy1,]
+
+#lpd performed better with only zeroes therefore all 0.5 signals are 1
+olpd_signal_2_only1=olpd_signal_2
 olpd_signal_2_only1[which(olpd_signal_2==0.5)]<-1
 
 olpd_2_eth=olpd_2
-
 dummy2=which(olpd_2_eth==0)
-
 olpd_2_eth[dummy2,]=outtarget_eth[dummy2,]
 
-cumsum(olpd_2_eth)
+#lpd performed better with only zeroes therefore all 0.5 signals are 1
+olpd_signal_3_only1=olpd_signal_3
+olpd_signal_3_only1[which(olpd_signal_3==0.5)]<-1
+
+olpd_3_eth=olpd_3
+dummy3=which(olpd_3_eth==0)
+olpd_3_eth[dummy3,]=outtarget_eth[dummy3,]
+
+
+
+#lpd signal with only 1
+
+
+# trading rule: signal lpd nn is zero -> ether if the last 5 returns were positive -> negative
+# if last 5 were positive -> negative else just buy 
+
+#lpd performed better with only zeroes therefore all 0.5 signals are 1
+#
+
+
+
+#lpd performed better with only zeroes therefore all 0.5 signals are 1
+olpd_signal_2_only1=olpd_signal_2
+olpd_signal_2_only1[which(olpd_signal_2==0.5)]<-1
+
+olpd_2_eth=olpd_2
+dummy2=which(olpd_2_eth==0)
+olpd_2_eth[dummy2,]=outtarget_eth[dummy2,]
+
+#lpd performed better with only zeroes therefore all 0.5 signals are 1
+olpd_signal_3_only1=olpd_signal_3
+olpd_signal_3_only1[which(olpd_signal_3==0.5)]<-1
+
+olpd_3_eth=olpd_3
+dummy3=which(olpd_3_eth==0)
+olpd_3_eth[dummy3,]=outtarget_eth[dummy3,]
+
+
+
+
+
+
+
 
 #sharperatio over all
 sharpe_bh=sqrt(365)*SharpeRatio(outtarget,FUN="StdDev")
@@ -141,20 +194,22 @@ sharpe_olpd_1=sqrt(365)*SharpeRatio(olpd_1,FUN="StdDev")
 sharpe_nn_1=sqrt(365)*SharpeRatio(nn_1,FUN="StdDev")
 sharpe_lpd_1=sqrt(365)*SharpeRatio(lpdperf1,FUN="StdDev")
 sharpe_all3_1=sqrt(365)*SharpeRatio(perfall3_1,FUN="StdDev")
+sharpe_olpd_1_eth=sqrt(365)*SharpeRatio(olpd_1_eth,FUN="StdDev")
 
-sharpe_olpd_2_eth=sqrt(365)*SharpeRatio(olpd_2_eth,FUN="StdDev")
 
 
 sharpe_olpd_2=sqrt(365)*SharpeRatio(olpd_2,FUN="StdDev")
 sharpe_nn_2=sqrt(365)*SharpeRatio(nn_2,FUN="StdDev")
 sharpe_lpd_2=sqrt(365)*SharpeRatio(lpdperf2,FUN="StdDev")
 sharpe_all3_2=sqrt(365)*SharpeRatio(perfall3_2,FUN="StdDev")
+sharpe_olpd_2_eth=sqrt(365)*SharpeRatio(olpd_2_eth,FUN="StdDev")
 
 
 sharpe_olpd_3=sqrt(365)*SharpeRatio(olpd_3,FUN="StdDev")
 sharpe_nn_3=sqrt(365)*SharpeRatio(nn_3,FUN="StdDev")
 sharpe_lpd_3=sqrt(365)*SharpeRatio(lpdperf3,FUN="StdDev")
 sharpe_all3_3=sqrt(365)*SharpeRatio(perfall3_3,FUN="StdDev")
+sharpe_olpd_3_eth=sqrt(365)*SharpeRatio(olpd_3_eth,FUN="StdDev")
 
 
 
@@ -200,10 +255,37 @@ assign(batchsharpestring,allsharp)
 #-----------------------------------------------------------------------------
 
 #eth and best olpd
-olpd_2_eth[1]<-0
 
-data=cbind(cumsum(outtarget),cumsum(olpd_2),cumsum(olpd_2_eth))
-plot.xts(data,col=c("green","orange","blue"))
+
+main=paste("Performance cumulated from 9 splits, λ=",as.character(devi))
+
+data=cbind(cumsum(outtarget),cumsum(olpd_1),cumsum(olpd_1_eth),cumsum(olpd_2),cumsum(olpd_2_eth),cumsum(olpd_3),cumsum(olpd_3_eth))
+colors= c("green","red","pink","violetred","darkorchid","blue","lightblue")
+name=c(
+      paste("Buy and Hold"," sharpe=",round(sharpe_bh,2)),
+      paste("lpd+nn β=0.1"," sharpe=",round(sharpe_olpd_1,2)),
+       paste("nn+lpd+eth-if-0 β=0.1"," sharpe=",round(sharpe_olpd_1_eth,2)),
+       paste("lpd+nn β=0.2"," sharpe=",round(sharpe_olpd_2,2)),
+       paste("nn+lpd+eth-if-0 β=0.2"," sharpe=",round(sharpe_olpd_2_eth,2)),
+      paste("lpd+nn β=0.3"," sharpe=",round(sharpe_olpd_3,2)),
+      paste("nn+lpd+eth-if-0 β=0.3"," sharpe=",round(sharpe_olpd_3_eth,2))
+      )
+
+       
+plot.xts(data,col=colors,main=main)
+addLegend("topleft", 
+          legend.names=name,
+          col=colors,
+          lty=c(rep(1,13),2),
+          lwd=c(rep(2,13),3),
+          ncol=1,
+          bg="white")
+
+
+
+
+
+
 
 #performance cumulated lpdperf3
 par(mfrow=c(3,1))
