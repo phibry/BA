@@ -436,7 +436,7 @@ knitr::include_graphics("images/xailpd/lambda_1/batch.svg")
 \newpage
 #### 3.3.5. Adding Ether
 
-In the performance plot \ref{fig:perf}, we have still left out what to do with 0 signals.  one opportunity as in  3.3.3. shortly mentioned, is to invest the money in another asset. By reason of staying in the same asset class we choose ether to invest in. According to [@correlation_btc] the correlation between the two assets is 0.91. This is not a braking factor to us, because the 0 signal of the lpd is just indicating that something is changing in the data or the neural net is not stable thus we cant exactly know what is the 0 singal means. 
+In the performance plot \ref{fig:perf}, we have still left out what to do with 0 signals.  One opportunity as in  3.3.3. shortly mentioned, is to invest the money in another asset. By reason of staying in the same asset class we choose ether to invest in. According to [@correlation_btc] the correlation between the two assets is 0.91. This is not a braking factor to us, because the 0 signal of the lpd is just indicating that something is changing in the data or the neural net is not stable thus we cant exactly know what is the 0 singal means. 
 
 Due to the similarity of the data we are not going to further elaborate on ether. The series is imported in the same way as btc e.g. the logreturns are derived.
 
