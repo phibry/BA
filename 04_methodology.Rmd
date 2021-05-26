@@ -449,7 +449,7 @@ In figure \ref{fig:with_eth} we observe the outperforming of buy and hold, by ad
 
 
 
-```{r with_eth, fig.align='center', out.width='100%', fig.cap="Added Eth signal",dev = "tikz",echo=FALSE}
+```{r with_eth, fig.align='center', out.width='100%', fig.cap="Added Eth signal",dev = "svg",echo=FALSE}
 knitr::include_graphics("images/xailpd/lambda_1/lpd_nn_eth_perf.svg")
 ```
 
