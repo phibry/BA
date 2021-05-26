@@ -5,8 +5,4 @@ geometry: margin = 1in
 
 ## 1. Introduction
 
-Ken is testing working with Github.does it work now?
-
-
-
-### 1.1. Intro 
+The well-known asset classes such as equities, bonds and money market instruments have existed for several decades and have established themselves as a fixed component in many portfolios. The approach often taken is that, in principle, the equity component is responsible for the main return and the remaining asset classes are used to optimize the risk/return ratio or, depending on the area of application, for liquidity. Recently, there has been talk of a new asset class that has a low correlation to the equity markets, very high volatility, but also enormous opportunities for profit [@bitcoin_market]. The best-known cryptocurrency with the largest market capitalization at the moment is bitcoin. Compared to traditional asset classes, the characteristics of the bitcoin market are relatively unexplored. Especially for the reason that only about ten years of  historical data is available for bitcoin. In addition to this aspect, the costs for trading bitcoin are surprisingly low and are in the promille range when using exchanges like Binance or Kraken. These characteristics make bitcoin an attractive investment vehicle to test the application of artificial neural networks. 
