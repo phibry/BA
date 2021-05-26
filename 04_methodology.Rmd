@@ -69,7 +69,7 @@ To find the optimal network architecture, we test a maximum of 3 layers with a m
 
 ```{=tex}
 \begin{align} \label{eq:comb}
-\text{comb}=\sum_{i=1}^{L}N^{i}
+\text{Comb}=\sum_{i=1}^{L}N^{i}
 \end{align}
 ```
 with:
@@ -78,7 +78,7 @@ $L=\text{maximum Layer} \in \mathbb{N}^{*}$
 
 $N=\text{maximum Neuron}\in \mathbb{N}^{*}$
 
-$\text{comb} =\text{Number of all combinations}$
+$\text{Comb} =\text{Number of all combinations}$
 
 Thus, with our initial setup, we obtain a maximum neuron-layer combination of 1110. To respond to the challenges mentioned in section [2.1.6.](#challenges), not only a single network per neuron-layer combination is trained, but a whole batch of 50 networks. So we end up with a total of 55'500 trained networks. For each individual network, the in-sample and out-of-sample MSE as well as the Sharpe ratios are determined. We use these values to find an optimal network architecture based on the statistical error as well as on the trading performance (daily trading).
 
@@ -352,7 +352,7 @@ knitr::include_graphics("images/xailpd/out_sum_2.jpeg")
 
 \newpage
 
-#### 3.3.5. Volatility predictions with GARCH
+#### 3.3.4. Volatility predictions with GARCH
 &nbsp;
 
 In a further step, we examine the time series with a traditional GARCH model that allows heteroskedasticity. T. Bollerslev proposes to use this to model time-dependent variance as a function of lagged shocks and lagged conditional variances [@garch]. Based on an ARMA(1,1)-GARCH(1,1), we conduct one-step-ahead predictions using a rolling window of size 365 days and refit the model after 30 days. This results in two different trading strategies of which one is based on the signs of the forecasts and the other on predicted volatility. The predictions of future volatilities are presented in the appendix in figure \ref{fig:vola_forecasts}. 
@@ -364,17 +364,18 @@ The second strategy is solely based on volatility predictions resulting from a G
 
 ```{=tex}
 \begin{equation}\label{eq:vola_predict}
-lpd signal(\sigma pred_{t}) =
+\text{signal}(\hat{\sigma}_{t}) =
 \begin{cases} 
                                               
-  0      & \quad \text{if } ,  \sigma pred_{t} \ge \sigma_{historical} \\
+  0      & \quad \text{if} ,  \hat{\sigma}_{t} \ge \sigma_{historical} \\
   1      & \quad \text{else}
 
    \end{cases}
 \end{equation}
 ```
 
-$sigmapred_{t}$ = predicted volatility in every $_{t}$
+$\hat{\sigma}_{t}$ = predicted volatility in every ${t}$
+
 $\sigma_{historical}$ = historical volatility
 
 In other words, the code checks whether the predicted volatility is significantly greater than the 95% confidence interval (based on historical data). If this is the case, the trading signal is set to 0, i.e. the position is sold respectively we stay out of the market. If the expected volatility is within the normal range, we enter respectively remain in a long position. For simplicity, a threshold of 1.64 is used, which corresponds approximately to the upper 95% confidence interval for a standard normal distribution. 
@@ -387,9 +388,9 @@ Figure \ref{fig:garch_trading} illustrates how the GARCH trading strategies show
 
 \newpage
 
-#### 3.3.4. nn and lpd estimation
-
+#### 3.3.5. nn and lpd estimation
 &nbsp;
+
 In chapter 3.2.3 we have decided to fix the architecture 7 layers 7 nets, all
 the 9 splits which were introduced in chapter [3.2.1.](#test_train), are now used for trading. The out of sample performances of every split are added together and are compared with the benchmark from [bench](#bench_mark).
 
@@ -398,16 +399,9 @@ Our findings from the garch model were not very promising, nevertheless we combi
 With the previously established architecture, different values for the parameters: $\lambda$, $\eta_{lower},\eta_{upper}$ and $\beta$  are used and the performance is compared to each other.
 
 The most promising performance is found with $\lambda = 1$,$\eta_{lower} > \eta_{upper}$ (no 0.5 signals were used) $\eta_{upper}=3$ and $\beta = 0.2$.
-In figure \ref{fig:perf} different combinations are visualized nn is simply trading the forecast of neuralnet based on their sign. The signals of lpd are all 1 except off all those which are predict 0. nn+lpd is the performance as described in 3.3.3. .The combination with garch nn+lpd+garch takes in account the garch signals from 3.3.5. If lpd or garch signal 0 -> the signal is also 0. 
+In figure \ref{fig:perf} different combinations are visualized nn is simply trading the forecast of neuralnet based on their sign. The signals of lpd are all 1 except off all those which are predict 0. nn+lpd is the performance as described in 3.3.3. .The combination with garch nn+lpd+garch takes in account the garch signals from 3.3.5. If lpd or garch signal is 0 then the signal is also 0. 
 
 By investigating the plot it seems that some combinations perform better than the others. The garch application appears to worsen the performance. ligthblue and the yellow line catches our eye, their perfomance seems to be better than the rest and as we can see, those are combinations of nn+lpd.
-
-
-
-
-
-
-
 
 
 ```{r perf, fig.align='center', out.width='100%', fig.cap="Different signal combinations: performance plot",dev = "svg",echo=FALSE}
@@ -418,7 +412,6 @@ knitr::include_graphics("images/xailpd/lambda_1/perf.svg")
 Regarding the sharpe in figure \ref{fig:sharpe} our findings from before are confirmed. the nn+lpd with $\beta = 0.2$ has even  a better sharpe ratio than buy and Hold. But another observations is seemingly more interesting, the lpd is alway better than just nn. By investigating the other calculations we have done, we find the same pattern, therefore we conclude that lpd brings us a real benefit.
 
 
-
 ```{r sharpe, fig.align='center', out.width='80%', fig.cap="Different signal combinations: Sharpe",dev = "svg",echo=FALSE}
 knitr::include_graphics("images/xailpd/lambda_1/sharpe.svg")
 ```
@@ -427,14 +420,12 @@ Figure \ref{fig:batch} gives a insight on how the indivudal combinations perform
 But lets take this plot not to serious because these splits are just one month out of sample i.e the sharpe ratio is sensitive to outliers, this effect is even stronger when there is little data present.
 
 
-
-
-
 ```{r batch, fig.align='center', out.width='80%', fig.cap="Different signal combinations: Sharpe per split",dev = "svg",echo=FALSE}
 knitr::include_graphics("images/xailpd/lambda_1/batch.svg")
 ```
+
 \newpage
-#### 3.3.5. Adding Ether
+#### 3.3.6. Adding Ether
 
 In the performance plot \ref{fig:perf}, we have still left out what to do with 0 signals.  one opportunity as in  3.3.3. shortly mentioned, is to invest the money in another asset. By reason of staying in the same asset class we choose ether to invest in. According to [@correlation_btc] the correlation between the two assets is 0.91. This is not a braking factor to us, because the 0 signal of the lpd is just indicating that something is changing in the data or the neural net is not stable thus we cant exactly know what is the 0 singal means. 
 
@@ -442,32 +433,13 @@ Due to the similarity of the data we are not going to further elaborate on ether
 
 That said, we use a simple rule to integrate ether. if the signal of the combination nn+lpd is 0 -> go long on ether, as soon as the signal from lpd changes back to 1 or -1 , ether is sold.
 
-
-
 In figure \ref{fig:with_eth} we observe the outperforming of buy and hold, by adding the ether rule to the previous nn+lpd combinations.
-
-
 
 
 ```{r with_eth, fig.align='center', out.width='100%', fig.cap="Added Eth signal",dev = "svg",echo=FALSE}
 knitr::include_graphics("images/xailpd/lambda_1/lpd_nn_eth_perf.svg")
 ```
 
-
-
-
-
-\newpage
-
-
-#### 3.3.6. Kapitel: Resultat nicht wie erhofft
-
-&nbsp;
-
-- Vorschläge: 
-- Resultat nochmals prüfen mit "gutem" Seed
-- Versuchen auf andere Zeitreihe
-- Preise nehmen anstatt log returns 
 
 
 
