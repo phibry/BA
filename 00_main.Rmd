@@ -13,6 +13,7 @@ header-includes:
 - \usepackage{amsmath}
 - \usepackage{placeins}
 output: pdf_document
+
 ---
 ```{r, include=FALSE}
 options(tinytex.verbose = TRUE)
