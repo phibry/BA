@@ -59,3 +59,11 @@ knitr::include_graphics("images/splitplots/price9.jpeg")
 ```{r vola_forecasts, out.width='90%', fig.cap='One-step-ahead forecasts of volatility using rolling window of size 365. Refitting model after every months.', echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/GARCH/vola_forecasts.png")
 ```
+
+```{r xai_plot2, fig.align='center', echo=FALSE, fig.cap="LPD of BTC.", out.width='100%', fig.width = 10, fig.height = 6}
+par(mfrow=c(1,1))
+colorino <- c("#ff1208", "#003f5c", "#2f4b7c", "#665191", "#a05195", "#d45087", "#f6004a", "#004c6d", "#0075b6", "#665191", "#ff7c43")
+plot(xai_data, main="XAI ~ Bitcoin", col=colorino)
+for (i in 1:ncol(xai_data))
+  mtext(colnames(xai_data)[i], col=colorino[i], line=-i)
+```

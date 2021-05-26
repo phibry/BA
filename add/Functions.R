@@ -1997,6 +1997,39 @@ chart.ACF.phil <- function (R, maxlag = NULL, elementcolor = "gray", main = NULL
   abline(h = c(0, L, U), lty = c(1, 2, 2), col = c(1, 4, 4))
 }
 
+chart.ACF.phil.special <- function (R, maxlag = NULL, elementcolor = "gray", main = NULL, ymax = 0.3,
+                            ...) 
+{
+  colorino <- c("#000000", "#000000", "#000000", "#000000", "#000000",
+                "#f6004a", "#004c6d", "#0075b6", "#665191", "#ff7c43",
+                "#000000", "#000000", "#000000", "#000000", "#000000",
+                "#000000", "#000000", "#000000", "#000000", "#000000")
+  R = checkData(R)
+  data = checkData(R[, 1], method = "vector", na.rm = TRUE)
+  columns = ncol(R)
+  rows = nrow(R)
+  columnnames = colnames(R)
+  if (is.null(main)) 
+    main = columnnames[1]
+  num = length(data)
+  if (is.null(maxlag)) 
+    maxlag = ceiling(10 + sqrt(num))
+  ACF = acf(data, maxlag, plot = FALSE)$acf[-1]
+  Lag = 1:length(ACF)/frequency(data)
+  minA = min(ACF)
+  U = 2/sqrt(num)
+  L = -U
+  minu = min(minA, L) - 0.01
+  plot(Lag, ACF, type = "h", ylim = c(minu, ymax), main = main, 
+       axes = FALSE, col=colorino, ...)
+  box(col = elementcolor)
+  axis(2, col = elementcolor, cex.axis = 0.8)
+  axis(1, col = elementcolor, cex.axis = 0.8)
+  abline(h = c(0, L, U), lty = c(1, 2, 2), col = c(1, 4, 4))
+}
+
+
+
 chart.ACFplus.phil <- function (R, maxlag = NULL, elementcolor = "gray", main = NULL, ymax = 1,
                                 ...) 
 {
