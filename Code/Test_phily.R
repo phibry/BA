@@ -499,7 +499,7 @@ par(mfrow=c(1,1))
 chart.ACF.phil(logi_googi, ymax=0.1)
 # lag1, 6, 7, 12
 
-# XAI - BTC
+# XAI - BTC####
 load("data/log_ret_27_03_21.rda")
 load("data/BTC_USD_27_03_21.rda")
 btc <- BTC_USD_27_03_21$`BTC-USD.Adjusted`
@@ -507,6 +507,7 @@ logret <- log_ret_27_03_21
 
 par(mfrow=c(1,1))
 chart.ACF.phil(logret, ymax=0.06, maxlag = 20, main="BTC Price Dependency Structure")
+chart.ACF.phil.special(logret, ymax=0.06, maxlag = 20, main="BTC Price Dependency Structure")
 chart.ACFplus.phil(logret, ymax=0.06, main="BTC price dependency structure")
 # lag 6 und lag 10
 
