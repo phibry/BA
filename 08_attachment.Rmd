@@ -5,7 +5,9 @@ geometry: margin = 1in
 
 ## Attachment
 
-This project work is created  with R-4.0.2 , RStudio Version 1.4.904 and RMarkdown in collaborative working via Git / Github
+This bachelorthesis is created  with R-4.0.2 , RStudio Version 1.4.904 and RMarkdown in collaborative working via Git / Github
+https://github.com/phibry/BA 
+
 
 ```{r meanmean1, out.width='90%', fig.cap='MSE mean over all 9 splits with all 3 layers.', echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/batch5/mean_mean_3layer.jpeg")
