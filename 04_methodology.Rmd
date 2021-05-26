@@ -362,11 +362,20 @@ The first trading strategy is based on one-step-ahead rolling window forecasts (
 The second strategy is solely based on volatility predictions resulting from a GARCH(1,1) and tries to take an advantage from the asymmetric volatility phenomenon by F. Black. This phenomenon describes a negative correlation between the volatility of the return and the achieved return [@leverage_effect]. Therefore, we define the following trading rule:
 
 
-| **FOR EACH** $i$ in $\sigma_{predicted}$ 
-|       **IF** $\sigma_{predicted, i} \ge 1.64 \sigma_{historical}$:  
-|               $signal_i = 0$;  
-|       **ELSE**
-|               $signal_i = 1$;  
+```{=tex}
+\begin{equation}\label{eq:vola_predict}
+lpd signal(\sigma pred_{t}) =
+\begin{cases} 
+                                              
+  0      & \quad \text{if } ,  \sigma pred_{t} \ge \sigma_{historical} \\
+  1      & \quad \text{else}
+
+   \end{cases}
+\end{equation}
+```
+
+$sigmapred_{t}$ = predicted volatility in every $_{t}$
+$\sigma_{historical}$ = historical volatility
 
 In other words, the code checks whether the predicted volatility is significantly greater than the 95% confidence interval (based on historical data). If this is the case, the trading signal is set to 0, i.e. the position is sold respectively we stay out of the market. If the expected volatility is within the normal range, we enter respectively remain in a long position. For simplicity, a threshold of 1.64 is used, which corresponds approximately to the upper 95% confidence interval for a standard normal distribution. 
 
@@ -427,11 +436,11 @@ knitr::include_graphics("images/xailpd/lambda_1/batch.svg")
 \newpage
 #### 3.3.5. Adding Ether
 
-In the performance plot \ref{fig:perf}, we have still left out what to do with 0 signals.  one opportunity in as 3.3.3. shortly mentioned is to invest the money in another asset. By reason of staying in the same asset class we choose ether to invest in. According to [@correlation_btc] the correlation between the two assets is 0.91. This is not a braking factor to us, because the 0 signal of the lpd is just indicating that something is changing in the data or the neural net is not stable. 
+In the performance plot \ref{fig:perf}, we have still left out what to do with 0 signals.  one opportunity as in  3.3.3. shortly mentioned, is to invest the money in another asset. By reason of staying in the same asset class we choose ether to invest in. According to [@correlation_btc] the correlation between the two assets is 0.91. This is not a braking factor to us, because the 0 signal of the lpd is just indicating that something is changing in the data or the neural net is not stable thus we cant exactly know what is the 0 singal means. 
 
-Due to the similarity of the data we are not going to further elaborate on ether. The serie is imported in the same way as btc e.g. the logreturns are derived.
+Due to the similarity of the data we are not going to further elaborate on ether. The series is imported in the same way as btc e.g. the logreturns are derived.
 
-That said, we use a simple rule to integrate ether. if the signal of lpd is 0 -> go long on ether, as soon as the signal from lpd changes back to 1 or -1 , ether is sold.
+That said, we use a simple rule to integrate ether. if the signal of the combination nn+lpd is 0 -> go long on ether, as soon as the signal from lpd changes back to 1 or -1 , ether is sold.
 
 
 
@@ -459,4 +468,9 @@ knitr::include_graphics("images/xailpd/lambda_1/lpd_nn_eth_perf.svg")
 - Resultat nochmals prüfen mit "gutem" Seed
 - Versuchen auf andere Zeitreihe
 - Preise nehmen anstatt log returns 
+
+
+
+
+
 

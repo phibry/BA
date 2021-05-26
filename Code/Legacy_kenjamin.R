@@ -89,3 +89,12 @@ while(datum <= date_n){
 
 plot(vola_mat, type = "l")
 
+
+
+
+| **FOR EACH** $i$ in $\sigma_{predicted}$ 
+  |       **IF** $\sigma_{predicted, i} \ge 1.64 \sigma_{historical}$:  
+  |               $signal_i = 0$;  
+|       **ELSE**
+  |               $signal_i = 1$;  
+
