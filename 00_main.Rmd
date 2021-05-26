@@ -12,10 +12,8 @@ header-includes:
 - \usepackage{pdfpages}
 - \usepackage{amsmath}
 - \usepackage{placeins}
-output:
-  html_document:
-    df_print: paged
-  pdf_document: default
+output: pdf_document
+
 ---
 ```{r, include=FALSE}
 options(tinytex.verbose = TRUE)
