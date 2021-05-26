@@ -576,6 +576,20 @@ plot(logret, main="LogReturn ~ Bitcoin")
 apply(na.omit(xai_data), 2, mean)[c(7,8,9,10,11)]
 coef(xai_lm)[c(7,8,9,10,11)]
 
+
+
+
+# SignalTest####
+par(mfrow=c(1,1))
+plot(logret, main="LogReturn ~ Bitcoin")
+signal <- logret
+length(signal)
+signal[1:1000,] <- 1
+signal[1001:1500,] <- 0
+signal[1501:2000,] <- -1
+signal[2001:2379,] <- -1
+lines(signal, on=NA, ylim=c(-1.3, 1.3), lwd=2, col="#DF536B")
+
 # Test
 # test1 <- na.exclude(OLPDphil("2021-03-27", data_mat, use_in_samp=TRUE, c(7,7))$OLPD_mat)
 
@@ -698,3 +712,50 @@ df <- as.data.frame(rbind(name,z))
 colnames(df) <- NULL
 rownames(df) <- c("Coefficient", "Value")
 df
+
+
+# Pasculen Codens####
+source("add/libraries.r") 
+source("add/Functions.r") 
+
+
+
+
+load("data/xai/7_7_withsignal_xai_in/performance_with_eth.rda")
+
+load("data/xai/7_7_withsignal_xai_in/nn_lpd_without_eth.rda")
+
+data.df=as.data.frame(data)
+data.df$signal=nn_lpd
+
+
+
+main=paste("Performance cumulated from 9 splits, λ=","1")
+
+colors= c("green","red","pink","violetred","darkorchid","blue","lightblue")
+
+name=c(
+  paste("Buy and Hold"," sharpe=3.57"),
+  paste("lpd+nn β=0.1"," sharpe=2.54"),
+  paste("nn+lpd+eth-if-0 β=0.1"," sharpe=3.47"),
+  paste("lpd+nn β=0.2"," sharpe=3.76"),
+  paste("nn+lpd+eth-if-0 β=0.2"," sharpe=4.41"),
+  paste("lpd+nn β=0.3"," sharpe=3.4"),
+  paste("nn+lpd+eth-if-0 β=0.3"," sharpe=3.8")
+)
+
+
+plot(data,col=colors,main=main)
+
+
+
+addLegend("topleft", 
+          legend.names=name,
+          col=colors,
+          lty=c(rep(1,13),2),
+          lwd=c(rep(2,13),3),
+          ncol=1,
+          bg="white")
+
+
+lines(as.xts(data.df$signal), on=NA, lwd=3, col="red" , ylim=c(-1.3, 1.3))
