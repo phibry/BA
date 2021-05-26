@@ -11,8 +11,9 @@ load("data/xai/7_7_withsignal_xai_in/performance_with_eth.rda")
 
 load("data/xai/7_7_withsignal_xai_in/nn_lpd_without_eth.rda")
 
-data.df=as.data.frame(data)
-data.df$signal=nn_lpd
+
+signal <- data$BTC.USD.Close
+signal$BTC.USD.Close <- nn_lpd
 
 
 
@@ -30,8 +31,8 @@ name=c(
   paste("nn+lpd+eth-if-0 β=0.3"," sharpe=3.8")
 )
 
-
-xts.plot(data,col=colors,main=main)
+class(data)
+plot(data, col=colors, main=main)
 
 
 
@@ -43,10 +44,7 @@ addLegend("topleft",
           ncol=1,
           bg="white")
 
-
-lines(as.xts(data.df$signal), on=NA, lwd=3, col="red" , ylim=c(-1.3, 1.3))
-
-
+lines(signal, on=NA, lwd=2, col="red", ylim=c(-1.3, 1.3))
 
 
 

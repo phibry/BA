@@ -41,7 +41,7 @@ neuron_vec=c(7,7)
 
 # insample or out of sample of net ai 
 intercept=F# use the intercept for evaluation?
-anz=10
+anz=100
 # ANZAHL REEALSIATIONEN OLPD MAT
 
 outtarget=log_ret_27_03_21[paste(in_out_sep,"::",sep="")]
@@ -253,7 +253,10 @@ plot.new()
     for (i in 1:ncol(OLPD_mat_out))
        mtext(colnames(OLPD_mat_out)[i],col=rainbow(ncol(OLPD_mat_out))[i],line=-i)
 
-    
+    # save(OLPD_mat_out, file = "data/xai/7_7_withsignal_xai_in/OLPD_mat_out_plot.rda")
+    # save(mean_in, file = "data/xai/7_7_withsignal_xai_in/OLPD_mat_in_mean.rda")
+    # save(sd_in, file = "data/xai/7_7_withsignal_xai_in/OLPD_mat_in_sd.rda")
+    # 
     
 
     abline(h=mean_in[-1],lwd=2)
@@ -266,6 +269,8 @@ plot.new()
     meanline=reclass(meanline,OLPD_mat_out["::2021-02-08"])
     meanup=reclass(meanup,OLPD_mat_out["::2021-02-08"])
     meandown=reclass(meandown,OLPD_mat_out["::2021-02-08"])
+    
+    
     
     lines(meanline,lwd=2,col="black")
     lines(meanup,lwd=2,col="red",lty=2)
@@ -308,15 +313,16 @@ plot.new()
     plot(signal_olpd,main="Final signal LPD")
     
     
+    
+    
+    
+    # save(sum_explana, file = "data/xai/7_7_withsignal_xai_in/sum_explana_out_plot.rda")
+    
     plot(sum_explana["::2021-02-08"],type=c("b"),main="Sum of lags deviateing λ*sdY from Mean(Y)")
    
     
     sum_with_lines=na.exclude(cbind(as.xts(sum_explana),lineup,linedown))
-    lines(lineup,lwd=2,col="red",lty=1)
-    lines(linedown,lwd=2,col="green",lty=1)
     
-    
-
     lineup=rep(4.0,nrow(sum_explana["::2021-02-08"]))
     linedown=rep(2.0,nrow(sum_explana["::2021-02-08"]))
     
@@ -325,7 +331,10 @@ plot.new()
     linedown=reclass(linedown,sum_explana["::2021-02-08"])
     
 
- 
+     
+    lines(lineup,lwd=2,col="red",lty=1)
+    lines(linedown,lwd=2,col="green",lty=1)
+    
     
 
     name=c("η upper","η lower")
