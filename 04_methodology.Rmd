@@ -474,18 +474,9 @@ In figure \ref{fig:perf} different combinations are visualized nn is simply trad
 By investigating the plot it seems that some combinations perform better than the others. The garch application appears to worsen the performance. ligthblue and the yellow line catches our eye, their perfomance seems to be better than the rest and as we can see, those are combinations of nn+lpd.
 
 
-<<<<<<< HEAD
 
-
-
-
-
-
-
-```{r perf, fig.align='center',fig.keep="last", out.width='100%', fig.cap="Different signal combinations: performance plot",dev = "svg",echo=FALSE}
-=======
 ```{r perf, fig.align='center', out.width='100%', fig.cap="Different signal combinations: performance plot",dev = "svg",echo=FALSE}
->>>>>>> main
+
 knitr::include_graphics("images/xailpd/lambda_1/perf.svg")
 
 # load("data/xai/7_7_withsignal_xai_in/perfall_without_eth.rda")
