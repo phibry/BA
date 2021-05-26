@@ -277,7 +277,6 @@ $p_{k}$ = Predicted value from neural network
 
 In the same manner as before, for every $k$ of the $N_{total}$ network in every time step $t$ the derivative as in chapter [2.4.2.](#xai_finance) is calculated. From the insample lpd the mean $\bar{Y}$ \ref{eq:Ybar} and the standarddeviation $sdY$ \ref{eq:sdY} for every $lag_{j}$ is derived. In the out of sample $\bar{Y}_{j}$ and $sdY_{j}$  are used to generate a signal by the following:
 
-
 With Formula \ref{eq:count} in every $lag_{j}$ it is decided wether the predicted lpd exceeds $\bar{Y}_{j} \pm   \lambda sdY_{j}$. In Figure \ref{fig:lpd_explain} this procedure is visualized, just for one lag due to a smoother visualisation. 
 
 Function $g(X)$ \ref{eq:count} is further applied in $lpd signal(x_{t})$ to every timestep $_{t}$ in order to generate a signal with \ref{eq:net_decision2} $lpd signal(x_{t})$. The output of $g(X)$ \ref{eq:count} is between 0 and $lag_{j}$.
@@ -388,7 +387,7 @@ Figure \ref{fig:garch_trading} illustrates how the GARCH trading strategies show
 
 \newpage
 
-#### 3.3.5. nn and lpd estimation
+#### 3.3.5. NN and LPD estimation
 &nbsp;
 
 In chapter 3.2.3 we have decided to fix the architecture 7 layers 7 nets, all
@@ -427,7 +426,7 @@ knitr::include_graphics("images/xailpd/lambda_1/batch.svg")
 \newpage
 #### 3.3.6. Adding Ether
 
-In the performance plot \ref{fig:perf}, we have still left out what to do with 0 signals.  one opportunity as in  3.3.3. shortly mentioned, is to invest the money in another asset. By reason of staying in the same asset class we choose ether to invest in. According to [@correlation_btc] the correlation between the two assets is 0.91. This is not a braking factor to us, because the 0 signal of the lpd is just indicating that something is changing in the data or the neural net is not stable thus we cant exactly know what is the 0 singal means. 
+In the performance plot \ref{fig:perf}, we have still left out what to do with 0 signals. One opportunity as in 3.3.3. shortly mentioned, is to invest the money in another asset. By reason of staying in the same asset class we choose Ether to invest in. According to [@correlation_btc] the correlation between the two assets is 0.91. This is not a braking factor to us, because the 0 signal of the lpd is just indicating that something is changing in the data or the neural net is not stable thus we cant exactly know what is the 0 singal means. 
 
 Due to the similarity of the data we are not going to further elaborate on ether. The series is imported in the same way as btc e.g. the logreturns are derived.
 
