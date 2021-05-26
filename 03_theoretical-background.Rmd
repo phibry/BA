@@ -127,71 +127,183 @@ Every neural network has an input layer, which consists of one or more nodes. Th
 
 In between are the hidden layers, whose number and size can be configured as desired. The challenge is to find an optimal and efficient configuration without causing overfitting of the training data. The number of hidden layers depends primarily on the application area of the neural network. For example, working with image recognition would require more layers since the image file is broken down into individual pixels. Subsequently, the layers are used to optimize from rough outlines to the smallest detail. In our research, we came across several methods or 'rules of thumb' to optimize the model. A frequently suggested method is explained by Andrej Karpathy (director of the AI department of Tesla, Inc.). His GitHub entry recommends the approach of starting with a model that is too large that causes overfitting. Subsequently, the model is reduced by focusing on increasing training loss and improving validation loss [@recipe_training].
 
-#### 2.1.4. Recurrent neural networks (RNN) {#RNN}
+#### 2.1.4. Challenges {#challenges}
 &nbsp;
 
-Recurrent neural networks (RNN) are a further development of conventional neural networks. While MLP use new inputs $x_i$ in each epoch, RNN also use sequential data $h_i$ in addition to $x_i$. This sequential data are called hidden states and result from the previous runs. This has the advantage that historical information stemming from past predictions is included for the prediction for $t+1$. This effect can be intuitively explained by an example in which the flight path of a scheduled flight is predicted using RNN. When predicting the exact location (coordinates) of a plane, it is of great advantage to know the location at $t-1$ and to derive the flight direction from it. With the inclusion of this information, the target area can be narrowed down, which optimally leads to more accurate results. The same principle is used in applications like machine translation and speech recognition, where the result (here possibly letter or word) of the last epoch plays a big role for the next prediction [@RNN].
-
-```{r RNN, fig.align='center', out.width='80%', fig.cap= 'Process sequences of different applicances of RNN.', echo=FALSE}
-
-knitr::include_graphics("images/RNN.jpg")
-
-#[1]F.-F. Li, J. Johnson, and S. Yeung, ‘Lecture 10: Recurrent Neural Networks’, p. 105.
-
-```
-
-Figure \ref{fig:RNN} shows different process sequences of the RNN, which vary depending on the field of application. The red rectangles at the bottom represent the number of inputs. Similarly, the blue rectangles represent the outputs that come out of the RNN. The term 'many' refers to $>1$ and is illustrated with three rectangles in the figure. The green ones represent the hidden states $h_i$ of all time steps and thus can be seen as the memory of the neural network. The green arrows show that the previous hidden state is used as input for the current step. Starting from the left: one-to-many can be used for image captioning (extracting sequence of words from images), many-to-one for sentiment classification from sequence of words, many-to-many for machine translation (sequence of words in one language to sequence of words in another language) and many-to-many for video classification on frame level [@RNN_Stanford]. For the prediction of the BTC/USD exchange rate in this paper, we deal with the process many-to-one. This method combines information from inputs and hidden states into one single prediction value. 
-
-```{r RNN_many_to_one, fig.align='center', out.width='70%', fig.cap= 'Computational graph of a many-to-one RNN.', echo=FALSE}
-
-knitr::include_graphics("images/RNN_many_to_one.jpg")
-
-#[1]F.-F. Li, J. Johnson, and S. Yeung, ‘Lecture 10: Recurrent Neural Networks’, p. 105.
-
-```
-
-```{=tex}
-\begin{align} \label{eq:RNN_many_to_one_1}
-  h_{i} & = f_{W}(h_{i-1}, x_{i}) \\
-  & = \tanh(W_{h}h_{i-1} + W_{x}x_{i} + b) \nonumber 
-\end{align}
-```
-
-Equation \ref{eq:RNN_many_to_one_1} shows how the hidden states $h_{i}$ are calculated at each time step, $i$ where $f_{W}$ is an activation function (here: hyperbolic tangent function), $h_{i-1}$ is the previous state and $x_i$ is the input vector at time step i. In some cases, a bias term $b$ is added to the parameters. $W_{h}$ represents the weight matrix for $h_{i}$ with dimension (length($h$)$\times$length($h$)). Thus, $W_{x}$ is the weight matrix for $x_{i}$ with dimension (length($h$)$\times$length($x$)).
-
-```{=tex}
-\begin{align} \label{eq:RNN_many_to_one_2}
-  \hat{y_{i}} = W_{y}h_{i}
-\end{align}
-```
-
-Looking at equation \ref{eq:RNN_many_to_one_2}, $y_{i}$ equals the output and desired prediction of the RNN. The prediction results from the matrix-vector product of the weight matrix $W_{y}$ with dimension (length($h$)$\times$length($y$)) and the hidden states vector $h$.
-
-#### 2.1.5. Long-short term memory (LSTM) {#LSTM}
-&nbsp;
-
-#### 2.1.6. Challenges {#challenges}
-&nbsp;
-
-##### 2.1.6.1 Overfitting {#overfitting}
+##### 2.1.4.1 Overfitting {#overfitting}
 &nbsp;
 
 We have encountered several challenges that can occur when using neural networks. One of these possible problems is called overfitting. The goal of a neural network is to build a statistical model of the training set that is capable of generating the data. In overfitting on the other hand, the exact conditions of the training data including noise are reproduced. The focus is no longer on the underlying function. Last but not least, an unnecessarily large number of parameters or epochs can be 'consumed' for this, which makes the whole process relatively inefficient [@RNN]. 
 
-=> still needs clarification how we solve these challenges in this thesis!
-
-##### 2.1.6.2. Vanishing gradient problem {#vanishing_gradient}
+##### 2.1.4.2. Vanishing gradient problem {#vanishing_gradient}
 &nbsp;
 
 Another characteristic that requires our attention is the vanishing gradient problem. As explained in chapter [2.1.2.](#backpropagation_algorithm), the weights of the neural network are adjusted using the gradient of the loss function. Thereby, the problem can occur that the gradient almost vanishes. The error function's gradients become so small that the backpropagation algorithm takes smaller steps towards the loss function's minima and eventually stops learning. For example, if the derivative of an activation function such as the logistic sigmoid function approaches zero for extremely large or small values for $x$. To avoid these extreme values for $x$, the inputs are scaled and normalized in this paper. This ensures that the definition range is within the range where the gradient is still large enough for the backpropagation algorithm.  
 
-=> still needs clarification how we solve these challenges in this thesis!
+\newpage
 
-### 2.2. Model comparison {#model_comparison}
+### 2.2. Explainable artificial intelligence {#xai}
+
+Depending on the model architecture, a neural network can be a very complex construct. A number of weights and biases linked to the neurons lead to an output of the network through training. Understanding how exactly the alterations of the weights and biases lead to this output is a rather complex task. Due to this difficulty in interpretation, neural networks are often referred to as black boxes [@blackbox].
+
+Although the networks may lead to desired results, it can be important to build an understanding of these models. Suppose we are developing a classification method in supervised learning for a particular problem. A classical approach such as linear regression is easy to understand and we can convince people with little knowledge of mathematics of the usefulness of this method. Consider that a good and simple explanation may depend on investment. Would an investor invest in something that is not understood and difficult to get a grasp of? Neural networks with their non-linearity and the large number of parameters does not make it easy for the user to convince an investor of the benefits of a neural network.
+
+#### 2.2.1. Classic Approach
+&nbsp;
+
+As mentioned earlier, it is almost impossible to explain the networks based on the weights and biases. The following methods try to find effects on the features. One tries to find out which influence a certain feature has on the prediction of the network. There are classical approaches for explaining neural networks in the applications such as image recognition or text mining.
+
+A widely used approach is the Shapley value which has its origin in game theory. With this method, one tries to find out how big the influence of a feature is. So how much a feature contributes to the prediction. The problem with this method is that it mixes the data at different points in time. In this paper, we study the prediction of financial time series, i.e. autocorrelated data. Thus, this approach is not suitable for our application to interpret the importance of individual features (lagged log returns) [@slide_xai].
+
+An approach like ALE (Accumulated Local Effects) examines how the network reacts to change [@slide_xai]. The features (lags) are plotted in order against ALE in a graph. The problem with this method is that the plotted features do not contain the dimension of time. It could be that two very high values are very close to each other in the plot, but in reality, they occurred years after each other.
+
+Another approach is the LIME (Local Interpretable Model-agnostic Explanations). This method examines the change of the forecast when changing the input data. A permuted data set is generated from the given data (for example, adding standardized noise). Using this artificially altered data set, an interpretable model (regression) is created to analyze the change in features [@xai_blackbox]. Changing the data affects the time dependence of the data. Thus, this method is also unusable for our application.
+
+\newpage
+
+#### 2.2.2. Explainability for Financial Time Series {#xai_finance}
+&nbsp;
+
+For the interpretation of financial time series, we would like to keep the dependency structure. The changes in trend or variability should be maintained. The sequence should not be shuffled. When mixing up the order, a value from far back could suddenly play a bigger role for the model than a current one. Intuitively, this would not add any value to financial time series.
+
+For our application, the lagged log returns of Bitcoin prices, are the features to be studied (in this paper we are focusing on Bitcoin, here we are already using it as a means of explaining neural networks. A detailed description of BTC follows in sections [2.4](#bitcoin) and [3.1](#data_exploration)). We want to explore how the features affect the output of the neural network. A network is trained with delayed values as the input layer to match the output as closely as possible to the original values (the non-delayed ones). This concept strongly resembles a linear regression. $Y$ is what we want to achieve or what has occurred in reality. The following equation establishes a relationship of the lagged data with the regression coefficients.
+
+```{=tex}
+\begin{align} \label{eq:lm1}
+  Y_{i}=\beta_{0}+\beta_{1}*x_{i}^{(1)}+\beta_{2}*x_{i}^{(2)} + ... + \epsilon_{i}, \epsilon_{i} \sim \mathcal{N}(0, \sigma^{2})
+\end{align}  
+```
+
+In our concrete example, the equation would look like this.
+
+```{=tex}
+\begin{align} \label{eq:lm2}
+ \text{Data}^{(lag=0)}_{t}=\text{Intercept}+\beta_{1}*\text{Data}^{(lag=1)}_{t}+\beta_{2}*\text{Data}^{(lag=2)}_{t} + ... + \epsilon_{i}
+\end{align}  
+```
+
+Now, what could the fitted regression, respectively the regression coefficients tell us about the respective lagged values. For that, we can look at the autocorrelation function of the Bitcoin log returns in figure \ref{fig:xai_acf}. Lags at 6 (red) and 10 (orange) have a positive impact on the original data structure. In the context of the time series, this means that there is a strong 6- or 10-day dependency. 
+
+&nbsp;
+
+```{r xai_acf, fig.align='center', echo=FALSE, fig.cap="Autocorrelation function of BTC/USD.", out.width="80%", fig.width = 7, fig.height = 5}
+# Load Data
+load("data/log_ret_27_03_21.rda")
+load("data/BTC_USD_27_03_21.rda")
+load("data/xai_data.rda")
+load("data/xai_lm.rda")
+
+btc <- BTC_USD_27_03_21$`BTC-USD.Adjusted`
+logret <- log_ret_27_03_21
+
+par(mfrow=c(1,1))
+chart.ACF.phil.special(logret, ymax=0.06, maxlag = 20, main="BTC Price Dependency Structure")
+```
+
+\newpage
+
+Looking at the regression coefficients in table \ref{tab:lm_tab}, we can discover the relationship between the ACF's and the coefficients of the regression. Again, lags 6 and 10 make the largest positive contribution to the fit of the model. Lags 7, 8, 9 make a negative contribution, as can also be seen in the ACFs.  Sign and value are in line with the ACF's.
+
+```{r lm_tab, echo=FALSE}
+library(kableExtra)
+name <- c("Intercept", "Lag 1", "Lag 2", "Lag 3", "Lag 4", "Lag 5",
+          "Lag 6", "Lag 7", "Lag 8", "Lag 9", "Lag 10")  
+z <- as.numeric(round(xai_lm$coefficients,4))
+df <- as.data.frame(rbind(name,z))
+colnames(df) <- NULL
+rownames(df) <- NULL
+kbl(df, caption="Coefficient of the linear regression of the BTC log returns.", booktabs = T, linesep = "") %>%
+  kable_styling(latex_options = c("hold_position")) %>%
+  column_spec(1:6, color="#000000") %>%
+  column_spec(7, color="#f6004a") %>%
+  column_spec(8, color="#004c6d") %>%
+  column_spec(9, color="#0075b6") %>%
+  column_spec(10, color="#665191") %>%
+  column_spec(11, color="#ff7c43")
+```
+
+Now we would like to create such an analogy with neural networks. In the case of linear regression, the coefficients, or the weights of the lagged data are the solutions of the partial derivatives of the optimization function. One obtains a coefficient for each lag, thus the respective weight, is time independent. We would now like to extend this concept. We want to keep the structure of the time series, the time dependence.
+
+We can now calculate the partial derivatives of the output of a neural network with the respective input data of time $t$ for each time $t$. We obtain the coefficients or weights $\beta_{it}$.
+
+```{=tex}
+\begin{align} \label{eq:xai_partial}
+\beta_{it} = \frac{\partial \text{Output}_{t}}{\partial \text{Data}^{(lag=i)}_{t}}
+\end{align}  
+```
+
+Basically we have a similar concept as above with the regression. Only here the coefficients are the partial derivatives that establish the relationship between input and output at each point in time. Whereas in regression you would only have 1 coefficient to estimate per input neuron $\beta_{i}$, here you have one coefficient $\beta_{it}$ for each input neuron at each time point $t$.
+
+```{=tex}
+\begin{align} \label{eq:xai_fit}
+\text{Output}_{t} = \text{Intercept} + \beta_{1t}*\text{Data}^{(lag=1)}_{t} + \beta_{2t}*\text{Data}^{(lag=2)}_{t} + ... + \beta_{qt}*\text{Data}^{(lag=q)}_{t}
+\end{align}  
+```
+
+In simpler terms, we train a neural network with input data of length up to lag $q$. Now we change a data point at time $t$, we add a disturbance term by $\delta$. So we change the value of an explanatory variable, one of our features. Suppose our input data at time $t$ looks like this.
+
+$$X = x_{t-1}+x_{t-2}+...+x_{t-q}$$
+For the feature at lag 1, we now want to calculate the partial derivative. We create a new data set $Y$ and change the data point at lag 1.
+
+$$Y = x_{t-1}+(\delta*x_{t-1})+x_{t-2}+...+x_{t-q}$$
+With the trained network we now generate two predictions for time $t$. Once with the original data $NN(X)$ and once with the data with the slightly altered value $NN(Y)$. Now we can calculate the discrete approximated partial derivative.
+
+$$\beta_{1t} = \frac{\text{NN(X) - NN(Y)}}{\delta*x_{t-1}}$$
+
+The output of the neural network changes by the value $\beta_{1t}$ if the input is changed by 1. This procedure can now be done for each feature at each point in time. Then we have for each feature at each time the derivations, which makes an explanation of neuronal networks more possible.
+
+\newpage
+
+In figure \ref{fig:xai_plot1}, you can see the $\beta_{it}$, that is, the partial derivatives from equation \ref{eq:xai_fit} up to a $q=10$, and you can see the intercept. For the comparison to the linear regression and the autocorrelation, only the lags 6 to 10 are explicitly highlighted. A detailed identification of all LPD's can be seen in figure \ref{fig:xai_plot2}.
+
+It is noticeable that the structure of LPD's strongly resembles the logarithmic returns of BTC. The heteroskedasticity of the log returns, i.e. the volatility clusters are also evident in the LPD's. If the BTC is in a turbulent phase, then the partial derivatives also fluctuate.
+
+&nbsp;
+
+```{r xai_plot1, fig.align='center', echo=FALSE, fig.cap="LPD compared to log returns of BTC.", out.width='100%', fig.width = 11, fig.height = 8.5}
+# Load Data
+par(mfrow=c(2,1))
+colorino <- c("#000000", "#000000", "#000000", "#000000", "#000000", "#000000", "#f6004a", "#004c6d", "#0075b6", "#665191", "#ff7c43")
+plot(xai_data, main="LPD ~ Bitcoin", col=colorino)
+for (i in c(7,8,9,10,11))
+  mtext(colnames(xai_data)[i], col=colorino[i], line=-i*0.8)
+plot(logret, main="Log Return ~ Bitcoin")
+```
+
+In the autocorrelations (figure \ref{fig:xai_acf}) and in the regression coefficients (table \ref{tab:lm_tab}), lags 6 and 10 have a significant positive effect, while lags 7, 8, and 9 have a negative effect. This is also the case for the LPD's. Lag 6 (red) and lag 10 (orange) have a positive sign and have the largest positive effects on an eventual model in terms of absolute value. Lags 7, 8 and 9 (dark blue, light blue and purple) have the largest negative effects here, as well as in the autocorrelations and regression coefficients.
+
+\newpage
+
+To provide a more accurate and better comparison between regression and XAI, table \ref{tab:lpd_tab} compares the regression coefficients with the mean values of the LPDs. Although the values are not equal, the signs are the same.
+
+```{r lpd_tab, echo=FALSE}
+library(kableExtra)
+name <- c("Lag 6", "Lag 7", "Lag 8", "Lag 9", "Lag 10")
+lr <- round(as.numeric(coef(xai_lm)[c(7,8,9,10,11)]), 5)
+lpd <- round(as.numeric(apply(na.omit(xai_data), 2, mean)[c(7,8,9,10,11)]), 5)
+
+df <- as.data.frame(rbind(name, lr, lpd))
+colnames(df) <- NULL
+rownames(df) <- c(" ","LR", "LPD")
+kbl(df, caption="Comparison between linear regression (LR) and linear parameter data (LPD) coefficients.", booktabs = T, linesep = "") %>%
+  kable_styling(latex_options = c("hold_position")) %>%
+  column_spec(1, color="#000000") %>%
+  column_spec(2, color="#f6004a") %>%
+  column_spec(3, color="#004c6d") %>%
+  column_spec(4, color="#0075b6") %>%
+  column_spec(5, color="#665191") %>%
+  column_spec(6, color="#ff7c43")
+```
+
+Together with the findings from the visualization in figure \ref{fig:xai_acf} and the autocorrelations in figure \ref{fig:xai_plot1}, a correlation can be established. Strong autocorrelations, i.e. large dependencies on a given delay, can be recognized in the partial derivatives. With the help of the LPD's and the autocorrelations, the behavior of neuronal networks could be explained with the handling of time series. The delayed input of a neural network seems to have probably a connection with the ACF's.
+
+\newpage
+
+### 2.3. Model comparison {#model_comparison}
 
 This thesis sets the goal to compare the different neural networks presented. Besides the types of neural networks, the network architecture (number of layers and nodes) is explored. In addition, a comparison is made with the winner of the Forecasting Competition M4, which combines a standard exponential smoothing model with an LSTM network. To make the comparison meaningful enough, the following two figures are compared. 
 
-#### 2.2.1. Sharpe Ratio {#sharpe_ratio}
+#### 2.3.1. Sharpe Ratio {#sharpe_ratio}
 &nbsp;
 
 The first number refers to the performance of the trading strategy based on the sign of the prediction $t+1$ and is called Sharpe Ratio. Sharpe ratio is a very powerful and widely used ratio to measure performance and it describes return per risk.
@@ -204,62 +316,14 @@ The first number refers to the performance of the trading strategy based on the 
 
 $R_{p}$ represents the return of the portfolio, while $R_{f}$ equals the risk free rate. $\sigma$ is the standard deviation of the portfolios excess return (risk). For the comparison of different series, the Sharpe Ratio needs to be annualized with $\sqrt{365}$ as the crypto market is open 24/7.
 
-#### 2.2.2. Diebold Mariano {#diebold_mariano}
-&nbsp;
-
-The second method used is the Diebold Mariano test, which compares the predictive accuracy between two forecasts. First, the loss differential $d_{i}$ between two forecasts is defined in equation \ref{eq:DM_loss_diff} where a loss function L of one model is subtracted from another model. The proposed loss functions include absolute errors (AE) and squared errors (SE) [@DM_paper]. Given an expected value of $d = 0$, both forecasts are assumed to have the same accuracy. If the expected value differs from zero, the null hypothesis can be rejected. This would mean that the two methods have different levels of accuracy. 
-
-```{=tex}
-\begin{align} \label{eq:DM_hypothesis}
-  H_{0}: E(d_{i}) = 0 \\
-  H_{1}: E(d_{i}) \neq 0 \nonumber
-\end{align}
-```
-
-with
-
-```{=tex}
-\begin{align} \label{eq:DM_loss_diff}
-  d_{i} = L(e_{1i}) - L(e_{2i})
-\end{align}
-```
-
-and
-
-```{=tex}
-\begin{align} \label{eq:DM_error}
-  e_{ti} = \hat{y_{ti}} - y_{i} \\
-  \text{for } t={1,2} \nonumber
-\end{align}
-```
-
-Under the null hypothesis $H_{0}$, the Diebold Mariano test uses the statistics shown in equation \ref{eq:DM} and is asymptotically N(0,1) distributed. On the other hand, the null hypothesis is rejected if the calculated absolute Diebold Mariano value is outside $-z_{\alpha/2}$ and $z_{\alpha/2}$. Thus, $|DM|>z_{\alpha/2}$ is valid when there is a significant difference between the predictions where $z_{\alpha/2}$ is the positive bound of the z-value to the level $\alpha$.    
-
-```{=tex}
-\begin{align} \label{eq:DM}
-  DM = \frac{\bar{d}}{\sqrt{\frac{2*\pi*\hat{f_{d}(0)}}{T}}} \rightarrow N(0,1)
-\end{align}
-```
-
-where $\bar{d}$ is the sample mean of the loss differential and $f_{d}(0)$ is the spectral density of the loss differential at lag k [@DM_lecture].
-
-```{=tex}
-\begin{align} \label{eq:DM_definitions}
-  \bar{d} = \sum_{i = 1}^{T}d_{i} \\
-  f_{d}(0) = \frac{1}{2\pi}(\sum_{k=-\infty}^{\infty} \gamma_{d}(k))
-\end{align}
-```
-
-In conclusion, the Diebold Mariano test helps us to understand whether the predictions of one model turned out better by chance or due to statistical significance. 
-
-#### 2.2.3. Mean Squared Error (MSE) {#MSE}
+#### 2.3.2. Mean Squared Error (MSE) {#MSE}
 &nbsp;
 
 The third performance measurement method is also widely used and called mean squared error. Its calculation is very simple, for every timestep the estimated value is subtracted from the real empirical value, squared and then summarized and divided by the absolute number of observations as seen in equation \ref{eq:MSE}.
 
 ```{=tex}
 \begin{align} \label{eq:MSE}
-  MSE &= \frac{1}{N}\sum_{i = 1}^{N}(realvalue_{i}-prediciton_{i})^2 \\
+  \text{MSE} &= \frac{1}{N}\sum_{i = 1}^{N}(\text{realvalue}_{i}-\text{prediciton}_{i})^2 \\
   &= \frac{1}{N}\sum_{i = 1}^{N}(y_{i}-\hat{y}_{i})^2
 \end{align}  
 ```
@@ -268,13 +332,13 @@ The application of MSE is widely used in statistical modeling and supervised lea
 
 \newpage
 
-### 2.3. Bitcoin {#bitcoin}
+### 2.4. Bitcoin {#bitcoin}
 
 In this section bitcoin as a crypto-curreny is introduced. The historical data is analyzed and commented. Further the technology in and around crypto-currencies in chapter [2.3.2.](#bitcoin_tec) is briefly explained. A detailed explanation would require a paper itself, therefore the explanation is done as simple as possible.
 
 In the following work bitcoin as a cryptocurreny is mentionend in its short term BTC, by the meaning of US Dollars per bitcoin.
 
-#### 2.3.1. Historical analysis {#historical_analysis}
+#### 2.4.1. Historical analysis {#historical_analysis}
 &nbsp;
 
 The story of bitcoin began with a paper published by the name of Satoshi Nakamoto [@bitcoin]. The publisher of the document cannot be assigned to a real person, therefore the technology inventor remains mysteriosly unknown until today. In 2009 the first bitcoin transaction was executed. On account of the opensource technology of bitcoin, lots of alternative currencies were created. 
@@ -306,7 +370,7 @@ knitr::include_graphics("images/btc_usd.jpeg")
 
 \newpage
 
-#### 2.3.2. Bitcoin technology and cryptocurrencies {#bitcoin_tec} 
+#### 2.4.2. Bitcoin technology and cryptocurrencies {#bitcoin_tec} 
 &nbsp;
 
 This chapter focuses on the technical aspects of the cryptocurrency bitcoin. It describes the role that blockchain technology plays in cryptocurrencies and how this manifests itself in the case of bitcoin. Cryptocurrency as a more general term is used because bitcoin was only the first of its kind. One may look at a cryptocurrency similarly to a normal currency because you can buy and sell things and get bitcoin in exchange. But cryptocurrencies fundamentally differ to conservative currencies in merely all ways. The cryptocurrencies (not just bitcoin) are based on the blockchain technology introduced in Nakamotos paper [@bitcoin]. The system is decentralized, where no institution or government regulates the market in terms of the blockchain itself. The transactions are signed by the participants via  cryptographic hash functions, which generate a private and public key. This means that every signature can only be accessed by the owner of the private key i.e. it can not be copied. Once a transaction is signed, it is broadcasted into the network to all participants, so that everyone sees a transaction has been made.  Around 2400 transactions are packed in a block (the blocksize is limited by memory) which are broadcasted to all participants of the system. Every block consists the transaction information, previous hash, the special number and their resulting hash as visualized in figure \ref{fig:blockchain}.
@@ -323,7 +387,7 @@ knitr::include_graphics("images/blockchain.jpg")
 
 \newpage
 
-#### 2.3.3. Valuation and digital gold {#bitcoin_valuation} 
+#### 2.4.3. Valuation and digital gold {#bitcoin_valuation} 
 &nbsp;
 
 As mentioned in the previous chapter, the maximum possible amount of 21 million equals a fixed supply of this cryptocurrency. This leads to the question if this has an influence on the fair market value of bitcoins. A. Meynkhard is conducting research in this area and has concluded that it relies on the following three factors [@bitcoin_halving]:
@@ -333,142 +397,3 @@ As mentioned in the previous chapter, the maximum possible amount of 21 million 
 - Reward halving
 
 First, it is emphasized that in a decentralized monetary system, the newly issued amount is defined by the cryptographic algorithm. Consistently, new Bitcoins enter circulation when a miner sells their received reward to fund operating costs or new equipment. Unlike a central bank, which typically aims for an annual inflation target of 2%, with bitcoin the number of new coins issued is decreased after each halving. Meynkhard describes that this decrease in newly issued Bitcoins, assuming constant demand, causes the market value to increase in the long-term. Although in contrast to stock markets, there is only a fraction of historical data available, this halving phenomenon could certainly be observed. The halving in 2016 is made responsible for the price increase from USD 500 to USD 20'000 by December 2017. The latest halving in May 2020 appears to be responsible for the present bull market, which let the price drive from USD 9000 to over USD 60'000. This deflationary characteristic of bitcoin led to it being more and more referred to as digital gold in the broad media [@digital_gold].
-
-\newpage
-
-### 2.4. Explainable artificial intelligence {#xai}
-
-Depending on the model architecture, a neural network can be a very complex construct. A number of weights and biases linked to the neurons lead to an output of the network through training. Understanding how exactly the alterations of the weights and biases lead to this output is a rather complex task. Due to this difficulty in interpretation, neural networks are often referred to as black boxes [@blackbox].
-
-Although the networks may lead to desired results, it can be important to build an understanding of these models. Suppose we are developing a classification method in supervised learning for a particular problem. A classical approach such as linear regression is easy to understand and we can convince people with little knowledge of mathematics of the usefulness of this method. Consider that a good and simple explanation may depend on investment. Would an investor invest in something that is not understood and difficult to get a grasp of? Neural networks with their non-linearity and the large number of parameters does not make it easy for the user to convince an investor of the benefits of a neural network.
-
-#### 2.4.1. Classic Approach
-&nbsp;
-
-As mentioned earlier, it is almost impossible to explain the networks based on the weights and biases. The following methods try to find effects on the features. One tries to find out which influence a certain feature has on the prediction of the network. There are classical approaches for explaining neural networks in the applications such as image recognition or text mining.
-
-A widely used approach is the Shapley value which has its origin in game theory. With this method, one tries to find out how big the influence of a feature is. So how much a feature contributes to the prediction. The problem with this method is that it mixes the data at different points in time. In this paper, we study the prediction of financial time series, i.e. autocorrelated data. Thus, this approach is not suitable for our application to interpret the importance of individual features (lagged log returns) [@slide_xai].
-
-An approach like ALE (Accumulated Local Effects) examines how the network reacts to change [@slide_xai]. The features (lags) are plotted in order against ALE in a graph. The problem with this method is that the plotted features do not contain the dimension of time. It could be that two very high values are very close to each other in the plot, but in reality, they occurred years after each other.
-
-Another approach is the LIME (Local Interpretable Model-agnostic Explanations). This method examines the change of the forecast when changing the input data. A permuted data set is generated from the given data (for example, adding standardized noise). Using this artificially altered data set, an interpretable model (regression) is created to analyze the change in features [@xai_blackbox]. Changing the data affects the time dependence of the data. Thus, this method is also unusable for our application.
-
-\newpage
-
-#### 2.4.2. Explainability for Financial Time Series {#xai_finance}
-&nbsp;
-
-For the interpretation of financial time series, we would like to keep the dependency structure. The changes in trend or variability should be maintained. The sequence should not be shuffled. When mixing up the order, a value from far back could suddenly play a bigger role for the model than a current one. Intuitively, this would not add any value to financial time series.
-
-For our application, the lagged log returns of bitcoin prices, are the features to be studied. We want to find out how the features affect the output of the neural network. A network is trained with delayed values as the input layer to match the output as closely as possible to the original values (the non-delayed ones). This concept strongly resembles a linear regression. What would this look like.
-
-```{=tex}
-\begin{align} \label{eq:lm1}
-  Y_{i}=\beta_{0}+\beta_{1}*x_{i}^{(1)}+\beta_{2}*x_{i}^{(2)} + ... + \epsilon_{i}, \epsilon_{i} \sim \mathcal{N}(0, \sigma^{2})
-\end{align}  
-```
-
-In our concrete example, the equation would look like this.
-
-```{=tex}
-\begin{align} \label{eq:lm2}
- \text{Original Data}_{t}=\text{Intercept}+\beta_{1}*\text{Data}^{(lag=1)}_{t}+\beta_{2}*\text{Data}^{(lag=2)}_{t} + ... + \epsilon_{i}
-\end{align}  
-```
-
-Now, what could the fitted regression, respectively the regression coefficients tell us about the respective lagged values. For that, we can look at the autocorrelation function of the bitcoin log returns in figure \ref{fig:xai_acf}. Lags at 6 and 10 have a positive impact on the original data structure. In the context of the time series, this means that there is a strong 6- or 10-day dependency.
-
-```{r xai_acf, fig.align='center', echo=FALSE, fig.cap="Autocorrelation function of BTC/USD."}
-# Load Data
-load("data/log_ret_27_03_21.rda")
-load("data/BTC_USD_27_03_21.rda")
-load("data/xai_data.rda")
-load("data/xai_lm.rda")
-
-btc <- BTC_USD_27_03_21$`BTC-USD.Adjusted`
-logret <- log_ret_27_03_21
-
-par(mfrow=c(1,1))
-chart.ACF.phil(logret, ymax=0.06, maxlag = 20, main="BTC Price Dependency Structure")
-```
-
-\newpage
-
-Looking at the regression coefficients in table \ref{tab:lm_tab}, we can discover the relationship between the ACF's and the coefficients of the regression. Again, lags 6 and 10 make the largest positive contribution to the fit of the model. Lags 7, 8, 9 make a negative contribution, as can also be seen in the ACFs.  Sign and value are in line with the ACF's.
-
-```{r lm_tab, echo=FALSE}
-library(kableExtra)
-name <- c("Intercept", "Lag 1", "Lag 2", "Lag 3", "Lag 4", "Lag 5",
-          "Lag 6", "Lag 7", "Lag 8", "Lag 9", "Lag 10")  
-z <- as.numeric(round(xai_lm$coefficients,4))
-df <- as.data.frame(rbind(name,z))
-colnames(df) <- NULL
-rownames(df) <- NULL
-kbl(df, caption="Coefficient of the linear regression of the BTC log returns.", booktabs = T, linesep = "") %>%
-  kable_styling(latex_options = c("striped", "hold_position")) %>%
-  column_spec(1:6, color="#000000") %>%
-  column_spec(7, color="#f6004a") %>%
-  column_spec(8, color="#004c6d") %>%
-  column_spec(9, color="#0075b6") %>%
-  column_spec(10, color="#665191") %>%
-  column_spec(11, color="#ff7c43")
-```
-
-Now we would like to create such an analogy with neural networks. In the case of linear regression, the coefficients, or the weights of the lagged data are the solutions of the partial derivatives of the optimization function. One obtains a coefficient for each lag, thus the respective weight, is time independent. We would now like to extend this concept. We want to keep the structure of the time series, the time dependence.
-
-We can now calculate the partial derivatives of the output of a neural network with the respective input data of time $t$ for each time $t$. We obtain the coefficients or weights $\beta_{it}$.
-
-```{=tex}
-\begin{align} \label{eq:xai_partial}
-\beta_{it} = \frac{\partial \text{Output}_{t}}{\partial \text{Data}^{(lag=i)}_{t}}
-\end{align}  
-```
-
-Basically, we can thus state the following relationship between output and weighted input.
-
-```{=tex}
-\begin{align} \label{eq:xai_fit}
-\text{Output}_{t} = \text{Intercept} + \beta_{1t}*\text{Data}^{(lag=1)}_{t} + \beta_{2t}*\text{Data}^{(lag=2)}_{t} + ... + \beta_{qt}*\text{Data}^{(lag=q)}_{t}
-\end{align}  
-```
-
-In simpler terms, we train a neural network with input data of length up to lag $q$. Now we change a data point at time $t$, we add a disturbance term by $\delta$. So we change the value of an explanatory variable, one of our features. Suppose our input data at time $t$ looks like this.
-
-$$X = x_{t-1}+x_{t-2}+...+x_{t-q}$$
-For the feature at lag 1, we now want to calculate the partial derivative. We create a new data set $Y$ and change the data point at lag 1.
-
-$$Y = x_{t-1}+(\delta*x_{t-1})+x_{t-2}+...+x_{t-q}$$
-With the trained network we now generate two predictions for time $t$. Once with the original data $NN(X)$ and once with the data with the slightly altered value $NN(Y)$. Now we can calculate the discrete approximated partial derivative.
-
-$$\beta_{1t} = \frac{\text{NN(X) - NN(Y)}}{\delta*x_{t-1}}$$
-
-The output of the neural network changes by the value $\beta_{1t}$ if the input is changed by 1. This procedure can now be done for each feature at each point in time. Then one has for each feature at each time the derivations, which possibly makes an explanation of neuronal networks possible.
-
-\newpage
-
-asdasdasd
-
-```{r xai_plot1, fig.align='center', echo=FALSE, fig.cap="XAI.", out.width='100%'}
-par(mfrow=c(1,1))
-colorino <- c("#ff1208", "#003f5c", "#2f4b7c", "#665191", "#a05195", "#d45087", "#f6004a", "#004c6d", "#0075b6", "#665191", "#ff7c43")
-plot(xai_data, main="XAI ~ Bitcoin", col=colorino)
-for (i in 1:ncol(xai_data))
-  mtext(colnames(xai_data)[i], col=colorino[i], line=-i)
-```
-
-```{r xai_plot2, fig.align='center', echo=FALSE, fig.cap="XAI compared to log returns of BTC.", out.width='100%'}
-# Load Data
-par(mfrow=c(2,1))
-colorino <- c("#000000", "#000000", "#000000", "#000000", "#000000", "#000000", "#f6004a", "#004c6d", "#0075b6", "#665191", "#ff7c43")
-plot(xai_data, main="XAI ~ Bitcoin", col=colorino)
-for (i in c(7,8,9,10,11))
-  mtext(colnames(xai_data)[i], col=colorino[i], line=-i)
-plot(logret, main="Log return ~ Bitcoin")
-```
-
-\newpage
-
-```{r}
-apply(na.omit(xai_data), 2, mean)[c(7,8,9,10,11)]
-coef(xai_lm)[c(7,8,9,10,11)]
-```
