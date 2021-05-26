@@ -58,7 +58,7 @@ nn_signal_string=  paste("nn_signal","anz=",as.character(anz),"decision=",as.cha
 # assign("sharpmat_2",get(sharpmat_string))
 # assign("nn_signal_2",get(nn_signal_string))
 # assign("olpd_signal_2",get(olpd_signal_string))
-
+# 
 
 # assign("olpd_3",get(olpd_string))
 # assign("nn_3",get(nn_string))
@@ -66,7 +66,7 @@ nn_signal_string=  paste("nn_signal","anz=",as.character(anz),"decision=",as.cha
 # assign("nn_signal_3",get(nn_signal_string))
 # assign("olpd_signal_3",get(olpd_signal_string))
 
-
+# 
 
 
 
@@ -276,7 +276,12 @@ assign(batchsharpestring,allsharp)
 
 main=paste("Performance cumulated from 9 splits, λ=",as.character(devi))
 
+
 data=cbind(cumsum(outtarget),cumsum(olpd_1),cumsum(olpd_1_eth),cumsum(olpd_2),cumsum(olpd_2_eth),cumsum(olpd_3),cumsum(olpd_3_eth))
+
+#save(data, file = paste("data/xai/7_7_withsignal_xai_in/performance_with_eth.rda",sep=""))
+
+
 colors= c("green","red","pink","violetred","darkorchid","blue","lightblue")
 name=c(
       paste("Buy and Hold"," sharpe=",round(sharpe_bh,2)),
@@ -317,6 +322,12 @@ name=c("nn β=0.1","lpd β=0.1","lpd+nn β=0.1","nn+lpd+garch β=0.1","nn β=0.2
 
 colnames(compare_perf)=name
 
+# nn_lpd=nn_signal_2
+# nn_lpd[which(olpd_signal_2==0)]<-0
+# 
+# save(nn_lpd, file = paste("data/xai/7_7_withsignal_xai_in/nn_lpd_without_eth.rda",sep=""))
+# save(compare_perf, file = paste("data/xai/7_7_withsignal_xai_in/perfall_without_eth.rda",sep=""))
+
 colors= c("red","pink","violetred","darkorchid","blue","lightblue","turquoise","dodgerblue4","darkorange","goldenrod1","yellow","darkgoldenrod1","green")
 
 
@@ -331,6 +342,13 @@ addLegend("topleft",
 
 
 #sharpe ratios over all
+# 
+# sharpesave=rbind(sharpe_nn_1,sharpe_lpd_1,sharpe_olpd_1,sharpe_all3_1,
+#       sharpe_nn_2,sharpe_lpd_2,sharpe_olpd_2,sharpe_all3_2,
+#       sharpe_nn_3,sharpe_lpd_3,sharpe_olpd_3,sharpe_all3_3,
+#       sharpe_bh)
+# 
+# save(sharpesave, file = paste("data/xai/7_7_withsignal_xai_in/sharpeplot_without_eth.rda",sep=""))
 
 plot(rbind(sharpe_nn_1,sharpe_lpd_1,sharpe_olpd_1,sharpe_all3_1,
            sharpe_nn_2,sharpe_lpd_2,sharpe_olpd_2,sharpe_all3_2,
@@ -341,6 +359,11 @@ axis(1, at=1:13, labels=name,)
 
 
 #sharperatios per batch
+
+
+# save(sharpmat_1, file = paste("data/xai/7_7_withsignal_xai_in/sharpmat_perbatch_without_eth.rda",sep=""))
+# save(allsharp, file = paste("data/xai/7_7_withsignal_xai_in/allsharp_without_eth.rda",sep=""))
+
 
 colorsbatch= c("red","pink","violetred","blue","lightblue","turquoise","darkorange","goldenrod1","yellow","green")
 
