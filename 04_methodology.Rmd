@@ -56,6 +56,27 @@ Curios from which distribution the log returns might originate, we are fitting a
 
 ```{r histogramm_logreturns, out.width='80%', fig.cap='Distribution of BTC log returns', echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/histogram_logret_3.jpeg")
+
+# load("data/log_ret_27_03_21.rda")  # loading logreturns closing! data xts
+# logret=log_ret_27_03_21 
+# 
+# my_data=as.numeric(logret[,1])   # as vector 
+# fit <- fitdistr(my_data, densfun="normal")  
+# fit2<- fitdistr(my_data, "t", start = list(m=mean(my_data),s=sd(my_data), df=1), lower=c(-1, 0.001,1)) #algo braucht startwerte
+# 
+# dt_ls <-function(x,mu,sigma,df){1/sigma * dt((x - mu)/sigma, df)}   # converting scale and location in only df
+# 
+# beschrnorm= paste("Normal distribution ~ N(","mu=",as.character(round(fit$estimate[1],5)),
+#                   "sd=",as.character(round(fit$estimate[2],5)),")")
+# beschrt= paste("T - distribution ~ t(","l=",as.character(round(fit2$estimate[1],5)),"s=",
+#                as.character(round(fit2$estimate[2],5)),"df=",as.character(round(fit2$estimate[3],5)),")")
+# 
+# # plotting the data
+# hist(my_data, pch=20, breaks=70, prob=TRUE, main="Logreturns BTC",xlab="logrets")
+# curve(dnorm(x, fit$estimate[1], fit$estimate[2]), col="red", lwd=1.5, add=T)
+# curve(dt_ls(x,fit2$estimate[1],fit2$estimate[2],fit2$estimate[3]), col="blue", lwd=1.5, add=T)
+# legend("topleft", inset=.02, legend=c(beschrnorm,beschrt),
+#        col=c("red", "blue"), pch = c(1,1), cex=1,2, horiz=F)
 ```
 
 
@@ -313,10 +334,59 @@ $g(X)$ = Function of lags exceeding band $\in$ {0..j}
 
 ```{r lpd_explain, fig.align='center', out.width='100%', fig.cap="LPD Plot for illustration", echo=FALSE}
 knitr::include_graphics("images/xailpd/out_decision_small.jpeg")
+
+# load("data/xai/7_7_withsignal_xai_in/OLPD_mat_out_plot.rda")
+# load("data/xai/7_7_withsignal_xai_in/OLPD_mat_in_mean.rda")
+# load("data/xai/7_7_withsignal_xai_in/OLPD_mat_in_sd.rda")
+# devi=2
+# 
+# plot.xts(OLPD_mat_out["::2021-02-08."],col=rainbow(ncol(OLPD_mat_out)),main="LPD Out of Sample")
+# for (i in 1:ncol(OLPD_mat_out))
+# 
+# meanline=rep(as.numeric(mean_in[4]),nrow(OLPD_mat_out["::2021-02-08"]))
+# meanup=rep(as.numeric(mean_in[4]+devi*sd_in[4]),nrow(OLPD_mat_out["::2021-02-08"]))
+# meandown=rep(as.numeric(mean_in[4]-devi*sd_in[4]),nrow(OLPD_mat_out["::2021-02-08"]))
+# meanline=reclass(meanline,OLPD_mat_out["::2021-02-08"])
+# meanup=reclass(meanup,OLPD_mat_out["::2021-02-08"])
+# meandown=reclass(meandown,OLPD_mat_out["::2021-02-08"])
+# lines(meanline,lwd=2,col="black")
+# lines(meanup,lwd=2,col="red",lty=2)
+# lines(meandown,lwd=2,col="red",lty=2)
+# 
+# name=c("arithmetic mean ffrom insample lag_j","standard deviation from insample lag_j * λ")
+# addLegend("bottomleft", 
+#           legend.names=name,
+#           col=c("black","red"),
+#           lty=c(1,2),
+#           lwd=c(1,1),
+#           ncol=1,
+#           bg="white")
 ```
 
 ```{r lpd_explain_sum, fig.align='center', out.width='100%', fig.cap="LPD Sum Plot for illustration", echo=FALSE}
 knitr::include_graphics("images/xailpd/out_sum_2.jpeg")
+
+# load("data/xai/7_7_withsignal_xai_in/sum_explana_out_plot.rda")
+# lineup=rep(4.0,nrow(sum_explana["::2021-02-08"]))
+# linedown=rep(2.0,nrow(sum_explana["::2021-02-08"]))
+# lineup=reclass(lineup,sum_explana["::2021-02-08"])
+# linedown=reclass(linedown,sum_explana["::2021-02-08"])
+# sum_with_lines=na.exclude(cbind(as.xts(sum_explana),lineup,linedown))
+# 
+# plot(sum_explana["::2021-02-08"],type=c("b"),main="Sum of lags deviateing λ*sdY from Mean(Y)")
+# 
+# lines(lineup,lwd=2,col="red",lty=1)
+# lines(linedown,lwd=2,col="green",lty=1)
+# 
+# name=c("η upper","η lower")
+# 
+# addLegend("topright", 
+#           legend.names=name,
+#           col=c("red","green"),
+#           lty=c(1,1),
+#           lwd=c(2,2),
+#           ncol=1,
+#           bg="white")
 ```
 
 
@@ -362,7 +432,7 @@ Figure \ref{fig:garch_trading} illustrates how the GARCH trading strategies show
 &nbsp;
 
 In chapter 3.2.3 we have decided to fix the architecture 7 layers 7 nets, all
-the 9 splits which were introduced in chapter [3.2.1.](#test_train), are now used for trading. The out of sample performances of every split are added together and are compared with the benchmark from [bench](#bench_mark).
+the 9 splits which were introduced in chapter [3.2.1.](#test_train), are now used for trading. The out of sample performances of every split are added together and are compared with the benchmark from [3.2.3](#benchmark).
 
 Our findings from the garch model were not very promising, nevertheless we combine their signals with the neuralnet output and the signals from lpd.
 
@@ -374,8 +444,27 @@ In figure \ref{fig:perf} different combinations are visualized nn is simply trad
 By investigating the plot it seems that some combinations perform better than the others. The garch application appears to worsen the performance. ligthblue and the yellow line catches our eye, their perfomance seems to be better than the rest and as we can see, those are combinations of nn+lpd.
 
 
+
 ```{r perf, fig.align='center', out.width='100%', fig.cap="Different signal combinations: performance plot",dev = "svg",echo=FALSE}
+
 knitr::include_graphics("images/xailpd/lambda_1/perf.svg")
+
+# load("data/xai/7_7_withsignal_xai_in/perfall_without_eth.rda")
+# main="Performance cumulated from 9 splits, λ=1"
+# name=c("nn β=0.1","lpd β=0.1","lpd+nn β=0.1","nn+lpd+garch β=0.1","nn β=0.2","lpd β=0.2","lpd+nn β=0.2",
+#        "nn+lpd+garch β=0.2","nn β=0.3","lpd β=0.3","lpd+nn β=0.3","nn+lpd+garch β=0.3","Buy and Hold")
+# 
+# colnames(compare_perf)=name
+# colors= c("red","pink","violetred","darkorchid","blue","lightblue","turquoise","dodgerblue4","darkorange","goldenrod1","yellow","darkgoldenrod1","green")
+# plot.xts(compare_perf,main=main,col=colors)
+# addLegend("topleft",
+#           legend.names=name,
+#           col=colors,
+#           lty=c(rep(1,13),2),
+#           lwd=c(rep(2,13),3),
+#           ncol=1,
+#           bg="white")
+
 ```
 \newpage
 
@@ -384,20 +473,44 @@ Regarding the sharpe in figure \ref{fig:sharpe} our findings from before are con
 
 ```{r sharpe, fig.align='center', out.width='80%', fig.cap="Different signal combinations: Sharpe",dev = "svg",echo=FALSE}
 knitr::include_graphics("images/xailpd/lambda_1/sharpe.svg")
+
+# load("data/xai/7_7_withsignal_xai_in/sharpeplot_without_eth.rda")
+# name=c("nn β=0.1","lpd β=0.1","lpd+nn β=0.1","nn+lpd+garch β=0.1","nn β=0.2","lpd β=0.2","lpd+nn β=0.2",
+#        "nn+lpd+garch β=0.2","nn β=0.3","lpd β=0.3","lpd+nn β=0.3","nn+lpd+garch β=0.3","Buy and Hold")
+# colors= c("red","pink","violetred","darkorchid","blue","lightblue","turquoise","dodgerblue4","darkorange","goldenrod1","yellow","darkgoldenrod1","green")
+# plot(sharpesave,main="Sharpe, λ=1",xaxt="n",ylab="sharpe",xlab=""
+#      ,col=colors,pch=19,cex=2)
+# axis(1, at=1:13, labels=name,)
+
 ```
 
-Figure \ref{fig:batch} gives a insight on how the indivudal combinations performed in each of the 9 splits. the nn+lpd with $\beta = 0.2$ is predominantly better in the first three splits, in the middle section its worse and towards the end the sharpe is again better than Buy and Hold.
+Figure \ref{fig:batch} gives a insight on how the individual combinations performed in each of the 9 splits. the nn+lpd with $\beta = 0.2$ is predominantly better in the first three splits, in the middle section its worse and towards the end the sharpe is again better than Buy and Hold.
 But lets take this plot not to serious because these splits are just one month out of sample i.e the sharpe ratio is sensitive to outliers, this effect is even stronger when there is little data present.
 
 
 ```{r batch, fig.align='center', out.width='80%', fig.cap="Different signal combinations: Sharpe per split",dev = "svg",echo=FALSE}
 knitr::include_graphics("images/xailpd/lambda_1/batch.svg")
+
+# load("data/xai/7_7_withsignal_xai_in/sharpmat_perbatch_without_eth.rda")
+# load("data/xai/7_7_withsignal_xai_in/allsharp_without_eth.rda")
+# 
+# 
+# colorsbatch= c("red","pink","violetred","blue","lightblue","turquoise","darkorange","goldenrod1","yellow","green")
+# main="Sharpe per batch, λ=1"
+# plot(sharpmat_1[,4],type="l",col="green",xlab="batch nr",ylab= "sharpe",lwd=4,ylim=c(min(allsharp),max(allsharp)),main=main)
+# for (i in 1:8){lines(allsharp[,i],col=colorsbatch[i],type="l",lwd=2)}
+
+
 ```
 
 \newpage
 #### 3.3.6. Adding Ether
 
+
 In the performance plot \ref{fig:perf}, we have still left out what to do with 0 signals. One opportunity as in 3.3.3. shortly mentioned, is to invest the money in another asset. By reason of staying in the same asset class we choose Ether to invest in. According to [@correlation_btc] the correlation between the two assets is 0.91. This is not a braking factor to us, because the 0 signal of the lpd is just indicating that something is changing in the data or the neural net is not stable thus we cant exactly know what is the 0 singal means. 
+
+In the performance plot \ref{fig:perf}, we have still left out what to do with 0 signals.  One opportunity as in  3.3.3. shortly mentioned, is to invest the money in another asset. By reason of staying in the same asset class we choose ether to invest in. According to [@correlation_btc] the correlation between the two assets is 0.91. This is not a braking factor to us, because the 0 signal of the lpd is just indicating that something is changing in the data or the neural net is not stable thus we cant exactly know what is the 0 singal means. 
+
 
 Due to the similarity of the data we are not going to further elaborate on ether. The series is imported in the same way as btc e.g. the logreturns are derived.
 

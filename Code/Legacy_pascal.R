@@ -308,6 +308,8 @@ plot(cumsum(perf_nn_out),main=paste(as.character(anz),"n nets",as.character(neur
 
 plot(cumsum(perf_nn_out_with_olpd),main=paste("Net Olpd, sharpe:",as.character(sharpe_net_olpd)))
 
+
+
 # extracted from functions 10.5.2021
 xai_outp<-function(x,lags,in_out_sep,neuron_vec,use_in_samp=F,anz=1000,percentage=NULL,devi=1,plot=F,outtarget,use_between=F,lower=2,upper=3)
 {

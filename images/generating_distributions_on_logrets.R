@@ -1,6 +1,6 @@
+
 # generating density plots form dt an normaldist
 library(MASS)
-
 load("data/log_ret_27_03_21.rda")  # loading logreturns closing! data xts
 logret=log_ret_27_03_21 
 
@@ -14,10 +14,6 @@ beschrnorm= paste("Normal distribution ~ N(","mu=",as.character(round(fit$estima
                   "sd=",as.character(round(fit$estimate[2],5)),")")
 beschrt= paste("T - distribution ~ t(","l=",as.character(round(fit2$estimate[1],5)),"s=",
                as.character(round(fit2$estimate[2],5)),"df=",as.character(round(fit2$estimate[3],5)),")")
-
-
-
-
 
 # plotting the data
 hist(my_data, pch=20, breaks=70, prob=TRUE, main="Logreturns BTC",xlab="logrets")

@@ -1,6 +1,6 @@
-load("data/BTC_USD_13_03_21.rda") 
+load("data/BTC_USD_27_03_21.rda") 
 
-BTC_USD =BTC_USD_13_03_21
+BTC_USD =BTC_USD_27_03_21
 
 cl_btc=Cl(BTC_USD)
 cl_btc_log=log(cl_btc)
@@ -21,3 +21,4 @@ plot.xts(cl_btc_log,col = "black", main="Logarithmic Bitcoin in US $",lwd = 0.8)
 addEventLines(events,srt=90,pos=2,lty=3,col = c("darkgreen","red","darkgreen","red","darkgreen"),lwd=2,)
 
 BTC_USD["2020-02-12::"]
+
