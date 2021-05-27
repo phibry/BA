@@ -12,7 +12,20 @@ geometry: margin = 1in
 
 ### 5.1. Conclusion
 
-Neque volutpat ac tincidunt vitae semper quis. At elementum eu facilisis sed odio morbi quis commodo odio. Eget dolor 
+In this bachelor thesis we deal with three different fields. First, the network architecture of a neural network is investigated, then the model is analyzed using an XAI approach. In a last step, the information found on this paper and general time series analysis is combined to form a trading strategy. The methodology is based on the guiding questions defined in chapter [1.](#introduction):
+
+1) What influence does the selection of the network architecture have on the quality of predictions? What influence can be found with respect to the Sharpe ratio of a simple trading strategy?
+
+Pursuing the first guiding question, all possible network architecture combinations between one layer with one neuron and three layers with ten neurons each are quantitatively compared. The plots of the error function MSE in chapter [3.2.2.](#evaluate_nn) show that a complex model is more prone to overfitting. The Sharpe ratio is used to assess trading performance. There it can be seen that the inverse relationship between the in-sample and out-of-sample indicates overfitting characteristics. In conclusion, no rule of thumb can be found that works well without testing and comparing. The model should be complex enough for the sake of accuracy, but should not have overfitting. Ultimately, it seems to make sense that the number of neurons should be in the range of the number of inputs.
+
+2) What is the added value of enhancing this neural network with aspects of explainable artificial intelligence (XAI)? Again, the impact on trading performance will be investigated. 
+
+Of the methods presented, the linear parameter data approach (LPD) turns out to be the most useful for financial time series. Important reasons for this are that the data should remain chronologically ordered and the dependency structure should remain in place. The derivatives after the intercept and the weights reveal important points. On one hand, there is an analogy to linear regression, which suggests that some explanatory variables are more important than others at a point in time. Furthermore, analogous to the autocorrelation of the bitcoin log returns, it shows which lags are important and should be fed into the neural network. LPD cannot explain the operation of the network, the role of weights and error terms, and the development of the backpropagation algorithm. In summary, the derivations do a good job of revealing when the neural network is unstable and thus inaccurate outputs are to be expected. 
+
+3) How can the acquired information about neural networks, XAI and general time series analysis be used to define an efficient trading strategy?
+
+
+
 
 ### 5.2. Outlook
 
