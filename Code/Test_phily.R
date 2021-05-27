@@ -724,9 +724,8 @@ source("add/Functions.r")
 load("data/xai/7_7_withsignal_xai_in/performance_with_eth.rda")
 
 load("data/xai/7_7_withsignal_xai_in/nn_lpd_without_eth.rda")
-
-data.df=as.data.frame(data)
-data.df$signal=nn_lpd
+signal <- data$BTC.USD.Close
+signal$BTC.USD.Close <- nn_lpd
 
 
 
@@ -744,8 +743,8 @@ name=c(
   paste("nn+lpd+eth-if-0 β=0.3"," sharpe=3.8")
 )
 
-
-plot(data,col=colors,main=main)
+class(data)
+plot(data, col=colors, main=main)
 
 
 
@@ -757,5 +756,24 @@ addLegend("topleft",
           ncol=1,
           bg="white")
 
+lines(signal, on=NA, lwd=2, col="red", ylim=c(-1.3, 1.3))
 
-lines(as.xts(data.df$signal), on=NA, lwd=3, col="red" , ylim=c(-1.3, 1.3))
+head(as.xts(data.df$signal))
+
+load("data/log_ret_27_03_21.rda")
+load("data/BTC_USD_27_03_21.rda")
+btc <- BTC_USD_27_03_21$`BTC-USD.Adjusted`
+logret <- log_ret_27_03_21
+par(mfrow=c(1,1))
+plot(logret, main="LogReturn ~ Bitcoin")
+signal <- logret
+length(signal)
+signal[1:1000,] <- 1
+signal[1001:1500,] <- 0
+signal[1501:2000,] <- -1
+signal[2001:2379,] <- -1
+lines(signal, on=NA, ylim=c(-1.3, 1.3), lwd=2, col="#DF536B")
+
+class(logret)
+class(signal)
+head(signal)
