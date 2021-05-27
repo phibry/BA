@@ -94,7 +94,7 @@ We are looking for an optimal network, the optimal network should also provide r
 The reason for doing so is, we do not believe that the historical data longer than a year consists any information about the price tomorrow. By optimizing our models we found that more data would bring no additional performance, therefore the selected subset should be sufficient. Regarding consistency, the terms train and test set are used in the same sense as in-sample and out-of-sample. As proposed in [@nn_trading] we choose a test train split from 6 months in-sample and 1 month out-of-sample. This split is applied to the whole subset in form of a rolling window. By stepping forward with this 6/1 split by steplength of one month we end up with 9 data splits in total. In figure \ref{fig:test_train} this procedure is visualized, for every new timestep a new month is considered for the out of sample and the first month of the in sample, falls out of the frame. 
 
 
-```{r test_train, out.width='80%', fig.cap='Distribution of BTC log returns', echo=FALSE}
+```{r test_train, out.width='80%', fig.cap='In- and out-of-sample splits.', echo=FALSE}
 knitr::include_graphics("images/test_train_split_pp.jpeg.jpg")
 ```
 
@@ -175,24 +175,22 @@ When looking at the Sharpe ratios, an inverse relationship between the in-sample
 #### 3.2.3. Model selection
 &nbsp;
 
-- Vorschlag: zwei Modelle (z.B. c(10,10) und c(7,7) wählen, die irgendwie Sinn machen und dann mit Diebold Mariano Predictive Accuracy vergleichen. Das bessere wird verwendet. 
+With the above procedure, we have been able to identify the characteristics of neural networks. In time series applications, complex networks lead to overfitting. We could detect an inverse relationship between in- and out-of-sample MSE. We trained a large number of networks, yet no distinct optimal neuron-layer combination can be identified. Determining the architecture based on the minimum MSE would not yield good results. There would be too great a risk that the chosen architecture would be too complex and lead to overfitting. Additionally, the chosen architecture should lead to trustworthy predictions over different time periods (in our example over the 9 splits).
 
-#### 3.2.3.1 Benchmark {#benchmark}
- 
- -buy and hodl kurz erklären im out of sample ( alle grünen beim 9 split)
- 
- wiso ist der so stark
- 
- schwierig zu schlagen
- 
- 
+For the rest of the procedure, we decide to use a neural network architecture of (7,7). According to the 2-layer structure visualized in figure \ref{fig:mse_plot2}, the architecture we chose looks very balanced. In-sample, the MSE is rather in a more optimal range (smaller MSE) and out-of-sample, any overfitting is rather minimal compared to even more complex networks. In the attachment in figure \ref{fig:meanmean2} you can see the MSE's averaged over all 9 splits. The neuron layer architecture of (7,7) is exactly in the range where the in-sample MSE decreases and out-of-sample increases. The selected network lies exactly between the volatile networks, thus this architecture does not seem to be as prone to overfitting as the one next to it. The (7,7) network is not too complex, tends to have a good in-sample MSE and the out-of-sample MSE does not tend to overfit as much.
+
+#### 3.2.3. Benchmark {#benchmark}
 &nbsp;
+
+The trained networks and applied methods are compared with each other using a benchmark. For this purpose, we use the buy-and-hold, which is a long-term passive investment strategy. Investing with this strategy often leads to better returns in the long run than active trading [@bnh]. This strategy is hard to beat, especially when the market is trending upwards. In such a trend, an active strategy would hardly recommend anything other than buy-and-hold.
+
+We therefore compare our developed active strategies with the cumulative log returns. Our benchmark includes all green out-of-sample returns from figure \ref{fig:test_train} cumulated.
 
 \newpage
 
 ### 3.3. Trading strategy
 
-This chapter describes the trading strategy in more detail. In basic terms, the findings of the previous chapters are extended with considerations from explainable artificial intelligence (XAI) as well as from more traditional tools used in time series analysis. The following flowchart in figure \ref{fig:flowchart_trading} shows a broad overview of how the different factors are combined to generate the final trading signal. 
+This chapter describes the trading strategy in more detail. In basic terms, the findings of the previous chapters are extended with considerations from explainable artificial intelligence (XAI) as well as from more traditional tools used in time series analysis. The following flowchart in figure \ref{fig:flowchart_trading} shows a broad overview of how the different factors are combined to generate the final trading signal.
 
 &nbsp;
 
@@ -211,8 +209,7 @@ For trading the returns, we must first define the environment and make some assu
 
 \newpage
 
-#### 3.3.1. Trading with neural networks and LPD 
-
+#### 3.3.1. Trading with neural networks and LPD
 &nbsp;
 
 In the following we describe how in this case the neural network is used, in order to create a trading signal. Further we use the LPD, explained in chapter [2.4.2.](#xai_finance), based on the computed neural networks to derive an additional  signal for trading.
@@ -220,45 +217,29 @@ In the following we describe how in this case the neural network is used, in ord
 
 
 #### 3.3.2. Neural network
-
 &nbsp;
 
-Due to its randomness in finding the optimum, it is proposed by the Central Limit Theorem [@central_limit_theorem] to use an approximate   $\text{number of iterations } N_{total}$ $\ge$ 100 for an accurate mean value. In order to find a balance between precision and computation time, we found 1000 iterations should be sufficient.
+Due to its randomnes in finding the optimum, it is proposed by the Central Limit Theorem [@central_limit_theorem] to use an approximate   $\text{number of iterations } N_{total} \ge 100$ for an accurate mean value. In order to find a balance between precision and computation time, we found 1000 iterations should be sufficient.
 
-Let $p$ be the predicted value of the neural network in a certain time $_{t}$.
-With formula $f(p_{k})$ \ref{eq:net_decision1} in every $_{t}$ a trading signal is derived by majority decision. How clearly the decision of the forecasts must be, is decided by parameter $\beta$.
+Let $p$ be the predicted value of the neural network in a certain time $t$.
+With formula $f(p_{k})$ \ref{eq:net_decision1} in every $t$ a trading signal is derived by majority decision. How clearly the decision of the forecasts must be, is decided by parameter $\beta$.
 For further evaluation of neural networks $\beta$ can be used as an optimizing factor.
 
-
-
 &nbsp;
-&nbsp;
-&nbsp;
-
-
  
 ```{=tex}
-
- 
 \begin{equation}\label{eq:net_decision1}
  f(p_{k}) =
 \begin{cases} 
-  0      & \quad \text{if } \frac{1}{N_{total}}  \sum_{k=1}^{N_{total}}signum(p_{k}) < \beta \\
-  signum(\sum_{j=1}^{N_{total}}p_{k})    & \quad \text{else}
+  0      & \quad \text{if } \frac{1}{N_{total}}  \sum_{k=1}^{N_{total}}sign(p_{k}) < \beta \\
+  sign(\sum_{j=1}^{N_{total}}p_{k})    & \quad \text{else}
   
 
    \end{cases}
 \end{equation}
-
-
 ```
 
-
 &nbsp;
-&nbsp;
-&nbsp;
-
-
   
 $N_{total}$ = Total number of neural networks
 
@@ -266,27 +247,20 @@ $\beta$ = Ratio of majority decision
 
 $p_{k}$ = Predicted value from neural network
 
-
-
-
 \newpage
 
 #### 3.3.3. LPD signal
-
 &nbsp;
 
 In the same manner as before, for every $k$ of the $N_{total}$ network in every time step $t$ the derivative as in chapter [2.4.2.](#xai_finance) is calculated. From the insample lpd the mean $\bar{Y}$ \ref{eq:Ybar} and the standarddeviation $sdY$ \ref{eq:sdY} for every $lag_{j}$ is derived. In the out of sample $\bar{Y}_{j}$ and $sdY_{j}$  are used to generate a signal by the following:
 
 With Formula \ref{eq:count} in every $lag_{j}$ it is decided wether the predicted lpd exceeds $\bar{Y}_{j} \pm   \lambda sdY_{j}$. In Figure \ref{fig:lpd_explain} this procedure is visualized, just for one lag due to a smoother visualisation. 
 
-Function $g(X)$ \ref{eq:count} is further applied in $lpd signal(x_{t})$ to every timestep $_{t}$ in order to generate a signal with \ref{eq:net_decision2} $lpd signal(x_{t})$. The output of $g(X)$ \ref{eq:count} is between 0 and $lag_{j}$.
+Function $g(X)$ \ref{eq:count} is further applied in $\text{LPD signal}(x_{t})$ to every timestep $t$ in order to generate a signal with \ref{eq:net_decision2} $\text{LPD signal}(x_{t})$. The output of $g(X)$ \ref{eq:count} is between 0 and $lag_{j}$.
 
-With $\eta_{lower}$ and $\eta_{upper}$ it is decided which signal output the lpd $_{t}$ will be assigned. We have decided; for values bigger than $\eta_{upper}$ we conclude a big change is likely. In chapter [3.1.](#data_exploration) last section we observed, that larger negative returns are more likely then positive, therefore the proposed signal is 0. For values between $\eta_{lower}$ and $\eta_{upper}$ we propose a signal 0.5. 
+With $\eta_{lower}$ and $\eta_{upper}$ it is decided which signal output the lpd $t$ will be assigned. We have decided; for values bigger than $\eta_{upper}$ we conclude a big change is likely. In chapter [3.1.](#data_exploration) last section we observed, that larger negative returns are more likely then positive, therefore the proposed signal is 0. For values between $\eta_{lower}$ and $\eta_{upper}$ we propose a signal 0.5. 
 
 &nbsp;
-
-
-
 
 ```{=tex}
 \begin{align} \label{eq:sdY}
@@ -300,19 +274,15 @@ sdY=\sqrt{  \frac{1}{n_{in}}  \sum_{t=1}^{n_{in}}(Y_{t}-\bar{Y})^{2} }
 \end{align}
 ```
 
-
-
 ```{=tex}
 \begin{align} \label{eq:count}
 \text{g(X)}=\sum_{j=1}^{lag_{n}}X_{j}\Big((X_{j}>\bar{Y}_{j}+\lambda sdY_{j} )\vee( X_{j}<\bar{Y}_{j}-\lambda sdY_{j})\Big)
 \end{align}
 ```
 
-
-
 ```{=tex}
 \begin{equation}\label{eq:net_decision2}
-lpd signal(x_{t}) =
+\text{LPD signal}(x_{t}) =
 \begin{cases} 
   0.5    & \quad \text{if } ,  \eta_{lower} < g(x) \le \eta_{upper}    \\                                              
   0      & \quad \text{if } ,   \eta_{upper} < g(x) \\
@@ -321,6 +291,7 @@ lpd signal(x_{t}) =
    \end{cases}
 \end{equation}
 ```
+
 &nbsp;
 
 $Y_{t}$ = insample lpd observed 
