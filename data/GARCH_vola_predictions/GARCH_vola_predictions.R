@@ -139,8 +139,8 @@ addLegend(legend.loc = "topleft", legend = c(paste("Buy-and-Hold, Sharpe:", roun
 
 # Save trading signals only
 
-garch_out_signal=as.xts(GARCH_vola)$Trading_signal["2020-07-01::"]
-save(garch_out_signal, file = "data/GARCH_vola_predictions/garch_out_signal.rda")
+# garch_out_signal=as.xts(GARCH_vola)$Trading_signal["2020-07-01::"]
+# save(garch_out_signal, file = "data/GARCH_vola_predictions/garch_out_signal.rda")
 
 
 
