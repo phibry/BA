@@ -5,3 +5,5 @@ geometry: margin = 1in
 
 
 ## Zusammenfassung
+
+Das stetige weltweite Wachstum von Machinelearning methoden wird immer wichtiger auch bezüglich der Finanzmärkte. Jedoch sind diese Methoden meist noch sehr undurchsichtig. Diese These setzt sich mit der Anwendung von neuronalen Netzwerken deren Erklärbarkeit und dem Trading von Bitcoin,  welcher als Gründer der jüngsten Assetklasse Krypotwährung gilt. Grundlegend wird die Theorie der verwendeten Neuronalen Netzwerke und des neuartigen explainability aspekts erklärt, desweiteren gibt es einen kurzen Einblick in die Bitcoin theorie. Als erster Ansatz wird durch Rechenpower eine optimale Netzwerk Architektur ermittelt um treffende Prognosen für das täglich traden von Bitcoin zu optimieren. Mit dem explainabilty aspekt und einer vorhersage für die volatilität mit einem garchmodell wird eine Regel für das trading  implementiert und danach mit dem hinzuziehen  von Ether verbessert. Die Resultate sind vielsversprechend explainablitiy bringt eine deutlichen Mehrwert und der als fast unschlagbar geltende Benchmark buy and hold wird überboten. 
