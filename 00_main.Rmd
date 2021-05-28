@@ -19,7 +19,6 @@ output: pdf_document
 options(tinytex.verbose = TRUE)
 ```
 
-
 ```{r knitr.global_options, include=F}
 knitr::opts_chunk$set(out.width = "70%", fig.align = "center", echo=FALSE, warning=FALSE, message=FALSE, tidy.opts=list(width.cutoff=60), tidy=TRUE)
 ```
@@ -27,8 +26,6 @@ knitr::opts_chunk$set(out.width = "70%", fig.align = "center", echo=FALSE, warni
 ```{r }
 source("add/libraries.R")
 source("add/Functions.R")
-
-# source("add/load_files.R")
 ```
 
 \pagenumbering{gobble}

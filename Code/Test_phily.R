@@ -777,3 +777,177 @@ lines(signal, on=NA, ylim=c(-1.3, 1.3), lwd=2, col="#DF536B")
 class(logret)
 class(signal)
 head(signal)
+
+
+
+
+
+# Plot####
+load("data/xai/7_7_withsignal_xai_in/OLPD_mat_out_plot.rda")
+load("data/xai/7_7_withsignal_xai_in/meanCI.rda")
+
+plot.xts(OLPD_mat_out["::2021-02-08."],
+         col=c("#003f5c", "#665191", "#d45087", "#f6004a", "#ff1208", "#ffa600", "#ff7c43"),
+         main="LPD Out of Sample")
+
+lines(meanCI$meanline,lwd=2,col="black",lty=2)
+lines(meanCI$meanup,lwd=2,col="red",lty=3)
+lines(meanCI$meandown,lwd=2,col="red",lty=3)
+
+addLegend("bottomleft",
+          legend.names=c(TeX(sprintf("Mean value from $lag_{j}$")), TeX(sprintf("Standard deviation from $lag_{j}*\\lambda$"))),
+          col=c("black","red"),
+          lty=c(2,3),
+          lwd=c(1,1),
+          ncol=1,
+          bg="white")
+
+
+
+load("data/xai/7_7_withsignal_xai_in/sum_explana_out_plot.rda")
+load("data/xai/7_7_withsignal_xai_in/sumCI.rda")
+
+# lineup=rep(4.0,nrow(sum_explana["::2021-02-08"]))
+# linedown=rep(2.0,nrow(sum_explana["::2021-02-08"]))
+# lineup=reclass(lineup,sum_explana["::2021-02-08"])
+# linedown=reclass(linedown,sum_explana["::2021-02-08"])
+# sum_with_lines=na.exclude(cbind(as.xts(sum_explana),lineup,linedown))
+# 
+# sumCI <- cbind(lineup,linedown)
+# save(sumCI, file="data/xai/7_7_withsignal_xai_in/sumCI.rda")
+
+# plot(sum_explana["::2021-02-08"],type=c("b"),main="Sum of lags deviateing λ*sdY from Mean(Y)")
+
+
+load("data/xai/7_7_withsignal_xai_in/sum_explana_out_plot.rda")
+load("data/xai/7_7_withsignal_xai_in/sumCI.rda")
+plot(sum_explana["::2021-02-08"],type=c("b"),main=TeX(sprintf("Sum of lags deviating $\\lambda$ *sdY from $\\bar{Y}$")))
+lines(sumCI$lineup,lwd=2,col="red",lty=1)
+lines(sumCI$linedown,lwd=2,col="green",lty=1)
+
+name=c("η upper","η lower")
+
+addLegend("topright",
+          legend.names=c(TeX(sprintf("$\\eta_{upper}$")), TeX(sprintf("$\\eta_{lower}$"))),
+          col=c("red","green"),
+          lty=c(1,1),
+          lwd=c(2,2),
+          ncol=1,
+          bg="white")
+
+
+
+
+# plotter####
+load("data/xai/7_7_withsignal_xai_in/perfall_without_eth.rda")
+colnames(compare_perf)=name
+colors= c("red","pink","violetred","darkorchid","blue","lightblue","turquoise","dodgerblue4","darkorange","goldenrod1","yellow","darkgoldenrod1","green")
+plot.xts(compare_perf,
+         main=TeX(sprintf("Performance cumulated from 9 Splits, $\\lambda = %d$", 1)),
+         col=colors)
+addLegend("topleft",
+          legend.names=c(TeX(sprintf("NN $\\beta = %.1f$", 0.1)),
+                         TeX(sprintf("LPD $\\beta = %.1f$", 0.1)),
+                         TeX(sprintf("NN+LPD $\\beta = %.1f$", 0.1)),
+                         TeX(sprintf("NN+LPD+GARCH $\\beta = %.1f$", 0.1)),
+                         
+                         TeX(sprintf("NN $\\beta = %.1f$", 0.2)),
+                         TeX(sprintf("LPD $\\beta = %.1f$", 0.2)),
+                         TeX(sprintf("NN+LPD $\\beta = %.1f$", 0.2)),
+                         TeX(sprintf("NN+LPD+GARCH $\\beta = %.1f$", 0.2)),
+                         
+                         TeX(sprintf("NN $\\beta = %.1f$", 0.3)),
+                         TeX(sprintf("LPD $\\beta = %.1f$", 0.3)),
+                         TeX(sprintf("NN+LPD $\\beta = %.1f$", 0.3)),
+                         TeX(sprintf("NN+LPD+GARCH $\\beta = %.1f$", 0.3))
+                         ,
+                         TeX(sprintf("Buy and Hold"))),
+          col=colors,
+          lty=c(rep(1,13),2),
+          lwd=c(rep(2,13),3),
+          ncol=1,
+          bg="white")
+
+
+# plot####
+load("data/xai/7_7_withsignal_xai_in/sharpeplot_without_eth.rda")
+name=c("nn β=0.1","lpd β=0.1","lpd+nn β=0.1","nn+lpd+garch β=0.1","nn β=0.2","lpd β=0.2","lpd+nn β=0.2",
+       "nn+lpd+garch β=0.2","nn β=0.3","lpd β=0.3","lpd+nn β=0.3","nn+lpd+garch β=0.3","Buy and Hold")
+colors= c("red","pink","violetred","darkorchid","blue","lightblue","turquoise","dodgerblue4","darkorange","goldenrod1","yellow","darkgoldenrod1","green")
+plot(sharpesave, main="Sharpe, λ=1", xaxt="n",ylab="Sharpe",xlab=""
+     ,col=colors,pch=19,cex=2)
+
+
+
+axis(1, at=1:13, labels=name,las=2)
+
+
+load("data/xai/7_7_withsignal_xai_in/sharpeplot_without_eth.rda")
+defaultmar <- par("mar")
+par(mar=c(11,4,4,4))
+my_bar <- barplot(as.numeric(sharpesave), border=F,
+                  names.arg=c(TeX(sprintf("NN $\\beta = %.1f$", 0.1)),
+                              TeX(sprintf("LPD $\\beta = %.1f$", 0.1)),
+                              TeX(sprintf("NN+LPD $\\beta = %.1f$", 0.1)),
+                              TeX(sprintf("NN+LPD+GARCH $\\beta = %.1f$", 0.1)),
+                              
+                              TeX(sprintf("NN $\\beta = %.1f$", 0.2)),
+                              TeX(sprintf("LPD $\\beta = %.1f$", 0.2)),
+                              TeX(sprintf("NN+LPD $\\beta = %.1f$", 0.2)),
+                              TeX(sprintf("NN+LPD+GARCH $\\beta = %.1f$", 0.2)),
+                              
+                              TeX(sprintf("NN $\\beta = %.1f$", 0.3)),
+                              TeX(sprintf("LPD $\\beta = %.1f$", 0.3)),
+                              TeX(sprintf("NN+LPD $\\beta = %.1f$", 0.3)),
+                              TeX(sprintf("NN+LPD+GARCH $\\beta = %.1f$", 0.3)),
+                              
+                              TeX(sprintf("Buy and Hold"))),
+                  cex.names=0.8,
+                  las=2, 
+                  col=colors, 
+                  ylim=c(0,5), 
+                  main=TeX(sprintf("Sharpe $\\lambda = %d$", 1)),
+                  ylab="Sharpe")
+par(mar=defaultmar)
+par("mar")
+# Data
+data <- data.frame(
+  name = c("DD","with himself","with DC","with Silur" ,"DC","with himself","with DD","with Silur" ,"Silur","with himself","with DD","with DC" ),
+  average = sample(seq(1,10) , 12 , replace=T),
+  number = sample(seq(4,39) , 12 , replace=T)
+)
+data
+# Increase bottom margin
+par(mar=c(6,4,4,4))
+
+
+# Basic Barplot
+my_bar <- barplot(data$average , border=F , names.arg=data$name , 
+                  las=2 , 
+                  col=c(rgb(0.3,0.1,0.4,0.6) , rgb(0.3,0.5,0.4,0.6) , rgb(0.3,0.9,0.4,0.6) ,  rgb(0.3,0.9,0.4,0.6)) , 
+                  ylim=c(0,13) , 
+                  main="" )
+
+# Add abline
+abline(v=c(4.9 , 9.7) , col="grey")
+
+# Add the text 
+text(my_bar, data$average+0.4 , paste("n: ", data$number, sep="") ,cex=1) 
+
+#Legende
+legend("topleft", legend = c("Alone","with Himself","With other genotype" ) , 
+       col = c(rgb(0.3,0.1,0.4,0.6) , rgb(0.3,0.5,0.4,0.6) , rgb(0.3,0.9,0.4,0.6) ,  rgb(0.3,0.9,0.4,0.6)) , 
+       bty = "n", pch=20 , pt.cex = 2, cex = 0.8, horiz = FALSE, inset = c(0.05, 0.05))
+
+
+# plot####
+load("data/xai/7_7_withsignal_xai_in/sharpmat_perbatch_without_eth.rda")
+load("data/xai/7_7_withsignal_xai_in/allsharp_without_eth.rda")
+
+
+colorsbatch= c("red","pink","violetred","blue","lightblue","turquoise","darkorange","goldenrod1","yellow","green")
+main="Sharpe per batch, λ=1"
+plot(sharpmat_1[,4],type="l",col="green",xlab="Batch Nr.",ylab= "Sharpe",lwd=2,ylim=c(min(allsharp),max(allsharp)),
+     main=TeX(sprintf("Sharpe per batch, $\\lambda = %d$", 1)))
+grid()
+for (i in 1:8){lines(allsharp[,i],col=colorsbatch[i],type="l",lwd=2)}

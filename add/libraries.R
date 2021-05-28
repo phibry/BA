@@ -18,4 +18,5 @@ library(lubridate)
 library(rugarch)
 library(tikzDevice)
 library(MASS)
+library(latex2exp)
 
