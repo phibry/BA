@@ -951,3 +951,29 @@ plot(sharpmat_1[,4],type="l",col="green",xlab="Batch Nr.",ylab= "Sharpe",lwd=2,y
      main=TeX(sprintf("Sharpe per batch, $\\lambda = %d$", 1)))
 grid()
 for (i in 1:8){lines(allsharp[,i],col=colorsbatch[i],type="l",lwd=2)}
+
+# plot####
+load("data/xai/7_7_withsignal_xai_in/performance_with_eth.rda")
+load("data/xai/7_7_withsignal_xai_in/nn_lpd_without_eth.rda")
+signal <- data$BTC.USD.Close
+signal$BTC.USD.Close <- nn_lpd
+colors= c("green","darkorchid")
+plot(data[,c(1,5)], col=colors, main=TeX(sprintf("Performance cumulated from 9 splits, $\\lambda = %d$", 1)))
+
+addLegend("bottomright",
+          legend.names=c(TeX(sprintf("Buy and Hold, $Sharpe = %.2f$", 3.57)),
+                         TeX(sprintf("LPD+NN+ETH if 0 $\\beta = %.1f$, $Sharpe = %.2f$", 0.2, 4.41))),
+          col=colors,
+          lty=c(rep(1,13),2),
+          lwd=c(rep(2,13),3),
+          ncol=1,
+          bg="white")
+
+events<- xts(LETTERS[1:6], as.Date(c("2020-08-01","2020-09-05","2020-10-18","2021-01-14","2021-02-21","2021-03-12")))
+addEventLines(events, srt=0, pos=1, lty=3, col = rep("#004c6d",6),lwd=2, cex=1.2)
+
+?addEventLines
+# lines(signal, on=NA, lwd=2, col="red", ylim=c(-1.3, 1.3))
+
+
+

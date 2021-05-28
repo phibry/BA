@@ -2,9 +2,13 @@ rm(list=ls())
 
 #loading area ####
 source("add/libraries.r") 
+source("add/Functions.R")
 
-load("C:/Users/buehl/Desktop/PA_BA/BA/data/BTC_USD_27_03_21.rda")
-load("C:/Users/buehl/Desktop/PA_BA/BA/data/log_ret_27_03_21.rda")
+
+
+load("data/BTC_USD_27_03_21.rda")
+load("data/log_ret_27_03_21.rda")
+
 outtarget=log_ret_27_03_21["2020-07-01::"]
 
 load("data/GARCH_vola_predictions/garch_out_signal.rda")
@@ -28,7 +32,7 @@ outtarget_eth=logret_eth["2020-07-01::2021-03-27"]
 devi=1
 #
 # decision rule of nn percentage of half  if NULL majority decision is taken
-percentage= 0.3
+percentage= 0.2
 anz=1000
 #---------
 #-------------------------------------------------------------------------------
@@ -52,7 +56,7 @@ nn_signal_string=  paste("nn_signal","anz=",as.character(anz),"decision=",as.cha
 # assign("nn_signal_1",get(nn_signal_string))
 # assign("olpd_signal_1",get(olpd_signal_string))
 
-# 
+
 # assign("olpd_2",get(olpd_string))
 # assign("nn_2",get(nn_string))
 # assign("sharpmat_2",get(sharpmat_string))
@@ -66,7 +70,7 @@ nn_signal_string=  paste("nn_signal","anz=",as.character(anz),"decision=",as.cha
 # assign("nn_signal_3",get(nn_signal_string))
 # assign("olpd_signal_3",get(olpd_signal_string))
 
-# 
+
 
 
 
@@ -167,9 +171,9 @@ filler[]<-0
 cons=6
 for(i in (cons):length(checkdata))
 {
-   if(i==cons){filler[i]=100}
-   if(abs(sum(checkdata[i-1],checkdata[i-2],checkdata[i-3],checkdata[i-4],checkdata[i-5])) == 5)
-   {filler[i]=-sign(checkdata[i-1])}
+  if(i==cons){filler[i]=100}
+  if(abs(sum(checkdata[i-1],checkdata[i-2],checkdata[i-3],checkdata[i-4],checkdata[i-5])) == 5)
+  {filler[i]=-sign(checkdata[i-1])}
 }
 filler=filler["2020-07-01::2021-03-27"]
 
@@ -268,12 +272,6 @@ assign(batchsharpestring,allsharp)
 
 # 
 
-
-
-
-
-
-
 #plots####
 #-----------------------------------------------------------------------------
 
@@ -290,16 +288,16 @@ data=cbind(cumsum(outtarget),cumsum(olpd_1),cumsum(olpd_1_eth),cumsum(olpd_2),cu
 
 colors= c("green","red","pink","violetred","darkorchid","blue","lightblue")
 name=c(
-      paste("Buy and Hold"," sharpe=",round(sharpe_bh,2)),
-      paste("lpd+nn β=0.1"," sharpe=",round(sharpe_olpd_1,2)),
-       paste("nn+lpd+eth-if-0 β=0.1"," sharpe=",round(sharpe_olpd_1_eth,2)),
-       paste("lpd+nn β=0.2"," sharpe=",round(sharpe_olpd_2,2)),
-       paste("nn+lpd+eth-if-0 β=0.2"," sharpe=",round(sharpe_olpd_2_eth,2)),
-      paste("lpd+nn β=0.3"," sharpe=",round(sharpe_olpd_3,2)),
-      paste("nn+lpd+eth-if-0 β=0.3"," sharpe=",round(sharpe_olpd_3_eth,2))
-      )
+  paste("Buy and Hold"," sharpe=",round(sharpe_bh,2)),
+  paste("lpd+nn β=0.1"," sharpe=",round(sharpe_olpd_1,2)),
+  paste("nn+lpd+eth-if-0 β=0.1"," sharpe=",round(sharpe_olpd_1_eth,2)),
+  paste("lpd+nn β=0.2"," sharpe=",round(sharpe_olpd_2,2)),
+  paste("nn+lpd+eth-if-0 β=0.2"," sharpe=",round(sharpe_olpd_2_eth,2)),
+  paste("lpd+nn β=0.3"," sharpe=",round(sharpe_olpd_3,2)),
+  paste("nn+lpd+eth-if-0 β=0.3"," sharpe=",round(sharpe_olpd_3_eth,2))
+)
 
-       
+
 plot.xts(data,col=colors,main=main)
 addLegend("topleft", 
           legend.names=name,
@@ -309,39 +307,87 @@ addLegend("topleft",
           ncol=1,
           bg="white")
 
-
-# real performance with eth
-
-getSymbols("BTC-USD") # loads the newest data from quandl
-BTC_USD=na.omit(`BTC-USD`)
-
-return_eth=diff(ETH$`ETH-USD.Close`)["2020-07-01::2021-03-27"]
-return_btc=diff(BTC_USD$`BTC-USD.Close`)["2020-07-01::2021-03-27"]
-
-
-
+#with real returns
 
 nn_lpd=nn_signal_2
-nn_lpd[which(olpd_signal_2==0)]<-0
-
-original_ret_with_signal=return_btc*nn_lpd
-
-dummy4=which(original_ret_with_signal==0)
-
-
-original_ret_with_signal[dummy4,]=return_eth[dummy4,]
 
 
 
-cbind(original_ret_with_signal,return_btc)
-
-plot(cbind(cumsum(original_ret_with_signal),cumsum(return_btc)  ))
+nn_lpd[which(olpd_signal_2_only1==0)]<-0
 
 
 
+eth_returns=diff(ETH$`ETH-USD.Close`)["2020-07-01::2021-03-27"]
+
+btc_returns=diff(BTC_USD_27_03_21$`BTC-USD.Close`)["2020-07-01::2021-03-27"]
 
 
-#performance cumulated lpdperf3
+#signal lpd
+olpd_signal_2
+#signal nn
+nn_signal_2
+
+nnsig=nn_signal_2
+
+nnsig[which(olpd_signal_2==0)]<-0
+#performance nn+lpd
+
+olpd_2
+
+
+
+dim(olpd_2)
+
+outtarget*nnsig
+
+
+
+
+
+bind=cbind(outtarget*nnsig,olpd_2,outtarget,newsig)
+colnames(bind)=c("nnsignal*olpdsignalvonout","ret von out","logret buy and hold","signal von ret von out")
+
+
+cbind(newsig*outtarget,olpd_2)
+
+eth_returns=diff(ETH$`ETH-USD.Close`)["2020-07-01::2021-03-27"]
+btc_returns=diff(BTC_USD_27_03_21$`BTC-USD.Close`)["2020-07-01::2021-03-27"]
+
+
+koll=newsig*btc_returns
+
+
+
+
+koll[which(newsig==0)]<-eth_returns[which(newsig==0)]
+
+
+plot(cumsum(btc_returns))
+lines(cumsum(newsig*btc_returns))
+lines(cumsum(koll))
+
+
+?diff()
+
+bind[-1,]
+plot(cumsum(bind[-1,]))
+dim(nnsig)
+dim(log_ret_27_03_21)
+
+
+#wenn ungleich 0 signal = minus 1
+
+newsig=olpd_2+outtarget
+
+newsig[which(olpd_2+outtarget!=0)]<- 1
+newsig[which(olpd_2+outtarget==0)]<- -1
+newsig[which(olpd_2==0)]<- 0
+
+
+
+plot(cumsum(newsig*outtarget))
+
+#performance cumulated lpdperf3()
 par(mfrow=c(3,1))
 
 main=paste("Performance cumulated from 9 splits, λ=",as.character(devi))

@@ -49,7 +49,7 @@ As just mentioned, the aim is to feed the perceptron with the training set and c
 
 \newpage
 
-#### 2.1.2. Backpropagation algorithm {#backprogation_algorithm}
+#### 2.1.2. Backpropagation Algorithm {#backprogation_algorithm}
 &nbsp;
 
 Finding the optimal weights of the neural network is achieved by finding the minimum of an error function. One of the most common methods for this is the backpropagation algorithm. This algorithm searches for the minimum of the error function by making use of a method called gradient descent. The gradient method is used in numerics to solve general optimization problems. In doing so, we progress (using the example of a minimization problem) from a starting point along a descent direction until no further numerical improvement is achieved. Since this method requires the computation of the gradient of the error function after each step, continuity and differentiability of this function must necessarily be given. The step function mentioned above in section [2.1.1.](#perceptron) is therefore out of the question, but a non-linear function such as the logistic and the hyperbolic tangent functions (sigmoid) [@backpropagation]. Both activation functions are visible in figure \ref{fig:sigmoid}. While the target range of the 'ordinary' sigmoid function (equation \ref{eq:sigmoid_logistic}) is between 0 and 1, the $\hat{y}$ of the hyperbolic tangent function (equation \ref{eq:sigmoid_tanh}) ranges between -1 and 1. $v_{i}$ equals the weighted sum including bias term.
@@ -106,7 +106,7 @@ The weights get adjusted according to the following algorithm \ref{eq:weight_adj
 
 \newpage
 
-#### 2.1.3. Multilayer perceptron {#MLP}
+#### 2.1.3. Multilayer Perceptron {#MLP}
 &nbsp;
 
 Multilayer perceptrons (MLP) are widely used feedforward neural network models and make usage of the backpropagation algorithm. They are an evolution of the original perceptron proposed by Rosenblatt in 1958 [@perceptron_paper]. The distinction is that they have at least one hidden layer between input and output layer, which means that an MLP has more neurons whose weights must be optimized. Consequently, this requires more computing power, but more complex classification problems can be handled [@mlp_architecture]. figure \ref{fig:mlp_schema} shows the structure of an MLP with $n$ hidden layers. Compared to the perceptron, it can be seen that this neural network consists of an input layer, one or more hidden layers, and an output layer. In each layer, there is a different number of neurons, respectively nodes. These properties (number of layers and nodes) can be summarized with the term 'network architecture' and will be dealt with in this thesis.
@@ -126,14 +126,14 @@ In between are the hidden layers, whose number and size can be configured as des
 #### 2.1.4. Challenges {#challenges}
 &nbsp;
 
-In this section, we address the 2 fundamental challenges with dealing with neural networks.
+In this section, we address the two fundamental challenges when dealing with neural networks.
 
 ##### 2.1.4.1 Overfitting {#overfitting}
 &nbsp;
 
 We have encountered several challenges that can occur when using neural networks. One of these possible problems is called overfitting. The goal of a neural network is to build a statistical model of the training set that is capable of generating the data. In overfitting on the other hand, the exact conditions of the training data including noise are reproduced. The focus is no longer on the underlying function. Last but not least, an unnecessarily large number of parameters or epochs can be 'consumed' for this, which makes the whole process relatively inefficient [@RNN]. 
 
-##### 2.1.4.2. Vanishing gradient problem {#vanishing_gradient}
+##### 2.1.4.2. Vanishing Gradient Problem {#vanishing_gradient}
 &nbsp;
 
 Another characteristic that requires our attention is the vanishing gradient problem. As explained in chapter [2.1.2.](#backpropagation_algorithm), the weights of the neural network are adjusted using the gradient of the loss function. Thereby, the problem can occur that the gradient almost vanishes. The error function's gradients become so small that the backpropagation algorithm takes smaller steps towards the loss function's minima and eventually stops learning. For example, if the derivative of an activation function such as the logistic sigmoid function approaches zero for extremely large or small values for $x$. To avoid these extreme values for $x$, the inputs are scaled and normalized in this paper. This ensures that the definition range is within the range where the gradient is still large enough for the backpropagation algorithm.  
@@ -303,14 +303,14 @@ Thus, we can say that at best, with this method of calculating the partial deriv
 
 \newpage
 
-### 2.3. Model comparison {#model_comparison}
+### 2.3. Model Comparison {#model_comparison}
 
-This thesis sets the goal to compare the different neural networks presented. Besides the types of neural networks, the network architecture (number of layers and nodes) is explored. In addition, a comparison is made with the winner of the Forecasting Competition M4, which combines a standard exponential smoothing model with an LSTM network. To make the comparison meaningful enough, the following two figures are compared. 
+This thesis sets the goal to compare the different neural network architectures presented in order to find the best model. To quantify the quality of the prediction as well as the trading performance, we make use of the following measures.
 
 #### 2.3.1. Sharpe Ratio {#sharpe_ratio}
 &nbsp;
 
-The first number refers to the performance of the trading strategy based on the sign of the prediction $t+1$ and is called Sharpe Ratio. Sharpe ratio is a very powerful and widely used ratio to measure performance and it describes return per risk.
+The first number refers to the performance of the trading strategy based on the sign of the prediction $t+1$ and is called Sharpe ratio. Sharpe ratio is a very powerful and widely used ratio to measure performance and it describes return per risk.
 
 ```{=tex}
 \begin{align} \label{eq:Sharpe}
@@ -338,22 +338,17 @@ The application of MSE is widely used in statistical modeling and supervised lea
 
 ### 2.4. Bitcoin {#bitcoin}
 
-In this section bitcoin as a crypto-curreny is introduced. The historical data is analyzed and commented. Further the technology in and around crypto-currencies in chapter [2.3.2.](#bitcoin_tec) is briefly explained. A detailed explanation would require a paper itself, therefore the explanation is done as simple as possible.
+In this section, bitcoin as a cryptocurreny is introduced by analyzing and commenting historical events. Further the technology in and around cryptocurrencies in chapter [2.3.2.](#bitcoin_tec) is briefly explained. This chapter serves to get an overview of the technology and background of bitcoin. A more detailed description is beyond the scope of this thesis and will therefore be refrained from. We work with the short form 'BTC', which is the abbreviation for the currency. 
 
-In the following work bitcoin as a cryptocurreny is mentionend in its short term BTC, by the meaning of US Dollars per bitcoin.
-
-#### 2.4.1. Historical analysis {#historical_analysis}
+#### 2.4.1. Historical Analysis {#historical_analysis}
 &nbsp;
 
-The story of bitcoin began with a paper published by the name of Satoshi Nakamoto [@bitcoin]. The publisher of the document cannot be assigned to a real person, therefore the technology inventor remains mysteriosly unknown until today. In 2009 the first bitcoin transaction was executed. On account of the opensource technology of bitcoin, lots of alternative currencies were created. 
-
-Until 2013 the cryptocurrencies operated under the radar of most regulatory institutions. Because of the anonymity of the transactions, criminals were attracted by the newborn payment method. Headlines, such as the seizure of 26'000 bitcoins by closing the "Dark-Web" Website Silkroad through the Drug Enforcement Agency, followed moreoften in the newspapers. 
-
-Nevertheless in 2014 more companys, such as: Zynga, D LasVegas Casinos, Golden Gate Hotel & Casino, TigerDirect, Overstock.com, Newegg, Dell, and even Microsoft [@A_History_of_Bitcoin], began to accept bitcoin as a payment method. In 2014 the first derivative with bitcoin as an underlying was approved by the U.S.Commodity Futures Trading Commission.
-2015 an estimated 160'000 merchants used bitcoin to trade. 
+The story of bitcoin began with a paper published in the name of an alleged person called Satoshi Nakamoto [@bitcoin]. The publisher of the document cannot be assigned to a real person, therefore the technology inventor remains mysteriously unknown until today. In 2009, the first bitcoin transaction was executed. Over the years, several other cryptocurrencies have emerged as a result of the open source-based code. Until 2013, cryptocurrencies operated under the radar of most regulatory institutions. The character traits, including total anonymity, led Bitcoin to become a common alternative to cash in criminal transactions. Silk Road was one of the most famous dark web trading platforms, where the trade of illegal narcotics and fake ID cards flourished. Due to this, Bitcoin was portrayed in a rather bad light by the media and newspapers. The crowning moment was when the drug enforcement agency shut down Silk Road and confiscated 26,000 bitcoins. Nevertheless in 2014, more companies, such as Zynga, The D Las Vegas Casinos, Golden Gate Hotel & Casino, TigerDirect, Overstock.com, Newegg, Dell Technologies, and even Microsoft Corporation [@A_History_of_Bitcoin], began to accept bitcoin as a payment method. In the same year, the first derivative with bitcoin as an underlying was approved by the U.S.Commodity Futures Trading Commission. In 2015, an estimated 160'000 merchants used bitcoin to trade. Since then, cryptocurrencies have become increasingly popular among businesses and individuals, which has also been reflected in the exchange market.  
 
 
 Let us first look a the price in figure \ref{fig:price_btc} and the log(price) in figure \ref{fig:logprice_btc} and get a sense of the chart. Note: The data in the charts start in 2014 where it was listed in coinmarket, events between 2009 and 2014 are described without visualization.
+
+Therefore, we next examine the price of BTC/USD and the logarithmic price in figures \ref{fig:price_btc} and \ref{fig:logprice_btc}. These historical prices originate from the price-tracking website CoinMarketCap and show data from 2014. 
 
 Around 2010 bitcoin had the first increase in price as it jumped a 100% from 0.0008 USD to 0.08 Dollar [@Bitcoin_history]. In 2011 the price rose from 1 USD to 32 USD within 3 months and recessd shortly after to 2 USD this can be referred as a first price bubble in bitcoin, for the next year the price climbed to 13 Dollars and reached a never seen level of 220 USD, only to plunge to 70 USD within a half month in April 2013.
 By the end of the year a rally brought btc up to a peak of 1156 USD. The following year brought bad news and the price slowly decreased to 315 USD in 2015 after an observed drop of 20% after news from the trial of Ross Ulbricht, founder of Silk road marked in Letter \textbf{A}.
@@ -368,7 +363,7 @@ But the story was not over by now, after the drop the price of the cryptocurrenc
 
 &nbsp;
 
-```{r logprice_btc, out.width='75%', fig.cap='Logarithmic BTC/USD', echo=FALSE, fig.keep='last', fig.width = 8, fig.height = 5}
+```{r price_btc, out.width='75%', fig.cap='BTC/USD', echo=FALSE, fig.keep='last', fig.width = 8, fig.height = 5}
 # knitr::include_graphics("images/logbtc_usd.jpeg")
 load("data/BTC_USD_27_03_21.rda") 
 
@@ -394,15 +389,16 @@ addEventLines(events,srt=90,pos=2,lty=3,col = c("darkgreen","red","darkgreen","r
 
 &nbsp;
 
-```{r price_btc, out.width='75%', fig.cap='BTC/USD', echo=FALSE, fig.keep='last', fig.width = 8, fig.height = 5}
+```{r logprice_btc, out.width='75%', fig.cap='Logarithmic BTC/USD', echo=FALSE, fig.keep='last', fig.width = 8, fig.height = 5}
 # knitr::include_graphics("images/btc_usd.jpeg")
 plot.xts(cl_btc_log,col = "black", main="Logarithmic Bitcoin in US $",lwd = 0.8)
 addEventLines(events,srt=90,pos=2,lty=3,col = c("darkgreen","red","darkgreen","red","darkgreen"),lwd=2,)
+
 ```
 
 \newpage
 
-#### 2.4.2. Bitcoin technology and cryptocurrencies {#bitcoin_tec} 
+#### 2.4.2. Cryptocurrencies and Bitcoin Technology  {#bitcoin_tec} 
 &nbsp;
 
 This chapter focuses on the technical aspects of the cryptocurrency bitcoin. It describes the role that blockchain technology plays in cryptocurrencies and how this manifests itself in the case of bitcoin. Cryptocurrency as a more general term is used because bitcoin was only the first of its kind. One may look at a cryptocurrency similarly to a normal currency because you can buy and sell things and get bitcoin in exchange. But cryptocurrencies fundamentally differ to conservative currencies in merely all ways. The cryptocurrencies (not just bitcoin) are based on the blockchain technology introduced in Nakamotos paper [@bitcoin]. The system is decentralized, where no institution or government regulates the market in terms of the blockchain itself. The transactions are signed by the participants via  cryptographic hash functions, which generate a private and public key. This means that every signature can only be accessed by the owner of the private key i.e. it can not be copied. Once a transaction is signed, it is broadcasted into the network to all participants, so that everyone sees a transaction has been made.  Around 2400 transactions are packed in a block (the blocksize is limited by memory) which are broadcasted to all participants of the system. Every block consists the transaction information, previous hash, the special number and their resulting hash as visualized in figure \ref{fig:blockchain}.
@@ -419,7 +415,7 @@ knitr::include_graphics("images/blockchain.jpg")
 
 \newpage
 
-#### 2.4.3. Valuation and digital gold {#bitcoin_valuation} 
+#### 2.4.3. Valuation and Digital Gold {#bitcoin_valuation} 
 &nbsp;
 
 As mentioned in the previous chapter, the maximum possible amount of 21 million equals a fixed supply of this cryptocurrency. This leads to the question if this has an influence on the fair market value of bitcoins. A. Meynkhard is conducting research in this area and has concluded that it relies on the following three factors [@bitcoin_halving]:
