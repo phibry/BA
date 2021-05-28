@@ -127,8 +127,12 @@ Every neural network has an input layer, which consists of one or more nodes. Th
 
 In between are the hidden layers, whose number and size can be configured as desired. The challenge is to find an optimal and efficient configuration without causing overfitting of the training data. The number of hidden layers depends primarily on the application area of the neural network. For example, working with image recognition would require more layers since the image file is broken down into individual pixels. Subsequently, the layers are used to optimize from rough outlines to the smallest detail. In our research, we came across several methods or 'rules of thumb' to optimize the model. A frequently suggested method is explained by Andrej Karpathy (director of the AI department of Tesla, Inc.). His GitHub entry recommends the approach of starting with a model that is too large that causes overfitting. Subsequently, the model is reduced by focusing on increasing training loss and improving validation loss [@recipe_training].
 
+\newpage
+
 #### 2.1.4. Challenges {#challenges}
 &nbsp;
+
+In this section, we address the 2 fundamental challenges with dealing with neural networks.
 
 ##### 2.1.4.1 Overfitting {#overfitting}
 &nbsp;
@@ -148,7 +152,7 @@ Depending on the model architecture, a neural network can be a very complex cons
 
 Although the networks may lead to desired results, it can be important to build an understanding of these models. Suppose we are developing a classification method in supervised learning for a particular problem. A classical approach such as linear regression is easy to understand and we can convince people with little knowledge of mathematics of the usefulness of this method. Consider that a good and simple explanation may depend on investment. Would an investor invest in something that is not understood and difficult to get a grasp of? Neural networks with their non-linearity and the large number of parameters does not make it easy for the user to convince an investor of the benefits of a neural network.
 
-#### 2.2.1. Classic Approach
+#### 2.2.1. Classic Approach {#classic}
 &nbsp;
 
 As mentioned earlier, it is almost impossible to explain the networks based on the weights and biases. The following methods try to find effects on the features. One tries to find out which influence a certain feature has on the prediction of the network. There are classical approaches for explaining neural networks in the applications such as image recognition or text mining.
@@ -250,11 +254,11 @@ With the trained network we now generate two predictions for time $t$. Once with
 
 $$\beta_{1t} = \frac{\text{NN(X) - NN(Y)}}{\delta*x_{t-1}}$$
 
-The output of the neural network changes by the value $\beta_{1t}$ if the input is changed by 1. This procedure can now be done for each feature at each point in time. Then we have for each feature at each time the derivations, which makes an explanation of neuronal networks more possible.
+The output of the neural network changes by the value $\beta_{1t}$ if the input is changed by 1. This procedure can now be performed for each feature at each time point. This gives us the derivatives for each feature and time point, which makes an explanation of neural networks more feasible. We call these newly generated data sets linear parameter data (LPD) [@slide_xai].
 
 \newpage
 
-In figure \ref{fig:xai_plot1}, you can see the $\beta_{it}$, that is, the partial derivatives from equation \ref{eq:xai_fit} up to a $q=10$, and you can see the intercept. For the comparison to the linear regression and the autocorrelation, only the lags 6 to 10 are explicitly highlighted. A detailed identification of all LPD's can be seen in figure \ref{fig:xai_plot2}.
+In figure \ref{fig:xai_plot1}, you can see the $\beta_{it}$, that is, the partial derivatives from equation \ref{eq:xai_fit} up to $q=10$, and you can see the intercept. For the comparison to the linear regression and the autocorrelation, only the lags 6 to 10 are explicitly highlighted. A detailed identification of all LPD's can be seen in figure \ref{fig:xai_plot2}.
 
 It is noticeable that the structure of LPD's strongly resembles the logarithmic returns of BTC. The heteroskedasticity of the log returns, i.e. the volatility clusters are also evident in the LPD's. If the BTC is in a turbulent phase, then the partial derivatives also fluctuate.
 
@@ -274,7 +278,7 @@ In the autocorrelations (figure \ref{fig:xai_acf}) and in the regression coeffic
 
 \newpage
 
-To provide a more accurate and better comparison between regression and XAI, table \ref{tab:lpd_tab} compares the regression coefficients with the mean values of the LPDs. Although the values are not equal, the signs are the same.
+To provide a more accurate and better comparison between regression and XAI, table \ref{tab:lpd_tab} compares the regression coefficients with the mean values of the LPDs. Although the values are not equal, the signs are the same. With this knowledge, we can say that both procedures are similar. Through this similarity, a connection can be made. As already explained in section [2.2.1](#classic), a linear regression is easier to explain and therefore more likely to be used. With this transfer between these two procedures, a bridge can be built.
 
 ```{r lpd_tab, echo=FALSE}
 library(kableExtra)
@@ -295,7 +299,11 @@ kbl(df, caption="Comparison between linear regression (LR) and linear parameter 
   column_spec(6, color="#ff7c43")
 ```
 
-Together with the findings from the visualization in figure \ref{fig:xai_acf} and the autocorrelations in figure \ref{fig:xai_plot1}, a correlation can be established. Strong autocorrelations, i.e. large dependencies on a given delay, can be recognized in the partial derivatives. With the help of the LPD's and the autocorrelations, the behavior of neuronal networks could be explained with the handling of time series. The delayed input of a neural network seems to have probably a connection with the ACF's.
+&nbsp;
+
+Together with the findings from the visualization in figure \ref{fig:xai_acf} and the autocorrelations in figure \ref{fig:xai_plot1}, a connection can be established. Strong autocorrelations, i.e. large dependencies on a given delay, can be recognized in the partial derivatives. With the help of the LPD's and the autocorrelations, the behavior of neuronal networks could be explained with the handling of time series. The delayed input of a neural network seems to have probably a connection with the ACF's.
+
+Thus, we can say that at best, with this method of calculating the partial derivatives for each feature at each time t, we may have found an explanation for the black box of neural networks. With this method we cannot explain how the network led to exactly this prediction using the backpropagation algorithm with the many weights and error terms, but the basic structure, i.e. information which is in the data (for example the autocorrelation), can be found. The ACF is a basic method to find structures in time series and here, with the LPD's you can fall back on exactly this ACF. Despite the complexity of the networks, this special procedure for the XAI leads to the basic ACF's, thus improving the explainability.
 
 \newpage
 

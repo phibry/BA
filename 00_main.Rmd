@@ -41,9 +41,15 @@ source("add/Functions.R")
 \setcounter{tocdepth}{4}
 \tableofcontents
 ```
+
 \newpage
 
 ```{r child = '01_abstract.Rmd'}
+```
+
+\newpage
+
+```{r child = '01_zusammenfassung.Rmd'}
 ```
 
 \newpage
