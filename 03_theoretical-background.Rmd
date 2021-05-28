@@ -345,30 +345,11 @@ In this section, bitcoin as a cryptocurreny is introduced by analyzing and comme
 
 The story of bitcoin began with a paper published in the name of an alleged person called Satoshi Nakamoto [@bitcoin]. The publisher of the document cannot be assigned to a real person, therefore the technology inventor remains mysteriously unknown until today. In 2009, the first bitcoin transaction was executed. Over the years, several other cryptocurrencies have emerged as a result of the open source-based code. Until 2013, cryptocurrencies operated under the radar of most regulatory institutions. The character traits, including total anonymity, led bitcoin to become a common alternative to cash in criminal transactions. Silk Road was one of the most famous dark web trading platforms, where the trade of illegal narcotics and fake ID cards flourished. Due to this, Bitcoin was portrayed in a rather bad light by the media and newspapers. The crowning moment was when the drug enforcement agency shut down Silk Road and confiscated 26,000 bitcoins. Nevertheless in 2014, more companies, such as Zynga, The D Las Vegas Casinos, Golden Gate Hotel & Casino, TigerDirect, Overstock.com, Newegg, Dell Technologies, and even Microsoft Corporation [@A_History_of_Bitcoin], began to accept bitcoin as a payment method. In the same year, the first derivative with bitcoin as an underlying was approved by the U.S.Commodity Futures Trading Commission. In 2015, an estimated 160'000 merchants used bitcoin to trade. Since then, cryptocurrencies have become increasingly popular among businesses and individuals, which has also been reflected in the exchange market.  
 
-<<<<<<< HEAD
 Therefore, we next examine the price of BTC/USD and the logarithmic price in figures \ref{fig:price_btc} and \ref{fig:logprice_btc}. The latter plot helps to compare the relative price changes as the price level changed very much over the years. These historical prices originate from the price-tracking website CoinMarketCap and show data from 2014. 
-=======
-
-Let us first look a the price in figure \ref{fig:price_btc} and the log(price) in figure \ref{fig:logprice_btc} and get a sense of the chart. Note: The data in the charts start in 2014 where it was listed in coinmarket, events between 2009 and 2014 are described without visualization.
-
-Therefore, we next examine the price of BTC/USD and the logarithmic price in figures \ref{fig:price_btc} and \ref{fig:logprice_btc}. These historical prices originate from the price-tracking website CoinMarketCap and show data from 2014. 
->>>>>>> main
 
 In 2010, the events just described caused the price to increase a hundredfold from 0.0008 USD to 0.08 USD [@Bitcoin_history]. The first bubble phenomenon was observed after that. In 2011, the price moved from USD 1 to USD 32 within three months, after which it settled back at USD 2. The following year, the price climbed to 13 USD and reached a never seen level of 220 USD, only to plunge to 70 USD within two weeks in April 2013. By the end of the year, a rally brought BTC to a price of USD 1156. Negative media reports triggered mixed moods. The trial of Silk Road founder Ross Ulbricht was one of the more notable events that unsettled the market. This time point is marked with the letter \textbf{A}. From this point in time, things began to change. More volume was flushed in the market and the price of BTC began to ascend. The price soared to 20k on 17th September 2017, which can be seen in letter \textbf{B}. After this tremendous bull run, BTC lost value for more than a year until mid-December 2018 (letter \textbf{C}). The trend reverted and found its peak after 6 months in June 2019 (letter \textbf{D}). After this on 3 March 2020, BTC lost nearly half of its value in 4 days, which can be seen in letter \textbf{E}. This is likely due to irrational behavior during the outbreak of the Covid-19 pandemic. Subsequently, the price recovered rapidly. Institutional investors and prominent companies such as Tesla Inc. announced their purchase, which in combination with the halving effect in May 2020 led to this effect. At the time of writing this thesis, the registered BTC all-time high is USD 64'805. In summary, the BTC market is strongly driven by emotional trends and is very volatile. The time series is analyzed in more detail in section [3.2.](#data_exploration).
 
 \newpage
-
-<<<<<<< HEAD
-```{r price_btc, out.width='80%', fig.cap='BTC/USD historical prices', echo=FALSE}
-knitr::include_graphics("images/btc_usd.jpeg")
-```
-
-```{r logprice_btc, out.width='80%', fig.cap='BTC/USD historical logarithmic prices', echo=FALSE}
-knitr::include_graphics("images/logbtc_usd.jpeg")
-=======
-&nbsp;
-
-&nbsp;
 
 ```{r price_btc, out.width='75%', fig.cap='BTC/USD', echo=FALSE, fig.keep='last', fig.width = 8, fig.height = 5}
 # knitr::include_graphics("images/logbtc_usd.jpeg")
@@ -401,7 +382,6 @@ addEventLines(events,srt=90,pos=2,lty=3,col = c("darkgreen","red","darkgreen","r
 plot.xts(cl_btc_log,col = "black", main="Logarithmic Bitcoin in US $",lwd = 0.8)
 addEventLines(events,srt=90,pos=2,lty=3,col = c("darkgreen","red","darkgreen","red","darkgreen"),lwd=2,)
 
->>>>>>> main
 ```
 
 \newpage
