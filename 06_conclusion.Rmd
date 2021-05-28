@@ -5,7 +5,7 @@ geometry: margin = 1in
 
 ## 5. Conclusion
 
-<<<<<<< HEAD
+
 
 realistic view:
 
@@ -24,18 +24,17 @@ Problems?
 
 
 
-=======
+
 - Restate the thesis
 - Review the key points of your work
 - Explain why your work is relevant
 - Add a take-home message for the reader
->>>>>>> main
+
 
 ### 5.1. Conclusion
 
-<<<<<<< HEAD
 
-=======
+
 In this bachelor thesis, we deal with three different fields. First, the network architecture of a neural network is investigated, then the model is analyzed using an XAI approach. In the last step, the information found in this paper and general time series analysis is combined to form a trading strategy. The methodology is based on the guiding questions defined in chapter [1.](#introduction):
 
 1) What influence does the selection of the network architecture have on the quality of predictions? What influence can be found concerning the Sharpe ratio of a simple trading strategy?
@@ -52,7 +51,7 @@ Of the methods presented, the linear parameter data approach (LPD) turns out to 
 
 
 ### 5.2. Outlook
->>>>>>> main
+
 
 - Point Prognose real test daily
 
