@@ -132,7 +132,7 @@ In between are the hidden layers, whose number and size can be configured as des
 #### 2.1.4. Challenges {#challenges}
 &nbsp;
 
-In this section, we address the 2 fundamental challenges with dealing with neural networks.
+In this section, we address the two fundamental challenges when dealing with neural networks.
 
 ##### 2.1.4.1 Overfitting {#overfitting}
 &nbsp;
