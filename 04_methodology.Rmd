@@ -446,8 +446,8 @@ Our findings from the garch model were not very promising, nevertheless we combi
 
 With the previously established architecture, different values for the parameters: $\lambda$, $\eta_{lower},\eta_{upper}$ and $\beta$  are used and the performance is compared to each other.
 
-The most promising performance is found with $\lambda = 1$,$\eta_{lower} > \eta_{upper}$ (no 0.5 signals were used) $\eta_{upper}=3$ and $\beta = 0.2$.
-In figure \ref{fig:perf} different combinations are visualized nn is simply trading the forecast of neuralnet based on their sign. The signals of lpd are all 1 except off all those which are predict 0. nn+lpd is the performance as described in 3.3.3. .The combination with garch nn+lpd+garch takes in account the garch signals from 3.3.5. If LPD or garch signal is 0 then the signal is also 0. 
+The most promising performance is found with $\lambda = 1$,$\eta_{lower} > \eta_{upper}$ ( no 0.5 signals were used ) $\eta_{upper}=3$ and $\beta = 0.2$.
+In figure \ref{fig:perf} different combinations are visualized, nn is simply trading the forecast of neuralnet based on their sign. The signals of lpd are all 1 except off all those which are predict 0. nn+lpd is the performance as described in 3.3.3. .The combination with garch nn+lpd+garch takes in account the garch signals from 3.3.5. If LPD or garch signal is 0 then the signal is also 0. 
 
 By investigating the plot it seems that some combinations perform better than the others. The garch application appears to worsen the performance. ligthblue and the yellow line catches our eye, their perfomance seems to be better than the rest and as we can see, those are combinations of nn+lpd.
 
