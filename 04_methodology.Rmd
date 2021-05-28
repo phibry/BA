@@ -563,43 +563,45 @@ knitr::include_graphics("images/xailpd/lambda_1/lpd_nn_eth_perf.svg")
 ```
 ```{r with_eth_sole, fig.align='center', out.width='100%', fig.cap="Added Eth signal",dev = "svg",echo=FALSE,fig.keep="last"}
 
-load("data/xai/7_7_withsignal_xai_in/performance_with_eth.rda")
-load("data/xai/7_7_withsignal_xai_in/nn_lpd_without_eth.rda")
-signal <- data$BTC.USD.Close
-signal$BTC.USD.Close <- nn_lpd
-
-main=paste("Performance cumulated from 9 splits, λ=","1")
-
-colors= c("green","darkorchid")
-
-name=c(paste("Buy and Hold"," sharpe=3.57"),paste("nn+lpd+eth-if-0 β=0.2"," sharpe=4.41"))
-
-class(data)
-plot(data[,c(1,5)], col=colors, main=main)
-
-addLegend("topleft",
-          legend.names=name,
-          col=colors,
-          lty=c(rep(1,13),2),
-          lwd=c(rep(2,13),3),
-          ncol=1,
-          bg="white")
-
-events <- xts(LETTERS[1:6], as.Date(c("2020-08-01","2020-09-05","2020-10-18","2021-01-14","2021-02-21","2021-03-12")))
-
-#plots
-addEventLines(events,srt=90,pos=2,lty=3,col = rep("#004c6d",6),lwd=2,)
-
-
-
-
-
-#lines(signal, on=NA, lwd=2, col="red", ylim=c(-1.3, 1.3))
-
-
-
+# load("data/xai/7_7_withsignal_xai_in/performance_with_eth.rda")
+# load("data/xai/7_7_withsignal_xai_in/nn_lpd_without_eth.rda")
+# signal <- data$BTC.USD.Close
+# signal$BTC.USD.Close <- nn_lpd
+# 
+# main=paste("Performance cumulated from 9 splits, λ=","1")
+# 
+# colors= c("green","darkorchid")
+# 
+# name=c(paste("Buy and Hold"," sharpe=3.57"),paste("nn+lpd+eth-if-0 β=0.2"," sharpe=4.41"))
+# 
+# class(data)
+# plot(data[,c(1,5)], col=colors, main=main)
+# 
+# addLegend("topleft",
+#           legend.names=name,
+#           col=colors,
+#           lty=c(rep(1,13),2),
+#           lwd=c(rep(2,13),3),
+#           ncol=1,
+#           bg="white")
+# 
+# events <- xts(LETTERS[1:6], as.Date(c("2020-08-01","2020-09-05","2020-10-18","2021-01-14","2021-02-21","2021-03-12")))
+# 
+# #plots
+# addEventLines(events,srt=90,pos=2,lty=3,col = rep("#004c6d",6),lwd=2,)
+# 
+# 
+# 
+# 
+# 
+# #lines(signal, on=NA, lwd=2, col="red", ylim=c(-1.3, 1.3))
+# 
+# 
+# 
 
 ```
+
+
 For  a closer analysis, lets have a look at the best performing model vs. Buy and hold in Figure \ref{fig:with_eth_sole}.The following analysis is related to the violet chart and starts from left to right, beginning with letter A. 
 Imideatly after the line by letter A, there are several decisions which differ from buy and hold and force a shift to the series. In letter B we observe a similar behavior for a short period of time. The unsatisfying trend change in letter C is stopped around the first of November. Thereafter unto the point in letter D the decisions of the model behave quite similar to Buy and Hold. Right after D the net handles the negative trend very well and climbs further up. The same accounts for letter E where the trend once more goes in the opposite direction than the benchmark. Sshortly after F the model does exactly the same as Buy and Hold.
 
