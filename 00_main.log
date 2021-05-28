@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.5.17)  28 MAY 2021 13:18
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.5.17)  28 MAY 2021 14:12
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -919,257 +919,257 @@ g (ext4): destination with the same identifier (name{table.2}) has been already
                                                   
 l.786 \newpage
               ] [13] [14]
-<images/logbtc_usd.jpeg, id=463, 599.23875pt x 339.51843pt>
-File: images/logbtc_usd.jpeg Graphic file (type jpg)
-<use images/logbtc_usd.jpeg>
-Package pdftex.def Info: images/logbtc_usd.jpeg  used on input line 918.
-(pdftex.def)             Requested size: 375.81255pt x 212.92896pt.
-<images/btc_usd.jpeg, id=464, 798.985pt x 452.69125pt>
+<images/btc_usd.jpeg, id=463, 798.985pt x 452.69125pt>
 File: images/btc_usd.jpeg Graphic file (type jpg)
 <use images/btc_usd.jpeg>
-Package pdftex.def Info: images/btc_usd.jpeg  used on input line 927.
+Package pdftex.def Info: images/btc_usd.jpeg  used on input line 917.
 (pdftex.def)             Requested size: 375.8034pt x 212.92378pt.
+<images/logbtc_usd.jpeg, id=464, 599.23875pt x 339.51843pt>
+File: images/logbtc_usd.jpeg Graphic file (type jpg)
+<use images/logbtc_usd.jpeg>
+Package pdftex.def Info: images/logbtc_usd.jpeg  used on input line 926.
+(pdftex.def)             Requested size: 375.81255pt x 212.92896pt.
 [15pdfTeX warning (ext4): destination with the same identifier (name{figure.6})
  has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.934 \newpage
+l.933 \newpage
               pdfTeX warning (ext4): destination with the same identifier (name
 {figure.7}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.934 \newpage
-               <./images/logbtc_usd.jpeg> <./images/btc_usd.jpeg>]
+l.933 \newpage
+               <./images/btc_usd.jpeg> <./images/logbtc_usd.jpeg>]
 <images/blockchain.jpg, id=471, 2105.61656pt x 743.77875pt>
 File: images/blockchain.jpg Graphic file (type jpg)
 <use images/blockchain.jpg>
-Package pdftex.def Info: images/blockchain.jpg  used on input line 1001.
+Package pdftex.def Info: images/blockchain.jpg  used on input line 1000.
 (pdftex.def)             Requested size: 375.78172pt x 132.73947pt.
 [16pdfTeX warning (ext4): destination with the same identifier (name{figure.8})
  has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.1008 \newpage
+l.1007 \newpage
                 <./images/blockchain.jpg>]
 LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 1
-024.
+023.
 (c:/Users/kenge/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ) [17]
 <images/flowchart_overview.png, id=484, 541.27219pt x 407.27156pt>
 File: images/flowchart_overview.png Graphic file (type png)
 <use images/flowchart_overview.png>
-Package pdftex.def Info: images/flowchart_overview.png  used on input line 1065
+Package pdftex.def Info: images/flowchart_overview.png  used on input line 1064
 .
 (pdftex.def)             Requested size: 305.34857pt x 229.75462pt.
 [18pdfTeX warning (ext4): destination with the same identifier (name{figure.9})
  has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.1072 \newpage
+l.1071 \newpage
                 <./images/flowchart_overview.png>]
 <00_main_files/figure-latex/log_ret-1.pdf, id=495, 469.755pt x 325.215pt>
 File: 00_main_files/figure-latex/log_ret-1.pdf Graphic file (type pdf)
 <use 00_main_files/figure-latex/log_ret-1.pdf>
 Package pdftex.def Info: 00_main_files/figure-latex/log_ret-1.pdf  used on inpu
-t line 1095.
+t line 1094.
 (pdftex.def)             Requested size: 375.80452pt x 260.17235pt.
 <00_main_files/figure-latex/acf_log_ret-1.pdf, id=498, 469.755pt x 325.215pt>
 File: 00_main_files/figure-latex/acf_log_ret-1.pdf Graphic file (type pdf)
 <use 00_main_files/figure-latex/acf_log_ret-1.pdf>
 Package pdftex.def Info: 00_main_files/figure-latex/acf_log_ret-1.pdf  used on 
-input line 1112.
+input line 1111.
 (pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
 <images/histogram_logret_3.jpeg, id=501, 627.84563pt x 472.01344pt>
 File: images/histogram_logret_3.jpeg Graphic file (type jpg)
 <use images/histogram_logret_3.jpeg>
 Package pdftex.def Info: images/histogram_logret_3.jpeg  used on input line 113
-7.
+6.
 (pdftex.def)             Requested size: 375.80016pt x 282.52602pt.
 [19pdfTeX warning (ext4): destination with the same identifier (name{figure.10}
 ) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.1144 \newpage
+l.1143 \newpage
                 <./00_main_files/figure-latex/log_ret-1.pdf>] [20pdfTeX warning
  (ext4): destination with the same identifier (name{figure.11}) has been alread
 y used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.1144 \newpage
+l.1143 \newpage
                pdfTeX warning (ext4): destination with the same identifier (nam
 e{figure.12}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.1144 \newpage
+l.1143 \newpage
                 <./00_main_files/figure-latex/acf_log_ret-1.pdf> <./images/hist
 ogram_logret_3.jpeg>] [21]
 <images/test_train_split_pp.jpeg.jpg, id=536, 602.25pt x 450.483pt>
 File: images/test_train_split_pp.jpeg.jpg Graphic file (type jpg)
 <use images/test_train_split_pp.jpeg.jpg>
 Package pdftex.def Info: images/test_train_split_pp.jpeg.jpg  used on input lin
-e 1224.
+e 1223.
 (pdftex.def)             Requested size: 375.81718pt x 281.11125pt.
 [22pdfTeX warning (ext4): destination with the same identifier (name{figure.13}
 ) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.1243 \newpage
+l.1242 \newpage
                 <./images/test_train_split_pp.jpeg.jpg>]
 <images/batch5/mse_5_layer1.jpeg, id=546, 1405.25pt x 903.375pt>
 File: images/batch5/mse_5_layer1.jpeg Graphic file (type jpg)
 <use images/batch5/mse_5_layer1.jpeg>
 Package pdftex.def Info: images/batch5/mse_5_layer1.jpeg  used on input line 12
-67.
+66.
 (pdftex.def)             Requested size: 469.75925pt x 301.98808pt.
 [23pdfTeX warning (ext4): destination with the same identifier (name{figure.14}
 ) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.1280 \newpage
+l.1279 \newpage
                 <./images/batch5/mse_5_layer1.jpeg>]
 <images/batch5/mse_5_layer2.jpeg, id=557, 1405.25pt x 903.375pt>
 File: images/batch5/mse_5_layer2.jpeg Graphic file (type jpg)
 <use images/batch5/mse_5_layer2.jpeg>
 Package pdftex.def Info: images/batch5/mse_5_layer2.jpeg  used on input line 12
-97.
+96.
 (pdftex.def)             Requested size: 469.75925pt x 301.98808pt.
 [24pdfTeX warning (ext4): destination with the same identifier (name{figure.15}
 ) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.1315 \newpage
+l.1314 \newpage
                 <./images/batch5/mse_5_layer2.jpeg>]
 <images/batch5/mse_5_layer3.jpeg, id=565, 1405.25pt x 903.375pt>
 File: images/batch5/mse_5_layer3.jpeg Graphic file (type jpg)
 <use images/batch5/mse_5_layer3.jpeg>
 Package pdftex.def Info: images/batch5/mse_5_layer3.jpeg  used on input line 13
-35.
+34.
 (pdftex.def)             Requested size: 469.75925pt x 301.98808pt.
 [25pdfTeX warning (ext4): destination with the same identifier (name{figure.16}
 ) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.1341 \newpage
+l.1340 \newpage
                 <./images/batch5/mse_5_layer3.jpeg>]
 <images/batch5/mse_5_all.jpeg, id=573, 1405.25pt x 903.375pt>
 File: images/batch5/mse_5_all.jpeg Graphic file (type jpg)
 <use images/batch5/mse_5_all.jpeg>
-Package pdftex.def Info: images/batch5/mse_5_all.jpeg  used on input line 1369.
+Package pdftex.def Info: images/batch5/mse_5_all.jpeg  used on input line 1368.
 
 (pdftex.def)             Requested size: 469.75925pt x 301.98808pt.
 [26pdfTeX warning (ext4): destination with the same identifier (name{figure.17}
 ) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.1388 \newpage
+l.1387 \newpage
                 <./images/batch5/mse_5_all.jpeg>]
 <images/batch5/median_mse.jpeg, id=582, 1405.25pt x 903.375pt>
 File: images/batch5/median_mse.jpeg Graphic file (type jpg)
 <use images/batch5/median_mse.jpeg>
-Package pdftex.def Info: images/batch5/median_mse.jpeg  used on input line 1403
+Package pdftex.def Info: images/batch5/median_mse.jpeg  used on input line 1402
 .
 (pdftex.def)             Requested size: 469.75925pt x 301.98808pt.
 [27pdfTeX warning (ext4): destination with the same identifier (name{figure.18}
 ) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.1426 \newpage
+l.1425 \newpage
                 <./images/batch5/median_mse.jpeg>]
 <images/batch5/median_sharpe.jpeg, id=591, 1405.25pt x 903.375pt>
 File: images/batch5/median_sharpe.jpeg Graphic file (type jpg)
 <use images/batch5/median_sharpe.jpeg>
 Package pdftex.def Info: images/batch5/median_sharpe.jpeg  used on input line 1
-443.
+442.
 (pdftex.def)             Requested size: 469.75925pt x 301.98808pt.
 [28pdfTeX warning (ext4): destination with the same identifier (name{figure.19}
 ) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.1459 \newpage
+l.1458 \newpage
                 <./images/batch5/median_sharpe.jpeg>] [29]
 <images/flowchart_trading.png, id=608, 2027.32407pt x 452.4403pt>
 File: images/flowchart_trading.png Graphic file (type png)
 <use images/flowchart_trading.png>
-Package pdftex.def Info: images/flowchart_trading.png  used on input line 1526.
+Package pdftex.def Info: images/flowchart_trading.png  used on input line 1525.
 
 (pdftex.def)             Requested size: 469.7394pt x 104.83229pt.
 [30pdfTeX warning (ext4): destination with the same identifier (name{figure.20}
 ) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.1568 \newpage
+l.1567 \newpage
                 <./images/flowchart_trading.png>] [31]
 <images/xailpd/out_decision_small.jpeg, id=638, 822.82407pt x 659.46375pt>
 File: images/xailpd/out_decision_small.jpeg Graphic file (type jpg)
 <use images/xailpd/out_decision_small.jpeg>
 Package pdftex.def Info: images/xailpd/out_decision_small.jpeg  used on input l
-ine 1698.
+ine 1697.
 (pdftex.def)             Requested size: 469.75536pt x 376.49193pt.
 <images/xailpd/out_sum_2.jpeg, id=639, 822.82407pt x 659.46375pt>
 File: images/xailpd/out_sum_2.jpeg Graphic file (type jpg)
 <use images/xailpd/out_sum_2.jpeg>
-Package pdftex.def Info: images/xailpd/out_sum_2.jpeg  used on input line 1707.
+Package pdftex.def Info: images/xailpd/out_sum_2.jpeg  used on input line 1706.
 
 (pdftex.def)             Requested size: 469.75536pt x 376.49193pt.
 [32] [33pdfTeX warning (ext4): destination with the same identifier (name{figur
 e.21}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.1714 \newpage
+l.1713 \newpage
                 <./images/xailpd/out_decision_small.jpeg>] [34pdfTeX warning (e
 xt4): destination with the same identifier (name{figure.22}) has been already u
 sed, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.1714 \newpage
+l.1713 \newpage
                 <./images/xailpd/out_sum_2.jpeg>]
 <images/GARCH/garch_trading.png, id=660, 1127.71312pt x 884.55469pt>
 File: images/GARCH/garch_trading.png Graphic file (type png)
 <use images/GARCH/garch_trading.png>
 Package pdftex.def Info: images/GARCH/garch_trading.png  used on input line 177
-1.
+0.
 (pdftex.def)             Requested size: 422.77094pt x 331.61272pt.
 [35] [36pdfTeX warning (ext4): destination with the same identifier (name{figur
 e.23}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.1790 \newpage
+l.1789 \newpage
                 <./images/GARCH/garch_trading.png>]
 <images/xailpd/lambda_1/perf.jpeg, id=679, 706.89093pt x 473.51906pt>
 File: images/xailpd/lambda_1/perf.jpeg Graphic file (type jpg)
 <use images/xailpd/lambda_1/perf.jpeg>
 Package pdftex.def Info: images/xailpd/lambda_1/perf.jpeg  used on input line 1
-829.
+828.
 (pdftex.def)             Requested size: 469.76376pt x 314.67667pt.
 [37pdfTeX warning (ext4): destination with the same identifier (name{figure.24}
 ) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.1835 \newpage
+l.1834 \newpage
                 <./images/xailpd/lambda_1/perf.jpeg>]
 <images/xailpd/lambda_1/sharpe.jpeg, id=688, 1378.39969pt x 666.23906pt>
 File: images/xailpd/lambda_1/sharpe.jpeg Graphic file (type jpg)
 <use images/xailpd/lambda_1/sharpe.jpeg>
 Package pdftex.def Info: images/xailpd/lambda_1/sharpe.jpeg  used on input line
- 1846.
+ 1845.
 (pdftex.def)             Requested size: 375.79051pt x 181.6355pt.
 <images/xailpd/lambda_1/batch.jpeg, id=690, 1143.52219pt x 666.23906pt>
 File: images/xailpd/lambda_1/batch.jpeg Graphic file (type jpg)
 <use images/xailpd/lambda_1/batch.jpeg>
 Package pdftex.def Info: images/xailpd/lambda_1/batch.jpeg  used on input line 
-1864.
+1863.
 (pdftex.def)             Requested size: 375.81056pt x 218.95479pt.
 [38pdfTeX warning (ext4): destination with the same identifier (name{figure.25}
 ) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.1871 \newpage
+l.1870 \newpage
                pdfTeX warning (ext4): destination with the same identifier (nam
 e{figure.26}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.1871 \newpage
+l.1870 \newpage
                 <./images/xailpd/lambda_1/sharpe.jpeg> <./images/xailpd/lambda_
 1/batch.jpeg>]
 <images/xailpd/lambda_1/lpd_nn_eth_perf.jpeg, id=700, 712.91344pt x 377.15906pt
@@ -1177,382 +1177,382 @@ l.1871 \newpage
 File: images/xailpd/lambda_1/lpd_nn_eth_perf.jpeg Graphic file (type jpg)
 <use images/xailpd/lambda_1/lpd_nn_eth_perf.jpeg>
 Package pdftex.def Info: images/xailpd/lambda_1/lpd_nn_eth_perf.jpeg  used on i
-nput line 1907.
+nput line 1906.
 (pdftex.def)             Requested size: 469.75197pt x 248.51715pt.
 
 LaTeX Warning: Reference `fig:with_eth_sole' on page 39 undefined on input line
- 1915.
+ 1914.
 
 [39pdfTeX warning (ext4): destination with the same identifier (name{figure.27}
 ) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.1928 \newpage
+l.1927 \newpage
                 <./images/xailpd/lambda_1/lpd_nn_eth_perf.jpeg>] [40] [41] [42]
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 2068--2074
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 2067--2073
 [][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2068--2074
+Underfull \hbox (badness 10000) in paragraph at lines 2067--2073
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 2075--2080
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 2074--2079
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2075--2080
+Underfull \hbox (badness 10000) in paragraph at lines 2074--2079
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 2081--2085
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 2080--2084
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2081--2085
+Underfull \hbox (badness 10000) in paragraph at lines 2080--2084
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 2086--2090
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 2085--2089
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2086--2090
+Underfull \hbox (badness 10000) in paragraph at lines 2085--2089
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 2091--2096
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 2090--2095
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2091--2096
+Underfull \hbox (badness 10000) in paragraph at lines 2090--2095
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 2097--2103
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 2096--2102
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2097--2103
+Underfull \hbox (badness 10000) in paragraph at lines 2096--2102
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 2104--2110
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 2103--2109
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2104--2110
+Underfull \hbox (badness 10000) in paragraph at lines 2103--2109
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 2111--2116
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 2110--2115
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2111--2116
+Underfull \hbox (badness 10000) in paragraph at lines 2110--2115
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 2117--2121
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 2116--2120
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2117--2121
+Underfull \hbox (badness 10000) in paragraph at lines 2116--2120
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 2122--2128
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 2121--2127
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2122--2128
+Underfull \hbox (badness 10000) in paragraph at lines 2121--2127
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 2129--2132
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 2128--2131
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2129--2132
+Underfull \hbox (badness 10000) in paragraph at lines 2128--2131
 
  []
 
 
-Underfull \hbox (badness 7238) in paragraph at lines 2138--2138
+Underfull \hbox (badness 7238) in paragraph at lines 2137--2137
 []\T1/lmr/m/n/10 F. Pretto, ``Un-cov-er-ing the magic: In-ter-pret-ing ma-chine
  learn-ing black-box mod-els.''
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2138--2138
+Underfull \hbox (badness 10000) in paragraph at lines 2137--2137
 [][]$\T1/lmr/m/n/10 https : / / towardsdatascience . com / uncovering -[] the -
 [] magic -[] interpreting -[] machine -[] learning -[] black -[] box -[]
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 2133--2139
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 2132--2138
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2133--2139
+Underfull \hbox (badness 10000) in paragraph at lines 2132--2138
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 2140--2144
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 2139--2143
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2140--2144
+Underfull \hbox (badness 10000) in paragraph at lines 2139--2143
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 2145--2149
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 2144--2148
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2145--2149
+Underfull \hbox (badness 10000) in paragraph at lines 2144--2148
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 2150--2155
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 2149--2154
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2150--2155
+Underfull \hbox (badness 10000) in paragraph at lines 2149--2154
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 2156--2161
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 2155--2160
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2156--2161
+Underfull \hbox (badness 10000) in paragraph at lines 2155--2160
 
  []
 
 
-Underfull \hbox (badness 1043) in paragraph at lines 2167--2167
+Underfull \hbox (badness 1043) in paragraph at lines 2166--2166
 []\T1/lmr/m/n/10 L. Win-ter-maier, ``Bit-coin's en-ergy con-sump-tion is a high
 ly charged de-bate -- who's right?''
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2167--2167
+Underfull \hbox (badness 10000) in paragraph at lines 2166--2166
 [][]$\T1/lmr/m/n/10 https : / / www . forbes . com / sites / lawrencewintermeye
 r / 2021 / 03 / 10 / bitcoins -[] energy -[] consumption -[] is -[] a -[]
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 2162--2168
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 2161--2167
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2162--2168
+Underfull \hbox (badness 10000) in paragraph at lines 2161--2167
 
  []
 
 
-Underfull \hbox (badness 6094) in paragraph at lines 2174--2174
+Underfull \hbox (badness 6094) in paragraph at lines 2173--2173
 []\T1/lmr/m/n/10 C. C. for Al-ter-na-tive Fi-nance, ``Live bit-coin elec-tric-i
 ty con-sump-tion in-dex.'' [][]$https :
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2174--2174
+Underfull \hbox (badness 10000) in paragraph at lines 2173--2173
 \T1/lmr/m/n/10 / / www . forbes . com / sites / lawrencewintermeyer / 2021 / 03
  / 10 / bitcoins -[] energy -[] consumption -[] is -[] a -[]
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 2169--2175
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 2168--2174
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2169--2175
+Underfull \hbox (badness 10000) in paragraph at lines 2168--2174
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 2176--2181
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 2175--2180
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2176--2181
+Underfull \hbox (badness 10000) in paragraph at lines 2175--2180
 
  []
 
 [43]
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 2182--2187
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 2181--2186
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2182--2187
+Underfull \hbox (badness 10000) in paragraph at lines 2181--2186
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 2188--2193
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 2187--2192
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2188--2193
+Underfull \hbox (badness 10000) in paragraph at lines 2187--2192
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 2194--2199
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 2193--2198
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2194--2199
+Underfull \hbox (badness 10000) in paragraph at lines 2193--2198
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 2200--2205
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 2199--2204
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2200--2205
+Underfull \hbox (badness 10000) in paragraph at lines 2199--2204
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 2206--2211
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 2205--2210
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2206--2211
+Underfull \hbox (badness 10000) in paragraph at lines 2205--2210
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2217--2217
+Underfull \hbox (badness 10000) in paragraph at lines 2216--2216
 \T1/lmr/m/n/10 Bookshelves / Probability _ Theory / Book % 3A _ Applied _ Proba
 bility _ (Pfei^^[er ) /13 % 3A _ Transform _
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2217--2217
+Underfull \hbox (badness 10000) in paragraph at lines 2216--2216
 \T1/lmr/m/n/10 Methods / 13 . 02 % 3A _ Convergence _ and _ the _ Central _ Lim
 it _ Theorem# : ~ : text = Central %
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2217--2217
+Underfull \hbox (badness 10000) in paragraph at lines 2216--2216
 \T1/lmr/m/n/10 20Limit % 20Theorem % 20(Lindeberg % 2DL % C3 % A9vy % 20form ) 
 &text = By % 20the % 20convergence %
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2217--2217
+Underfull \hbox (badness 10000) in paragraph at lines 2216--2216
 \T1/lmr/m/n/10 20theorem % 20on ,[] ) % E2 % 86 % 92 % CF % 95(t ) . & text = T
 he % 20theorem % 20says % 20that % 20the ,[] does %
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 2212--2218
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 2211--2217
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2212--2218
+Underfull \hbox (badness 10000) in paragraph at lines 2211--2217
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 2219--2224
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 2218--2223
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2219--2224
+Underfull \hbox (badness 10000) in paragraph at lines 2218--2223
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 2225--2230
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 2224--2229
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2225--2230
+Underfull \hbox (badness 10000) in paragraph at lines 2224--2229
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 2231--2236
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 2230--2235
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2231--2236
+Underfull \hbox (badness 10000) in paragraph at lines 2230--2235
 
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 2237--2241
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 2236--2240
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2237--2241
+Underfull \hbox (badness 10000) in paragraph at lines 2236--2240
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2247--2247
+Underfull \hbox (badness 10000) in paragraph at lines 2246--2246
 \T1/lmr/m/n/10 com / news / bitcoin / these -[] three -[] crypto -[] assets -[]
  are -[] least -[] correlated -[] to -[] bitcoin -[] data -[] shows / %0A$[][] 
 (ac-
  []
 
 
-Overfull \hbox (2.22221pt too wide) in paragraph at lines 2242--2248
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 2241--2247
 [][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2242--2248
+Underfull \hbox (badness 10000) in paragraph at lines 2241--2247
 
  []
 
@@ -1561,160 +1561,160 @@ Underfull \hbox (badness 10000) in paragraph at lines 2242--2248
 File: images/batch5/mean_mean_3layer.jpeg Graphic file (type jpg)
 <use images/batch5/mean_mean_3layer.jpeg>
 Package pdftex.def Info: images/batch5/mean_mean_3layer.jpeg  used on input lin
-e 2262.
+e 2261.
 (pdftex.def)             Requested size: 422.77902pt x 211.38951pt.
 <images/batch5/mean_mean_2layer.jpeg, id=804, 1405.25pt x 702.625pt>
 File: images/batch5/mean_mean_2layer.jpeg Graphic file (type jpg)
 <use images/batch5/mean_mean_2layer.jpeg>
 Package pdftex.def Info: images/batch5/mean_mean_2layer.jpeg  used on input lin
-e 2271.
+e 2270.
 (pdftex.def)             Requested size: 422.77902pt x 211.38951pt.
 <images/splitplots/price1.jpeg, id=805, 1405.25pt x 501.875pt>
 File: images/splitplots/price1.jpeg Graphic file (type jpg)
 <use images/splitplots/price1.jpeg>
-Package pdftex.def Info: images/splitplots/price1.jpeg  used on input line 2280
+Package pdftex.def Info: images/splitplots/price1.jpeg  used on input line 2279
 .
 (pdftex.def)             Requested size: 422.77902pt x 150.99251pt.
 <images/splitplots/price2.jpeg, id=806, 1405.25pt x 501.875pt>
 File: images/splitplots/price2.jpeg Graphic file (type jpg)
 <use images/splitplots/price2.jpeg>
-Package pdftex.def Info: images/splitplots/price2.jpeg  used on input line 2289
+Package pdftex.def Info: images/splitplots/price2.jpeg  used on input line 2288
 .
 (pdftex.def)             Requested size: 422.77902pt x 150.99251pt.
 <images/splitplots/price3.jpeg, id=807, 1405.25pt x 501.875pt>
 File: images/splitplots/price3.jpeg Graphic file (type jpg)
 <use images/splitplots/price3.jpeg>
-Package pdftex.def Info: images/splitplots/price3.jpeg  used on input line 2298
+Package pdftex.def Info: images/splitplots/price3.jpeg  used on input line 2297
 .
 (pdftex.def)             Requested size: 422.77902pt x 150.99251pt.
 <images/splitplots/price4.jpeg, id=808, 1405.25pt x 501.875pt>
 File: images/splitplots/price4.jpeg Graphic file (type jpg)
 <use images/splitplots/price4.jpeg>
-Package pdftex.def Info: images/splitplots/price4.jpeg  used on input line 2307
+Package pdftex.def Info: images/splitplots/price4.jpeg  used on input line 2306
 .
 (pdftex.def)             Requested size: 422.77902pt x 150.99251pt.
 <images/splitplots/price5.jpeg, id=809, 1405.25pt x 501.875pt>
 File: images/splitplots/price5.jpeg Graphic file (type jpg)
 <use images/splitplots/price5.jpeg>
-Package pdftex.def Info: images/splitplots/price5.jpeg  used on input line 2316
+Package pdftex.def Info: images/splitplots/price5.jpeg  used on input line 2315
 .
 (pdftex.def)             Requested size: 422.77902pt x 150.99251pt.
 <images/splitplots/price6.jpeg, id=810, 1405.25pt x 501.875pt>
 File: images/splitplots/price6.jpeg Graphic file (type jpg)
 <use images/splitplots/price6.jpeg>
-Package pdftex.def Info: images/splitplots/price6.jpeg  used on input line 2325
+Package pdftex.def Info: images/splitplots/price6.jpeg  used on input line 2324
 .
 (pdftex.def)             Requested size: 422.77902pt x 150.99251pt.
 <images/splitplots/price7.jpeg, id=811, 1405.25pt x 501.875pt>
 File: images/splitplots/price7.jpeg Graphic file (type jpg)
 <use images/splitplots/price7.jpeg>
-Package pdftex.def Info: images/splitplots/price7.jpeg  used on input line 2334
+Package pdftex.def Info: images/splitplots/price7.jpeg  used on input line 2333
 .
 (pdftex.def)             Requested size: 422.77902pt x 150.99251pt.
 <images/splitplots/price8.jpeg, id=812, 1405.25pt x 501.875pt>
 File: images/splitplots/price8.jpeg Graphic file (type jpg)
 <use images/splitplots/price8.jpeg>
-Package pdftex.def Info: images/splitplots/price8.jpeg  used on input line 2343
+Package pdftex.def Info: images/splitplots/price8.jpeg  used on input line 2342
 .
 (pdftex.def)             Requested size: 422.77902pt x 150.99251pt.
 <images/splitplots/price9.jpeg, id=813, 1405.25pt x 501.875pt>
 File: images/splitplots/price9.jpeg Graphic file (type jpg)
 <use images/splitplots/price9.jpeg>
-Package pdftex.def Info: images/splitplots/price9.jpeg  used on input line 2352
+Package pdftex.def Info: images/splitplots/price9.jpeg  used on input line 2351
 .
 (pdftex.def)             Requested size: 422.77902pt x 150.99251pt.
 <images/GARCH/vola_forecasts.png, id=814, 1222.5675pt x 968.86969pt>
 File: images/GARCH/vola_forecasts.png Graphic file (type png)
 <use images/GARCH/vola_forecasts.png>
 Package pdftex.def Info: images/GARCH/vola_forecasts.png  used on input line 23
-61.
+60.
 (pdftex.def)             Requested size: 422.77495pt x 335.04395pt.
 <00_main_files/figure-latex/xai_plot2-1.pdf, id=815, 722.7pt x 433.62pt>
 File: 00_main_files/figure-latex/xai_plot2-1.pdf Graphic file (type pdf)
 <use 00_main_files/figure-latex/xai_plot2-1.pdf>
 Package pdftex.def Info: 00_main_files/figure-latex/xai_plot2-1.pdf  used on in
-put line 2370.
+put line 2369.
 (pdftex.def)             Requested size: 469.76045pt x 281.85628pt.
 [45pdfTeX warning (ext4): destination with the same identifier (name{figure.28}
 ) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.2377 \end{document}
+l.2376 \end{document}
                      pdfTeX warning (ext4): destination with the same identifie
 r (name{figure.29}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.2377 \end{document}
+l.2376 \end{document}
                       <./images/batch5/mean_mean_3layer.jpeg> <./images/batch5/
 mean_mean_2layer.jpeg>] [46pdfTeX warning (ext4): destination with the same ide
 ntifier (name{figure.30}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.2377 \end{document}
+l.2376 \end{document}
                      pdfTeX warning (ext4): destination with the same identifie
 r (name{figure.31}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.2377 \end{document}
+l.2376 \end{document}
                      pdfTeX warning (ext4): destination with the same identifie
 r (name{figure.32}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.2377 \end{document}
+l.2376 \end{document}
                       <./images/splitplots/price1.jpeg> <./images/splitplots/pr
 ice2.jpeg> <./images/splitplots/price3.jpeg>] [47pdfTeX warning (ext4): destina
 tion with the same identifier (name{figure.33}) has been already used, duplicat
 e ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.2377 \end{document}
+l.2376 \end{document}
                      pdfTeX warning (ext4): destination with the same identifie
 r (name{figure.34}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.2377 \end{document}
+l.2376 \end{document}
                      pdfTeX warning (ext4): destination with the same identifie
 r (name{figure.35}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.2377 \end{document}
+l.2376 \end{document}
                       <./images/splitplots/price4.jpeg> <./images/splitplots/pr
 ice5.jpeg> <./images/splitplots/price6.jpeg>] [48pdfTeX warning (ext4): destina
 tion with the same identifier (name{figure.36}) has been already used, duplicat
 e ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.2377 \end{document}
+l.2376 \end{document}
                      pdfTeX warning (ext4): destination with the same identifie
 r (name{figure.37}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.2377 \end{document}
+l.2376 \end{document}
                      pdfTeX warning (ext4): destination with the same identifie
 r (name{figure.38}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.2377 \end{document}
+l.2376 \end{document}
                       <./images/splitplots/price7.jpeg> <./images/splitplots/pr
 ice8.jpeg> <./images/splitplots/price9.jpeg>] [49pdfTeX warning (ext4): destina
 tion with the same identifier (name{figure.39}) has been already used, duplicat
 e ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.2377 \end{document}
+l.2376 \end{document}
                       <./images/GARCH/vola_forecasts.png>] [50pdfTeX warning (e
 xt4): destination with the same identifier (name{figure.40}) has been already u
 sed, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.2377 \end{document}
+l.2376 \end{document}
                       <./00_main_files/figure-latex/xai_plot2-1.pdf>] (./00_mai
 n.aux)
 
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `00_main.out' has not changed.
-(rerunfilecheck)             Checksum: 95F27F2333735122F34B9B28E843DE10;6981.
+(rerunfilecheck)             Checksum: 9C31590A993B02E471DF8C5D4D92DFAB;6981.
  ) 
 Here is how much of TeX's memory you used:
  13396 strings out of 480796
@@ -1747,7 +1747,7 @@ ata/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/kenge
 /AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb><c:/Users/k
 enge/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msb
 m10.pfb>
-Output written on 00_main.pdf (56 pages, 5552409 bytes).
+Output written on 00_main.pdf (56 pages, 5552663 bytes).
 PDF statistics:
  962 PDF objects out of 1000 (max. 8388607)
  817 compressed objects within 9 object streams

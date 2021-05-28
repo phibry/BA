@@ -342,20 +342,14 @@ The application of MSE is widely used in statistical modeling and supervised lea
 
 ### 2.4. Bitcoin {#bitcoin}
 
-In this section, bitcoin as a cryptocurreny is introduced by analyzing and commenting historical events. Further the technology in and around cryptocurrencies in chapter [2.3.2.](#bitcoin_tec) is briefly explained. This chapter serves to get an overview of the technology as well as background of bitcoin. A more detailed description is beyond the scope of this thesis and will therefore be refrained from. We work with the short form 'BTC', which is the abbreviation for the currency. 
+In this section, bitcoin as a cryptocurreny is introduced by analyzing and commenting historical events. Further the technology in and around cryptocurrencies in chapter [2.3.2.](#bitcoin_tec) is briefly explained. This chapter serves to get an overview of the technology and background of bitcoin. A more detailed description is beyond the scope of this thesis and will therefore be refrained from. We work with the short form 'BTC', which is the abbreviation for the currency. 
 
 #### 2.4.1. Historical Analysis {#historical_analysis}
 &nbsp;
 
-The story of bitcoin began with a paper published in the name of an alleged person called Satoshi Nakamoto [@bitcoin]. The publisher of the document cannot be assigned to a real person, therefore the technology inventor remains mysteriously unknown until today. In 2009, the first bitcoin transaction was executed. Over the years, several other cryptocurrencies have emerged as a result of the open source-based code. 
+The story of bitcoin began with a paper published in the name of an alleged person called Satoshi Nakamoto [@bitcoin]. The publisher of the document cannot be assigned to a real person, therefore the technology inventor remains mysteriously unknown until today. In 2009, the first bitcoin transaction was executed. Over the years, several other cryptocurrencies have emerged as a result of the open source-based code. Until 2013, cryptocurrencies operated under the radar of most regulatory institutions. The character traits, including total anonymity, led Bitcoin to become a common alternative to cash in criminal transactions. Silk Road was one of the most famous dark web trading platforms, where the trade of illegal narcotics and fake ID cards flourished. Due to this, Bitcoin was portrayed in a rather bad light by the media and newspapers. The crowning moment was when the drug enforcement agency shut down Silk Road and confiscated 26,000 bitcoins. Nevertheless in 2014, more companies, such as Zynga, The D Las Vegas Casinos, Golden Gate Hotel & Casino, TigerDirect, Overstock.com, Newegg, Dell Technologies, and even Microsoft Corporation [@A_History_of_Bitcoin], began to accept bitcoin as a payment method. In the same year, the first derivative with bitcoin as an underlying was approved by the U.S.Commodity Futures Trading Commission. In 2015, an estimated 160'000 merchants used bitcoin to trade. Since then, cryptocurrencies have become increasingly popular among businesses and individuals, which has also been reflected in the exchange market.  
 
-Until 2013, cryptocurrencies operated under the radar of most regulatory institutions. The character traits, including total anonymity, led Bitcoin to become a common alternative to cash in criminal transactions. Silk Road was one of the most famous dark web trading platforms, where the trade of illegal narcotics and fake ID cards flourished. Due to this, Bitcoin was portrayed in a rather bad light by the media and newspapers. The crowning moment was when the drug enforcement agency shut down Silk Road and confiscated 26,000 bitcoins.
-
-Nevertheless in 2014, more companies, such as: Zynga, D LasVegas Casinos, Golden Gate Hotel & Casino, TigerDirect, Overstock.com, Newegg, Dell, and even Microsoft [@A_History_of_Bitcoin], began to accept bitcoin as a payment method. In 2014 the first derivative with bitcoin as an underlying was approved by the U.S.Commodity Futures Trading Commission.
-2015 an estimated 160'000 merchants used bitcoin to trade. 
-
-
-Let us first look a the price in Figure \ref{fig:price_btc} and the log(price) in Figure \ref{fig:logprice_btc} and get a sense of the chart. Note: The data in the charts start in 2014 where it was listed in coinmarket, events between 2009 and 2014 are described without visualization.
+Therefore, we next examine the price of BTC/USD and the logarithmic price in figures \ref{fig:price_btc} and \ref{fig:logprice_btc}. These historical prices originate from the price-tracking website CoinMarketCap and show data from 2014. 
 
 Around 2010 bitcoin had the first increase in price as it jumped a 100% from 0.0008 USD to 0.08 Dollar [@Bitcoin_history]. In 2011 the price rose from 1 USD to 32 USD within 3 months and recessd shortly after to 2 USD this can be referred as a first price bubble in bitcoin, for the next year the price climbed to 13 Dollars and reached a never seen level of 220 USD, only to plunge to 70 USD within a half month in April 2013.
 By the end of the year a rally brought btc up to a peak of 1156 USD. The following year brought bad news and the price slowly decreased to 315 USD in 2015 after an observed drop of 20% after news from the trial of Ross Ulbricht, founder of Silk road marked in Letter \textbf{A}.
@@ -366,12 +360,12 @@ But the story was not over by now, after the drop the price of the cryptocurrenc
 
 \newpage
 
-```{r logprice_btc, out.width='80%', fig.cap='Logarithmic BTC/USD', echo=FALSE}
-knitr::include_graphics("images/logbtc_usd.jpeg")
-```
-
 ```{r price_btc, out.width='80%', fig.cap='BTC/USD', echo=FALSE}
 knitr::include_graphics("images/btc_usd.jpeg")
+```
+
+```{r logprice_btc, out.width='80%', fig.cap='Logarithmic BTC/USD', echo=FALSE}
+knitr::include_graphics("images/logbtc_usd.jpeg")
 ```
 
 \newpage
