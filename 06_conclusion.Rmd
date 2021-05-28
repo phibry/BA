@@ -5,13 +5,32 @@ geometry: margin = 1in
 
 ## 5. Conclusion
 
-Best Trading Algorithm ever!
+
+realistic view:
+
+- need more iterations to proof  stability
+
+- randomness in financial Timeseries
+
+nn interesting
+
+cryptoassets on the run anyway
+
+
+
+Problems?
+
+
+
+
 
 ### 5.1. Get rich or die tryin
 
-Neque volutpat ac tincidunt vitae semper quis. At elementum eu facilisis sed odio morbi quis commodo odio. Eget dolor 
 
-### 5.2. Be GME stock, or not to be GME stock
 
-Tellus at urna condimentum mattis pellentesque id nibh. Morbi tempus iaculis urna id volutpat lacus laoreet. Sem fringilla 
+- Point Prognose real test daily
+
+
+
+
 

@@ -536,17 +536,64 @@ knitr::include_graphics("images/xailpd/lambda_1/batch.svg")
 \newpage
 #### 3.3.6. Adding Ether
 
-In the performance plot \ref{fig:perf}, we have still left out what to do with 0 signals.  One opportunity as in  3.3.3. shortly mentioned, is to invest the money in another asset. By reason of staying in the same asset class we choose ether to invest in. According to [@correlation_btc] the correlation between the two assets is 0.91. This is not a braking factor to us, because the 0 signal of the lpd is just indicating that something is changing in the data or the neural net is not stable thus we cant exactly know what is the 0 singal means. 
+In the performance plot \ref{fig:perf}, we have still left out what to do with the 0 signals.  One opportunity, as in  3.3.3. shortly mentioned, is to invest the money in another asset. By reason of staying in the same asset class we choose ether to invest in. According to [@correlation_btc] the correlation between the two assets is 0.91. This is not a braking factor to us, because the 0 signal of the lpd is just indicating that something is changing in the data or the neural net is not stable thus we cant exactly know what is the 0 signal means. 
 
 Due to the similarity of the data we are not going to further elaborate on ether. The series is imported in the same way as btc e.g. the logreturns are derived.
 
-That said, we use a simple rule to integrate ether. if the signal of the combination nn+lpd is 0 -> go long on ether, as soon as the signal from lpd changes back to 1 or -1 , ether is sold.
+That said, we use a simple rule to integrate ether in out trading strategy. If the signal of the combination nn+lpd is 0 -> go long on ether, as soon as the signal from lpd changes back to 1 or -1 , ether is sold.
 
-In figure \ref{fig:with_eth} we observe the outperforming of buy and hold, by adding the ether rule to the previous nn+lpd combinations.
+
+
+
+In figure \ref{fig:with_eth} the performance with the added ether is visualized. All 3 nets with the added sharpe were better in terms of absolute performance 
+
+-> the master of descritpion ken please here further elaborate::
+
+
+
 
 
 ```{r with_eth, fig.align='center', out.width='100%', fig.cap="Added Eth signal",dev = "svg",echo=FALSE}
 knitr::include_graphics("images/xailpd/lambda_1/lpd_nn_eth_perf.svg")
+load("data/xai/7_7_withsignal_xai_in/performance_with_eth.rda")
+
+load("data/xai/7_7_withsignal_xai_in/nn_lpd_without_eth.rda")
+
+
+signal <- data$BTC.USD.Close
+signal$BTC.USD.Close <- nn_lpd
+
+
+
+main=paste("Performance cumulated from 9 splits, λ=","1")
+
+colors= c("green","red","pink","violetred","darkorchid","blue","lightblue")
+
+name=c(
+  paste("Buy and Hold"," sharpe=3.57"),
+  paste("lpd+nn β=0.1"," sharpe=2.54"),
+  paste("nn+lpd+eth-if-0 β=0.1"," sharpe=3.47"),
+  paste("lpd+nn β=0.2"," sharpe=3.76"),
+  paste("nn+lpd+eth-if-0 β=0.2"," sharpe=4.41"),
+  paste("lpd+nn β=0.3"," sharpe=3.4"),
+  paste("nn+lpd+eth-if-0 β=0.3"," sharpe=3.8")
+)
+
+class(data)
+plot(data, col=colors, main=main)
+
+
+
+addLegend("topleft",
+          legend.names=name,
+          col=colors,
+          lty=c(rep(1,13),2),
+          lwd=c(rep(2,13),3),
+          ncol=1,
+          bg="white")
+
+lines(signal, on=NA, lwd=2, col="red", ylim=c(-1.3, 1.3))
+
 ```
 
 
