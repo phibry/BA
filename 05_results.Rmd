@@ -5,4 +5,22 @@ geometry: margin = 1in
 
 ## 4. Results
 
+
+-overfitting from neural network
+
+- only stable performance with min 100 nets 
+
+-garch no further benefit
+
+-lpd was benefital in terms of nn
+
+-adding the alternativ strategy 
+
+
+
+
+
 ### 4.1. Results chapterino
+
+realistic view : trading costs ?
+

@@ -507,21 +507,101 @@ knitr::include_graphics("images/xailpd/lambda_1/batch.svg")
 #### 3.3.6. Adding Ether
 
 
-In the performance plot \ref{fig:perf}, we have still left out what to do with 0 signals. One opportunity as in 3.3.3. shortly mentioned, is to invest the money in another asset. By reason of staying in the same asset class we choose Ether to invest in. According to [@correlation_btc] the correlation between the two assets is 0.91. This is not a braking factor to us, because the 0 signal of the lpd is just indicating that something is changing in the data or the neural net is not stable thus we cant exactly know what is the 0 singal means. 
+In the performance plot \ref{fig:perf}, we have still left out what to do with 0 signals. One opportunity as in 3.3.3. shortly mentioned, is to invest the money in another asset. By reason of staying in the same asset class we choose Ether [@ether] to invest in.
+The coin Ether from Ethereum is with $61.48B [@ethereum] the second largest cryptocurrency according to marketcapitalisation. 
 
-In the performance plot \ref{fig:perf}, we have still left out what to do with 0 signals.  One opportunity as in  3.3.3. shortly mentioned, is to invest the money in another asset. By reason of staying in the same asset class we choose ether to invest in. According to [@correlation_btc] the correlation between the two assets is 0.91. This is not a braking factor to us, because the 0 signal of the lpd is just indicating that something is changing in the data or the neural net is not stable thus we cant exactly know what is the 0 singal means. 
+
+According to [@correlation_btc] the correlation between the two assets is 0.91. This is not a braking factor to us, because the 0 signal of the lpd is just indicating that something is changing in the data or the neural net is not stable, thus we cant exactly know what the 0 signal means. 
 
 
-Due to the similarity of the data we are not going to further elaborate on ether. The series is imported in the same way as btc e.g. the logreturns are derived.
+Ether is very similar . The series is imported in the same way as btc e.g. the logreturns are derived.
 
-That said, we use a simple rule to integrate ether. if the signal of the combination nn+lpd is 0 -> go long on ether, as soon as the signal from lpd changes back to 1 or -1 , ether is sold.
+That said, we use a simple rule to integrate ether. if the signal of the combination nn+lpd is 0 -> go long on ether, as soon as the signal from lpd changes back to 1 or -1 , ether is sold and the bitcoin position is entered again.
 
-In figure \ref{fig:with_eth} we observe the outperforming of buy and hold, by adding the ether rule to the previous nn+lpd combinations.
 
+
+In figure \ref{fig:with_eth} the nn+lpd's from Figure \ref{fig:perf} and the adding of ether is visualized. In the lower part, we can observe the signals which are 0 in the nn + lpd model. These zeroes are now filled up with the logreturns from ether.
+
+The one performance with nn + lpd + eth with $\beta = 20 %$ seems promising. also for the other two nn+lpd the adding of ether seems benefital.
 
 ```{r with_eth, fig.align='center', out.width='100%', fig.cap="Added Eth signal",dev = "svg",echo=FALSE}
 knitr::include_graphics("images/xailpd/lambda_1/lpd_nn_eth_perf.svg")
+
+
+# load("data/xai/7_7_withsignal_xai_in/performance_with_eth.rda")
+# load("data/xai/7_7_withsignal_xai_in/nn_lpd_without_eth.rda")
+# signal <- data$BTC.USD.Close
+# signal$BTC.USD.Close <- nn_lpd
+# 
+# main=paste("Performance cumulated from 9 splits, λ=","1")
+# 
+# colors= c("green","red","pink","violetred","darkorchid","blue","lightblue")
+# 
+# name=c(
+#   paste("Buy and Hold"," sharpe=3.57"),
+#   paste("lpd+nn β=0.1"," sharpe=2.54"),
+#   paste("nn+lpd+eth-if-0 β=0.1"," sharpe=3.47"),
+#   paste("lpd+nn β=0.2"," sharpe=3.76"),
+#   paste("nn+lpd+eth-if-0 β=0.2"," sharpe=4.41"),
+#   paste("lpd+nn β=0.3"," sharpe=3.4"),
+#   paste("nn+lpd+eth-if-0 β=0.3"," sharpe=3.8")
+# )
+# 
+# class(data)
+# plot(data, col=colors, main=main)
+# 
+# addLegend("topleft", 
+#           legend.names=name,
+#           col=colors,
+#           lty=c(rep(1,13),2),
+#           lwd=c(rep(2,13),3),
+#           ncol=1,
+#           bg="white")
+# 
+# lines(signal, on=NA, lwd=2, col="red", ylim=c(-1.3, 1.3))
+
 ```
+```{r with_eth_sole, fig.align='center', out.width='100%', fig.cap="Added Eth signal",dev = "svg",echo=FALSE,fig.keep="last"}
+
+load("data/xai/7_7_withsignal_xai_in/performance_with_eth.rda")
+load("data/xai/7_7_withsignal_xai_in/nn_lpd_without_eth.rda")
+signal <- data$BTC.USD.Close
+signal$BTC.USD.Close <- nn_lpd
+
+main=paste("Performance cumulated from 9 splits, λ=","1")
+
+colors= c("green","darkorchid")
+
+name=c(paste("Buy and Hold"," sharpe=3.57"),paste("nn+lpd+eth-if-0 β=0.2"," sharpe=4.41"))
+
+class(data)
+plot(data[,c(1,5)], col=colors, main=main)
+
+addLegend("topleft",
+          legend.names=name,
+          col=colors,
+          lty=c(rep(1,13),2),
+          lwd=c(rep(2,13),3),
+          ncol=1,
+          bg="white")
+
+events <- xts(LETTERS[1:6], as.Date(c("2020-08-01","2020-09-05","2020-10-18","2021-01-14","2021-02-21","2021-03-12")))
+
+#plots
+addEventLines(events,srt=90,pos=2,lty=3,col = rep("#004c6d",6),lwd=2,)
+
+
+
+
+
+#lines(signal, on=NA, lwd=2, col="red", ylim=c(-1.3, 1.3))
+
+
+
+
+```
+For  a closer analysis, lets have a look at the best performing model vs. Buy and hold in Figure \ref{fig:with_eth_sole}.The following analysis is related to the violet chart and starts from left to right, beginning with letter A. 
+Imideatly after the line by letter A, there are several decisions which differ from buy and hold and force a shift to the series. In letter B we observe a similar behavior for a short period of time. The unsatisfying trend change in letter C is stopped around the first of November. Thereafter unto the point in letter D the decisions of the model behave quite similar to Buy and Hold. Right after D the net handles the negative trend very well and climbs further up. The same accounts for letter E where the trend once more goes in the opposite direction than the benchmark. Sshortly after F the model does exactly the same as Buy and Hold.
 
 
 
