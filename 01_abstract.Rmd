@@ -6,3 +6,17 @@ geometry: margin = 1in
 
 ## Abstract
 
+An abstract summarizes, usually in one paragraph of 300 words or less, the major aspects of the entire paper in a prescribed sequence that includes:
+1) the overall purpose of the study and the research problem(s) you investigated;
+2) the basic design of the study; 
+3) major findings or trends found as a result of your analysis; and,
+4) a brief summary of your interpretations and conclusions
+
+
+
+
+
+
+
+
+The steady worldwide growth of machine learning methods is becoming increasingly important also concerning the financial markets. However, these methods are mostly still very opaque. This thesis deals with the application of neural networks, their explainability, and the trading of Bitcoin, which is considered the founder of the youngest asset class cryptocurrency. The theory of the neural networks used and the novel explainability aspect is explained, furthermore, there is a brief insight into the Bitcoin theory. As a first approach, an optimal network architecture is determined through computational power to optimize accurate predictions for the daily trading of Bitcoin. With the explainability aspect and a prediction for the volatility with a garch model, a rule for trading is implemented and then improved with the addition of Ether. The results are promising explainability brings a significant added value and the almost unbeatable benchmark buy and hold is outperformed. 
