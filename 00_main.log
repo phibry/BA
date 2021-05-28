@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.5.28)  28 MAY 2021 11:19
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.5.28)  28 MAY 2021 14:09
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1104,145 +1104,145 @@ l.1550 \newpage
 File: images/xailpd/out_decision_small.jpeg Graphic file (type jpg)
 <use images/xailpd/out_decision_small.jpeg>
 Package pdftex.def Info: images/xailpd/out_decision_small.jpeg  used on input l
-ine 1680.
+ine 1684.
 (pdftex.def)             Requested size: 469.75536pt x 376.49193pt.
 <images/xailpd/out_sum_2.jpeg, id=639, 822.82407pt x 659.46375pt>
 File: images/xailpd/out_sum_2.jpeg Graphic file (type jpg)
 <use images/xailpd/out_sum_2.jpeg>
-Package pdftex.def Info: images/xailpd/out_sum_2.jpeg  used on input line 1689.
+Package pdftex.def Info: images/xailpd/out_sum_2.jpeg  used on input line 1693.
 
 (pdftex.def)             Requested size: 469.75536pt x 376.49193pt.
 [32] [33pdfTeX warning (ext4): destination with the same identifier (name{figur
 e.21}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.1696 \newpage
+l.1700 \newpage
                 <./images/xailpd/out_decision_small.jpeg>] [34pdfTeX warning (e
 xt4): destination with the same identifier (name{figure.22}) has been already u
 sed, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.1696 \newpage
+l.1700 \newpage
                 <./images/xailpd/out_sum_2.jpeg>]
 <images/GARCH/garch_trading.png, id=660, 1127.71312pt x 884.55469pt>
 File: images/GARCH/garch_trading.png Graphic file (type png)
 <use images/GARCH/garch_trading.png>
 Package pdftex.def Info: images/GARCH/garch_trading.png  used on input line 175
-3.
+7.
 (pdftex.def)             Requested size: 422.77094pt x 331.61272pt.
 [35] [36pdfTeX warning (ext4): destination with the same identifier (name{figur
 e.23}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.1772 \newpage
+l.1776 \newpage
                 <./images/GARCH/garch_trading.png>]
 <images/xailpd/lambda_1/perf.jpeg, id=679, 706.89093pt x 473.51906pt>
 File: images/xailpd/lambda_1/perf.jpeg Graphic file (type jpg)
 <use images/xailpd/lambda_1/perf.jpeg>
 Package pdftex.def Info: images/xailpd/lambda_1/perf.jpeg  used on input line 1
-811.
+815.
 (pdftex.def)             Requested size: 469.76376pt x 314.67667pt.
 [37pdfTeX warning (ext4): destination with the same identifier (name{figure.24}
 ) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.1817 \newpage
+l.1821 \newpage
                 <./images/xailpd/lambda_1/perf.jpeg>]
 <images/xailpd/lambda_1/sharpe.jpeg, id=688, 1378.39969pt x 666.23906pt>
 File: images/xailpd/lambda_1/sharpe.jpeg Graphic file (type jpg)
 <use images/xailpd/lambda_1/sharpe.jpeg>
 Package pdftex.def Info: images/xailpd/lambda_1/sharpe.jpeg  used on input line
- 1828.
+ 1832.
 (pdftex.def)             Requested size: 375.79051pt x 181.6355pt.
 <images/xailpd/lambda_1/batch.jpeg, id=690, 1143.52219pt x 666.23906pt>
 File: images/xailpd/lambda_1/batch.jpeg Graphic file (type jpg)
 <use images/xailpd/lambda_1/batch.jpeg>
 Package pdftex.def Info: images/xailpd/lambda_1/batch.jpeg  used on input line 
-1846.
+1850.
 (pdftex.def)             Requested size: 375.81056pt x 218.95479pt.
 [38pdfTeX warning (ext4): destination with the same identifier (name{figure.25}
 ) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.1853 \newpage
+l.1857 \newpage
                pdfTeX warning (ext4): destination with the same identifier (nam
 e{figure.26}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.1853 \newpage
+l.1857 \newpage
                 <./images/xailpd/lambda_1/sharpe.jpeg> <./images/xailpd/lambda_
 1/batch.jpeg>]
-
-LaTeX Warning: Reference `fig:with_eth_sole' on page 39 undefined on input line
- 1888.
-
 <images/xailpd/lambda_1/lpd_nn_eth_perf.jpeg, id=700, 712.91344pt x 377.15906pt
 >
 File: images/xailpd/lambda_1/lpd_nn_eth_perf.jpeg Graphic file (type jpg)
 <use images/xailpd/lambda_1/lpd_nn_eth_perf.jpeg>
 Package pdftex.def Info: images/xailpd/lambda_1/lpd_nn_eth_perf.jpeg  used on i
-nput line 1892.
+nput line 1893.
 (pdftex.def)             Requested size: 469.75197pt x 248.51715pt.
+
+LaTeX Warning: Reference `fig:with_eth_sole' on page 39 undefined on input line
+ 1901.
+
 [39pdfTeX warning (ext4): destination with the same identifier (name{figure.27}
 ) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.1899 \newpage
+l.1914 \newpage
                 <./images/xailpd/lambda_1/lpd_nn_eth_perf.jpeg>] [40] [41] [42]
 
-Underfull \hbox (badness 2653) in paragraph at lines 2081--2086
+Underfull \hbox (badness 2653) in paragraph at lines 2097--2102
 \T1/lmr/m/n/10 selves.'' [][]$https : / / www . technologyreview . com / 2017 /
  03 / 14 / 243295 / the -[] us -[] military -[] wants -[] its -[] autonomous -[
 ]
  []
 
 
-Overfull \hbox (10.15758pt too wide) in paragraph at lines 2090--2095
+Overfull \hbox (10.15758pt too wide) in paragraph at lines 2106--2111
 \T1/lmr/m/n/10 towardsdatascience . com / uncovering -[] the -[] magic -[] inte
 rpreting -[] machine -[] learning -[] black -[] box -[] models -[] 3154fb8ed01a
 $[][]
  []
 
 
-Underfull \hbox (badness 1609) in paragraph at lines 2114--2119
+Underfull \hbox (badness 1609) in paragraph at lines 2130--2135
 [][]\T1/lmr/m/n/10 [17] L. Win-ter-maier, ``Bit-coin's en-ergy con-sump-tion is
  a highly charged de-bate -- who's right?''
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2114--2119
+Underfull \hbox (badness 10000) in paragraph at lines 2130--2135
 [][]$\T1/lmr/m/n/10 https : / / www . forbes . com / sites / lawrencewintermeye
 r / 2021 / 03 / 10 / bitcoins -[] energy -[] consumption -[] is -[] a -[] highl
 y -[]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2120--2125
+Underfull \hbox (badness 10000) in paragraph at lines 2136--2141
 \T1/lmr/m/n/10 sites / lawrencewintermeyer / 2021 / 03 / 10 / bitcoins -[] ener
 gy -[] consumption -[] is -[] a -[] highly -[] charged -[] debate -[]-[] whos -
 []
  []
 
 [43]
-Underfull \hbox (badness 10000) in paragraph at lines 2154--2159
+Underfull \hbox (badness 10000) in paragraph at lines 2170--2175
 \T1/lmr/m/n/10 Probability _ Theory / Book % 3A _ Applied _ Probability _ (Pfei
 ^^[er ) /13 % 3A _ Transform _ Methods / 13 .
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2154--2159
+Underfull \hbox (badness 10000) in paragraph at lines 2170--2175
 \T1/lmr/m/n/10 02 % 3A _ Convergence _ and _ the _ Central _ Limit _ Theorem# :
  ~ : text = Central % 20Limit % 20Theorem %
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2154--2159
+Underfull \hbox (badness 10000) in paragraph at lines 2170--2175
 \T1/lmr/m/n/10 20(Lindeberg % 2DL % C3 % A9vy % 20form ) &text = By % 20the % 2
 0convergence % 20theorem % 20on ,[] ) % E2 %
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2154--2159
+Underfull \hbox (badness 10000) in paragraph at lines 2170--2175
 \T1/lmr/m/n/10 86 % 92 % CF % 95(t ) . & text = The % 20theorem % 20says % 20th
 at % 20the ,[] does % 20not % 20tell % 20how % 20fast.$[][]
  []
@@ -1252,153 +1252,153 @@ at % 20the ,[] does % 20not % 20tell % 20how % 20fast.$[][]
 File: images/batch5/mean_mean_3layer.jpeg Graphic file (type jpg)
 <use images/batch5/mean_mean_3layer.jpeg>
 Package pdftex.def Info: images/batch5/mean_mean_3layer.jpeg  used on input lin
-e 2196.
+e 2212.
 (pdftex.def)             Requested size: 422.77902pt x 211.38951pt.
 <images/batch5/mean_mean_2layer.jpeg, id=803, 1405.25pt x 702.625pt>
 File: images/batch5/mean_mean_2layer.jpeg Graphic file (type jpg)
 <use images/batch5/mean_mean_2layer.jpeg>
 Package pdftex.def Info: images/batch5/mean_mean_2layer.jpeg  used on input lin
-e 2205.
+e 2221.
 (pdftex.def)             Requested size: 422.77902pt x 211.38951pt.
 <images/splitplots/price1.jpeg, id=804, 1405.25pt x 501.875pt>
 File: images/splitplots/price1.jpeg Graphic file (type jpg)
 <use images/splitplots/price1.jpeg>
-Package pdftex.def Info: images/splitplots/price1.jpeg  used on input line 2214
+Package pdftex.def Info: images/splitplots/price1.jpeg  used on input line 2230
 .
 (pdftex.def)             Requested size: 422.77902pt x 150.99251pt.
 <images/splitplots/price2.jpeg, id=805, 1405.25pt x 501.875pt>
 File: images/splitplots/price2.jpeg Graphic file (type jpg)
 <use images/splitplots/price2.jpeg>
-Package pdftex.def Info: images/splitplots/price2.jpeg  used on input line 2223
+Package pdftex.def Info: images/splitplots/price2.jpeg  used on input line 2239
 .
 (pdftex.def)             Requested size: 422.77902pt x 150.99251pt.
 <images/splitplots/price3.jpeg, id=806, 1405.25pt x 501.875pt>
 File: images/splitplots/price3.jpeg Graphic file (type jpg)
 <use images/splitplots/price3.jpeg>
-Package pdftex.def Info: images/splitplots/price3.jpeg  used on input line 2232
+Package pdftex.def Info: images/splitplots/price3.jpeg  used on input line 2248
 .
 (pdftex.def)             Requested size: 422.77902pt x 150.99251pt.
 <images/splitplots/price4.jpeg, id=807, 1405.25pt x 501.875pt>
 File: images/splitplots/price4.jpeg Graphic file (type jpg)
 <use images/splitplots/price4.jpeg>
-Package pdftex.def Info: images/splitplots/price4.jpeg  used on input line 2241
+Package pdftex.def Info: images/splitplots/price4.jpeg  used on input line 2257
 .
 (pdftex.def)             Requested size: 422.77902pt x 150.99251pt.
 <images/splitplots/price5.jpeg, id=808, 1405.25pt x 501.875pt>
 File: images/splitplots/price5.jpeg Graphic file (type jpg)
 <use images/splitplots/price5.jpeg>
-Package pdftex.def Info: images/splitplots/price5.jpeg  used on input line 2250
+Package pdftex.def Info: images/splitplots/price5.jpeg  used on input line 2266
 .
 (pdftex.def)             Requested size: 422.77902pt x 150.99251pt.
 <images/splitplots/price6.jpeg, id=809, 1405.25pt x 501.875pt>
 File: images/splitplots/price6.jpeg Graphic file (type jpg)
 <use images/splitplots/price6.jpeg>
-Package pdftex.def Info: images/splitplots/price6.jpeg  used on input line 2259
+Package pdftex.def Info: images/splitplots/price6.jpeg  used on input line 2275
 .
 (pdftex.def)             Requested size: 422.77902pt x 150.99251pt.
 <images/splitplots/price7.jpeg, id=810, 1405.25pt x 501.875pt>
 File: images/splitplots/price7.jpeg Graphic file (type jpg)
 <use images/splitplots/price7.jpeg>
-Package pdftex.def Info: images/splitplots/price7.jpeg  used on input line 2268
+Package pdftex.def Info: images/splitplots/price7.jpeg  used on input line 2284
 .
 (pdftex.def)             Requested size: 422.77902pt x 150.99251pt.
 <images/splitplots/price8.jpeg, id=811, 1405.25pt x 501.875pt>
 File: images/splitplots/price8.jpeg Graphic file (type jpg)
 <use images/splitplots/price8.jpeg>
-Package pdftex.def Info: images/splitplots/price8.jpeg  used on input line 2277
+Package pdftex.def Info: images/splitplots/price8.jpeg  used on input line 2293
 .
 (pdftex.def)             Requested size: 422.77902pt x 150.99251pt.
 <images/splitplots/price9.jpeg, id=812, 1405.25pt x 501.875pt>
 File: images/splitplots/price9.jpeg Graphic file (type jpg)
 <use images/splitplots/price9.jpeg>
-Package pdftex.def Info: images/splitplots/price9.jpeg  used on input line 2286
+Package pdftex.def Info: images/splitplots/price9.jpeg  used on input line 2302
 .
 (pdftex.def)             Requested size: 422.77902pt x 150.99251pt.
 <images/GARCH/vola_forecasts.png, id=813, 1222.5675pt x 968.86969pt>
 File: images/GARCH/vola_forecasts.png Graphic file (type png)
 <use images/GARCH/vola_forecasts.png>
-Package pdftex.def Info: images/GARCH/vola_forecasts.png  used on input line 22
-95.
+Package pdftex.def Info: images/GARCH/vola_forecasts.png  used on input line 23
+11.
 (pdftex.def)             Requested size: 422.77495pt x 335.04395pt.
 <00_main_files/figure-latex/xai_plot2-1.pdf, id=814, 722.7pt x 433.62pt>
 File: 00_main_files/figure-latex/xai_plot2-1.pdf Graphic file (type pdf)
 <use 00_main_files/figure-latex/xai_plot2-1.pdf>
 Package pdftex.def Info: 00_main_files/figure-latex/xai_plot2-1.pdf  used on in
-put line 2304.
+put line 2320.
 (pdftex.def)             Requested size: 469.76045pt x 281.85628pt.
 [45pdfTeX warning (ext4): destination with the same identifier (name{figure.28}
 ) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.2311 \end{document}
+l.2327 \end{document}
                      pdfTeX warning (ext4): destination with the same identifie
 r (name{figure.29}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.2311 \end{document}
+l.2327 \end{document}
                       <./images/batch5/mean_mean_3layer.jpeg> <./images/batch5/
 mean_mean_2layer.jpeg>] [46pdfTeX warning (ext4): destination with the same ide
 ntifier (name{figure.30}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.2311 \end{document}
+l.2327 \end{document}
                      pdfTeX warning (ext4): destination with the same identifie
 r (name{figure.31}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.2311 \end{document}
+l.2327 \end{document}
                      pdfTeX warning (ext4): destination with the same identifie
 r (name{figure.32}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.2311 \end{document}
+l.2327 \end{document}
                       <./images/splitplots/price1.jpeg> <./images/splitplots/pr
 ice2.jpeg> <./images/splitplots/price3.jpeg>] [47pdfTeX warning (ext4): destina
 tion with the same identifier (name{figure.33}) has been already used, duplicat
 e ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.2311 \end{document}
+l.2327 \end{document}
                      pdfTeX warning (ext4): destination with the same identifie
 r (name{figure.34}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.2311 \end{document}
+l.2327 \end{document}
                      pdfTeX warning (ext4): destination with the same identifie
 r (name{figure.35}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.2311 \end{document}
+l.2327 \end{document}
                       <./images/splitplots/price4.jpeg> <./images/splitplots/pr
 ice5.jpeg> <./images/splitplots/price6.jpeg>] [48pdfTeX warning (ext4): destina
 tion with the same identifier (name{figure.36}) has been already used, duplicat
 e ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.2311 \end{document}
+l.2327 \end{document}
                      pdfTeX warning (ext4): destination with the same identifie
 r (name{figure.37}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.2311 \end{document}
+l.2327 \end{document}
                      pdfTeX warning (ext4): destination with the same identifie
 r (name{figure.38}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.2311 \end{document}
+l.2327 \end{document}
                       <./images/splitplots/price7.jpeg> <./images/splitplots/pr
 ice8.jpeg> <./images/splitplots/price9.jpeg>] [49pdfTeX warning (ext4): destina
 tion with the same identifier (name{figure.39}) has been already used, duplicat
 e ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.2311 \end{document}
+l.2327 \end{document}
                       <./images/GARCH/vola_forecasts.png>] [50pdfTeX warning (e
 xt4): destination with the same identifier (name{figure.40}) has been already u
 sed, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.2311 \end{document}
+l.2327 \end{document}
                       <./00_main_files/figure-latex/xai_plot2-1.pdf>] (./00_mai
 n.aux)
 
@@ -1438,7 +1438,7 @@ ata/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/buehl
 /AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb><c:/Users/b
 uehl/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msb
 m10.pfb>
-Output written on 00_main.pdf (56 pages, 5551597 bytes).
+Output written on 00_main.pdf (56 pages, 5552867 bytes).
 PDF statistics:
  961 PDF objects out of 1000 (max. 8388607)
  816 compressed objects within 9 object streams
