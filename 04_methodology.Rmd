@@ -42,10 +42,8 @@ axis.Date(1, at=seq(min(df_sub$date), max(df_sub$date), by="months"), format="%m
 
 Figure \ref{fig:log_ret} displays the historical log returns. In addition to the volatility clusters typical for financial time series, large outliers are visible. The negative outlier at the beginning of 2020 is particularly noticeable. By computing the autocorrelation (ACF) of the series in figure \ref{fig:acf_log_ret}, we can describe the dependency in these clusters. According to the ACF the lags 6 and 10 are significant on a 5% level. 
 
-```{r acf_log_ret, echo=FALSE, message=FALSE, fig.cap="Autocorrelation of BTC log returns for the entire time window"}
-# acf(log_ret,main="autocorrelation Logreturns")
-# chart.ACF(log_ret,main="Autocorrelation of log returns", maxlag = 20)
-chart.ACF.phil(log_ret,main="Autocorrelation of log returns", maxlag = 20)
+```{r acf_log_ret, echo=FALSE, message=FALSE, fig.cap="Autocorrelation of BTC log returns for the entire time window", out.width='75%', fig.width = 8, fig.height = 5}
+chart.ACF.phil(log_ret, main="Autocorrelation of log returns", maxlag = 20, ymax = 0.07)
 ```
 
 Curios from which distribution the log returns might originate, we are fitting a normal distribution and a Students-t distribution to the data in figure \ref{fig:histogramm_logreturns}. Interestingly the mean is shifted slightly (0.002) to the positive side. By inspecting the tails, one can observe that the negative tail is not fitted as good as the positive part by the t distribution. The two normal distributions either over- or underestimate the values in the tails, therefore we conclude that the proposed t-distribution fits the data better but also not perfect. Concerning the extreme outlier discussed earlier, visible in figure \ref{fig:log_ret} towards the end, the density plot makes clear how unimaginable small the probability of this extreme observation is. Altough the histogram is might useful for value-at-risk considerations, for trading purposes its use is mitigated due to its complete loss of the dependency structure by plotting the returns in a density-distribution.
@@ -54,29 +52,24 @@ Curios from which distribution the log returns might originate, we are fitting a
 
 
 
-```{r histogramm_logreturns, out.width='80%', fig.cap='Distribution of BTC log returns', echo=FALSE,fig.align="center"}
-knitr::include_graphics("images/histogram_logret_3.jpeg")
+```{r histogramm_logreturns, out.width='75%', fig.cap='Distribution of BTC log returns', echo=FALSE,fig.align="center", fig.width = 8, fig.height = 6}
+# knitr::include_graphics("images/histogram_logret_3.jpeg")
 
-# load("data/log_ret_27_03_21.rda")  # loading logreturns closing! data xts
-# logret=log_ret_27_03_21 
-# 
-# my_data=as.numeric(logret[,1])   # as vector 
-# fit <- fitdistr(my_data, densfun="normal")  
-# fit2<- fitdistr(my_data, "t", start = list(m=mean(my_data),s=sd(my_data), df=1), lower=c(-1, 0.001,1)) #algo braucht startwerte
-# 
-# dt_ls <-function(x,mu,sigma,df){1/sigma * dt((x - mu)/sigma, df)}   # converting scale and location in only df
-# 
-# beschrnorm= paste("Normal distribution ~ N(","mu=",as.character(round(fit$estimate[1],5)),
-#                   "sd=",as.character(round(fit$estimate[2],5)),")")
-# beschrt= paste("T - distribution ~ t(","l=",as.character(round(fit2$estimate[1],5)),"s=",
-#                as.character(round(fit2$estimate[2],5)),"df=",as.character(round(fit2$estimate[3],5)),")")
-# 
-# # plotting the data
-# hist(my_data, pch=20, breaks=70, prob=TRUE, main="Logreturns BTC",xlab="logrets")
-# curve(dnorm(x, fit$estimate[1], fit$estimate[2]), col="red", lwd=1.5, add=T)
-# curve(dt_ls(x,fit2$estimate[1],fit2$estimate[2],fit2$estimate[3]), col="blue", lwd=1.5, add=T)
-# legend("topleft", inset=.02, legend=c(beschrnorm,beschrt),
-#        col=c("red", "blue"), pch = c(1,1), cex=1,2, horiz=F)
+load("data/log_ret_27_03_21.rda")  # loading logreturns closing! data xts
+logret=log_ret_27_03_21 
+
+my_data=as.numeric(logret[,1])   # as vector 
+fit <- fitdistr(my_data, densfun="normal")  
+fit2<- fitdistr(my_data, "t", start = list(m=mean(my_data),s=sd(my_data), df=1), lower=c(-1, 0.001,1)) #algo braucht startwerte
+dt_ls <- function(x,mu,sigma,df){1/sigma * dt((x - mu)/sigma, df)}   # converting scale and location in only df
+
+# plotting the data
+hist(my_data, pch=20, breaks=70, prob=TRUE, main="Logreturns BTC",xlab="logrets")
+curve(dnorm(x, fit$estimate[1], fit$estimate[2]), col="red", lwd=1.5, add=T)
+curve(dt_ls(x,fit2$estimate[1], fit2$estimate[2],fit2$estimate[3]), col="blue", lwd=1.5, add=T)
+curve(dnorm(x, fit$estimate[1], 0.025), col="orange", lwd=1.5, add=T)
+legend("topleft", inset=.02, legend=c(TeX(sprintf("$N(\\mu = 0.00201$,$ \\sigma = 0.03925)$")), TeX(sprintf("$t(l = 0.00245$,$ s = 2.0341$,$ df = 2.0341)$")), TeX(sprintf("$N(\\mu = 0.00201$,$ \\sigma = 0.025)$"))),
+       col=c("red", "blue", "orange"), lty = c(1,1,1), cex=1, horiz=F, bty = "n")
 ```
 
 
@@ -115,8 +108,84 @@ We are looking for an optimal network, the optimal network should also provide r
 The reason for doing so is, we do not believe that the historical data longer than a year consists any information about the price tomorrow. By optimizing our models we found that more data would bring no additional performance, therefore the selected subset should be sufficient. Regarding consistency, the terms train and test set are used in the same sense as in-sample and out-of-sample. As proposed in [@nn_trading] we choose a test train split from 6 months in-sample and 1 month out-of-sample. This split is applied to the whole subset in form of a rolling window. By stepping forward with this 6/1 split by steplength of one month we end up with 9 data splits in total. In figure \ref{fig:test_train} this procedure is visualized, for every new timestep a new month is considered for the out of sample and the first month of the in sample, falls out of the frame. 
 
 
-```{r test_train, out.width='80%', fig.cap='In- and out-of-sample splits.', echo=FALSE}
-knitr::include_graphics("images/test_train_split_pp.jpeg.jpg")
+```{r test_train, out.width='75%', fig.cap='In- and out-of-sample splits.', echo=FALSE, fig.width = 8, fig.height = 6}
+# knitr::include_graphics("images/test_train_split_pp.jpeg.jpg")
+load("data/dates_mat.rda")
+
+subseti <- logret["2020-01-01::"]
+
+# r graph gallery
+# Create a df
+df_sub <- data.frame(date = ymd(time(subseti)), value = as.numeric(subseti))
+
+plot(df_sub,
+     type="l",
+     lwd=1.5,
+     frame.plot = FALSE,
+     xaxt="n",
+     xlab="Time:  Month-Year",
+     ylab="Log Return BTC",
+     ylim=c(-0.2, 0.2),
+     main= "Train/ Test Split")
+axis.Date(1, at=seq(min(df_sub$date), max(df_sub$date), by="months"), format="%m-%y")
+
+
+
+# Transform timestamp to numeric for the plot
+ybot <- par('usr')[3]
+ytop <- par('usr')[4]
+
+ydist <- abs(ybot - ytop)
+ypartial <- ydist/9
+
+for (i in 1:9) {
+  rect_borders <- as.numeric(ymd(dates_mat[i,]))
+  
+  rect(xleft = rect_borders[1],
+       xright = rect_borders[2]+1,
+       ybottom = par('usr')[3]+(ypartial*(i-1)),
+       ytop = par('usr')[3]+(ypartial*i),
+       col="#0000FF1A")
+  rect(xleft = rect_borders[3],
+       xright = rect_borders[4]+1,
+       ybottom = par('usr')[3]+(ypartial*(i-1)),
+       ytop = par('usr')[3]+(ypartial*i),
+       col="#80FF001A")
+}
+
+text1 <- as.numeric(ymd(dates_mat[1,]))
+posx <- (text1[4] + text1[1])/2
+posy <- par('usr')[3] + ypartial/2
+text(x=posx, y=posy, labels="1", cex = 1.1)
+text(x=text1[4]+55, y=posy, labels="t+1 month", cex = 0.8)
+arrows(x0=text1[3]+15, y0=posy, x1=text1[3]+50, y1=posy, length = 0.12, angle = 20)
+
+text1 <- as.numeric(ymd(dates_mat[2,]))
+posx <- (text1[4] + text1[1])/2
+posy <- par('usr')[3] + ypartial/2 + ypartial
+text(x=posx, y=posy, labels="2", cex = 1.1)
+text(x=text1[4]+55, y=posy, labels="t+1 month", cex = 0.8)
+arrows(x0=text1[3]+15, y0=posy, x1=text1[3]+50, y1=posy, length = 0.12, angle = 20)
+
+text1 <- as.numeric(ymd(dates_mat[3,]))
+posx <- (text1[4] + text1[1])/2
+posy <- par('usr')[3] + ypartial/2 + ypartial*2
+text(x=posx, y=posy, labels="...", cex = 1.1)
+
+text1 <- as.numeric(ymd(dates_mat[8,]))
+posx <- (text1[4] + text1[1])/2
+posy <- par('usr')[3] + ypartial/2 + ypartial*7
+text(x=posx, y=posy, labels="...", cex = 1.1)
+
+text1 <- as.numeric(ymd(dates_mat[9,]))
+posx <- (text1[4] + text1[1])/2
+posy <- par('usr')[3] + ypartial/2 + ypartial*8
+text(x=posx, y=posy, labels="9", cex = 1.1)
+
+
+legend("topleft", inset=.02, legend=c("In-sample 6 months","Out-of-sample 1 month"),
+       col =c("#CCCCFF", "#CCFFCC"),  pch=c(15,15),cex=1,2, horiz=F,pt.cex=2,
+       bty = "n")
 ```
 
 In the time series in figure \ref{fig:test_train}, one can see different periods. Strongly volatile as well as rather calm phases occur. With the rolling window, we can train and test the networks based on different phases. Thus, we can also evaluate the performance of the networks based on different phases and not only on a predefined single test and train split.
@@ -214,7 +283,6 @@ We therefore compare our developed active strategies with the cumulative log ret
 This chapter describes the trading strategy in more detail. In basic terms, the findings of the previous chapters are extended with considerations from explainable artificial intelligence (XAI) as well as from more traditional tools used in time series analysis. The following flowchart in figure \ref{fig:flowchart_trading} shows a broad overview of how the different factors are combined to generate the final trading signal.
 
 &nbsp;
-
 
 ```{r flowchart_trading, fig.align='center', out.width='100%', fig.cap='This flowchart illustrates an overview of the trading strategy applied in this chapter. ', echo=FALSE}
 knitr::include_graphics("images/flowchart_trading.png")
@@ -337,64 +405,47 @@ $g$ = Function of lags exceeding band $\in$ {0..$lag_{n}$}
 $signal$ = Function of final signal
 
 
-&nbsp;
 
-
-```{r lpd_explain, fig.align='center', out.width='100%', fig.cap="LPD Plot for illustration", echo=FALSE}
+```{r lpd_explain, fig.align='center', out.width='80%', fig.cap="LPD Plot for illustration", echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
 knitr::include_graphics("images/xailpd/out_decision_small.jpeg")
+load("data/xai/7_7_withsignal_xai_in/OLPD_mat_out_plot.rda")
+load("data/xai/7_7_withsignal_xai_in/meanCI.rda")
 
-# load("data/xai/7_7_withsignal_xai_in/OLPD_mat_out_plot.rda")
-# load("data/xai/7_7_withsignal_xai_in/OLPD_mat_in_mean.rda")
-# load("data/xai/7_7_withsignal_xai_in/OLPD_mat_in_sd.rda")
-# devi=2
-# 
-# plot.xts(OLPD_mat_out["::2021-02-08."],col=rainbow(ncol(OLPD_mat_out)),main="LPD Out of Sample")
-# for (i in 1:ncol(OLPD_mat_out))
-# 
-# meanline=rep(as.numeric(mean_in[4]),nrow(OLPD_mat_out["::2021-02-08"]))
-# meanup=rep(as.numeric(mean_in[4]+devi*sd_in[4]),nrow(OLPD_mat_out["::2021-02-08"]))
-# meandown=rep(as.numeric(mean_in[4]-devi*sd_in[4]),nrow(OLPD_mat_out["::2021-02-08"]))
-# meanline=reclass(meanline,OLPD_mat_out["::2021-02-08"])
-# meanup=reclass(meanup,OLPD_mat_out["::2021-02-08"])
-# meandown=reclass(meandown,OLPD_mat_out["::2021-02-08"])
-# lines(meanline,lwd=2,col="black")
-# lines(meanup,lwd=2,col="red",lty=2)
-# lines(meandown,lwd=2,col="red",lty=2)
-# 
-# name=c("arithmetic mean ffrom insample lag_j","standard deviation from insample lag_j * λ")
-# addLegend("bottomleft", 
-#           legend.names=name,
-#           col=c("black","red"),
-#           lty=c(1,2),
-#           lwd=c(1,1),
-#           ncol=1,
-#           bg="white")
+plot.xts(OLPD_mat_out["::2021-02-08."],
+         col=c("#003f5c", "#665191", "#d45087", "#f6004a", "#ff1208", "#ffa600", "#ff7c43"),
+         main="LPD Out of Sample")
+
+lines(meanCI$meanline,lwd=2,col="black",lty=2)
+lines(meanCI$meanup,lwd=2,col="red",lty=3)
+lines(meanCI$meandown,lwd=2,col="red",lty=3)
+
+addLegend("bottomleft",
+          legend.names=c(TeX(sprintf("Mean value from $lag_{j}$")), TeX(sprintf("Standard deviation from $lag_{j}*\\lambda$"))),
+          col=c("black","red"),
+          lty=c(2,3),
+          lwd=c(2,2),
+          ncol=1,
+          bg="white")
 ```
 
-```{r lpd_explain_sum, fig.align='center', out.width='100%', fig.cap="LPD Sum Plot for illustration", echo=FALSE}
-knitr::include_graphics("images/xailpd/out_sum_2.jpeg")
+```{r lpd_explain_sum, fig.align='center', out.width='80%', fig.cap="LPD Sum Plot for illustration", echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
+# knitr::include_graphics("images/xailpd/out_sum_2.jpeg")
 
-# load("data/xai/7_7_withsignal_xai_in/sum_explana_out_plot.rda")
-# lineup=rep(4.0,nrow(sum_explana["::2021-02-08"]))
-# linedown=rep(2.0,nrow(sum_explana["::2021-02-08"]))
-# lineup=reclass(lineup,sum_explana["::2021-02-08"])
-# linedown=reclass(linedown,sum_explana["::2021-02-08"])
-# sum_with_lines=na.exclude(cbind(as.xts(sum_explana),lineup,linedown))
-# 
-# plot(sum_explana["::2021-02-08"],type=c("b"),main="Sum of lags deviateing λ*sdY from Mean(Y)")
-# 
-# lines(lineup,lwd=2,col="red",lty=1)
-# lines(linedown,lwd=2,col="green",lty=1)
-# 
-# name=c("η upper","η lower")
-# 
-# addLegend("topright", 
-#           legend.names=name,
-#           col=c("red","green"),
-#           lty=c(1,1),
-#           lwd=c(2,2),
-#           ncol=1,
-#           bg="white")
+load("data/xai/7_7_withsignal_xai_in/sum_explana_out_plot.rda")
+load("data/xai/7_7_withsignal_xai_in/sumCI.rda")
+plot(sum_explana["::2021-02-08"],type=c("b"),main=TeX(sprintf("Sum of lags deviating $\\lambda$ *sdY from $\\bar{Y}$")))
+lines(sumCI$lineup,lwd=2,col="red",lty=1)
+lines(sumCI$linedown,lwd=2,col="green",lty=1)
+
+name=c("η upper","η lower")
+
+addLegend("topright",
+          legend.names=c(TeX(sprintf("$\\eta_{upper}$")), TeX(sprintf("$\\eta_{lower}$"))),
+          col=c("red","green"),
+          lty=c(1,1),
+          lwd=c(2,2),
+          ncol=1,
+          bg="white")
 ```
 
 
@@ -408,7 +459,6 @@ In a further step, we examine the time series with a traditional GARCH model tha
 The first trading strategy is based on one-step-ahead rolling window forecasts (here: log return) resulting from the ARMA(1,1)-GARCH(1,1). When we predict a positive value, the algorithm decides to enter, respectively remain in a long position. When predicting a negative value, we enter a short position to benefit from the anticipated market movement. 
 
 The second strategy is solely based on volatility predictions resulting from a GARCH(1,1) and tries to take an advantage from the asymmetric volatility phenomenon by F. Black. This phenomenon describes a negative correlation between the volatility of the return and the achieved return [@leverage_effect]. Therefore, we define the following trading rule:
-
 
 ```{=tex}
 \begin{equation}\label{eq:vola_predict}
@@ -426,11 +476,26 @@ $\hat{\sigma}_{t}$ = predicted volatility in every ${t}$
 
 $\sigma_{historical}$ = historical volatility
 
-In other words, the code checks whether the predicted volatility is significantly greater than the 95% confidence interval (based on historical data). If this is the case, the trading signal is set to 0, i.e. the position is sold respectively we stay out of the market. If the expected volatility is within the normal range, we enter respectively remain in a long position. For simplicity, a threshold of 1.64 is used, which corresponds approximately to the upper 95% confidence interval for a standard normal distribution. 
+In other words, the code checks whether the predicted volatility is significantly greater than the 95% confidence interval (based on historical data). If this is the case, the trading signal is set to 0, i.e. the position is sold respectively we stay out of the market. If the expected volatility is within the normal range, we enter respectively remain in a long position. For simplicity, a threshold of 1.64 is used, which corresponds approximately to the upper 95% confidence interval for a standard normal distribution.
 
-```{r garch_trading, fig.align='center', out.width='90%', fig.cap='Cumulative daily returns of two different GARCH trading strategies and a simple buy-and-hold strategy. The GARCH Signum strategy is based on the ARMA(1,1)-GARCH(1,1) prediction, while the GARCH Volatility strategy simply checks if the threshold is exceeded. The time periods where we quit the market is clearly visible as horizontal lines.', echo=FALSE}
-knitr::include_graphics("images/GARCH/garch_trading.png")
+\newpage
+
+```{r garch_trading, fig.align='center', out.width='80%', fig.cap='Cumulative daily returns of two different GARCH trading strategies and a simple buy-and-hold strategy. The GARCH Signum strategy is based on the ARMA(1,1)-GARCH(1,1) prediction, while the GARCH Volatility strategy simply checks if the threshold is exceeded. The time periods where we quit the market is clearly visible as horizontal lines.', echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
+# knitr::include_graphics("images/GARCH/garch_trading.png")
+
+load("data/GARCH_vola_predictions/garch_perf.rda")
+load("data/GARCH_vola_predictions/sharpe_perf.rda")
+par(mfrow = c(1,1))
+plot(cumsum(garch_perf[,1]), main = "Cumulative daily returns", lwd=1.5)
+lines(cumsum(garch_perf[,2]), col = 2, lwd=1.5)
+lines(cumsum(garch_perf[,3]), col = 3, lwd=1.5)
+addLegend(legend.loc = "topleft", legend = c(paste("Buy-and-Hold, Sharpe:", round(sharpe_perf[1], 2)), 
+                                                 paste("GARCH Signum Trading, Sharpe:", round(sharpe_perf[2],2)),
+                                                 paste("GARCH Volatility Trading, Sharpe:", round(sharpe_perf[3], 2))), 
+          col = c(1,2,3), lty = 1, lwd=1.5)
 ```
+
+&nbsp;
 
 Figure \ref{fig:garch_trading} illustrates how the GARCH trading strategies shown as well as a buy-and-hold strategy would have performed in a backtesting. It is easy to see that buy-and-hold outperforms the other two. The GARCH Signum strategy misjudges the situation at key points in time and thus hurts the return and Sharpe Ratio. Only during the Covid-19 crash in March 2020, the GARCH Signum strategy suffered a smaller loss. On the other hand, we missed the following bull run. Also, the horizontal lines in the GARCH Volatility strategy are clearly visible at which the predicted volatility is too large and thus the market exits. While some draw-downs are dampened, upside moves are also avoided. 
 
@@ -451,69 +516,104 @@ In figure \ref{fig:perf} different combinations are visualized, nn is simply tra
 
 By investigating the plot it seems that some combinations perform better than the others. The garch application appears to worsen the performance. ligthblue and the yellow line catches our eye, their perfomance seems to be better than the rest and as we can see, those are combinations of nn+lpd.
 
+&nbsp;
 
+```{r perf, fig.align='center', out.width='80%', fig.cap="Different signal combinations: performance plot", echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
 
-```{r perf, fig.align='center', out.width='100%', fig.cap="Different signal combinations: performance plot",dev = "svg",echo=FALSE}
+# knitr::include_graphics("images/xailpd/lambda_1/perf.svg")
 
-knitr::include_graphics("images/xailpd/lambda_1/perf.svg")
-
-# load("data/xai/7_7_withsignal_xai_in/perfall_without_eth.rda")
-# main="Performance cumulated from 9 splits, λ=1"
-# name=c("nn β=0.1","lpd β=0.1","lpd+nn β=0.1","nn+lpd+garch β=0.1","nn β=0.2","lpd β=0.2","lpd+nn β=0.2",
-#        "nn+lpd+garch β=0.2","nn β=0.3","lpd β=0.3","lpd+nn β=0.3","nn+lpd+garch β=0.3","Buy and Hold")
-# 
-# colnames(compare_perf)=name
-# colors= c("red","pink","violetred","darkorchid","blue","lightblue","turquoise","dodgerblue4","darkorange","goldenrod1","yellow","darkgoldenrod1","green")
-# plot.xts(compare_perf,main=main,col=colors)
-# addLegend("topleft",
-#           legend.names=name,
-#           col=colors,
-#           lty=c(rep(1,13),2),
-#           lwd=c(rep(2,13),3),
-#           ncol=1,
-#           bg="white")
-
+load("data/xai/7_7_withsignal_xai_in/perfall_without_eth.rda")
+colors= c("red","pink","violetred","darkorchid","blue","lightblue","turquoise","dodgerblue4","darkorange","goldenrod1","yellow","darkgoldenrod1","green")
+plot.xts(compare_perf,
+         main=TeX(sprintf("Performance cumulated from 9 Splits, $\\lambda = %d$", 1)),
+         col=colors)
+addLegend("topleft",
+          legend.names=c(TeX(sprintf("NN $\\beta = %.1f$", 0.1)),
+                         TeX(sprintf("LPD $\\beta = %.1f$", 0.1)),
+                         TeX(sprintf("NN+LPD $\\beta = %.1f$", 0.1)),
+                         TeX(sprintf("NN+LPD+GARCH $\\beta = %.1f$", 0.1)),
+                         
+                         TeX(sprintf("NN $\\beta = %.1f$", 0.2)),
+                         TeX(sprintf("LPD $\\beta = %.1f$", 0.2)),
+                         TeX(sprintf("NN+LPD $\\beta = %.1f$", 0.2)),
+                         TeX(sprintf("NN+LPD+GARCH $\\beta = %.1f$", 0.2)),
+                         
+                         TeX(sprintf("NN $\\beta = %.1f$", 0.3)),
+                         TeX(sprintf("LPD $\\beta = %.1f$", 0.3)),
+                         TeX(sprintf("NN+LPD $\\beta = %.1f$", 0.3)),
+                         TeX(sprintf("NN+LPD+GARCH $\\beta = %.1f$", 0.3))
+                         ,
+                         TeX(sprintf("Buy and Hold"))),
+          col=colors,
+          lty=c(rep(1,13),2),
+          lwd=c(rep(2,13),3),
+          ncol=1,
+          bg="white")
 ```
 \newpage
 
 Regarding the sharpe in figure \ref{fig:sharpe} our findings from before are confirmed. the nn+lpd with $\beta = 0.2$ has even  a better sharpe ratio than buy and Hold. But another observations is seemingly more interesting, the lpd is alway better than just nn. By investigating the other calculations we have done, we find the same pattern, therefore we conclude that lpd brings us a real benefit.
 
+&nbsp;
 
-```{r sharpe, fig.align='center', out.width='80%', fig.cap="Different signal combinations: Sharpe",dev = "svg",echo=FALSE}
-knitr::include_graphics("images/xailpd/lambda_1/sharpe.svg")
+```{r sharpe, fig.align='center', out.width='80%', fig.cap="Different signal combinations: Sharpe",echo=FALSE, fig.width = 8, fig.height = 5}
+# knitr::include_graphics("images/xailpd/lambda_1/sharpe.svg")
 
-# load("data/xai/7_7_withsignal_xai_in/sharpeplot_without_eth.rda")
-# name=c("nn β=0.1","lpd β=0.1","lpd+nn β=0.1","nn+lpd+garch β=0.1","nn β=0.2","lpd β=0.2","lpd+nn β=0.2",
-#        "nn+lpd+garch β=0.2","nn β=0.3","lpd β=0.3","lpd+nn β=0.3","nn+lpd+garch β=0.3","Buy and Hold")
-# colors= c("red","pink","violetred","darkorchid","blue","lightblue","turquoise","dodgerblue4","darkorange","goldenrod1","yellow","darkgoldenrod1","green")
-# plot(sharpesave,main="Sharpe, λ=1",xaxt="n",ylab="sharpe",xlab=""
-#      ,col=colors,pch=19,cex=2)
-# axis(1, at=1:13, labels=name,)
-
+load("data/xai/7_7_withsignal_xai_in/sharpeplot_without_eth.rda")
+defaultmar <- par("mar")
+par(mar=c(11,4,4,4))
+my_bar <- barplot(as.numeric(sharpesave), border=F,
+                  names.arg=c(TeX(sprintf("NN $\\beta = %.1f$", 0.1)),
+                              TeX(sprintf("LPD $\\beta = %.1f$", 0.1)),
+                              TeX(sprintf("NN+LPD $\\beta = %.1f$", 0.1)),
+                              TeX(sprintf("NN+LPD+GARCH $\\beta = %.1f$", 0.1)),
+                              
+                              TeX(sprintf("NN $\\beta = %.1f$", 0.2)),
+                              TeX(sprintf("LPD $\\beta = %.1f$", 0.2)),
+                              TeX(sprintf("NN+LPD $\\beta = %.1f$", 0.2)),
+                              TeX(sprintf("NN+LPD+GARCH $\\beta = %.1f$", 0.2)),
+                              
+                              TeX(sprintf("NN $\\beta = %.1f$", 0.3)),
+                              TeX(sprintf("LPD $\\beta = %.1f$", 0.3)),
+                              TeX(sprintf("NN+LPD $\\beta = %.1f$", 0.3)),
+                              TeX(sprintf("NN+LPD+GARCH $\\beta = %.1f$", 0.3)),
+                              
+                              TeX(sprintf("Buy and Hold"))),
+                  cex.names=0.8,
+                  las=2, 
+                  col=colors, 
+                  ylim=c(0,5), 
+                  main=TeX(sprintf("Sharpe $\\lambda = %d$", 1)),
+                  ylab="Sharpe")
+par(mar=defaultmar)
 ```
+
+\newpage
 
 Figure \ref{fig:batch} gives a insight on how the individual combinations performed in each of the 9 splits. the nn+lpd with $\beta = 0.2$ is predominantly better in the first three splits, in the middle section its worse and towards the end the sharpe is again better than Buy and Hold.
 But lets take this plot not to serious because these splits are just one month out of sample i.e the sharpe ratio is sensitive to outliers, this effect is even stronger when there is little data present.
 
+&nbsp;
 
-```{r batch, fig.align='center', out.width='80%', fig.cap="Different signal combinations: Sharpe per split",dev = "svg",echo=FALSE}
-knitr::include_graphics("images/xailpd/lambda_1/batch.svg")
+```{r batch, fig.align='center', out.width='80%', fig.cap="Different signal combinations: Sharpe per split",echo=FALSE, fig.width = 8, fig.height = 5}
+# knitr::include_graphics("images/xailpd/lambda_1/batch.svg")
 
-# load("data/xai/7_7_withsignal_xai_in/sharpmat_perbatch_without_eth.rda")
-# load("data/xai/7_7_withsignal_xai_in/allsharp_without_eth.rda")
-# 
-# 
-# colorsbatch= c("red","pink","violetred","blue","lightblue","turquoise","darkorange","goldenrod1","yellow","green")
-# main="Sharpe per batch, λ=1"
-# plot(sharpmat_1[,4],type="l",col="green",xlab="batch nr",ylab= "sharpe",lwd=4,ylim=c(min(allsharp),max(allsharp)),main=main)
-# for (i in 1:8){lines(allsharp[,i],col=colorsbatch[i],type="l",lwd=2)}
+load("data/xai/7_7_withsignal_xai_in/sharpmat_perbatch_without_eth.rda")
+load("data/xai/7_7_withsignal_xai_in/allsharp_without_eth.rda")
 
 
+colorsbatch= c("red","pink","violetred","blue","lightblue","turquoise","darkorange","goldenrod1","yellow","green")
+main="Sharpe per batch, λ=1"
+plot(sharpmat_1[,4],type="l",col="green",xlab="Batch Nr.",ylab= "Sharpe",lwd=2,ylim=c(min(allsharp),max(allsharp)),
+     main=TeX(sprintf("Sharpe per batch, $\\lambda = %d$", 1)))
+grid()
+for (i in 1:8){lines(allsharp[,i],col=colorsbatch[i],type="l",lwd=2)}
 ```
 
 \newpage
-#### 3.3.6. Adding Ether
 
+#### 3.3.6. Adding Ether
+&nbsp;
 
 In the performance plot \ref{fig:perf}, we have still left out what to do with 0 signals. One opportunity as in 3.3.3. shortly mentioned, is to invest the money in another asset. By reason of staying in the same asset class we choose Ether [@ether] to invest in.
 The coin Ether from Ethereum is with $61.48B [@ethereum] the second largest cryptocurrency according to marketcapitalisation. 
@@ -526,89 +626,65 @@ Ether is very similar . The series is imported in the same way as btc e.g. the l
 
 That said, we use a simple rule to integrate ether. if the signal of the combination nn+lpd is 0 -> go long on ether, as soon as the signal from LPD changes back to 1 or -1 , ether is sold and the bitcoin position is entered again.
 
+&nbsp;
 
+```{r with_eth, fig.align='center', out.width='80%', fig.cap="Added Eth signal",echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
+# knitr::include_graphics("images/xailpd/lambda_1/lpd_nn_eth_perf.svg")
+load("data/xai/7_7_withsignal_xai_in/performance_with_eth.rda")
+load("data/xai/7_7_withsignal_xai_in/nn_lpd_without_eth.rda")
+signal <- data$BTC.USD.Close
+signal$BTC.USD.Close <- nn_lpd
+colors= c("green","red","pink","violetred","darkorchid","blue","lightblue")
+plot(data, col=colors, main=TeX(sprintf("Performance cumulated from 9 splits, $\\lambda = %d$", 1)))
+addLegend("topleft", 
+          legend.names=c(TeX(sprintf("Buy and Hold, $Sharpe = %.2f$", 3.57)),
+                         TeX(sprintf("LPD+NN $\\beta = %.1f$, $Sharpe = %.2f$", 0.1, 2.54)),
+                         TeX(sprintf("LPD+NN+ETH if 0 $\\beta = %.1f$, $Sharpe = %.2f$", 0.1, 3.47)),
+                         TeX(sprintf("LPD+NN $\\beta = %.1f$, $Sharpe = %.2f$", 0.2, 3.76)),
+                         TeX(sprintf("LPD+NN+ETH if 0 $\\beta = %.1f$, $Sharpe = %.2f$", 0.2, 4.41)),
+                         TeX(sprintf("LPD+NN $\\beta = %.1f$, $Sharpe = %.2f$", 0.3, 3.40)),
+                         TeX(sprintf("LPD+NN+ETH if 0 $\\beta = %.1f$, $Sharpe = %.2f$", 0.3, 3.80))),
+                         
+          col=colors,
+          lty=c(rep(1,13),2),
+          lwd=c(rep(2,13),3),
+          ncol=1,
+          bg="white")
+```
+
+&nbsp;
 
 In figure \ref{fig:with_eth} the nn+lpd's from Figure \ref{fig:perf} and the adding of ether is visualized. In the lower part, we can observe the signals which are 0 in the nn + lpd model. These zeroes are now filled up with the logreturns from ether.
 
 The one performance with nn + lpd + eth with $\beta = 20 %$ seems promising. also for the other two nn+lpd the adding of ether seems benefital.
 
-```{r with_eth, fig.align='center', out.width='100%', fig.cap="Added Eth signal",dev = "svg",echo=FALSE}
-knitr::include_graphics("images/xailpd/lambda_1/lpd_nn_eth_perf.svg")
+\newpage
 
+```{r with_eth_sole, fig.align='center', out.width='80%', fig.cap="Added Eth signal",echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
 
-# load("data/xai/7_7_withsignal_xai_in/performance_with_eth.rda")
-# load("data/xai/7_7_withsignal_xai_in/nn_lpd_without_eth.rda")
-# signal <- data$BTC.USD.Close
-# signal$BTC.USD.Close <- nn_lpd
-# 
-# main=paste("Performance cumulated from 9 splits, λ=","1")
-# 
-# colors= c("green","red","pink","violetred","darkorchid","blue","lightblue")
-# 
-# name=c(
-#   paste("Buy and Hold"," sharpe=3.57"),
-#   paste("lpd+nn β=0.1"," sharpe=2.54"),
-#   paste("nn+lpd+eth-if-0 β=0.1"," sharpe=3.47"),
-#   paste("lpd+nn β=0.2"," sharpe=3.76"),
-#   paste("nn+lpd+eth-if-0 β=0.2"," sharpe=4.41"),
-#   paste("lpd+nn β=0.3"," sharpe=3.4"),
-#   paste("nn+lpd+eth-if-0 β=0.3"," sharpe=3.8")
-# )
-# 
-# class(data)
-# plot(data, col=colors, main=main)
-# 
-# addLegend("topleft", 
-#           legend.names=name,
-#           col=colors,
-#           lty=c(rep(1,13),2),
-#           lwd=c(rep(2,13),3),
-#           ncol=1,
-#           bg="white")
-# 
+load("data/xai/7_7_withsignal_xai_in/performance_with_eth.rda")
+load("data/xai/7_7_withsignal_xai_in/nn_lpd_without_eth.rda")
+signal <- data$BTC.USD.Close
+signal$BTC.USD.Close <- nn_lpd
+colors= c("green","darkorchid")
+plot(data[,c(1,5)], col=colors, main=TeX(sprintf("Performance cumulated from 9 splits, $\\lambda = %d$", 1)))
+
+addLegend("bottomright",
+          legend.names=c(TeX(sprintf("Buy and Hold, $Sharpe = %.2f$", 3.57)),
+                         TeX(sprintf("LPD+NN+ETH if 0 $\\beta = %.1f$, $Sharpe = %.2f$", 0.2, 4.41))),
+          col=colors,
+          lty=c(rep(1,13),2),
+          lwd=c(rep(2,13),3),
+          ncol=1,
+          bg="white")
+
+events<- xts(LETTERS[1:6], as.Date(c("2020-08-01","2020-09-05","2020-10-18","2021-01-14","2021-02-21","2021-03-12")))
+addEventLines(events, srt=0, pos=1, lty=3, col = rep("#004c6d",6),lwd=2, cex=1.2)
 # lines(signal, on=NA, lwd=2, col="red", ylim=c(-1.3, 1.3))
 
 ```
-```{r with_eth_sole, fig.align='center', out.width='100%', fig.cap="Added Eth signal",dev = "svg",echo=FALSE,fig.keep="last"}
 
-# load("data/xai/7_7_withsignal_xai_in/performance_with_eth.rda")
-# load("data/xai/7_7_withsignal_xai_in/nn_lpd_without_eth.rda")
-# signal <- data$BTC.USD.Close
-# signal$BTC.USD.Close <- nn_lpd
-# 
-# main=paste("Performance cumulated from 9 splits, λ=","1")
-# 
-# colors= c("green","darkorchid")
-# 
-# name=c(paste("Buy and Hold"," sharpe=3.57"),paste("nn+lpd+eth-if-0 β=0.2"," sharpe=4.41"))
-# 
-# class(data)
-# plot(data[,c(1,5)], col=colors, main=main)
-# 
-# addLegend("topleft",
-#           legend.names=name,
-#           col=colors,
-#           lty=c(rep(1,13),2),
-#           lwd=c(rep(2,13),3),
-#           ncol=1,
-#           bg="white")
-# 
-# events <- xts(LETTERS[1:6], as.Date(c("2020-08-01","2020-09-05","2020-10-18","2021-01-14","2021-02-21","2021-03-12")))
-# 
-# #plots
-# addEventLines(events,srt=90,pos=2,lty=3,col = rep("#004c6d",6),lwd=2,)
-# 
-# 
-# 
-# 
-# 
-# #lines(signal, on=NA, lwd=2, col="red", ylim=c(-1.3, 1.3))
-# 
-# 
-# 
-
-```
-
+&nbsp;
 
 For  a closer analysis, lets have a look at the best performing model vs. buy-and-hold in Figure \ref{fig:with_eth_sole}.The following analysis is related to the violet chart and starts from left to right, beginning with letter **A**. 
 Imideatly after the line by letter **A**, there are several decisions which differ from buy-and-hold and force a shift to the series. In letter **B** we observe a similar behavior for a short period of time. The unsatisfying trend change in letter **C** is stopped around the first of November. Thereafter unto the point in letter **D** the decisions of the model behave quite similar to Buy and Hold. Right after **D** the net handles the negative trend very well and climbs further up. The same accounts for letter E, where the trend once more goes in the opposite direction than the benchmark. Shortly after **F** the model does exactly the same as Buy and Hold.

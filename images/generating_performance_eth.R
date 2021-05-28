@@ -31,13 +31,23 @@ name=c(
   paste("nn+lpd+eth-if-0 β=0.3"," sharpe=3.8")
 )
 
-class(data)
-plot(data, col=colors, main=main)
 
 
-
+load("data/xai/7_7_withsignal_xai_in/performance_with_eth.rda")
+load("data/xai/7_7_withsignal_xai_in/nn_lpd_without_eth.rda")
+signal <- data$BTC.USD.Close
+signal$BTC.USD.Close <- nn_lpd
+colors= c("green","red","pink","violetred","darkorchid","blue","lightblue")
+plot(data, col=colors, main=TeX(sprintf("Performance cumulated from 9 splits, $\\lambda = %d$", 1)))
 addLegend("topleft", 
-          legend.names=name,
+          legend.names=c(TeX(sprintf("Buy and Hold, $Sharpe = %.2f$", 3.57)),
+                         TeX(sprintf("LPD+NN $\\beta = %.1f$, $Sharpe = %.2f$", 0.1, 2.54)),
+                         TeX(sprintf("LPD+NN+ETH if 0 $\\beta = %.1f$, $Sharpe = %.2f$", 0.1, 3.47)),
+                         TeX(sprintf("LPD+NN $\\beta = %.1f$, $Sharpe = %.2f$", 0.2, 3.76)),
+                         TeX(sprintf("LPD+NN+ETH if 0 $\\beta = %.1f$, $Sharpe = %.2f$", 0.2, 4.41)),
+                         TeX(sprintf("LPD+NN $\\beta = %.1f$, $Sharpe = %.2f$", 0.3, 3.40)),
+                         TeX(sprintf("LPD+NN+ETH if 0 $\\beta = %.1f$, $Sharpe = %.2f$", 0.3, 3.80))),
+                         
           col=colors,
           lty=c(rep(1,13),2),
           lwd=c(rep(2,13),3),
