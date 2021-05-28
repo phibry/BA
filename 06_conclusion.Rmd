@@ -55,7 +55,7 @@ Of the methods presented, the linear parameter data approach (LPD) turns out to 
 
 - Point Prognose real test daily
 
-
+- what wopuld the model do if we change the timeperiod?
 
 
 
