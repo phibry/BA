@@ -7,7 +7,7 @@ geometry: margin = 1in
 
 ## 3. Methodology
 
-The focus of this thesis can be divided into two areas. First, the aim is to find an optimal neural network including a network architecture. This should perform well in the application area, in which the future log return of the Bitcoin is predicted on the basis of historical log returns. In a second step, we will focus on defining a trading strategy based on our findings. All considerations and findings will be presented in a quantitative way and compared with each other. Figure \ref{fig:flowchart_overview} helps to get an overview of the individual steps followed in this section.
+The focus of this thesis can be divided into three areas. First, the aim is to find an optimal neural network including a network architecture. This should perform well in the application area, in which the future log return of the Bitcoin is predicted on the basis of historical log returns. In a second step, it will be evaluated whether added value can be found with the help of XAI. Finally, we will focus on defining a trading strategy based on our findings. All considerations and findings will be presented in a quantitative way and compared with each other. Figure \ref{fig:flowchart_overview} helps to get an overview of the individual steps followed in this section.
 
 &nbsp;
 
@@ -17,7 +17,7 @@ knitr::include_graphics("images/flowchart_overview.png")
 
 \newpage
 
-### 3.1. Data exploration {#data_exploration}
+### 3.1. Data Exploration {#data_exploration}
 
 The data in this paper is accessed through the API of Yahoo Finance and is originally provided by the price-tracking website CoinMarketCap. We use the daily closing price of Bitcoin in USD with the ticker BTC-USD. As cryptocurrencies are traded 24/7, the closing price refers to the last price of the day evaluated at the last timestamp according to the Coordinated Universal Time (UTC).
 
@@ -74,7 +74,7 @@ legend("topleft", inset=.02, legend=c(TeX(sprintf("$N(\\mu = 0.00201$,$ \\sigma 
 
 \newpage
 
-### 3.2. Network architecture
+### 3.2. Network Architecture
 
 As mentioned in section [2.1.3](#MLP), choosing an appropriate network architecture for Bitcoin price prediction is a crucial step in order to achieve useful forecasts while avoiding overfitting. Due to the complexity as well as the non-linearity of neural networks, the interpretation cannot be performed intuitively. For this reason, an approach is pursued in which neural networks with different numbers of layers and neurons are compared with each other by using the MSE loss and Sharpe ratio. This allows us to compare accuracy, respectively trading performance and possibly see a connection with network architecture.
 
@@ -99,7 +99,7 @@ To ensure that the neural network with the chosen network architecture does not 
 
 \newpage
 
-#### 3.2.1. Defining train and test samples {#test_train}
+#### 3.2.1. Defining Train and Test Samples {#test_train}
 &nbsp;
 
 We are looking for an optimal network, the optimal network should also provide reasonable and reliable predictions for different periods. For further analysis, we use a subset of the introduced closing prices of Bitcoin. Starting from the first of January 2020 to the 27th of March in 2021, we only consider 15 months for our data.
@@ -193,7 +193,7 @@ The complexity of the search for the optimal network architecture increases sign
 
 \newpage
 
-#### 3.2.2.  Evaluating network architecture {#evaluate_nn}
+#### 3.2.2.  Evaluating Network Architecture {#evaluate_nn}
 &nbsp;
 
 Here we would like to focus on some findings that we discovered during the processing of the trained networks. To illustrate the results, an extract is discussed here, namely only the 5th train/test split (in figure \ref{fig:test_train} the middle one).
@@ -261,7 +261,7 @@ When looking at the Sharpe ratios, an inverse relationship between the in-sample
 
 \newpage
 
-#### 3.2.3. Model selection {#mod-select}
+#### 3.2.3. Model Selection {#mod-select}
 &nbsp;
 
 With the above procedure, we have been able to identify the characteristics of neural networks. In time series applications, complex networks lead to overfitting. We could detect an inverse relationship between in- and out-of-sample MSE. We trained a large number of networks, yet no distinct optimal neuron-layer combination can be identified. Determining the architecture based on the minimum MSE would not yield good results. There would be too great a risk that the chosen architecture would be too complex and lead to overfitting. Additionally, the chosen architecture should lead to trustworthy predictions over different time periods (in our example over the 9 splits).
@@ -277,7 +277,7 @@ We, therefore, compare our developed active strategies with the cumulative log r
 
 \newpage
 
-### 3.3. Trading strategy {#trading-strat}
+### 3.3. Trading Strategy {#trading-strat}
 
 This section describes the trading strategy in more detail. In basic terms, the findings of the previous sections are extended with considerations from explainable artificial intelligence (XAI) as well as from more traditional tools used in time series analysis. The following flowchart in figure \ref{fig:flowchart_trading} shows a broad overview of how the different factors are combined to generate the final trading signal.
 
@@ -293,17 +293,17 @@ The main component is the prediction of the neural network. This reflects the ex
 
 While these methods sound promising, it should not be forgotten that a buy-and-hold strategy (given nerves of steel) also led to remarkable performances in the past that even outperformed traditional asset classes. The price development is described in sections [2.4.1](#historical_analysis) and [2.4.3](#bitcoin_valuation). That is why buy-and-hold is frequently used as a comparison. 
 
-For trading the returns, we must first define the environment and make some assumptions. Tradingcosts are crucial in high frequency trading, nevertheless we assume that transaction costs are non exsistant. Further we assume the possibility of shortselling in BTC. These assumptions allow us to wether stay in the market( signal = 1), to exit the market (signal = 0)  or to sell tomorrows return (signal = -1). If in the two latter  tomorrows return is negative, a gain in performance is realized. By exiting the market with signal 0, there are several opportunities to invest the money elsewhere or just stay out of the market and therefore eliminate market exposure. 
+Before we trade the returns, we first need to define the environment and make some assumptions. Normally, trading costs are crucial in high-frequency trading. Since the fee structure for cryptocurrencies is more attractive than for stocks, transaction costs are waived for the sake of simplicity.  Further, we assume the possibility of entering short positions for BTC. These assumptions allow us to wether stay in the market (signal = 1), to exit the market (signal = 0)  or to sell tomorrows return (signal = -1). In the latter two positions, negative returns can be avoided, or we can even profit from the downward movement. By exiting the market with signal 0, there are several opportunities to invest the money elsewhere or just stay out of the market and therefore eliminate market exposure. 
 
 \newpage
 
-#### 3.3.1. Trading with neural networks and LPD
+#### 3.3.1. Trading with Neural Networks and LPD
 &nbsp;
 
 In the following we describe how in this case the neural network is used, in order to create a trading signal. Further we use the LPD, explained in section [2.2.2](#xai_finance), based on the computed neural networks to derive an additional  signal for trading.
 
 
-#### 3.3.2. Neural network
+#### 3.3.2. Neural Network
 &nbsp;
 
 Due to its randomnes in finding the optimum, it is proposed by the Central Limit Theorem [@central_limit_theorem] to use an approximate   $\text{number of iterations } N_{total} \ge 100$ for an accurate mean value. In order to find a balance between precision and computation time, we found 1000 iterations should be sufficient.
@@ -338,7 +338,7 @@ $\hat{p}_{k}$ = Predicted value from neural network
 
 \newpage
 
-#### 3.3.3. LPD signal {#lpd-signal}
+#### 3.3.3. LPD Signal {#lpd-signal}
 &nbsp;
 
 In the same manner as before, for every $k$ of the $N_{total}$ network in every time step $t$ the derivative as in section [2.2.2](#xai_finance) is calculated. From the insample LPD $Y$ the mean $\bar{Y}$ \ref{eq:Ybar} and the standard deviation $sdY$ \ref{eq:sdY} for every $lag_{j}$ , $j \in$ {$1...lag_{n}$} is derived. In the out-of-sample $\bar{Y}_{j}$ and $sdY_{j}$  are used to generate a signal by the following:
@@ -449,7 +449,7 @@ addLegend("topright",
 
 \newpage
 
-#### 3.3.4. Volatility predictions with GARCH {#garch-signal}
+#### 3.3.4. GARCH Volatility Predictions {#garch-signal}
 &nbsp;
 
 In a further step, we examine the time series with a traditional GARCH model that allows heteroskedasticity. T. Bollerslev proposes to use this to model time-dependent variance as a function of lagged shocks and lagged conditional variances [@garch]. Based on an ARMA(1,1)-GARCH(1,1), we conduct one-step-ahead predictions using a rolling window of size 365 days and refit the model after 30 days. This results in two different trading strategies of which one is based on the signs of the forecasts and the other on predicted volatility. The predictions of future volatilities are presented in the appendix in figure \ref{fig:vola_forecasts}. 
@@ -487,19 +487,16 @@ par(mfrow = c(1,1))
 plot(cumsum(garch_perf[,1]), main = "Cumulative daily returns", lwd=1.5)
 lines(cumsum(garch_perf[,2]), col = 2, lwd=1.5)
 lines(cumsum(garch_perf[,3]), col = 3, lwd=1.5)
-addLegend(legend.loc = "topleft", legend = c(paste("Buy-and-Hold, Sharpe:", round(sharpe_perf[1], 2)), 
-                                                 paste("GARCH Signum Trading, Sharpe:", round(sharpe_perf[2],2)),
-                                                 paste("GARCH Volatility Trading, Sharpe:", round(sharpe_perf[3], 2))), 
-          col = c(1,2,3), lty = 1, lwd=1.5)
+addLegend(legend.loc = "topleft", legend = c("Buy-and-Hold", "GARCH Signum Trading", "GARCH Volatility Trading"), col = c(1,2,3), lty = 1, lwd=1.5)
 ```
 
 &nbsp;
 
-Figure \ref{fig:garch_trading} illustrates how the GARCH trading strategies shown as well as a buy-and-hold strategy would have performed in a backtesting. It is easy to see that buy-and-hold outperforms the other two. The GARCH sign strategy misjudges the situation at key points in time and thus hurts the return and Sharpe Ratio. Only during the Covid-19 crash in March 2020, the GARCH sign strategy suffered a smaller loss. On the other hand, we missed the following bull run. Also, the horizontal lines in the GARCH volatility strategy are clearly visible at which the predicted volatility is too large and thus the market exits. While some draw-downs are dampened, upside moves are also avoided. 
+Figure \ref{fig:garch_trading} illustrates how the GARCH trading strategies shown as well as a buy-and-hold strategy would have performed in a backtesting. It is easy to see that buy-and-hold outperforms the other two. The GARCH sign strategy misjudges the situation at key points in time and thus hurts the overall performance. Only during the Covid-19 crash in March 2020, the GARCH sign strategy suffered a smaller loss. On the other hand, we missed the following bull run. Also, the horizontal lines in the GARCH volatility strategy are clearly visible at which the predicted volatility is too large and thus the market exits. While some draw-downs are dampened, upside moves are also avoided. 
 
 \newpage
 
-#### 3.3.5. NN and LPD estimation
+#### 3.3.5. NN and LPD Estimation
 &nbsp;
 
 In section [3.2.3](#mod-select) we have decided to fix the architecture 7 layers 7 nets, all
