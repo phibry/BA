@@ -7,7 +7,9 @@ geometry: margin = 1in
 
 ## 3. Methodology
 
-The focus of this thesis can be divided into two areas. First, the aim is to find an optimal neural network including a network architecture. This should perform well in the application area, in which the future log return of the bitcoin is predicted on the basis of historical log returns. In a second step, we will focus on defining a trading strategy based on our findings. All considerations and findings will be presented in a quantitative way and compared with each other. Figure \ref{fig:flowchart_overview} helps to get an overview of the individual steps followed in this section  
+The focus of this thesis can be divided into two areas. First, the aim is to find an optimal neural network including a network architecture. This should perform well in the application area, in which the future log return of the Bitcoin is predicted on the basis of historical log returns. In a second step, we will focus on defining a trading strategy based on our findings. All considerations and findings will be presented in a quantitative way and compared with each other. Figure \ref{fig:flowchart_overview} helps to get an overview of the individual steps followed in this section.
+
+&nbsp;
 
 ```{r flowchart_overview, fig.align='center', out.width='65%', fig.cap='This flowchart illustrates an overview of the individual intermediate steps that are covered in the Methodology section. ', echo=FALSE}
 knitr::include_graphics("images/flowchart_overview.png")
@@ -17,9 +19,9 @@ knitr::include_graphics("images/flowchart_overview.png")
 
 ### 3.1. Data exploration {#data_exploration}
 
-The data in this paper is accessed  through the API of Yahoo Finance and is originally provided by the price-tracking website CoinMarketCap. We use the daily closing price of bitcoin in USD with the ticker BTC-USD. As cryptocurrencies are traded 24/7, the closing price refers to the last price of the day evaluated at the last time stamp according to the Coordinated Universal Time (UTC).
+The data in this paper is accessed through the API of Yahoo Finance and is originally provided by the price-tracking website CoinMarketCap. We use the daily closing price of Bitcoin in USD with the ticker BTC-USD. As cryptocurrencies are traded 24/7, the closing price refers to the last price of the day evaluated at the last timestamp according to the Coordinated Universal Time (UTC).
 
-In section [2.4](#bitcoin), the bitcoin price and the logarithmic price are visualized.
+In section [2.4](#bitcoin), the Bitcoin price and the logarithmic price are visualized.
 For processing and analyzing the data in order to fulfill the weak stationarity assumptions, we transform the data into log returns according to equation \ref{eq:logreturn}.
 
 ```{=tex}
@@ -40,13 +42,13 @@ plot(df_sub,
 axis.Date(1, at=seq(min(df_sub$date), max(df_sub$date), by="months"), format="%m-%y")
 ```
 
-Figure \ref{fig:log_ret} displays the historical log returns. In addition to the volatility clusters typical for financial time series, large outliers are visible. The negative outlier at the beginning of 2020 is particularly noticeable. By computing the autocorrelation (ACF) of the series in figure \ref{fig:acf_log_ret}, we can describe the dependency in these clusters. According to the ACF the lags 6 and 10 are significant on a 5% level. 
+Figure \ref{fig:log_ret} displays the historical log returns. In addition to the volatility clusters typical for financial time series, large outliers are visible. The negative outlier at the beginning of 2020 is particularly noticeable. By computing the autocorrelation (ACF) of the series in figure \ref{fig:acf_log_ret}, we can describe the dependency in these clusters. According to the ACF, the lags 6 and 10 are significant on a 5% level. 
 
 ```{r acf_log_ret, echo=FALSE, message=FALSE, fig.cap="Autocorrelation of BTC log returns for the entire time window", out.width='75%', fig.width = 8, fig.height = 5}
 chart.ACF.phil(log_ret, main="Autocorrelation of log returns", maxlag = 20, ymax = 0.07)
 ```
 
-Curios from which distribution the log returns might originate, we are fitting a normal distribution and a Students-t distribution to the data in figure \ref{fig:histogramm_logreturns}. Interestingly the mean is shifted slightly (0.002) to the positive side. By inspecting the tails, one can observe that the negative tail is not fitted as good as the positive part by the t distribution. The two normal distributions either over- or underestimate the values in the tails, therefore we conclude that the proposed t-distribution fits the data better but also not perfect. Concerning the extreme outlier discussed earlier, visible in figure \ref{fig:log_ret} towards the end, the density plot makes clear how unimaginable small the probability of this extreme observation is. Altough the histogram is might useful for value-at-risk considerations, for trading purposes its use is mitigated due to its complete loss of the dependency structure by plotting the returns in a density-distribution.
+Curios from which distribution the log returns might originate, we are fitting a normal distribution and a Students-t distribution to the data in figure \ref{fig:histogramm_logreturns}. Interestingly the mean is shifted slightly (0.002) to the positive side. By inspecting the tails, one can observe that the negative tail is not fitted as well as the positive part by the t distribution. The two normal distributions either over- or underestimate the values in the tails, therefore we conclude that the proposed t-distribution fits the data better but also not perfect. Concerning the extreme outlier discussed earlier, visible in figure \ref{fig:log_ret} towards the end, the density plot makes clear how unimaginable small the probability of this extreme observation is. Although the histogram might be useful for value-at-risk considerations, for trading purposes its use is mitigated due to its complete loss of the dependency structure by plotting the returns in a density distribution.
 
 
 ```{r histogramm_logreturns, out.width='75%', fig.cap='Distribution of BTC log returns', echo=FALSE,fig.align="center", fig.width = 8, fig.height = 6}
@@ -74,7 +76,7 @@ legend("topleft", inset=.02, legend=c(TeX(sprintf("$N(\\mu = 0.00201$,$ \\sigma 
 
 ### 3.2. Network architecture
 
-As mentioned in section [2.1.3](#MLP), choosing an appropriate network architecture for bitcoin price prediction is a crucial step in order to achieve useful forecasts while avoiding overfitting. Due to the complexity as well as the non-linearity of neural networks, the interpretation cannot be performed intuitively. For this reason, an approach is pursued in which neural networks with different numbers of layers and neurons are compared with each other by using the MSE loss and Sharpe ratio. This allows us to compare accuracy, respectively trading performance and possibly see a connection with network architecture.
+As mentioned in section [2.1.3](#MLP), choosing an appropriate network architecture for Bitcoin price prediction is a crucial step in order to achieve useful forecasts while avoiding overfitting. Due to the complexity as well as the non-linearity of neural networks, the interpretation cannot be performed intuitively. For this reason, an approach is pursued in which neural networks with different numbers of layers and neurons are compared with each other by using the MSE loss and Sharpe ratio. This allows us to compare accuracy, respectively trading performance and possibly see a connection with network architecture.
 
 To find the optimal network architecture, we test a maximum of 3 layers with a maximum of 10 neurons each. More complex models are not included in this thesis, as this would exceed the time frame. Furthermore, the application of complex network architectures for financial time series can be expected to lead to overfitting and thus to no real added value. The simplest network has one layer with one neuron (1), while the most complex has 3 layers with 10 neurons each (10,10,10). The total number of different combinations can be expressed as follows:
 
@@ -91,18 +93,18 @@ $N=\text{maximum Neuron}\in \mathbb{N}^{*}$
 
 $\text{Comb} =\text{Number of all combinations}$
 
-Thus, with our initial setup, we obtain a maximum neuron-layer combination of 1110. To respond to the challenges mentioned in section [2.1.4](#challenges), not only a single network per neuron-layer combination is trained, but a whole batch of 50 networks. So we end up with a total of 55'500 trained networks. For each individual network, the in-sample and out-of-sample MSE as well as the Sharpe ratios are determined. We use these values to find an optimal network architecture based on the statistical error as well as on the trading performance (daily signum trading).
+Thus, with our initial setup, we obtain a maximum neuron-layer combination of 1110. To respond to the challenges mentioned in section [2.1.4](#challenges), not only a single network per neuron-layer combination is trained, but a whole batch of 50 networks. So we end up with a total of 55'500 trained networks. For each network, the in-sample and out-of-sample MSE as well as the Sharpe ratios are determined. We use these values to find an optimal network architecture based on the statistical error as well as on the trading performance (daily signum trading).
 
-Finally, to ensure that the network architecture does not perform only for the selected time frame, the in-sample and out-of-sample split as well as the time period is discussed. 
+To ensure that the neural network with the chosen network architecture does not produce trustworthy predictions only for a specific time period, the in-sample and out-of-sample splits are examined for different time periods.
 
 \newpage
 
 #### 3.2.1. Defining train and test samples {#test_train}
 &nbsp;
 
-We are looking for an optimal network, the optimal network should also provide reasonable and reliable predictions for different periods. For further analysis, we use a subset of the introduced closing prices of the bitcoin. Starting from the first of January 2020 to the 27th of March in 2021, we only consider 15 months for our data.
+We are looking for an optimal network, the optimal network should also provide reasonable and reliable predictions for different periods. For further analysis, we use a subset of the introduced closing prices of Bitcoin. Starting from the first of January 2020 to the 27th of March in 2021, we only consider 15 months for our data.
 
-The reason for doing so is, we do not believe that the historical data longer than a year consists any information about the price tomorrow. By optimizing our models we found that more data would bring no additional performance, therefore the selected subset should be sufficient. Regarding consistency, the terms train and test set are used in the same sense as in-sample and out-of-sample. As proposed in [@nn_trading] we choose a test train split from 6 months in-sample and 1 month out-of-sample. This split is applied to the whole subset in form of a rolling window. By stepping forward with this 6/1 split by steplength of one month we end up with 9 data splits in total. In figure \ref{fig:test_train} this procedure is visualized, for every new timestep a new month is considered for the out of sample and the first month of the in sample, falls out of the frame. 
+The reason for doing so is, we do not believe that the historical data longer than a year consists of any information about the price tomorrow. By optimizing our models we found that more data would offer no additional performance, therefore the selected subset should be sufficient. Regarding consistency, the terms train and test set are used in the same sense as in-sample and out-of-sample. As proposed in [@nn_trading] we choose a test train split from 6 months in-sample and 1 month out-of-sample. This split is applied to the whole subset in form of a rolling window. By stepping forward with this 6/1 split by steplength of one month we end up with 9 data splits in total. In figure \ref{fig:test_train} this procedure is visualized, for every new timestep, a new month is considered for the out-of-sample and the first month of the in-sample falls out of the frame. 
 
 
 ```{r test_train, out.width='75%', fig.cap='In- and out-of-sample splits.', echo=FALSE, fig.width = 8, fig.height = 6}
@@ -202,13 +204,13 @@ The plot in figure \ref{fig:mse_plot1} compares one layer networks with differen
 knitr::include_graphics("images/batch5/mse_5_layer1.jpeg")
 ```
 
-What is already noticeable here is that with increasing complexity, i.e. with increasing number of neurons, the in-sample MSE decreases. The in-sample forecasts are thus becoming more accurate. At the same time, you can see how the out-of-sample MSE increases with increasing complexity, which means that the forecast accuracy tends to get worse.
+What is already noticeable here is that with an increasing complexity, i.e. with increasing number of neurons, the in-sample MSE decreases. The in-sample forecasts are thus becoming more accurate. At the same time, you can see how the out-of-sample MSE increases with increasing complexity, which means that the forecast accuracy tends to get worse.
 
 \newpage
 
 If you add another layer to the network architecture, the number of different networks with the same number of layers also increases. In the following figure \ref{fig:mse_plot2}, the simplest network is a (1,1) network. So 2 layers with one neuron each. The most complex is a network with a (10,10) architecture.
 
-As noted earlier in figure \ref{fig:mse_plot1}, the values for the MSE also fluctuate more and more with increasing complexity. Small in-sample MSE for more complex networks lead to rather high out-of-sample MSE. This leads us to the previously mentioned challenges in section [2.1.4.1](#overfitting), and that is that too many estimated parameters can lead to overfitting of the network.
+As noted earlier in figure \ref{fig:mse_plot1}, the values for the MSE also fluctuate more and more with increasing complexity. Small in-sample MSE for more complex networks leads to rather high out-of-sample MSE. This leads us to the previously mentioned challenges in section [2.1.4.1](#overfitting), and that is that too many estimated parameters can lead to overfitting of the network.
 
 ```{r mse_plot2, out.width='100%', fig.cap='Fifth train/test split, 2 layers with 100 different networks.', echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/batch5/mse_5_layer2.jpeg")
@@ -227,35 +229,35 @@ knitr::include_graphics("images/batch5/mse_5_layer3.jpeg")
 ```
 \newpage
 
-Figure \ref{fig:mse_plot5} shows the MSE of the models with 1-3 layers, i.e. the last three plots side by side. As mentioned, it can be seen here that the in-sample MSE scatter towards the bottom respectively decreases with more complex architectures. This does not have a positive effect on the out-of-sample, since in the same area the MSE deteriorates massively (note the different scaling of the y-axes). As a result, we have no real added value from more complex models. Also to be noted is that the in-sample MSE does not get worse than a certain threshold at the upper boundary. This asymmetric scattering around this value is likely due to numerical characteristics of the optimization algorithm.  
+Figure \ref{fig:mse_plot5} shows the MSE of the models with 1-3 layers, i.e. the last three plots side by side. As mentioned, it can be seen here that the in-sample MSE scatter towards the bottom respectively decreases with more complex architectures. This does not have a positive effect on the out-of-sample, since in the same area the MSE deteriorates massively (note the different scaling of the y-axes). As a result, we have no real added value from more complex models. Also to be noted is that the in-sample MSE does not get worse than a certain threshold at the upper boundary. This asymmetric scattering around this value is likely due to the numerical characteristics of the optimization algorithm.  
 
-At this point it should be emphasized that only the analyses from time split 5 are visualized in this section. Our primary goal is to compare the performances of different network architectures using MSE in order to find the optimal network that works in every time split. However, finding an optimal architecture using such visual analysis of the MSE seems nearly impossible. Nevertheless, the main finding of this section is that the MSE deteriorates massively with more complex models and thus a simpler one should be considered. Equally remarkable is the fact that the same model architectures produce such different results. Whilst many models range in a more or less solid midfield, traits of overfitting can be recognized. These are reflected by the spikes in the out-of-sample MSE. 
+At this point, it should be emphasized that only the analyses from time split 5 are visualized in this section. Our primary goal is to compare the performances of different network architectures using MSE to find the optimal network that works every time split. However, finding an optimal architecture using such visual analysis of the MSE seems nearly impossible. Nevertheless, the main finding of this section is that the MSE deteriorates massively with more complex models and thus a simpler one should be considered. Equally remarkable is the fact that the same model architectures produce such different results. Whilst many models range in a more or less solid midfield, traits of overfitting can be recognized. These are reflected by the spikes in the out-of-sample MSE.
 
 ```{r mse_plot5, out.width='100%', fig.cap='Fifth train/test split, all layers with 1110 different networks.', echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/batch5/mse_5_all.jpeg")
 ```
 
-What has not yet been studied is the dependence of the neural network's behavior on the different window splits we defined in figure \ref{fig:test_train}. Considering that the same network architectures provide MSE's of different quality (including huge outliers), the results for each configuration are summarized using a robust method. We make use of the median of the MSE's of all 50 equal networks over all time splits in order to evaluate the accuracy of the corresponding model. We consider this a better method than the arithmetic mean as figure \ref{fig:mse_plot5} shows large outliers. Thus, it can be better investigated whether the corresponding network architecture provides sound results apart from this one outlier. 
+What has not yet been studied is the dependence of the neural network's behavior on the different window splits we defined in figure \ref{fig:test_train}. Considering that the same network architectures provide MSE's of different quality (including huge outliers), the results for each configuration are summarized using a robust method. We make use of the median of the MSE's of all 50 equal networks across all time splits in order to evaluate the accuracy of the corresponding model. We consider this a better method than the arithmetic mean as figure \ref{fig:mse_plot5} shows large outliers. Thus, it can be better investigated whether the corresponding network architecture provides sound results apart from this one outlier. 
 
 \newpage
 
-The medians of the MSE's of all 50 equal networks over all time splits are plotted in figure \ref{fig:mse_median}. We restrict ourselves to neural networks with 1-2 layers (recognizable in the red (1) and blue (2) rectangles), since it can be assumed that too complex models are not suitable for the target. The lines represent the medians of the MSE of all 50 optimized neural networks at a given network architecture (x-axis). The nine different colors specify the specific time split in which the neural networks have been trained and tested. We anticipate that this comparison will facilitate finding a network architecture that performs over all time splits. 
+The medians of the MSE's of all 50 equal networks across all time splits are plotted in figure \ref{fig:mse_median}. We restrict ourselves to neural networks with 1-2 layers (recognizable in the red (1) and blue (2) rectangles), since it can be assumed that too complex models are not suitable for the target. The lines represent the medians of the MSE of all 50 optimized neural networks at a given network architecture (x-axis). The nine different colors specify the specific time split in which the neural networks have been trained and tested. We anticipate that this comparison will facilitate finding a network architecture that performs across all time splits. 
 
-```{r mse_median, out.width='100%', fig.cap='MSE median over all 9 splits. For each network architecture, 50 neural networks were trained (55`500 models per time split). The nine colors illustrate how these models behave in the different time splits.', echo=FALSE,fig.align="center"}
+```{r mse_median, out.width='100%', fig.cap='MSE median across all 9 splits. For each network architecture, 50 neural networks were trained (55`500 models per time split). The nine colors illustrate how these models behave in the different time splits.', echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/batch5/median_mse.jpeg")
 ```
 
-First, there is evidence of overfitting in the medians as well. In particular, splits 1-6 show a somewhat expected picture: the in-sample error becomes smaller with more complex architecture, while the opposite can be seen in the out-of-sample. However, the periodically appearing spikes visible in the time splits 8 and 9 of the in-sample plot seem unnatural. The plausible difference between this and the other splits is the underlying data. Therefore, we take a look at what the initial prices of bitcoin are doing in this period. The plots with the time splits of the logarithmized prices can be found in the appendix starting with figure \ref{fig:price1}. As a rule of thumb, the neural network behaves better when the train and test pairs behave similarly. In the plots of splits 8 and 9 it is clearly visible that in each case the in-sample shows a bullish behavior. This trend is not continued in the out-of-sample part, which probably leads to biased predictions due to amplified dependence structures.
+First, there is evidence of overfitting in the medians as well. In particular, splits 1-6 shows a somewhat expected picture: the in-sample error becomes smaller with more complex architecture, while the opposite can be seen in the out-of-sample. However, the periodically appearing spikes visible in the time splits 8 and 9 of the in-sample plot seem unnatural. The plausible difference between this and the other splits is the underlying data. Therefore, we take a look at what the initial prices of Bitcoin are doing in this period. The plots with the time splits of the logarithmized prices can be found in the appendix starting with figure \ref{fig:price1}. As a rule of thumb, the neural network behaves better when the train and test pairs behave similarly. In the plots of splits 8 and 9, it is clearly visible that in each case the in-sample shows a bullish behavior. This trend is not continued in the out-of-sample part, which probably leads to biased predictions due to amplified dependence structures.
 
 \newpage
 
-Our goal in the second part of this thesis is to work out a trading strategy with a suitable neural network. Therefore, as a last comparison, we visualize in figure \ref{fig:sharpe_median} how well the different network architectures behave in sign trading. This is a simple trading which depends on the sign of the prediction $\hat{y}_{t+1}$ i.e. next expected log return. If a positive prediction is forecasted, the trader is in a long position, otherwise in a short position. As with the previous plot, the Sharpe ratios of each neural network realization perform differently despite having the same network architecture. Therefore, we again decided to plot the median of all Sharpe ratios with the same network architecture. The nine different colors indicate the time interval during which the neural networks were trained and tested.
+Our goal in the second part of this thesis is to work out a trading strategy with a suitable neural network. Therefore, as the last comparison, we visualize in figure \ref{fig:sharpe_median} how well the different network architectures behave in sign trading. This is simple trading which depends on the sign of the prediction $\hat{y}_{t+1}$ i.e. next expected log return. If a positive prediction is forecasted, the trader is in a long position, otherwise in a short position. As with the previous plot, the Sharpe ratios of each neural network realization perform differently despite having the same network architecture. Therefore, we again decided to plot the median of all Sharpe ratios with the same network architecture. The nine different colors indicate the time interval during which the neural networks were trained and tested.
 
-```{r sharpe_median, out.width='100%', fig.cap='Sharpe median over all 9 splits.', echo=FALSE,fig.align="center"}
+```{r sharpe_median, out.width='100%', fig.cap='Sharpe median across all 9 splits.', echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/batch5/median_sharpe.jpeg")
 ```
 
-When looking at the Sharpe ratios, an inverse relationship between the in-sample and out-of-sample can be seen. The in-sample Sharpe ratio improves in most time splits with increasing complexity. In the out-of-sample, however, the medians decrease. It can also be seen that some of the Sharpe ratios show periodic spikes again. Apart from these aspects, no clear patterns or correlations could be identified. To put these numbers into perspective, an one-time investment in the S&P 500 ten years ago would have resulted in a Sharpe ratio of 0.83 [@S&P500_sharpe].
+When looking at the Sharpe ratios, an inverse relationship between the in-sample and out-of-sample can be seen. The in-sample Sharpe ratio improves in most time splits with increasing complexity. In the out-of-sample, however, the medians decrease. It can also be seen that some of the Sharpe ratios show periodic spikes again. Apart from these aspects, no clear patterns or correlations could be identified. To put these numbers into perspective, a one-time investment in the S&P 500 ten years ago would have resulted in a Sharpe ratio of 0.83 [@S&P500_sharpe].
 
 \newpage
 
@@ -264,14 +266,14 @@ When looking at the Sharpe ratios, an inverse relationship between the in-sample
 
 With the above procedure, we have been able to identify the characteristics of neural networks. In time series applications, complex networks lead to overfitting. We could detect an inverse relationship between in- and out-of-sample MSE. We trained a large number of networks, yet no distinct optimal neuron-layer combination can be identified. Determining the architecture based on the minimum MSE would not yield good results. There would be too great a risk that the chosen architecture would be too complex and lead to overfitting. Additionally, the chosen architecture should lead to trustworthy predictions over different time periods (in our example over the 9 splits).
 
-For the rest of the procedure, we decide to use a neural network architecture of (7,7). According to the 2-layer structure visualized in figure \ref{fig:mse_plot2}, the architecture we chose looks very balanced. In-sample, the MSE is rather in a more optimal range (smaller MSE) and out-of-sample, any overfitting is rather minimal compared to even more complex networks. In the attachment in figure \ref{fig:meanmean2} you can see the MSE's averaged over all 9 splits. The neuron layer architecture of (7,7) is exactly in the range where the in-sample MSE decreases and out-of-sample increases. The selected network lies exactly between the volatile networks, thus this architecture does not seem to be as prone to overfitting as the one next to it. The (7,7) network is not too complex, tends to have a good in-sample MSE and the out-of-sample MSE does not tend to overfit as much.
+For the rest of the procedure, we decide to use a neural network architecture of (7,7). According to the 2-layer structure visualized in figure \ref{fig:mse_plot2}, the architecture we chose looks very balanced. In-sample, the MSE is rather in a more optimal range (smaller MSE) and out-of-sample, any overfitting is rather minimal compared to even more complex networks. In the attachment in figure \ref{fig:meanmean2}, you can see the MSE's averaged across all 9 splits. The neuron layer architecture of (7,7) is exactly in the range where the in-sample MSE decreases and out-of-sample increases. The selected network lies exactly between the volatile networks, thus this architecture does not seem to be as prone to overfitting as the one next to it. The (7,7) network is not too complex, tends to have a good in-sample MSE and the out-of-sample MSE does not tend to overfit as much.
 
 #### 3.2.4. Benchmark {#benchmark}
 &nbsp;
 
 The trained networks and applied methods are compared with each other using a benchmark. For this purpose, we use the buy-and-hold, which is a long-term passive investment strategy. Investing with this strategy often leads to better returns in the long run than active trading [@bnh]. This strategy is hard to beat, especially when the market is trending upwards. In such a trend, an active strategy would hardly recommend anything other than buy-and-hold.
 
-We therefore compare our developed active strategies with the cumulative log returns. Our benchmark includes all green out-of-sample returns from figure \ref{fig:test_train} cumulated.
+We, therefore, compare our developed active strategies with the cumulative log returns. Our benchmark includes all green out-of-sample returns from figure \ref{fig:test_train} cumulated.
 
 \newpage
 
@@ -339,7 +341,7 @@ $\hat{p}_{k}$ = Predicted value from neural network
 #### 3.3.3. LPD signal {#lpd-signal}
 &nbsp;
 
-In the same manner as before, for every $k$ of the $N_{total}$ network in every time step $t$ the derivative as in section [2.2.2](#xai_finance) is calculated. From the insample LPD $Y$ the mean $\bar{Y}$ \ref{eq:Ybar} and the standard deviation $sdY$ \ref{eq:sdY} for every $lag_{j}$ , $j \in$ {$1...lag_{n}$} is derived. In the out of sample $\bar{Y}_{j}$ and $sdY_{j}$  are used to generate a signal by the following:
+In the same manner as before, for every $k$ of the $N_{total}$ network in every time step $t$ the derivative as in section [2.2.2](#xai_finance) is calculated. From the insample LPD $Y$ the mean $\bar{Y}$ \ref{eq:Ybar} and the standard deviation $sdY$ \ref{eq:sdY} for every $lag_{j}$ , $j \in$ {$1...lag_{n}$} is derived. In the out-of-sample $\bar{Y}_{j}$ and $sdY_{j}$  are used to generate a signal by the following:
 
 With formula \ref{eq:count} in every $lag_{j}$ it is decided wether the predicted LPD $X_{j}$ exceeds $\bar{Y}_{j} \pm \lambda sdY_{j}$. In figure \ref{fig:lpd_explain} this procedure is visualized, just for one lag due to a smoother visualisation. 
 
@@ -409,7 +411,7 @@ load("data/xai/7_7_withsignal_xai_in/meanCI.rda")
 
 plot.xts(OLPD_mat_out["::2021-02-08."],
          col=c("#003f5c", "#665191", "#d45087", "#f6004a", "#ff1208", "#ffa600", "#ff7c43"),
-         main="LPD Out of Sample")
+         main="LPD Out-of-Sample")
 
 lines(meanCI$meanline,lwd=2,col="black",lty=2)
 lines(meanCI$meanup,lwd=2,col="red",lty=3)
@@ -501,7 +503,7 @@ Figure \ref{fig:garch_trading} illustrates how the GARCH trading strategies show
 &nbsp;
 
 In section [3.2.3](#mod-select) we have decided to fix the architecture 7 layers 7 nets, all
-the 9 splits which were introduced in section [3.2.1](#test_train), are now used for trading. The out of sample performances of every split are added together and are compared with the benchmark from [3.2.4](#benchmark).
+the 9 splits which were introduced in section [3.2.1](#test_train), are now used for trading. The out-of-sample performances of every split are added together and are compared with the benchmark from [3.2.4](#benchmark).
 
 Our findings from the GARCH model were not very promising, nevertheless we combine their signals with the neuralnet output and the signals from LPD.
 
@@ -587,7 +589,7 @@ par(mar=defaultmar)
 \newpage
 
 Figure \ref{fig:batch} gives a insight on how the individual combinations performed in each of the 9 splits. The NN+LPD with $\beta = 0.2$ is predominantly better in the first three splits, in the middle section its worse and towards the end the Sharpe is again better than buy and hold.
-But lets take this plot not to serious because these splits are just one month out of sample i.e the Sharpe ratio is sensitive to outliers, this effect is even stronger when there is little data present.
+But lets take this plot not to serious because these splits are just one month out-of-sample i.e the Sharpe ratio is sensitive to outliers, this effect is even stronger when there is little data present.
 
 &nbsp;
 
@@ -618,7 +620,7 @@ According to [@correlation_btc] the correlation between the two assets is 0.91. 
 
 Ether is very similar. The series is imported in the same way as BTC e.g. the log returns are derived.
 
-That said, we use a simple rule to integrate Ether. If the signal of the combination NN+LPD is 0 then we go long on Ether. As soon as the signal from LPD changes back to 1 or -1, Ether is sold and the bitcoin position is entered again.
+That said, we use a simple rule to integrate Ether. If the signal of the combination NN+LPD is 0 then we go long on Ether. As soon as the signal from LPD changes back to 1 or -1, Ether is sold and the Bitcoin position is entered again.
 
 &nbsp;
 
