@@ -311,7 +311,7 @@ This thesis sets the goal to compare the different neural network architectures 
 #### 2.3.1. Sharpe Ratio {#sharpe_ratio}
 &nbsp;
 
-The first number refers to the performance of the trading strategy based on the sign of the prediction $t+1$ and is called Sharpe ratio. Sharpe ratio is a very powerful and widely used ratio to measure performance and it describes return per risk.
+The first measure refers to the performance of the trading strategy based on the sign of the prediction $t+1$ and is called Sharpe ratio. Sharpe ratio is a very powerful and widely used ratio to measure performance and it describes return per risk.
 
 ```{=tex}
 \begin{align} \label{eq:Sharpe}
@@ -324,7 +324,7 @@ $R_{p}$ represents the return of the portfolio, while $R_{f}$ equals the risk fr
 #### 2.3.2. Mean Squared Error (MSE) {#MSE}
 &nbsp;
 
-The third performance measurement method is also widely used and called mean squared error. Its calculation is very simple, for every timestep the estimated value is subtracted from the real empirical value, squared and then summarized and divided by the absolute number of observations as seen in equation \ref{eq:MSE}.
+The second performance measurement method is also widely used and called mean squared error. Its calculation is very simple, for every timestep the estimated value is subtracted from the real empirical value, squared and then summarized and divided by the absolute number of observations as seen in equation \ref{eq:MSE}.
 
 ```{=tex}
 \begin{align} \label{eq:MSE}
