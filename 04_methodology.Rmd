@@ -680,13 +680,13 @@ addEventLines(events, srt=0, pos=1, lty=3, col = rep("#004c6d",6),lwd=2, cex=1.2
 
 &nbsp;
 
-<<<<<<< HEAD
+
 For  a closer analysis, lets have a look at the best performing model vs. buy-and-hold in Figure \ref{fig:with_eth_sole}.The following analysis is related to the violet chart and starts from left to right, beginning with letter **A**. 
 Imideatly after the line by letter **A**, there are several decisions which differ from buy-and-hold and force a shift to the series. In letter **B** we observe a similar behavior for a short period of time. The unsatisfying trend change in letter **C** is stopped around the first of November. Thereafter unto the point in letter **D** the decisions of the model behave quite similar the green line. Right after **D** the net handles the negative trend very well and climbs further up. The same accounts for letter E, where the trend once more goes in the opposite direction than the benchmark. Shortly after **F** the model does exactly the same as buy-and-hold.
-=======
+
 For a closer analysis, lets have a look at the best performing model vs. buy-and-hold in figure \ref{fig:with_eth_sole}. The following analysis is related to the violet chart and starts from left to right, beginning with letter **A**. 
 Imideatly after the line by letter **A**, there are several decisions which differ from buy-and-hold and force a shift to the series. In letter **B** we observe a similar behavior for a short period of time. The unsatisfying trend change in letter **C** is stopped around the first of November. Thereafter unto the point in letter **D** the decisions of the model behave quite similar to Buy and Hold. Right after **D** the net handles the negative trend very well and climbs further up. The same accounts for letter **E**, where the trend once more goes in the opposite direction than the benchmark. Shortly after **F** the model does exactly the same as Buy and Hold.
->>>>>>> main
+
 
 
 
