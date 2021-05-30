@@ -1,16 +1,27 @@
 load("data/xai/7_7_withsignal_xai_in/performance_with_eth.rda")
 load("data/xai/7_7_withsignal_xai_in/nn_lpd_without_eth.rda")
 
+#datenpunkt vom 30.6.21
+
+9137.993* prod(exp(logret))
+
+9137.993*prod(diff(data[,5]))
+
+
+#wert vom 1.7.21
+1000*prod(exp(logret))
+
+1000* prod( exp(  diff(  data[,5] )[-1,]) )
+
+1000*exp(2.453907267)
+
+*cumsum(logret)
 
 
 
+logret=diff(log(Cl(btc))) ["2020-07-01::"]
 
-
-
-
-logret=diff(log(Cl(btc))) ["2020-01-01::"]
-
-Cl(btc)["2020-01-01::"]
+Cl(btc)["2020-06-30::"]
 
 sum(logret)/ nrow(logret)
 
