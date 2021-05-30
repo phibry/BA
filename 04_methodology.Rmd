@@ -670,7 +670,7 @@ addLegend("topleft",
 
 In figure \ref{fig:with_eth} the NN+LPD's from figure \ref{fig:perf} and the adding of Ether is visualized. In the lower part, we can observe the signals which are 0 in the NN+LPD model. These zeroes are now filled up with the log returns from Ether.
 
-The one performance with NN+LPD+ETH with $\beta = 20 %$ seems promising. Also for the other two NN+LPD the adding of Ether seems benefital.
+The one performance with NN+LPD+ETH with $\beta = 20 \%$ seems promising. Also for the other two NN+LPD the adding of Ether seems benefital.
 
 \newpage
 
