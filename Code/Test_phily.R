@@ -977,3 +977,49 @@ addEventLines(events, srt=0, pos=1, lty=3, col = rep("#004c6d",6),lwd=2, cex=1.2
 
 
 
+# Plot####
+load("data/log_ret_27_03_21.rda")
+log_ret <- log_ret_27_03_21   # loading logreturns
+df_sub <- data.frame(date = ymd(time(log_ret)), value = as.numeric(log_ret))
+plot(df_sub,
+     type="l",
+     frame.plot = FALSE,
+     xaxt="n",
+     xlab="",
+     ylab="log return", ylim=c(-0.45, 0.2))
+axis.Date(1, at=seq(min(df_sub$date), max(df_sub$date), by="months"), format="%m-%y")
+
+
+load("data/log_ret_27_03_21.rda")
+plot(log_ret_27_03_21, ylab="Log Return", main="Logarithmic Return BTC/USD")
+
+
+
+load("data/xai/7_7_withsignal_xai_in/sharpeplot_without_eth.rda")
+defaultmar <- par("mar")
+par(mar=c(11,4,4,4))
+my_bar <- barplot(as.numeric(sharpesave), border=F,
+                  names.arg=c(TeX(sprintf("NN $\\beta = %.1f$", 0.1)),
+                              TeX(sprintf("LPD $\\beta = %.1f$", 0.1)),
+                              TeX(sprintf("NN+LPD $\\beta = %.1f$", 0.1)),
+                              TeX(sprintf("NN+LPD+GARCH $\\beta = %.1f$", 0.1)),
+                              
+                              TeX(sprintf("NN $\\beta = %.1f$", 0.2)),
+                              TeX(sprintf("LPD $\\beta = %.1f$", 0.2)),
+                              TeX(sprintf("NN+LPD $\\beta = %.1f$", 0.2)),
+                              TeX(sprintf("NN+LPD+GARCH $\\beta = %.1f$", 0.2)),
+                              
+                              TeX(sprintf("NN $\\beta = %.1f$", 0.3)),
+                              TeX(sprintf("LPD $\\beta = %.1f$", 0.3)),
+                              TeX(sprintf("NN+LPD $\\beta = %.1f$", 0.3)),
+                              TeX(sprintf("NN+LPD+GARCH $\\beta = %.1f$", 0.3)),
+                              
+                              TeX(sprintf("Buy and Hold"))),
+                  cex.names=0.8,
+                  las=2, 
+                  col=colors, 
+                  ylim=c(0,5), 
+                  main=TeX(sprintf("Sharpe $\\lambda = %d$", 1)),
+                  ylab="Sharpe")
+grid()
+par(mar=defaultmar)
