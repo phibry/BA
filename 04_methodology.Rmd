@@ -347,31 +347,73 @@ $\hat{p}_{k}$ = Predicted value from neural network
 
 &nbsp;
 
-one can observe in $f()$ how the uncertain decidings result in a 0 signal. You could also use postions sizing and adjust the signal depending on the size of $\beta$ . But we have omitted this aspect, because otherwise there are too many parameters in the model.
+one can observe in $f()$ how the uncertain decidings result in a 0 signal. You could also use position sizing and adjust the signal depending on the size of $\beta$ . But we have omitted this aspect, because otherwise there are too many parameters in the model.
 
 \newpage
 
 #### 3.3.3. LPD Signal {#lpd-signal}
 &nbsp;
 
+To explain the following as understandable as possible, we recall chapter [2.2.2](#xai_finance) where the discrete derivatives of each input layer $lag_{j}$ were calculated with respect to the forecast at each time step. This procedure is now applied to the insample as well as the out-of-sample region. From the insample, the standard deviation and the mean are calculated for each $lag_{j}$. These are now used for the out-of-sample area.  An example with out of sample 01.01.2021 - 08.02.2021 clarifies the procedure:
+Figure \ref{fig:lpd_explain} represents the 7 lags, when looking at lag 4, the top line shows the previously calculated mean value from the insample (black) and the insample standard deviation upwards and downwards (dashed red). For the visualization the lines are drawn only for one lag.
+Let's take a look at the time step 25.01.2021, where you can see that the pink line exceeds the standard deviation.  Now we count in this time step how many other lags also overshoot their standard deviation.
+This is shown in ref \ref{eq:net_decision2}, we see immediately that on 25.01.2021, 4 lags have exceeded their standard deviation by the mean value.
+In the example we state that if 4 or more lags exceed the upper limit the final signal is 0 and if between 2 and 4 lags exceed the standard deviation, we assign the signal 0.5. For our example date 25.01.2021 the signal would be 0.
+Correctly concluded, we get a trading signal for each date.
 
-For the calcula
-In the same manner as before, for every $k$ of the $N_{total}$ network in every time step $t$ the derivative as in section [2.2.2](#xai_finance) is calculated. 
 
 
+```{r lpd_explain, fig.align='center', out.width='60%', fig.cap="LPD Plot for illustration", echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
+knitr::include_graphics("images/xailpd/out_decision_small.jpeg")
+load("data/xai/7_7_withsignal_xai_in/OLPD_mat_out_plot.rda")
+load("data/xai/7_7_withsignal_xai_in/meanCI.rda")
 
+plot.xts(OLPD_mat_out["::2021-02-08."],
+         col=c("#003f5c", "#665191", "#d45087", "#f6004a", "#ff1208", "#ffa600", "#ff7c43"),
+         main="LPD Out-of-Sample")
 
+lines(meanCI$meanline,lwd=2,col="black",lty=2)
+lines(meanCI$meanup,lwd=2,col="red",lty=3)
+lines(meanCI$meandown,lwd=2,col="red",lty=3)
 
-From the insample LPD $Y$ the mean $\bar{Y}$ \ref{eq:Ybar} and the standard deviation $sdY$ \ref{eq:sdY} for every $lag_{j}$ , $j \in$ {$1...lag_{n}$} is derived. In the out-of-sample $\bar{Y}_{j}$ and $sdY_{j}$  are used to generate a signal by the following:
+addLegend("bottomleft",
+          legend.names=c(TeX(sprintf("Mean value from $lag_{j}$")), TeX(sprintf("Standard deviation from $lag_{j}*\\lambda$"))),
+          col=c("black","red"),
+          lty=c(2,3),
+          lwd=c(2,2),
+          ncol=1,
+          bg="white")
+```
 
-With formula \ref{eq:count} in every $lag_{j}$ it is decided wether the predicted LPD $X_{j}$ exceeds $\bar{Y}_{j} \pm \lambda sdY_{j}$. In figure \ref{fig:lpd_explain} this procedure is visualized, just for one lag due to a smoother visualisation. 
+```{r lpd_explain_sum, fig.align='center', out.width='60%', fig.cap="LPD Sum Plot for illustration", echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
+# knitr::include_graphics("images/xailpd/out_sum_2.jpeg")
 
-The output of $g$ \ref{eq:count} is between 0 and $lag_{n}$.
-In  $\text{signal}$ \ref{eq:net_decision2}, $g$ is further applied in order to generate a signal. 
+load("data/xai/7_7_withsignal_xai_in/sum_explana_out_plot.rda")
+load("data/xai/7_7_withsignal_xai_in/sumCI.rda")
+plot(sum_explana["::2021-02-08"],type=c("b"),main=TeX(sprintf("Sum of lags deviating $\\lambda$ *sdY from $\\bar{Y}$")))
+lines(sumCI$lineup,lwd=2,col="red",lty=1)
+lines(sumCI$linedown,lwd=2,col="green",lty=1)
 
-With $\eta_{lower}$ and $\eta_{upper}$ it is decided which signal output the LPD will be assigned. We have decided, for values bigger than $\eta_{upper}$ we conclude a big change is likely. In section [3.1.](#data_exploration) last section we observed, that larger negative returns are more likely than positive, therefore the proposed signal is 0. For values between $\eta_{lower}$ and $\eta_{upper}$ we propose a signal 0.5. 
+name=c("η upper","η lower")
 
-Function \ref{eq:net_decision2} $\text{signal}$  is now applied to every timestep $_{t}$ ,therefore the final LPD signal is computed.
+addLegend("topright",
+          legend.names=c(TeX(sprintf("$\\eta_{upper}$")), TeX(sprintf("$\\eta_{lower}$"))),
+          col=c("red","green"),
+          lty=c(1,1),
+          lwd=c(2,2),
+          ncol=1,
+          bg="white")
+```
+
+\newpage
+
+To use this behavior for optimizing our model, a more informal general approach is needed.
+The standarddeviaton is therefore scaled with parameter $\lambda$ and with  formula \ref{eq:count} in every $lag_{j}$ it is decided whether the predicted LPD $X_{j}$ exceeds $\bar{Y}_{j} \pm \lambda sdY_{j}$.  
+
+With function $g$ \ref{eq:count} we count the lags which exceed their bands, the output of $g$ is between 0 and $lag_{n}$. In  $\text{signal}$ \ref{eq:net_decision2}, $g$ is further applied to generate a signal.
+With $\eta_{lower}$ (green) and $\eta_{upper}$ (red) it is decided which final output for the timestep $t$ should be assigned
+In section [3.1.](#data_exploration) last section, we observed, that larger negative returns are more likely than positive, therefore the proposed signal is 0. For values between $\eta_{lower}$ and $\eta_{upper}$ we propose a signal 0.5. 
+Function \ref{eq:net_decision2} $\text{signal}$  is now applied to every timestep $t$, therefore the final LPD signal is computed.
 
 
 
@@ -422,51 +464,6 @@ $\eta_{lower},\eta_{upper}$ = Lower  and upper border for signal decision
 $g$ = Function of lags exceeding band $\in$ {0..$lag_{n}$}
 
 $signal$ = Function of final signal
-
-
-
-```{r lpd_explain, fig.align='center', out.width='80%', fig.cap="LPD Plot for illustration", echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
-knitr::include_graphics("images/xailpd/out_decision_small.jpeg")
-load("data/xai/7_7_withsignal_xai_in/OLPD_mat_out_plot.rda")
-load("data/xai/7_7_withsignal_xai_in/meanCI.rda")
-
-plot.xts(OLPD_mat_out["::2021-02-08."],
-         col=c("#003f5c", "#665191", "#d45087", "#f6004a", "#ff1208", "#ffa600", "#ff7c43"),
-         main="LPD Out-of-Sample")
-
-lines(meanCI$meanline,lwd=2,col="black",lty=2)
-lines(meanCI$meanup,lwd=2,col="red",lty=3)
-lines(meanCI$meandown,lwd=2,col="red",lty=3)
-
-addLegend("bottomleft",
-          legend.names=c(TeX(sprintf("Mean value from $lag_{j}$")), TeX(sprintf("Standard deviation from $lag_{j}*\\lambda$"))),
-          col=c("black","red"),
-          lty=c(2,3),
-          lwd=c(2,2),
-          ncol=1,
-          bg="white")
-```
-
-```{r lpd_explain_sum, fig.align='center', out.width='80%', fig.cap="LPD Sum Plot for illustration", echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
-# knitr::include_graphics("images/xailpd/out_sum_2.jpeg")
-
-load("data/xai/7_7_withsignal_xai_in/sum_explana_out_plot.rda")
-load("data/xai/7_7_withsignal_xai_in/sumCI.rda")
-plot(sum_explana["::2021-02-08"],type=c("b"),main=TeX(sprintf("Sum of lags deviating $\\lambda$ *sdY from $\\bar{Y}$")))
-lines(sumCI$lineup,lwd=2,col="red",lty=1)
-lines(sumCI$linedown,lwd=2,col="green",lty=1)
-
-name=c("η upper","η lower")
-
-addLegend("topright",
-          legend.names=c(TeX(sprintf("$\\eta_{upper}$")), TeX(sprintf("$\\eta_{lower}$"))),
-          col=c("red","green"),
-          lty=c(1,1),
-          lwd=c(2,2),
-          ncol=1,
-          bg="white")
-```
-
 
 \newpage
 
