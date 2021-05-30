@@ -74,7 +74,7 @@ legend("topleft", inset=.02, legend=c(TeX(sprintf("$N(\\mu = 0.00201$,$ \\sigma 
 
 \newpage
 
-### 3.2. Network Architecture
+### 3.2. Network Architecture {#networkarchitecture}
 
 As mentioned in section [2.1.3](#MLP), choosing an appropriate network architecture for Bitcoin price prediction is a crucial step in order to achieve useful forecasts while avoiding overfitting. Due to the complexity as well as the non-linearity of neural networks, the interpretation cannot be performed intuitively. For this reason, an approach is pursued in which neural networks with different numbers of layers and neurons are compared with each other by using the MSE loss and Sharpe ratio. This allows us to compare accuracy, respectively trading performance and possibly see a connection with network architecture.
 
@@ -300,16 +300,24 @@ Before we trade the returns, we first need to define the environment and make so
 #### 3.3.1. Trading with Neural Networks and LPD
 &nbsp;
 
-In the following we describe how in this case the neural network is used, in order to create a trading signal. Further we use the LPD, explained in section [2.2.2](#xai_finance), based on the computed neural networks to derive an additional  signal for trading.
-
--1000 networks 
+The following consecutive sections 3.3.2. and 3.3.3. go together. We describe, how in this thesis the neural network and LPD( theory explained in section [2.2.2](#xai_finance)) is used to create  trading signals. 
 
 
 
 #### 3.3.2. Neural Network
 &nbsp;
 
-Due to its randomnes in finding the optimum, it is proposed by the Central Limit Theorem [@central_limit_theorem] to use an approximate   $\text{number of iterations } N_{total} \ge 100$ for an accurate mean value. In order to find a balance between precision and computation time, we found 1000 iterations should be sufficient.
+In [3.2.](#networkarchitecture) we use an average of only fifty realisations of feedforward nets to reduce computation time. However it is proposed by the Central Limit Theorem [@central_limit_theorem] to use an approximate   $\text{number of iterations } N_{total} \ge 100$ for an accurate mean value. 
+
+We can calculate now different numbers networks and average them, but what does that mean exactly? 
+
+Lets have a look at an example: 
+
+Imagine we calculate an amount of $N_{total}$=100 nets in total and try to predict just 1 day and use the signum of the forecast as a trading signal. If 49 nets predict a positive forecast and 51 nets a negative we end up with a negative trading signal which is actually decided by just one net. Wouldnt it be better if a vast majority of the nets would predict the same sign at least?
+
+In order to get a better hand on that problem we implement the following:
+
+&nbsp;
 
 Let $\hat{\underline{p}}$ be the predicted values {$\hat{p}_{1}...\hat{p}_{N_{total}}$} of the neural networks in a certain time $t$.
 With formula $f()$ \ref{eq:net_decision1} in every $t$ a trading signal is derived by majority decision. How clearly the decision of the forecasts must be, is decided by parameter $\beta$.
@@ -337,19 +345,29 @@ $\beta$ = Ratio of majority decision
 
 $\hat{p}_{k}$ = Predicted value from neural network
 
+&nbsp;
 
+one can observe in $f()$ how the uncertain decidings result in a 0 signal. You could also use postions sizing and adjust the signal depending on the size of $\beta$ . But we have omitted this aspect, because otherwise there are too many parameters in the model.
 
 \newpage
 
 #### 3.3.3. LPD Signal {#lpd-signal}
 &nbsp;
 
-In the same manner as before, for every $k$ of the $N_{total}$ network in every time step $t$ the derivative as in section [2.2.2](#xai_finance) is calculated. From the insample LPD $Y$ the mean $\bar{Y}$ \ref{eq:Ybar} and the standard deviation $sdY$ \ref{eq:sdY} for every $lag_{j}$ , $j \in$ {$1...lag_{n}$} is derived. In the out-of-sample $\bar{Y}_{j}$ and $sdY_{j}$  are used to generate a signal by the following:
+
+For the calcula
+In the same manner as before, for every $k$ of the $N_{total}$ network in every time step $t$ the derivative as in section [2.2.2](#xai_finance) is calculated. 
+
+
+
+
+
+From the insample LPD $Y$ the mean $\bar{Y}$ \ref{eq:Ybar} and the standard deviation $sdY$ \ref{eq:sdY} for every $lag_{j}$ , $j \in$ {$1...lag_{n}$} is derived. In the out-of-sample $\bar{Y}_{j}$ and $sdY_{j}$  are used to generate a signal by the following:
 
 With formula \ref{eq:count} in every $lag_{j}$ it is decided wether the predicted LPD $X_{j}$ exceeds $\bar{Y}_{j} \pm \lambda sdY_{j}$. In figure \ref{fig:lpd_explain} this procedure is visualized, just for one lag due to a smoother visualisation. 
 
 The output of $g$ \ref{eq:count} is between 0 and $lag_{n}$.
-In  $\text{signal}$ \ref{eq:net_decision2} $g$ is further applied in order to generate a signal. 
+In  $\text{signal}$ \ref{eq:net_decision2}, $g$ is further applied in order to generate a signal. 
 
 With $\eta_{lower}$ and $\eta_{upper}$ it is decided which signal output the LPD will be assigned. We have decided, for values bigger than $\eta_{upper}$ we conclude a big change is likely. In section [3.1.](#data_exploration) last section we observed, that larger negative returns are more likely than positive, therefore the proposed signal is 0. For values between $\eta_{lower}$ and $\eta_{upper}$ we propose a signal 0.5. 
 
@@ -507,7 +525,8 @@ the 9 splits which were introduced in section [3.2.1](#test_train), are now used
 
 Our findings from the GARCH model were not very promising, nevertheless we combine their signals with the neuralnet output and the signals from LPD.
 
-With the previously established architecture, different values for the parameters: $\lambda$, $\eta_{lower},\eta_{upper}$ and $\beta$  are used and the performance is compared to each other.
+With the previously established architecture, different values for the parameters: $\lambda$, $\eta_{lower},\eta_{upper}$ and $\beta$  are used and the performance is compared to each other. In order to find a balance between precision and computation time, we found $N_{total}$= 1000 iterations should be sufficient for the evaluation.
+
 
 The most promising performance is found with $\lambda = 1$,$\eta_{lower} > \eta_{upper}$ (no 0.5 signals were used) $\eta_{upper}=3$ and $\beta = 0.2$.
 In figure \ref{fig:perf} different combinations are visualized, NN is simply trading the forecast of neuralnet based on their sign. The signals of LPD are all 1 except off all those which are predicted 0. NN+LPD is the performance as described in section [3.3.3](#lpd-signal). The combination NN+LPD+GARCH takes in account the GARCH signals from section [3.3.4](#garch-signal). If LPD or GARCH signal is 0 then the signal is also 0. 
