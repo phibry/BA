@@ -302,6 +302,9 @@ Before we trade the returns, we first need to define the environment and make so
 
 In the following we describe how in this case the neural network is used, in order to create a trading signal. Further we use the LPD, explained in section [2.2.2](#xai_finance), based on the computed neural networks to derive an additional  signal for trading.
 
+-1000 networks 
+
+
 
 #### 3.3.2. Neural Network
 &nbsp;
