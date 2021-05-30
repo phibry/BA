@@ -30,28 +30,36 @@ For processing and analyzing the data in order to fulfill the weak stationarity 
 \end{align}
 ```
 
-```{r log_ret, echo=FALSE, message=FALSE, fig.cap="BTC log returns",out.width="80%"}
-load("data/log_ret_27_03_21.rda");log_ret=    log_ret_27_03_21   # loading logreturns
-df_sub <- data.frame(date = ymd(time(log_ret)), value = as.numeric(log_ret))
-plot(df_sub,
-     type="l",
-     frame.plot = FALSE,
-     xaxt="n",
-     xlab="",
-     ylab="log return", ylim=c(-0.45, 0.2))
-axis.Date(1, at=seq(min(df_sub$date), max(df_sub$date), by="months"), format="%m-%y")
+```{r log_ret, echo=FALSE, message=FALSE, fig.cap="Logarithmic returns of BTC/USD. Start of the time series is autumn 2014 and goes here until spring 2021. One can recognize the typical patterns of log returns, namely the vola clusters. This means phases in which the returns fluctuate strongly.", out.width='85%', fig.width = 10, fig.height = 5}
+# load("data/log_ret_27_03_21.rda");log_ret=    log_ret_27_03_21   # loading logreturns
+# df_sub <- data.frame(date = ymd(time(log_ret)), value = as.numeric(log_ret))
+# plot(df_sub,
+#      type="l",
+#      frame.plot = FALSE,
+#      xaxt="n",
+#      xlab="",
+#      ylab="log return", ylim=c(-0.45, 0.2))
+# axis.Date(1, at=seq(min(df_sub$date), max(df_sub$date), by="months"), format="%m-%y")
+load("data/log_ret_27_03_21.rda")
+log_ret <- log_ret_27_03_21
+plot(log_ret, ylab="Log Return", main="Logarithmic Return BTC/USD")
 ```
 
-Figure \ref{fig:log_ret} displays the historical log returns. In addition to the volatility clusters typical for financial time series, large outliers are visible. The negative outlier at the beginning of 2020 is particularly noticeable. By computing the autocorrelation (ACF) of the series in figure \ref{fig:acf_log_ret}, we can describe the dependency in these clusters. According to the ACF, the lags 6 and 10 are significant on a 5% level. 
-
-```{r acf_log_ret, echo=FALSE, message=FALSE, fig.cap="Autocorrelation of BTC log returns for the entire time window", out.width='75%', fig.width = 8, fig.height = 5}
-chart.ACF.phil(log_ret, main="Autocorrelation of log returns", maxlag = 20, ymax = 0.07)
-```
+Figure \ref{fig:log_ret} displays the historical log returns. In addition to the volatility clusters typical for financial time series, large outliers are visible. The negative outlier at the beginning of 2020 is particularly noticeable. By computing the autocorrelation (ACF) of the series in figure \ref{fig:acf_log_ret}, we can describe the dependency in these clusters. According to the ACF, the lags 6 and 10 are significant on a 5% level.
 
 Curios from which distribution the log returns might originate, we are fitting a normal distribution and a Students-t distribution to the data in figure \ref{fig:histogramm_logreturns}. Interestingly the mean is shifted slightly (0.002) to the positive side. By inspecting the tails, one can observe that the negative tail is not fitted as well as the positive part by the t distribution. The two normal distributions either over- or underestimate the values in the tails, therefore we conclude that the proposed t-distribution fits the data better but also not perfect. Concerning the extreme outlier discussed earlier, visible in figure \ref{fig:log_ret} towards the end, the density plot makes clear how unimaginable small the probability of this extreme observation is. Although the histogram might be useful for value-at-risk considerations, for trading purposes its use is mitigated due to its complete loss of the dependency structure by plotting the returns in a density distribution.
 
+\newpage
 
-```{r histogramm_logreturns, out.width='75%', fig.cap='Distribution of BTC log returns', echo=FALSE,fig.align="center", fig.width = 8, fig.height = 6}
+```{r acf_log_ret, echo=FALSE, message=FALSE, fig.cap="Autocorrelation function of BTC log returns during the entire time period from fall 2014 to spring 2021. Lag 6 and 10 are significant (values exceed the blue dotted line) and thus have an impact on possible models.", out.width='80%', fig.width = 8, fig.height = 4.4}
+chart.ACF.phil(log_ret, main="Autocorrelation of log returns", maxlag = 20, ymax = 0.07)
+```
+
+&nbsp;
+
+&nbsp;
+
+```{r histogramm_logreturns, out.width='80%', fig.cap='Histogram of BTC log return. Possible distribution of the data. None of the possible distributions would fit the data as well as possible. The blue t-Student distribution would fit the data better in the tails, while the yellow normal distribution would disperse a little better around the expected value.', echo=FALSE,fig.align="center", fig.width = 8, fig.height = 4.4}
 # knitr::include_graphics("images/histogram_logret_3.jpeg")
 
 load("data/log_ret_27_03_21.rda")  # loading logreturns closing! data xts
@@ -107,7 +115,7 @@ We are looking for an optimal network, the optimal network should also provide r
 The reason for doing so is, we do not believe that the historical data longer than a year consists of any information about the price tomorrow. By optimizing our models we found that more data would offer no additional performance, therefore the selected subset should be sufficient. Regarding consistency, the terms train and test set are used in the same sense as in-sample and out-of-sample. As proposed in [@nn_trading] we choose a test train split from 6 months in-sample and 1 month out-of-sample. This split is applied to the whole subset in form of a rolling window. By stepping forward with this 6/1 split by steplength of one month we end up with 9 data splits in total. In figure \ref{fig:test_train} this procedure is visualized, for every new timestep, a new month is considered for the out-of-sample and the first month of the in-sample falls out of the frame. 
 
 
-```{r test_train, out.width='75%', fig.cap='In- and out-of-sample splits.', echo=FALSE, fig.width = 8, fig.height = 6}
+```{r test_train, out.width='85%', fig.cap='Nine different in- and out-of-sample splits. The 6-month training phase (in-sample) is indicated in blue and the 1-month test phase (out-of-sample) in green. The splits capture different phases of the time series. Both very turbulent phases (split 1) and rather calm phases (split 5) can be recorded.', echo=FALSE, fig.width = 10, fig.height = 6}
 # knitr::include_graphics("images/test_train_split_pp.jpeg.jpg")
 load("data/dates_mat.rda")
 
@@ -200,7 +208,7 @@ Here we would like to focus on some findings that we discovered during the proce
 
 The plot in figure \ref{fig:mse_plot1} compares one layer networks with different numbers of neurons with each other. Networks with a maximum of ten neurons are compared. These different configurations can be seen on the x-axis. The first data point corresponds to a simple network with one neuron. The y-axis shows the MSE values obtained with the respective trained model. As already explained, we use 50 different optimizations of each configuration to get a better idea of a potentially systematic relationship with the MSE. In the plot, each of the 50 configurations is drawn using a different color.
 
-```{r mse_plot1, out.width='100%', fig.cap='Fifth train/test split, 1 layer with 10 different networks.', echo=FALSE,fig.align="center"}
+```{r mse_plot1, out.width='100%', fig.cap='In- and out-of-sample MSE of the 5th split. Only the networks with only one layer are shown here. Simplest network has 1 neuron (leftmost) and the most complex one has 10 neurons (rightmost), so here you have the MSEs of 10 different networks. In-sample the MSEs tend to decrease, while out-of-sample they increase.', echo=FALSE, fig.align="center"}
 knitr::include_graphics("images/batch5/mse_5_layer1.jpeg")
 ```
 
@@ -212,7 +220,7 @@ If you add another layer to the network architecture, the number of different ne
 
 As noted earlier in figure \ref{fig:mse_plot1}, the values for the MSE also fluctuate more and more with increasing complexity. Small in-sample MSE for more complex networks leads to rather high out-of-sample MSE. This leads us to the previously mentioned challenges in section [2.1.4.1](#overfitting), and that is that too many estimated parameters can lead to overfitting of the network.
 
-```{r mse_plot2, out.width='100%', fig.cap='Fifth train/test split, 2 layers with 100 different networks.', echo=FALSE,fig.align="center"}
+```{r mse_plot2, out.width='100%', fig.cap='In- and out-of-sample MSE of the 5th split. Shown here are only the networks with two layers. The simplest network has an architecture of 1 neuron per layer (leftmost) and the most complex has 10 neurons per layer (rightmost), so you have the MSEs of 100 different networks. As in the previous graph, in-sample MSEs tend to decrease while out-of-sample MSEs tend to increase.', echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/batch5/mse_5_layer2.jpeg")
 ```
 
@@ -224,7 +232,7 @@ Lastly, we look at the results of the different network architectures with a thi
 
 It is interesting that at the beginning, with the rather simple model architectures, the MSE of all realizations is very constant and only varies very slightly.
 
-```{r mse_plot3, out.width='100%', fig.cap='Fifth train/test split, 3 layers with 1000 different networks.', echo=FALSE,fig.align="center"}
+```{r mse_plot3, out.width='100%', fig.cap='In- and out-of-sample MSE of the 5th split. Shown here are only the networks with 3 layers. Simplest network has an architecture of 1 neuron per layer (leftmost) and the most complex has 10 neurons per layer (rightmost), so here you have the MSEs of 1000 different networks. Same pattern as for 1 layer and 2 layers. In-sample the MSE decreases, out-of-sample it increases.', echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/batch5/mse_5_layer3.jpeg")
 ```
 \newpage
@@ -233,7 +241,7 @@ Figure \ref{fig:mse_plot5} shows the MSE of the models with 1-3 layers, i.e. the
 
 At this point, it should be emphasized that only the analyses from time split 5 are visualized in this section. Our primary goal is to compare the performances of different network architectures using MSE to find the optimal network that works every time split. However, finding an optimal architecture using such visual analysis of the MSE seems nearly impossible. Nevertheless, the main finding of this section is that the MSE deteriorates massively with more complex models and thus a simpler one should be considered. Equally remarkable is the fact that the same model architectures produce such different results. Whilst many models range in a more or less solid midfield, traits of overfitting can be recognized. These are reflected by the spikes in the out-of-sample MSE.
 
-```{r mse_plot5, out.width='100%', fig.cap='Fifth train/test split, all layers with 1110 different networks.', echo=FALSE,fig.align="center"}
+```{r mse_plot5, out.width='100%', fig.cap='In- and out-of-sample MSE of the 5th split. The 3 previous graphs are summarized here. One has here an overview of all 3 layers and thus of all 1110 neuron-layer combinations. The more complex a network, the smaller the in-sample MSE becomes, but the larger the out-of-sample MSE becomes.', echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/batch5/mse_5_all.jpeg")
 ```
 
@@ -243,7 +251,7 @@ What has not yet been studied is the dependence of the neural network's behavior
 
 The medians of the MSE's of all 50 equal networks across all time splits are plotted in figure \ref{fig:mse_median}. We restrict ourselves to neural networks with 1-2 layers (recognizable in the red (1) and blue (2) rectangles), since it can be assumed that too complex models are not suitable for the target. The lines represent the medians of the MSE of all 50 optimized neural networks at a given network architecture (x-axis). The nine different colors specify the specific time split in which the neural networks have been trained and tested. We anticipate that this comparison will facilitate finding a network architecture that performs across all time splits. 
 
-```{r mse_median, out.width='100%', fig.cap='MSE median across all 9 splits. For each network architecture, 50 neural networks were trained (55`500 models per time split). The nine colors illustrate how these models behave in the different time splits.', echo=FALSE,fig.align="center"}
+```{r mse_median, out.width='100%', fig.cap='MSE median across all 9 splits. For each network architecture, 50 neural networks were trained (55`500 models per time split). The nine colors illustrate how these models behave in the different time splits. Time periods with a strong trend (for example, the dark red line, split 7) lead to the same structure as already noted in the previous graphs. The more complex a network, the smaller the in-sample MSE becomes, but the larger it becomes out-of-sample.', echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/batch5/median_mse.jpeg")
 ```
 
@@ -253,7 +261,7 @@ First, there is evidence of overfitting in the medians as well. In particular, s
 
 Our goal in the second part of this thesis is to work out a trading strategy with a suitable neural network. Therefore, as the last comparison, we visualize in figure \ref{fig:sharpe_median} how well the different network architectures behave in sign trading. This is simple trading which depends on the sign of the prediction $\hat{y}_{t+1}$ i.e. next expected log return. If a positive prediction is forecasted, the trader is in a long position, otherwise in a short position. As with the previous plot, the Sharpe ratios of each neural network realization perform differently despite having the same network architecture. Therefore, we again decided to plot the median of all Sharpe ratios with the same network architecture. The nine different colors indicate the time interval during which the neural networks were trained and tested.
 
-```{r sharpe_median, out.width='100%', fig.cap='Sharpe median across all 9 splits.', echo=FALSE,fig.align="center"}
+```{r sharpe_median, out.width='100%', fig.cap='Sharpe median across all 9 splits. Sharpe ratios increase in-sample (upper plot) with increasing complexity. Out-of-sample Sharpe ratios tend to decrease with increasing complexity. However, the effect is rather small here.', echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/batch5/median_sharpe.jpeg")
 ```
 
@@ -283,7 +291,7 @@ This section describes the trading strategy in more detail. In basic terms, the 
 
 &nbsp;
 
-```{r flowchart_trading, fig.align='center', out.width='100%', fig.cap='This flowchart illustrates an overview of the trading strategy applied in this section. ', echo=FALSE}
+```{r flowchart_trading, fig.align='center', out.width='100%', fig.cap='This flowchart illustrates an overview of the trading strategy applied in this section. From left to right: Trading signals are created from forecasts, XAI and GARCH and combined at the end.', echo=FALSE}
 knitr::include_graphics("images/flowchart_trading.png")
 ```
 
@@ -363,19 +371,16 @@ Correctly concluded, we get a trading signal for each date.
 
 
 
-```{r lpd_explain, fig.align='center', out.width='60%', fig.cap="LPD Plot for illustration", echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
+```{r lpd_explain, fig.align='center', out.width='60%', fig.cap="LPD Plot for illustration: Visualization of the above signal generation procedure. For the top LPD time series, the mean value and the upper and lower decision bands are plotted.", echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
 knitr::include_graphics("images/xailpd/out_decision_small.jpeg")
 load("data/xai/7_7_withsignal_xai_in/OLPD_mat_out_plot.rda")
 load("data/xai/7_7_withsignal_xai_in/meanCI.rda")
-
 plot.xts(OLPD_mat_out["::2021-02-08."],
          col=c("#003f5c", "#665191", "#d45087", "#f6004a", "#ff1208", "#ffa600", "#ff7c43"),
          main="LPD Out-of-Sample")
-
 lines(meanCI$meanline,lwd=2,col="black",lty=2)
 lines(meanCI$meanup,lwd=2,col="red",lty=3)
 lines(meanCI$meandown,lwd=2,col="red",lty=3)
-
 addLegend("bottomleft",
           legend.names=c(TeX(sprintf("Mean value from $lag_{j}$")), TeX(sprintf("Standard deviation from $lag_{j}*\\lambda$"))),
           col=c("black","red"),
@@ -385,17 +390,14 @@ addLegend("bottomleft",
           bg="white")
 ```
 
-```{r lpd_explain_sum, fig.align='center', out.width='60%', fig.cap="LPD Sum Plot for illustration", echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
+```{r lpd_explain_sum, fig.align='center', out.width='60%', fig.cap="LPD Sum Plot for illustration: Sum of the LPDs in black. Green is the upper decision limit and the red is the lower one. Values below the green line lead to a signal = 1. Values above the red line lead to a signal = 0. Values between the red and the green line lead to a signal = 0.5.", echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
 # knitr::include_graphics("images/xailpd/out_sum_2.jpeg")
-
 load("data/xai/7_7_withsignal_xai_in/sum_explana_out_plot.rda")
 load("data/xai/7_7_withsignal_xai_in/sumCI.rda")
 plot(sum_explana["::2021-02-08"],type=c("b"),main=TeX(sprintf("Sum of lags deviating $\\lambda$ *sdY from $\\bar{Y}$")))
 lines(sumCI$lineup,lwd=2,col="red",lty=1)
 lines(sumCI$linedown,lwd=2,col="green",lty=1)
-
 name=c("η upper","η lower")
-
 addLegend("topright",
           legend.names=c(TeX(sprintf("$\\eta_{upper}$")), TeX(sprintf("$\\eta_{lower}$"))),
           col=c("red","green"),
@@ -444,7 +446,6 @@ sdY=\sqrt{  \frac{1}{n_{in}}  \sum_{t=1}^{n_{in}}(Y_{t}-\bar{Y})^{2} }
   0.5    & \quad \text{if } ,  \eta_{lower} < \text{g(\underline{X})} \le \eta_{upper}    \\                                              
   0      & \quad \text{if } ,   \eta_{upper} < \text{g(\underline{X})} \\
   1      & \quad \text{else}
-
    \end{cases}
 \end{equation}
 ```
@@ -478,7 +479,7 @@ The second strategy is solely based on volatility predictions resulting from a G
 
 ```{=tex}
 \begin{equation}\label{eq:vola_predict}
-\text{signal}_{garch}(\hat{\sigma}_{t}) =
+\text{Signal}_{GARCH}(\hat{\sigma}_{t}) =
 \begin{cases} 
                                               
   0      & \quad \text{if} ,  \hat{\sigma}_{t} \ge \sigma_{historical} \\
@@ -524,7 +525,6 @@ Our findings from the GARCH model were not very promising, nevertheless we combi
 
 With the previously established architecture, different values for the parameters: $\lambda$, $\eta_{lower},\eta_{upper}$ and $\beta$  are used and the performance is compared to each other. In order to find a balance between precision and computation time, we found $N_{total}$= 1000 iterations should be sufficient for the evaluation.
 
-
 The most promising performance is found with $\lambda = 1$,$\eta_{lower} > \eta_{upper}$ (no 0.5 signals were used) $\eta_{upper}=3$ and $\beta = 0.2$.
 In figure \ref{fig:perf} different combinations are visualized, NN is simply trading the forecast of neuralnet based on their sign. The signals of LPD are all 1 except off all those which are predicted 0. NN+LPD is the performance as described in section [3.3.3](#lpd-signal). The combination NN+LPD+GARCH takes in account the GARCH signals from section [3.3.4](#garch-signal). If LPD or GARCH signal is 0 then the signal is also 0. 
 
@@ -532,7 +532,7 @@ By investigating the plot it seems that some combinations are performing better 
 
 &nbsp;
 
-```{r perf, fig.align='center', out.width='80%', fig.cap="Different signal combinations: performance plot", echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
+```{r perf, fig.align='center', out.width='80%', fig.cap="Visualization of different signaling combinations. The best performing rule here is buy and hold in green. It is closely followed by the light blue NN+LPD combination with a $\\beta$ of 0.2. The behavior of the individual rules is often very similar, few different decisions can influence the performance. Especially at the end of July, beginning of August the rules behave differently, but then usually behave very similarly.", echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
 
 # knitr::include_graphics("images/xailpd/lambda_1/perf.svg")
 
@@ -564,13 +564,14 @@ addLegend("topleft",
           ncol=1,
           bg="white")
 ```
+
 \newpage
 
 Regarding the Sharpe in figure \ref{fig:sharpe} our findings from before are confirmed. The NN+LPD with $\beta = 0.2$ has even a better Sharpe ratio than buy and hold. But another observation is seemingly more interesting, the LPD is alway better than only NN. By investigating the other calculations we have done, we find the same pattern, therefore we conclude that LPD brings us a real benefit.
 
 &nbsp;
 
-```{r sharpe, fig.align='center', out.width='80%', fig.cap="Different signal combinations: Sharpe",echo=FALSE, fig.width = 8, fig.height = 5}
+```{r sharpe, fig.align='center', out.width='80%', fig.cap="Sharpe ratios of different signaling combinations. Based on the performance measure Sharpe ratios, the LPDs lead to a better performance. According to the Sharpe ratio, the performance of the NN+LPD signaling rule with a $\\beta$ of 0.2, is better than Buy and Hold.",echo=FALSE, fig.width = 8, fig.height = 5}
 # knitr::include_graphics("images/xailpd/lambda_1/sharpe.svg")
 
 load("data/xai/7_7_withsignal_xai_in/sharpeplot_without_eth.rda")
@@ -599,6 +600,7 @@ my_bar <- barplot(as.numeric(sharpesave), border=F,
                   ylim=c(0,5), 
                   main=TeX(sprintf("Sharpe $\\lambda = %d$", 1)),
                   ylab="Sharpe")
+grid()
 par(mar=defaultmar)
 ```
 
@@ -609,7 +611,7 @@ But lets take this plot not to serious because these splits are just one month o
 
 &nbsp;
 
-```{r batch, fig.align='center', out.width='80%', fig.cap="Different signal combinations: Sharpe per split",echo=FALSE, fig.width = 8, fig.height = 5}
+```{r batch, fig.align='center', out.width='80%', fig.cap="Sharpe ratios from the same different signaling combinations as in the last two graphs, but each for the 9 different time splits. Certain combinations have very similar decisions and thus lead here also to similar trajectories of the Sharpe ratios.",echo=FALSE, fig.width = 8, fig.height = 5}
 # knitr::include_graphics("images/xailpd/lambda_1/batch.svg")
 
 load("data/xai/7_7_withsignal_xai_in/sharpmat_perbatch_without_eth.rda")
@@ -640,7 +642,7 @@ That said, we use a simple rule to integrate Ether. If the signal of the combina
 
 &nbsp;
 
-```{r with_eth, fig.align='center', out.width='80%', fig.cap="Added Eth signal",echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
+```{r with_eth, fig.align='center', out.width='80%', fig.cap="In addition to LPD+NN combinations with different beta, combinations with ETH are added here. The combination LPD+NN+ETH with a beta of 0.2, clearly performs best here. Overall, even 3 combinations are better than buy and hold.",echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
 # knitr::include_graphics("images/xailpd/lambda_1/lpd_nn_eth_perf.svg")
 load("data/xai/7_7_withsignal_xai_in/performance_with_eth.rda")
 load("data/xai/7_7_withsignal_xai_in/nn_lpd_without_eth.rda")
@@ -672,7 +674,7 @@ The one performance with NN+LPD+ETH with $\beta = 20 %$ seems promising. Also fo
 
 \newpage
 
-```{r with_eth_sole, fig.align='center', out.width='80%', fig.cap="Added Eth signal",echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
+```{r with_eth_sole, fig.align='center', out.width='80%', fig.cap="Visualization of the best performing signaling and the benchmark buy and hold. One can clearly see that as of August 2020, the purple signaling strongly contrasts with the green benchmark. There are some decisions which lead to a better performance than simple buy and hold.",echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
 
 load("data/xai/7_7_withsignal_xai_in/performance_with_eth.rda")
 load("data/xai/7_7_withsignal_xai_in/nn_lpd_without_eth.rda")
@@ -697,8 +699,6 @@ addEventLines(events, srt=0, pos=1, lty=3, col = rep("#004c6d",6),lwd=2, cex=1.2
 ```
 
 &nbsp;
-
-
 
 For  a closer analysis, lets have a look at the cumulated logreturns of the best performing model vs. buy-and-hold in Figure \ref{fig:with_eth_sole}. The following analysis is related to the violet chart and starts from left to right, beginning with letter **A**. 
 Imideatly after the line by letter **A**, there are several decisions which differ from buy-and-hold and force a shift to the series. In letter **B** we observe a similar behavior for a short period of time. The unsatisfying trend change in letter **C** is stopped around the first of November. Thereafter unto the point in letter **D** the decisions of the model behave quite similar the green line. Right after **D** the net handles the negative trend very well and climbs further up. The same accounts for letter E, where the trend once more goes in the opposite direction than the benchmark. Shortly after **F** the model does exactly the same as buy-and-hold.
