@@ -2,9 +2,6 @@
 soutput:
   pdf_document:
     toc: no
-  html_document:
-    toc: no
-    df_print: paged
 bibliography: add/doc.bib
 linkcolor: red
 csl: add/ieee.csl
@@ -12,7 +9,7 @@ header-includes:
 - \usepackage{pdfpages}
 - \usepackage{amsmath}
 - \usepackage{placeins}
-- \usepackage[format=plain, font=it]{caption}
+- \usepackage[font=it]{caption}
 output:
   pdf_document: default
 ---

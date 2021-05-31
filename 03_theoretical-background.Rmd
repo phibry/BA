@@ -259,7 +259,6 @@ It is noticeable that the structure of LPD's strongly resembles the logarithmic 
 &nbsp;
 
 ```{r xai_plot1, fig.align='center', echo=FALSE, fig.cap="Upper panel: LPD's of BTC's log returns. Only lags 6 to 10 are highlighted in color. Lag 6 (red) and 10 (orange) have the largest positive impact. 7, 8 and 9 have a negative impact. Lower panel: Logarithmic returns of BTC. The volatile phases can be seen very well again at the top of the LPD's.", out.width='100%', fig.width = 11, fig.height = 8.5}
-# Load Data
 par(mfrow=c(2,1))
 colorino <- c("#000000", "#000000", "#000000", "#000000", "#000000", "#000000", "#f6004a", "#004c6d", "#0075b6", "#665191", "#ff7c43")
 plot(xai_data, main="LPD ~ Bitcoin", col=colorino)
@@ -328,7 +327,7 @@ The second performance measurement method is also widely used and called mean sq
 
 ```{=tex}
 \begin{align} \label{eq:MSE}
-  \text{MSE} &= \frac{1}{N}\sum_{i = 1}^{N}(\text{realvalue}_{i}-\text{prediciton}_{i})^2 \\
+  \text{MSE} &= \frac{1}{N}\sum_{i = 1}^{N}(\text{realvalue}_{i}-\text{prediction}_{i})^2 \\
   &= \frac{1}{N}\sum_{i = 1}^{N}(y_{i}-\hat{y}_{i})^2
 \end{align}  
 ```
@@ -376,7 +375,7 @@ addEventLines(events,srt=90,pos=2,lty=3,col = c("darkgreen","red","darkgreen","r
 
 &nbsp;
 
-```{r logprice_btc, out.width='70%', fig.cap='Logarithmic transformation of the price development in the upper chart. In contrast to the upper chart, here you can see not only the extreme price spikes, but also the rather small price movements.', echo=FALSE, fig.keep='last', fig.width = 8, fig.height = 5}
+```{r logprice_btc, out.width='70%', fig.cap='Logarithmic transformation of the price development of the upper chart. In contrast to the upper chart, here you can see not only the extreme price spikes, but also the rather small price movements.', echo=FALSE, fig.keep='last', fig.width = 8, fig.height = 5}
 # knitr::include_graphics("images/btc_usd.jpeg")
 plot.xts(cl_btc_log,col = "black", main="Logarithmic Bitcoin in US $",lwd = 0.8)
 addEventLines(events,srt=90,pos=2,lty=3,col = c("darkgreen","red","darkgreen","red","darkgreen"),lwd=2,)
