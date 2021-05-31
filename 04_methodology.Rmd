@@ -119,7 +119,7 @@ The reason for doing so is, we do not believe that the historical data longer th
 # knitr::include_graphics("images/test_train_split_pp.jpeg.jpg")
 load("data/dates_mat.rda")
 
-subseti <- logret["2020-01-01::"]
+subseti <- logret["2020-01-01::2021-03-27"]
 
 # r graph gallery
 # Create a df
@@ -201,7 +201,30 @@ The complexity of the search for the optimal network architecture increases sign
 
 \newpage
 
-#### 3.2.2.  Evaluating Network Architecture {#evaluate_nn}
+#### 3.2.2. Defining Input-Layer {#input-layer}
+&nbsp;
+
+To train the feedforward neural networks, we need to specify the input layer in addition to the network architecture. For this, we take the autocorrelation function of the time period specified earlier.
+
+In contrast to the ACFs of the entire data set shown in figure \ref{fig:acf_log_ret} where lags 6 and 10 have a high impact, here in figure \ref{fig:test_train_acf} we see that lags 4 and 10 are significant. If one uses the ACFs as an indicator for the specification of a model, it must be considered that for other time periods also other rules apply. For modeling the entire data set, one could safely specify the input layer up to a lag of 10. Here for our subset, we specify the input layer up to a lag of 7. Lag 7 is just significant and could potentially explain an important dependency in the data. Since Bitcoin can be traded 7 days a week, including weekends, the dependency of 7 lags in the ACFs would also be explained.
+
+```{r test_train_acf, out.width='85%', fig.cap='Autocorrelation function of our chosen time period. One can clearly see an increased influence of lags 4 and 7, not as in the ACFs of the entire data set with significant values at 6 and 10. Only late at lag 18 does the ACF show a significant value again.', echo=FALSE, fig.width = 10, fig.height = 6}
+
+chart.ACF.phil(subseti, maxlag = 20, ymax = 0.12, main="ACF of time period: 2020-01-01/2021-03-27")
+```
+
+For the following procedure for finding an optimal network architecture we use an input layer of 7 lags. Since we will also use the same time period later in the trading section [3.3](#trading-strat), we will also specify the input layer with 7 lags for training these networks.
+
+\newpage
+
+#### 3.x.x. Neural Network Training {#train-nn}
+&nbsp;
+
+So far, we have specified the time periods as well as the input layer for the neural network. Together with one of the many different neuron layer combinations from section [3.2](#networkarchitecture), we can train networks. The exact procedure will be explained in more detail in this section.
+
+\newpage
+
+#### 3.2.3.  Evaluating Network Architecture {#evaluate_nn}
 &nbsp;
 
 Here we would like to focus on some findings that we discovered during the processing of the trained networks. To illustrate the results, an extract is discussed here, namely only the 5th train/test split (in figure \ref{fig:test_train} the middle one).
@@ -269,14 +292,14 @@ When looking at the Sharpe ratios, an inverse relationship between the in-sample
 
 \newpage
 
-#### 3.2.3. Model Selection {#mod-select}
+#### 3.2.4. Model Selection {#mod-select}
 &nbsp;
 
 With the above procedure, we have been able to identify the characteristics of neural networks. In time series applications, complex networks lead to overfitting. We could detect an inverse relationship between in- and out-of-sample MSE. We trained a large number of networks, yet no distinct optimal neuron-layer combination can be identified. Determining the architecture based on the minimum MSE would not yield good results. There would be too great a risk that the chosen architecture would be too complex and lead to overfitting. Additionally, the chosen architecture should lead to trustworthy predictions over different time periods (in our example over the 9 splits).
 
 For the rest of the procedure, we decide to use a neural network architecture of (7,7). According to the 2-layer structure visualized in figure \ref{fig:mse_plot2}, the architecture we chose looks very balanced. In-sample, the MSE is rather in a more optimal range (smaller MSE) and out-of-sample, any overfitting is rather minimal compared to even more complex networks. In the attachment in figure \ref{fig:meanmean2}, you can see the MSE's averaged across all 9 splits. The neuron layer architecture of (7,7) is exactly in the range where the in-sample MSE decreases and out-of-sample increases. The selected network lies exactly between the volatile networks, thus this architecture does not seem to be as prone to overfitting as the one next to it. The (7,7) network is not too complex, tends to have a good in-sample MSE and the out-of-sample MSE does not tend to overfit as much.
 
-#### 3.2.4. Benchmark {#benchmark}
+#### 3.2.5. Benchmark {#benchmark}
 &nbsp;
 
 The trained networks and applied methods are compared with each other using a benchmark. For this purpose, we use the buy-and-hold, which is a long-term passive investment strategy. Investing with this strategy often leads to better returns in the long run than active trading [@bnh]. This strategy is hard to beat, especially when the market is trending upwards. In such a trend, an active strategy would hardly recommend anything other than buy-and-hold.
@@ -297,7 +320,7 @@ knitr::include_graphics("images/flowchart_trading.png")
 
 &nbsp;
 
-The main component is the prediction of the neural network. This reflects the expected log return of the next day and is thus an important indicator of whether the money should remain invested or not. However, the output of these neural networks are to be treated with caution, as we have seen in the section [3.2.2](#evaluate_nn). Therefore, we rely on XAI to detect instability and incorporate this information into the final trading signal. Furthermore, volatility persistence is observed in financial time series, i.e. large changes can be expected after large changes. Leverage effects are also probable, which means that the tendency to achieve a negative return is higher when volatility is large. A GARCH model is used to model these phenomena, whose volatility predictions provide important information for the final trading signal.
+The main component is the prediction of the neural network. This reflects the expected log return of the next day and is thus an important indicator of whether the money should remain invested or not. However, the output of these neural networks are to be treated with caution, as we have seen in the section [3.2.3](#evaluate_nn). Therefore, we rely on XAI to detect instability and incorporate this information into the final trading signal. Furthermore, volatility persistence is observed in financial time series, i.e. large changes can be expected after large changes. Leverage effects are also probable, which means that the tendency to achieve a negative return is higher when volatility is large. A GARCH model is used to model these phenomena, whose volatility predictions provide important information for the final trading signal.
 
 While these methods sound promising, it should not be forgotten that a buy-and-hold strategy (given nerves of steel) also led to remarkable performances in the past that even outperformed traditional asset classes. The price development is described in sections [2.4.1](#historical_analysis) and [2.4.3](#bitcoin_valuation). That is why buy-and-hold is frequently used as a comparison. 
 
@@ -518,8 +541,8 @@ Figure \ref{fig:garch_trading} illustrates how the GARCH trading strategies show
 #### 3.3.5. NN and LPD Estimation
 &nbsp;
 
-In section [3.2.3](#mod-select) we have decided to fix the architecture 7 layers 7 nets, all
-the 9 splits which were introduced in section [3.2.1](#test_train), are now used for trading. The out-of-sample performances of every split are added together and are compared with the benchmark from [3.2.4](#benchmark).
+In section [3.2.4](#mod-select) we have decided to fix the architecture 7 layers 7 nets, all
+the 9 splits which were introduced in section [3.2.1](#test_train), are now used for trading. The out-of-sample performances of every split are added together and are compared with the benchmark from [3.2.5](#benchmark).
 
 Our findings from the GARCH model were not very promising, nevertheless we combine their signals with the neuralnet output and the signals from LPD.
 
