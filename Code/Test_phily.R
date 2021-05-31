@@ -1023,3 +1023,17 @@ my_bar <- barplot(as.numeric(sharpesave), border=F,
                   ylab="Sharpe")
 grid()
 par(mar=defaultmar)
+
+
+# Plot####
+load("data/log_ret_27_03_21.rda")
+load("data/BTC_USD_27_03_21.rda")
+load("data/xai_data.rda")
+load("data/xai_lm.rda")
+
+par(mfrow=c(2,1))
+colorino <- c("#000000", "#000000", "#000000", "#000000", "#000000", "#000000", "#f6004a", "#004c6d", "#0075b6", "#665191", "#ff7c43")
+plot(xai_data, main="LPD ~ Bitcoin", col=colorino)
+for (i in c(7,8,9,10,11))
+  mtext(colnames(xai_data)[i], col=colorino[i], line=-i*0.8)
+plot(logret, main="Log Return ~ Bitcoin")

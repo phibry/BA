@@ -16,6 +16,7 @@ dates_mat[1,][3]
 
 
 
+chart.ACF.phil(logret["2020-01-01::2021-03-27"],  ymax = 0.12, main="ACF of time period: 2020-01-01/2021-03-27")
 
 #.####
 # Training/Prediction####
