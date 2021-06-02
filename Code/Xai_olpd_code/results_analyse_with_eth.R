@@ -58,7 +58,7 @@ nn_signal_string=  paste("nn_signal","anz=",as.character(anz),"decision=",as.cha
 # assign("sharpmat_2",get(sharpmat_string))
 # assign("nn_signal_2",get(nn_signal_string))
 # assign("olpd_signal_2",get(olpd_signal_string))
-# 
+
 
 # assign("olpd_3",get(olpd_string))
 # assign("nn_3",get(nn_string))
@@ -268,6 +268,12 @@ assign(batchsharpestring,allsharp)
 
 # 
 
+
+
+
+
+
+
 #plots####
 #-----------------------------------------------------------------------------
 
@@ -304,6 +310,32 @@ addLegend("topleft",
           bg="white")
 
 
+# real performance with eth
+
+getSymbols("BTC-USD") # loads the newest data from quandl
+BTC_USD=na.omit(`BTC-USD`)
+
+return_eth=diff(ETH$`ETH-USD.Close`)["2020-07-01::2021-03-27"]
+return_btc=diff(BTC_USD$`BTC-USD.Close`)["2020-07-01::2021-03-27"]
+
+
+
+
+nn_lpd=nn_signal_2
+nn_lpd[which(olpd_signal_2==0)]<-0
+
+original_ret_with_signal=return_btc*nn_lpd
+
+dummy4=which(original_ret_with_signal==0)
+
+
+original_ret_with_signal[dummy4,]=return_eth[dummy4,]
+
+
+
+cbind(original_ret_with_signal,return_btc)
+
+plot(cbind(cumsum(original_ret_with_signal),cumsum(return_btc)  ))
 
 
 

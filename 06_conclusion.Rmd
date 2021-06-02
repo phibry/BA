@@ -5,29 +5,61 @@ geometry: margin = 1in
 
 ## 5. Conclusion
 
+
+
+
+
+realistic view:
+
+- need more iterations to proof  stability
+
+- randomness in financial Timeseries
+
+nn interesting
+
+cryptoassets on the run anyway
+
+
+
+Problems?
+
+
+
+
+
 - Restate the thesis
 - Review the key points of your work
 - Explain why your work is relevant
 - Add a take-home message for the reader
 
+
 ### 5.1. Conclusion
 
-In this bachelor thesis we deal with three different fields. First, the network architecture of a neural network is investigated, then the model is analyzed using an XAI approach. In a last step, the information found on this paper and general time series analysis is combined to form a trading strategy. The methodology is based on the guiding questions defined in chapter [1.](#introduction):
 
-1) What influence does the selection of the network architecture have on the quality of predictions? What influence can be found with respect to the Sharpe ratio of a simple trading strategy?
+
+In this bachelor thesis, we deal with three different fields. First, the network architecture of a neural network is investigated, then the model is analyzed using an XAI approach. In the last step, the information found in this paper and general time series analysis is combined to form a trading strategy. The methodology is based on the guiding questions defined in chapter [1.](#introduction):
+
+1) What influence does the selection of the network architecture have on the quality of predictions? What influence can be found concerning the Sharpe ratio of a simple trading strategy?
 
 Pursuing the first guiding question, all possible network architecture combinations between one layer with one neuron and three layers with ten neurons each are quantitatively compared. The plots of the error function MSE in chapter [3.2.2.](#evaluate_nn) show that a complex model is more prone to overfitting. The Sharpe ratio is used to assess trading performance. There it can be seen that the inverse relationship between the in-sample and out-of-sample indicates overfitting characteristics. In conclusion, no rule of thumb can be found that works well without testing and comparing. The model should be complex enough for the sake of accuracy, but should not have overfitting. Ultimately, it seems to make sense that the number of neurons should be in the range of the number of inputs.
 
 2) What is the added value of enhancing this neural network with aspects of explainable artificial intelligence (XAI)? Again, the impact on trading performance will be investigated. 
 
-Of the methods presented, the linear parameter data approach (LPD) turns out to be the most useful for financial time series. Important reasons for this are that the data should remain chronologically ordered and the dependency structure should remain in place. The derivatives after the intercept and the weights reveal important points. On one hand, there is an analogy to linear regression, which suggests that some explanatory variables are more important than others at a point in time. Furthermore, analogous to the autocorrelation of the bitcoin log returns, it shows which lags are important and should be fed into the neural network. LPD cannot explain the operation of the network, the role of weights and error terms, and the development of the backpropagation algorithm. In summary, the derivations do a good job of revealing when the neural network is unstable and thus inaccurate outputs are to be expected. 
+Of the methods presented, the linear parameter data approach (LPD) turns out to be the most useful for financial time series. Important reasons for this are that the data should remain chronologically ordered and the dependency structure should remain in place. The derivatives after the intercept and the weights reveal important points. On one hand, there is an analogy to linear regression, which suggests that some explanatory variables are more important than others at a point in time. Furthermore, analogous to the autocorrelation of the bitcoin log returns, it shows which lags are important and should be fed into the neural network. LPD cannot explain the operation of the network, the role of weights and error terms, and the development of the backpropagation algorithm. In summary, the derivations do a good job of revealing when the neural network is unstable, and thus inaccurate outputs are to be expected. 
 
-3) How can the acquired information about neural networks, XAI and general time series analysis be used to define an efficient trading strategy?
+3) How can the acquired information about neural networks, XAI, and general time series analysis be used to define an efficient trading strategy?
 
+The selected neural network provides the predictions of the log return of the next day. Referring to the central limit theorem, 1000 neural networks are optimized per prediction. With the help of a majority decision, which depends on a parameter $\beta$, the definite signal is derived from the neuronal network. At the same time, LPD shows in which time periods the model is unstable and therefore the output should be taken with caution. Extreme events of the individual derivatives in the LPD plot are combined to generate an additional trading signal. With the addition of a GARCH model, future volatility is estimated and if estimates are high, the market is exited as a precaution. Combining this information, it is noticeable that over the period tested, the buy-and-hold benchmark beats all methods. However, the addition of the signals from the LPD lead to better returns than the same model without LPD. Therefore, for the tested period, the addition of XAI seems to offer an effective added value. 
 
+Investing is about having your money invested in the market. Therefore, the thought process is continued by making an alternative investment in Ether during phases where the previous methods recommend going out of the market. Surprisingly, such a strategy leads to an outperformance of buy-and-hold for the chosen period. 
 
 
 ### 5.2. Outlook
 
-Tellus at urna condimentum mattis pellentesque id nibh. Morbi tempus iaculis urna id volutpat lacus laoreet. Sem fringilla 
+
+- Point Prognose real test daily
+
+- what wopuld the model do if we change the timeperiod?
+
+
 

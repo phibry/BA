@@ -743,3 +743,23 @@ xai_outp<-function(x,lags,in_out_sep,neuron_vec,intercept=F,anz=1000,percentage=
   
 }
 
+
+
+############lpd original###
+
+
+
+In the previous section we derived the predictions of the neural network. Based on these predictions for every $k$ of the $N_{total}$ network in every time step $t$ the derivative as in section [2.2.2](#xai_finance) is now calculated. The LPDs for every $k$ are averaged with the arithmetic mean. As a result we get the insample LPD $\underline{Y}_{t}$ containing The LPD from $lag_{1}$ to $lag_{j}$, same accounts for the out of sample LPD $\underline{X}_{t}$.
+  
+  
+  From the insample LPD $Y$ the mean $\bar{Y}$ \ref{eq:Ybar} and the standard deviation $sdY$ \ref{eq:sdY} for every $lag_{j}$ , $j \in$ {$1...lag_{n}$} is derived. In the out-of-sample $\bar{Y}_{j}$ and $sdY_{j}$  are used to generate a signal by the following:
+    
+    With formula \ref{eq:count} in every $lag_{j}$ it is decided wether the predicted LPD $X_{j}$ exceeds $\bar{Y}_{j} \pm \lambda sdY_{j}$. In figure \ref{fig:lpd_explain} this procedure is visualized, just for one lag due to a smoother visualisation. 
+  
+  The output of $g$ \ref{eq:count} is between 0 and $lag_{n}$.
+  In  $\text{signal}$ \ref{eq:net_decision2}, $g$ is further applied in order to generate a signal. 
+  
+  With $\eta_{lower}$ and $\eta_{upper}$ it is decided which signal output the LPD will be assigned. We have decided, for values bigger than $\eta_{upper}$ we conclude a big change is likely. In section [3.1.](#data_exploration) last section we observed, that larger negative returns are more likely than positive, therefore the proposed signal is 0. For values between $\eta_{lower}$ and $\eta_{upper}$ we propose a signal 0.5. 
+    
+    Function \ref{eq:net_decision2} $\text{signal}$  is now applied to every timestep $_{t}$, therefore the final LPD signal is computed.
+    

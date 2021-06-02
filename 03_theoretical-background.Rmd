@@ -9,11 +9,11 @@ bibliography: add/doc.bib
 
 ## 2. Theory {#theory}
 
-The following chapter is intended to provide the theoretical foundations necessary for our work. It is divided into a part that provides an overview of artificial neural networks. Followed by section [2.2.](#bitcoin) which shows the background and the ecosystem of Bitcoin. This knowledge should be kept in mind, which should help in understanding the price formation of bitcoin.
+The following section is intended to provide the theoretical foundations necessary for our work. It is divided into a part that provides an overview of artificial neural networks. Followed by section [2.4](#bitcoin) which shows the background and the ecosystem of Bitcoin. This knowledge should be kept in mind, which should help in understanding the price formation of Bitcoin.
 
 ### 2.1. Neural network {#neural_network}
 
-In the context of this work, artificial neural networks are used to answer supervised learning questions that focus on the classification of data. This means that a neural network finds a correlation between the data and their labels and optimizes its parameters to minimize the error for the next try. This process is called supervised training and is performed with a test data sample. An application example of classification is that a neural network is used for face recognition after it has learned the classification of different faces in the process of supervised training. Predictive analysis works similarly to the classification of labeled data. It estimates future values based on past events and can be trained with historical data. On the other hand, unsupervised learning (clustering) is applied to detect patterns from unlabeled data. Based on these patterns, for example, anomalies can be detected that are relevant in the fight against fraud (fraud detection). Unsupervised learning is not discussed further in this paper. Section [2.1.1.](#perceptron) will demonstrate the functioning of a neural network using a simple perceptron.
+In the context of this work, artificial neural networks are used to answer supervised learning questions that focus on the classification of data. This means that a neural network finds a correlation between the data and their labels and optimizes its parameters to minimize the error for the next try. This process is called supervised training and is performed with a test data sample. An application example of classification is that a neural network is used for face recognition after it has learned the classification of different faces in the process of supervised training. Predictive analysis works similarly to the classification of labeled data. It estimates future values based on past events and can be trained with historical data. On the other hand, unsupervised learning (clustering) is applied to detect patterns from unlabeled data. Based on these patterns, for example, anomalies can be detected that are relevant in the fight against fraud (fraud detection). Unsupervised learning is not discussed further in this paper. Section [2.1.1](#perceptron) will demonstrate the functioning of a neural network using a simple perceptron.
 
 #### 2.1.1. Perceptron {#perceptron}
 &nbsp;
@@ -38,7 +38,7 @@ Inputs are the information that is fed into the model. In the case of econometri
 knitr::include_graphics("images/Perceptron.jpg")
 ```
 
-The perceptron can also be represented as a function, which can be seen in equation \ref{eq:perceptron}. Analogous to the representation above, the inputs $x_{i}$ are multiplied by the weights $w_{i}$ in a linear combination. Then an error term is added so that the whole can be packed into the non-linear activation function $g(S)$ . $\hat{y}$ is the binary output of this perceptron. With the aid of an activation function, binary output is obtained. The Heaviside step function shown in figure \ref{fig:perceptron_schema} is usually only used in single layer perceptrons, which recognize linear separable patterns. For the multi-layer neural networks presented later, step functions are not an option, because in the course of the backpropagation algorithm the gradient descent has to be minimized. This requires derivatives of the activation function, which in the case of this Heaviside step function equals 0. Because the foundation for the optimization process is missing, functions like the sigmoid function or the hyperbolic tangent function are used [@nn_learning_theoretical_foundations]. More about this topic is discussed in chapter [2.1.2](#backprogation_algorithm).
+The perceptron can also be represented as a function, which can be seen in equation \ref{eq:perceptron}. Analogous to the representation above, the inputs $x_{i}$ are multiplied by the weights $w_{i}$ in a linear combination. Then an error term is added so that the whole can be packed into the non-linear activation function $g(S)$ . $\hat{y}$ is the binary output of this perceptron. With the aid of an activation function, binary output is obtained. The Heaviside step function shown in figure \ref{fig:perceptron_schema} is usually only used in single layer perceptrons, which recognize linear separable patterns. For the multi-layer neural networks presented later, step functions are not an option, because in the course of the backpropagation algorithm the gradient descent has to be minimized. This requires derivatives of the activation function, which in the case of this Heaviside step function equals 0. Because the foundation for the optimization process is missing, functions like the sigmoid function or the hyperbolic tangent function are used [@nn_learning_theoretical_foundations]. More about this topic is discussed in section [2.1.2](#backprogation_algorithm).
 
 ```{=tex}
 \begin{align} \label{eq:perceptron}
@@ -49,10 +49,10 @@ As just mentioned, the aim is to feed the perceptron with the training set and c
 
 \newpage
 
-#### 2.1.2. Backpropagation algorithm {#backprogation_algorithm}
+#### 2.1.2. Backpropagation Algorithm {#backprogation_algorithm}
 &nbsp;
 
-Finding the optimal weights of the neural network is achieved by finding the minimum of an error function. One of the most common methods for this is the backpropagation algorithm. This algorithm searches for the minimum of the error function by making use of a method called gradient descent. The gradient method is used in numerics to solve general optimization problems. In doing so, we progress (using the example of a minimization problem) from a starting point along a descent direction until no further numerical improvement is achieved. Since this method requires the computation of the gradient of the error function after each step, continuity and differentiability of this function must necessarily be given. The step function mentioned above in section [2.1.1.](#perceptron) is therefore out of the question, but a non-linear function such as the logistic and the hyperbolic tangent functions (sigmoid) [@backpropagation]. Both activation functions are visible in figure \ref{fig:sigmoid}. While the target range of the 'ordinary' sigmoid function (equation \ref{eq:sigmoid_logistic}) is between 0 and 1, the $\hat{y}$ of the hyperbolic tangent function (equation \ref{eq:sigmoid_tanh}) ranges between -1 and 1. $v_{i}$ equals the weighted sum including bias term.
+Finding the optimal weights of the neural network is achieved by finding the minimum of an error function. One of the most common methods for this is the backpropagation algorithm. This algorithm searches for the minimum of the error function by making use of a method called gradient descent. The gradient method is used in numerics to solve general optimization problems. In doing so, we progress (using the example of a minimization problem) from a starting point along a descent direction until no further numerical improvement is achieved. Since this method requires the computation of the gradient of the error function after each step, continuity and differentiability of this function must necessarily be given. The step function mentioned above in section [2.1.1](#perceptron) is therefore out of the question, but a non-linear function such as the logistic and the hyperbolic tangent functions (sigmoid) [@backpropagation]. Both activation functions are visible in figure \ref{fig:sigmoid}. While the target range of the 'ordinary' sigmoid function (equation \ref{eq:sigmoid_logistic}) is between 0 and 1, the $\hat{y}$ of the hyperbolic tangent function (equation \ref{eq:sigmoid_tanh}) ranges between -1 and 1. $v_{i}$ equals the weighted sum including bias term.
 
 ```{=tex}
 \begin{eqnarray}
@@ -60,13 +60,7 @@ Finding the optimal weights of the neural network is achieved by finding the min
 \hat{y}(v_{i})=\tanh(v_{i}) \label{eq:sigmoid_tanh}
 \end{eqnarray}
 ```
-<!-- \begin{align} \label{eq:sigmoid_logistic} -->
-<!-- \hat{y}(v_{i})=(1+e^{-v_{i}})^{-1} -->
-<!-- \end{align} -->
 
-<!-- \begin{align} \label{eq:sigmoid_tanh} -->
-<!-- \hat{y}(v_{i})=\tanh(v_{i}) -->
-<!-- \end{align} -->
 
 ```{r sigmoid, fig.align='center', echo=FALSE, fig.cap="Two common sigmoid activation functions: logistic functions and hyperbolic tangent."}
 # Define x
@@ -112,10 +106,10 @@ The weights get adjusted according to the following algorithm \ref{eq:weight_adj
 
 \newpage
 
-#### 2.1.3. Multilayer perceptron {#MLP}
+#### 2.1.3. Multilayer Perceptron {#MLP}
 &nbsp;
 
-Multilayer perceptrons (MLP) are widely used feedforward neural network models and make usage of the backpropagation algorithm. They are an evolution of the original perceptron proposed by Rosenblatt in 1958 [@perceptron_paper]. The distinction is that they have at least one hidden layer between input and output layer, which means that an MLP has more neurons whose weights must be optimized. Consequently, this requires more computing power, but more complex classification problems can be handled [@mlp_architecture]. Figure \ref{fig:mlp_schema} shows the structure of an MLP with $n$ hidden layers. Compared to the perceptron, it can be seen that this neural network consists of an input layer, one or more hidden layers, and an output layer. In each layer, there is a different number of neurons, respectively nodes. These properties (number of layers and nodes) can be summarized with the term 'network architecture' and will be dealt with in this thesis.
+Multilayer perceptrons (MLP) are widely used feedforward neural network models and make usage of the backpropagation algorithm. They are an evolution of the original perceptron proposed by Rosenblatt in 1958 [@perceptron_paper]. The distinction is that they have at least one hidden layer between input and output layer, which means that an MLP has more neurons whose weights must be optimized. Consequently, this requires more computing power, but more complex classification problems can be handled [@mlp_architecture]. figure \ref{fig:mlp_schema} shows the structure of an MLP with $n$ hidden layers. Compared to the perceptron, it can be seen that this neural network consists of an input layer, one or more hidden layers, and an output layer. In each layer, there is a different number of neurons, respectively nodes. These properties (number of layers and nodes) can be summarized with the term 'network architecture' and will be dealt with in this thesis.
 
 ```{r mlp_schema, fig.align='center', out.width='60%', fig.cap='Schematic diagram of a multilayer perceptron', echo=FALSE}
 knitr::include_graphics("images/MLP.jpeg")
@@ -123,7 +117,7 @@ knitr::include_graphics("images/MLP.jpeg")
 # https://assets.website-files.com/5ac6b7f2924c652fd013a891/5edab65ea64212da0ad611b7_5d52f096076d2b058e88cf0c_Artificial-neural-network-architecture-ANN-i-h-1-h-2-h-n-o.jpeg
 ```
 
-Every neural network has an input layer, which consists of one or more nodes. This number is determined from the training data and tells us how many features should be delivered to the neural network. In the case of bitcoin prices, we could use today's price and the prices of the last 10 days (lags 1-10), so the input layer would consist of 11 nodes. Some configurations also require a bias term to adjust the output along with the weighted sum, which is also added to the input layer. In contrast to the scheme of the MLP, this setup can be seen in figure \ref{fig:perceptron_schema} where the bias term is defined as 'constant'. Similarly to the input layer, each neural network has exactly one output layer. This can consist of one or more nodes. In this thesis, MLP is used as a regressor and therefore only one neuron is needed in this layer.
+Every neural network has an input layer, which consists of one or more nodes. This number is determined from the training data and tells us how many features should be delivered to the neural network. In the case of Bitcoin prices, we could use today's price and the prices of the last 10 days (lags 1-10), so the input layer would consist of 11 nodes. Some configurations also require a bias term to adjust the output along with the weighted sum, which is also added to the input layer. In contrast to the scheme of the MLP, this setup can be seen in figure \ref{fig:perceptron_schema} where the bias term is defined as 'constant'. Similarly to the input layer, each neural network has exactly one output layer. This can consist of one or more nodes. In this thesis, MLP is used as a regressor and therefore only one neuron is needed in this layer.
 
 In between are the hidden layers, whose number and size can be configured as desired. The challenge is to find an optimal and efficient configuration without causing overfitting of the training data. The number of hidden layers depends primarily on the application area of the neural network. For example, working with image recognition would require more layers since the image file is broken down into individual pixels. Subsequently, the layers are used to optimize from rough outlines to the smallest detail. In our research, we came across several methods or 'rules of thumb' to optimize the model. A frequently suggested method is explained by Andrej Karpathy (director of the AI department of Tesla, Inc.). His GitHub entry recommends the approach of starting with a model that is too large that causes overfitting. Subsequently, the model is reduced by focusing on increasing training loss and improving validation loss [@recipe_training].
 
@@ -132,17 +126,17 @@ In between are the hidden layers, whose number and size can be configured as des
 #### 2.1.4. Challenges {#challenges}
 &nbsp;
 
-In this section, we address the 2 fundamental challenges with dealing with neural networks.
+In this section, we address the two fundamental challenges when dealing with neural networks.
 
-##### 2.1.4.1 Overfitting {#overfitting}
+##### 2.1.4.1. Overfitting {#overfitting}
 &nbsp;
 
 We have encountered several challenges that can occur when using neural networks. One of these possible problems is called overfitting. The goal of a neural network is to build a statistical model of the training set that is capable of generating the data. In overfitting on the other hand, the exact conditions of the training data including noise are reproduced. The focus is no longer on the underlying function. Last but not least, an unnecessarily large number of parameters or epochs can be 'consumed' for this, which makes the whole process relatively inefficient [@RNN]. 
 
-##### 2.1.4.2. Vanishing gradient problem {#vanishing_gradient}
+##### 2.1.4.2. Vanishing Gradient Problem {#vanishing_gradient}
 &nbsp;
 
-Another characteristic that requires our attention is the vanishing gradient problem. As explained in chapter [2.1.2.](#backpropagation_algorithm), the weights of the neural network are adjusted using the gradient of the loss function. Thereby, the problem can occur that the gradient almost vanishes. The error function's gradients become so small that the backpropagation algorithm takes smaller steps towards the loss function's minima and eventually stops learning. For example, if the derivative of an activation function such as the logistic sigmoid function approaches zero for extremely large or small values for $x$. To avoid these extreme values for $x$, the inputs are scaled and normalized in this paper. This ensures that the definition range is within the range where the gradient is still large enough for the backpropagation algorithm.  
+Another characteristic that requires our attention is the vanishing gradient problem. As explained in section [2.1.2.](#backpropagation_algorithm), the weights of the neural network are adjusted using the gradient of the loss function. Thereby, the problem can occur that the gradient almost vanishes. The error function's gradients become so small that the backpropagation algorithm takes smaller steps towards the loss function's minima and eventually stops learning. For example, if the derivative of an activation function such as the logistic sigmoid function approaches zero for extremely large or small values for $x$. To avoid these extreme values for $x$, the inputs are scaled and normalized in this paper. This ensures that the definition range is within the range where the gradient is still large enough for the backpropagation algorithm.  
 
 \newpage
 
@@ -260,7 +254,7 @@ The output of the neural network changes by the value $\beta_{1t}$ if the input 
 
 In figure \ref{fig:xai_plot1}, you can see the $\beta_{it}$, that is, the partial derivatives from equation \ref{eq:xai_fit} up to $q=10$, and you can see the intercept. For the comparison to the linear regression and the autocorrelation, only the lags 6 to 10 are explicitly highlighted. A detailed identification of all LPD's can be seen in figure \ref{fig:xai_plot2}.
 
-It is noticeable that the structure of LPD's strongly resembles the logarithmic returns of BTC. The heteroskedasticity of the log returns, i.e. the volatility clusters are also evident in the LPD's. If the BTC is in a turbulent phase, then the partial derivatives also fluctuate.
+It is noticeable that the structure of LPD's strongly resembles the logarithmic returns of BTC. The heteroskedasticity of the log returns, i.e. the volatility clusters are also evident in the LPD's. If the BTC is in a turbulent phase, then the partial derivatives also fluctuate. 
 
 &nbsp;
 
@@ -305,16 +299,19 @@ Together with the findings from the visualization in figure \ref{fig:xai_acf} an
 
 Thus, we can say that at best, with this method of calculating the partial derivatives for each feature at each time t, we may have found an explanation for the black box of neural networks. With this method we cannot explain how the network led to exactly this prediction using the backpropagation algorithm with the many weights and error terms, but the basic structure, i.e. information which is in the data (for example the autocorrelation), can be found. The ACF is a basic method to find structures in time series and here, with the LPD's you can fall back on exactly this ACF. Despite the complexity of the networks, this special procedure for the XAI leads to the basic ACF's, thus improving the explainability.
 
+Another finding is the correlated behavior of the partial derivatives and the original time series. Volatile log return of the BTC leads to unstable derivatives. In other words, during a turbulent phase in the market, the neural networks are unstable, leading to unstable solutions. This particular behavior can potentially be used for possible trading decisions, which will be explored in section [3.3](#trading-strat)
+.
+
 \newpage
 
-### 2.3. Model comparison {#model_comparison}
+### 2.3. Model Comparison {#model_comparison}
 
-This thesis sets the goal to compare the different neural networks presented. Besides the types of neural networks, the network architecture (number of layers and nodes) is explored. In addition, a comparison is made with the winner of the Forecasting Competition M4, which combines a standard exponential smoothing model with an LSTM network. To make the comparison meaningful enough, the following two figures are compared. 
+This thesis sets the goal to compare the different neural network architectures presented in order to find the best model. To quantify the quality of the prediction as well as the trading performance, we make use of the following measures.
 
 #### 2.3.1. Sharpe Ratio {#sharpe_ratio}
 &nbsp;
 
-The first number refers to the performance of the trading strategy based on the sign of the prediction $t+1$ and is called Sharpe Ratio. Sharpe ratio is a very powerful and widely used ratio to measure performance and it describes return per risk.
+The first measure refers to the performance of the trading strategy based on the sign of the prediction $t+1$ and is called Sharpe ratio. Sharpe ratio is a very powerful and widely used ratio to measure performance and it describes return per risk.
 
 ```{=tex}
 \begin{align} \label{eq:Sharpe}
@@ -327,7 +324,7 @@ $R_{p}$ represents the return of the portfolio, while $R_{f}$ equals the risk fr
 #### 2.3.2. Mean Squared Error (MSE) {#MSE}
 &nbsp;
 
-The third performance measurement method is also widely used and called mean squared error. Its calculation is very simple, for every timestep the estimated value is subtracted from the real empirical value, squared and then summarized and divided by the absolute number of observations as seen in equation \ref{eq:MSE}.
+The second performance measurement method is also widely used and called mean squared error. Its calculation is very simple, for every timestep the estimated value is subtracted from the real empirical value, squared and then summarized and divided by the absolute number of observations as seen in equation \ref{eq:MSE}.
 
 ```{=tex}
 \begin{align} \label{eq:MSE}
@@ -342,52 +339,64 @@ The application of MSE is widely used in statistical modeling and supervised lea
 
 ### 2.4. Bitcoin {#bitcoin}
 
-In this section bitcoin as a crypto-curreny is introduced. The historical data is analyzed and commented. Further the technology in and around crypto-currencies in chapter [2.3.2.](#bitcoin_tec) is briefly explained. A detailed explanation would require a paper itself, therefore the explanation is done as simple as possible.
+In this section, Bitcoin as a cryptocurreny is introduced by analyzing and commenting historical events. Further the technology in and around cryptocurrencies in section [2.4.2](#bitcoin_tec) is briefly explained. This section serves to get an overview of the technology and background of Bitcoin. A more detailed description is beyond the scope of this thesis and will therefore be refrained from. We work with the short form 'BTC', which is the abbreviation for the currency. 
 
-In the following work bitcoin as a cryptocurreny is mentionend in its short term BTC, by the meaning of US Dollars per bitcoin.
-
-#### 2.4.1. Historical analysis {#historical_analysis}
+#### 2.4.1. Historical Analysis {#historical_analysis}
 &nbsp;
 
-The story of bitcoin began with a paper published by the name of Satoshi Nakamoto [@bitcoin]. The publisher of the document cannot be assigned to a real person, therefore the technology inventor remains mysteriosly unknown until today. In 2009 the first bitcoin transaction was executed. On account of the opensource technology of bitcoin, lots of alternative currencies were created. 
+The story of Bitcoin began with a paper published in the name of an alleged person called Satoshi Nakamoto [@bitcoin]. The publisher of the document cannot be assigned to a real person, therefore the technology inventor remains mysteriously unknown until today. In 2009, the first Bitcoin transaction was executed. Over the years, several other cryptocurrencies have emerged as a result of the open source-based code. Until 2013, cryptocurrencies operated under the radar of most regulatory institutions. The character traits, including total anonymity, led Bitcoin to become a common alternative to cash in criminal transactions. Silk Road was one of the most famous dark web trading platforms, where the trade of illegal narcotics and fake ID cards flourished. Due to this, Bitcoin was portrayed in a rather bad light by the media and newspapers. The crowning moment was when the drug enforcement agency shut down Silk Road and confiscated 26,000 Bitcoins. Nevertheless, in 2014, more companies, such as Zynga, The D Las Vegas Casinos, Golden Gate Hotel & Casino, TigerDirect, Overstock.com, Newegg, Dell Technologies, and even Microsoft Corporation [@A_History_of_Bitcoin], began to accept Bitcoin as a payment method. In the same year, the first derivative with Bitcoin as an underlying was approved by the U.S.Commodity Futures Trading Commission. In 2015, an estimated 160'000 merchants used Bitcoin to trade. Since then, cryptocurrencies have become increasingly popular among businesses and individuals, which has also been reflected in the exchange market.  
 
-Until 2013 the cryptocurrencies operated under the radar of most regulatory institutions. Because of the anonymity of the transactions, criminals were attracted by the newborn payment method. Headlines, such as the seizure of 26'000 bitcoins by closing the "Dark-Web" Website Silkroad through the Drug Enforcement Agency, followed moreoften in the newspapers. 
+Therefore, we examine the price of BTC/USD and the logarithmic price in figures \ref{fig:price_btc} and \ref{fig:logprice_btc}. The latter plot helps to compare the relative price changes as the price level changed very much over the years. These historical prices originate from the price-tracking website CoinMarketCap and show data originating from 2014. 
 
-Nevertheless in 2014 more companys, such as: Zynga, D LasVegas Casinos, Golden Gate Hotel & Casino, TigerDirect, Overstock.com, Newegg, Dell, and even Microsoft [@A_History_of_Bitcoin], began to accept bitcoin as a payment method. In 2014 the first derivative with bitcoin as an underlying was approved by the U.S.Commodity Futures Trading Commission.
-2015 an estimated 160'000 merchants used bitcoin to trade. 
-
-
-Let us first look a the price in Figure \ref{fig:price_btc} and the log(price) in Figure \ref{fig:logprice_btc} and get a sense of the chart. Note: The data in the charts start in 2014 where it was listed in coinmarket, events between 2009 and 2014 are described without visualization.
-
-Around 2010 bitcoin had the first increase in price as it jumped a 100% from 0.0008 USD to 0.08 Dollar [@Bitcoin_history]. In 2011 the price rose from 1 USD to 32 USD within 3 months and recessd shortly after to 2 USD this can be referred as a first price bubble in bitcoin, for the next year the price climbed to 13 Dollars and reached a never seen level of 220 USD, only to plunge to 70 USD within a half month in April 2013.
-By the end of the year a rally brought btc up to a peak of 1156 USD. The following year brought bad news and the price slowly decreased to 315 USD in 2015 after an observed drop of 20% after news from the trial of Ross Ulbricht, founder of Silk road marked in Letter \textbf{A}.
-
-From this point in time, things began to change, more volume was flushed in the market and the price of BTC began to ascend and the real rally began ,the BTC rose up to 20k USD / BTC on 17th September 2017 \textbf{B}. After the rise comes the fall and BTC lost value for more than a year until \textbf{C} 2018-12-15 the trend reverted and found its peak after 6 months in \textbf{D} 2019-06-26, but oncemore it was not lasting for long as bitcoin lost \textbf{D} 2020-03-12 nearly half its value in 4 days.
-
-But the story was not over by now, after the drop the price of the cryptocurrency regained value, passed previous levels and shortly after exploded, after companies like Tesla and Signal bought a big chunk of bitcoins, into a maximum of 58000 USD per bitcoin. It is also observed that the value of bitcoin is very volatile, we will discuss this in  section [3.2.](#data_exploration).
+In 2010, the events just described caused the price to increase a hundredfold from 0.0008 USD to 0.08 USD [@Bitcoin_history]. The first bubble phenomenon was observed after that. In 2011, the price moved from USD 1 to USD 32 within three months, after which it settled back at USD 2. The following year, the price climbed to 13 USD and reached a never-seen level of 220 USD, only to plunge to 70 USD within two weeks in April 2013. By the end of the year, a rally brought BTC to a price of USD 1156. Negative media reports triggered mixed moods. The trial of Silk Road founder Ross Ulbricht was one of the more notable events that unsettled the market. This time point is marked with the letter \textbf{A}. From this point in time, things began to change. More volume was flushed in the market and the price of BTC began to ascend. The price soared to 20k on 17th September 2017, which can be seen in letter \textbf{B}. After this tremendous bull run, BTC lost value for more than a year until mid-December 2018 (letter \textbf{C}). The trend reverted and found its peak after 6 months in June 2019 (letter \textbf{D}). After this on 3 March 2020, BTC lost nearly half of its value in 4 days, which can be seen in letter \textbf{E}. This is likely due to irrational behavior during the outbreak of the Covid-19 pandemic. Subsequently, the price recovered rapidly. Institutional investors and prominent companies such as Tesla Inc. announced their purchase, which in combination with the halving effect in May 2020 led to this effect. At the time of writing this thesis, the registered BTC all-time high is USD 64'805. In summary, the BTC market is strongly driven by emotional trends and is very volatile. The time series is analyzed in more detail in section [3.1](#data_exploration).
 
 \newpage
 
-```{r logprice_btc, out.width='80%', fig.cap='Logarithmic BTC/USD', echo=FALSE}
-knitr::include_graphics("images/logbtc_usd.jpeg")
+```{r price_btc, out.width='75%', fig.cap='BTC/USD', echo=FALSE, fig.keep='last', fig.width = 8, fig.height = 5}
+# knitr::include_graphics("images/logbtc_usd.jpeg")
+load("data/BTC_USD_27_03_21.rda") 
+
+BTC_USD <- BTC_USD_27_03_21
+
+cl_btc <- Cl(BTC_USD)
+cl_btc_log <- log(cl_btc)
+
+
+first <- min(cl_btc["2019-06-26::2020-09-01"]) # maximales / minamales value zwischen datum 
+
+# events generieren für values
+events <- xts(LETTERS[1:5], as.Date(c("2015-01-14","2017-12-16","2018-12-15","2019-06-26","2020-03-12")))
+
+#plots
+plot.xts(Cl(BTC_USD), col = "black", main="Bitcoin in US $",lwd = 0.8)
+addEventLines(events,srt=90,pos=2,lty=3,col = c("darkgreen","red","darkgreen","red","darkgreen"),lwd=2,)
 ```
 
-```{r price_btc, out.width='80%', fig.cap='BTC/USD', echo=FALSE}
-knitr::include_graphics("images/btc_usd.jpeg")
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
+```{r logprice_btc, out.width='75%', fig.cap='Logarithmic BTC/USD', echo=FALSE, fig.keep='last', fig.width = 8, fig.height = 5}
+# knitr::include_graphics("images/btc_usd.jpeg")
+plot.xts(cl_btc_log,col = "black", main="Logarithmic Bitcoin in US $",lwd = 0.8)
+addEventLines(events,srt=90,pos=2,lty=3,col = c("darkgreen","red","darkgreen","red","darkgreen"),lwd=2,)
+
 ```
 
 \newpage
 
-#### 2.4.2. Bitcoin technology and cryptocurrencies {#bitcoin_tec} 
+#### 2.4.2. Cryptocurrencies and Bitcoin Technology  {#bitcoin_tec} 
 &nbsp;
 
-This chapter focuses on the technical aspects of the cryptocurrency bitcoin. It describes the role that blockchain technology plays in cryptocurrencies and how this manifests itself in the case of bitcoin. Cryptocurrency as a more general term is used because bitcoin was only the first of its kind. One may look at a cryptocurrency similarly to a normal currency because you can buy and sell things and get bitcoin in exchange. But cryptocurrencies fundamentally differ to conservative currencies in merely all ways. The cryptocurrencies (not just bitcoin) are based on the blockchain technology introduced in Nakamotos paper [@bitcoin]. The system is decentralized, where no institution or government regulates the market in terms of the blockchain itself. The transactions are signed by the participants via  cryptographic hash functions, which generate a private and public key. This means that every signature can only be accessed by the owner of the private key i.e. it can not be copied. Once a transaction is signed, it is broadcasted into the network to all participants, so that everyone sees a transaction has been made.  Around 2400 transactions are packed in a block (the blocksize is limited by memory) which are broadcasted to all participants of the system. Every block consists the transaction information, previous hash, the special number and their resulting hash as visualized in figure \ref{fig:blockchain}.
-Miners are now trying to approve the block by generating a hash with a certain pattern with the hashfunction f(prevhash, data of the block, special number), the so called proof of work. The first miner who finds the according special number to the hash with the certain pattern, gets an amount of bitcoin in reward.
-The block with its new hash and the special number are now added to the chain and are broadcasted to the network. If someone manipulates transactions in a block and finds the special number to the hash, he could potentially get away with it but not for long because for the next block he must be also the first to find the right hash and so on. In figure \ref{fig:blockchain}, the red block is a false one which gets attached and later declined because the other branch is longer. Only the longest chain is to be trusted, and because there are so many miners one must have more than 50 % off the calculating power to get the best chance to find the right hash. Therefore its almost impossible to manipulate the chain. The cryptocurrency itself is now entirely defined by a chain of approved blocks by all participants.
+This section focuses on the technical aspects of the cryptocurrency Bitcoin. It describes the role that blockchain technology plays in cryptocurrencies and how this manifests itself in the case of Bitcoin. One may look at a cryptocurrency similarly to a normal currency because you can buy and sell things and get bitcoin in exchange. But cryptocurrencies fundamentally differ from conservative currencies in merely all ways. The cryptocurrencies (not just bitcoin) are based on the blockchain technology introduced in Nakamoto's paper [@bitcoin]. The system is decentralized, where no institution or government regulates the market in terms of the blockchain itself. The transactions are signed by the participants via  cryptographic hash functions, which generate a private and public key. This means that every signature can only be accessed by the owner of the private key i.e. it can not be copied. Once a transaction is signed, it is broadcasted into the network to all participants, so that everyone sees a transaction has been made.  Around 2400 transactions are packed in a block (the block size is limited by memory) which are broadcasted to all participants of the system. Every block consists the transaction information, previous hash, the special number and their resulting hash as visualized in figure \ref{fig:blockchain}.
+Miners are now trying to approve the block by generating a hash with a certain pattern with the hash function f(previous hash, data of the block, special number), the so-called proof of work. The first miner who finds the special number according to the hash with a certain pattern, gets an amount of Bitcoin in reward.
+The block with its new hash and the special number is now added to the chain and is broadcasted to the network. If someone manipulates transactions in a block and finds the special number to the hash, he could potentially get away with it but not for long because for the next block he must also be the first to find the right hash and so on. In figure \ref{fig:blockchain}, the red block is a false one that gets attached and later declined because the other branch is longer. Only the longest chain can be trusted, and because there are so many miners one must have more than 50 % off the calculating power to get the best chance to find the right hash. Therefore it's almost impossible to manipulate the chain. The cryptocurrency itself is now entirely defined by a chain of approved blocks by all participants.
 
-Another interesting fact about bitcoin is that the amount of coins is determined by the rewards of the miners. The first block (genesisblock) had a reward of 50 Bitcoins, every 210'000 blocks this reward gets halved. Since a new block is added every 10 minutes (this is the average time to solve a hash) the halving of the block rewards occurs approximately every 4 years. Under these conditions, one expects a block reward of zero in 2140 with a maximum number of Bitcoins of 21 million [@blockrewards].
+Another interesting fact about Bitcoin is that the amount of coins is determined by the rewards of the miners. The first block (genesis block) had a reward of 50 Bitcoins, every 210'000 blocks this reward gets halved. Since a new block is added every 10 minutes (this is the average time to solve a hash) the halving of the block rewards occurs approximately every 4 years. Under these conditions, one expects a block reward of zero in 2140 with a maximum number of Bitcoins of 21 million [@blockrewards].
 
-In recent days, the cryptocurrency has come under a lot of criticism. The immense computing expenditure has a very high power consumption which leads cryptomining companies to build huge farms with massive cooling aggregates. According to the article in Forbes magazine [@energy_consumption] the bitcoin mining process uses 0.51 percent (127TWh) of global energy consumption. The University of Cambridge created an index where the live energy consumption can be observed [@energy_index]. Right now China [@energy_map] contributes 70 % to the hash rate whereas the remaining 30 percent are distributed over the rest of the world.
+In recent days, cryptocurrency has come under a lot of criticism. The immense computing expenditure has a very high power consumption which leads crypto mining companies to build huge farms with massive cooling aggregates. According to the article in Forbes magazine [@energy_consumption] the Bitcoin mining process uses 0.51 percent (127TWh) of global energy consumption. The University of Cambridge created an index where the live energy consumption can be observed [@energy_index]. Right now China [@energy_map] contributes 70 % to the hash rate whereas the remaining 30 percent are distributed over the rest of the world.
 
 ```{r blockchain, out.width='80%', fig.cap='Blockchain schema', echo=FALSE}
 knitr::include_graphics("images/blockchain.jpg")
@@ -395,13 +404,13 @@ knitr::include_graphics("images/blockchain.jpg")
 
 \newpage
 
-#### 2.4.3. Valuation and digital gold {#bitcoin_valuation} 
+#### 2.4.3. Valuation and Digital Gold {#bitcoin_valuation} 
 &nbsp;
 
-As mentioned in the previous chapter, the maximum possible amount of 21 million equals a fixed supply of this cryptocurrency. This leads to the question if this has an influence on the fair market value of bitcoins. A. Meynkhard is conducting research in this area and has concluded that it relies on the following three factors [@bitcoin_halving]:
+As mentioned in the previous section, the maximum possible amount of 21 million equals a fixed supply of the cryptocurrency Bitcoin. This leads to the question of whether this influences the fair market value of bitcoins. A. Meynkhard is researching this area and has concluded that it relies on the following three factors [@bitcoin_halving]:
 
 - Fixed maximum supply
 - Mining process
 - Reward halving
 
-First, it is emphasized that in a decentralized monetary system, the newly issued amount is defined by the cryptographic algorithm. Consistently, new Bitcoins enter circulation when a miner sells their received reward to fund operating costs or new equipment. Unlike a central bank, which typically aims for an annual inflation target of 2%, with bitcoin the number of new coins issued is decreased after each halving. Meynkhard describes that this decrease in newly issued Bitcoins, assuming constant demand, causes the market value to increase in the long-term. Although in contrast to stock markets, there is only a fraction of historical data available, this halving phenomenon could certainly be observed. The halving in 2016 is made responsible for the price increase from USD 500 to USD 20'000 by December 2017. The latest halving in May 2020 appears to be responsible for the present bull market, which let the price drive from USD 9000 to over USD 60'000. This deflationary characteristic of bitcoin led to it being more and more referred to as digital gold in the broad media [@digital_gold].
+First, it is emphasized that in a decentralized monetary system, the newly issued amount is defined by the cryptographic algorithm. In contrast, this amount is determined by the national banks in the case of conventional currencies. New Bitcoins enter circulation when a miner sells their received reward to fund operating costs or new equipment. Unlike a central bank, which typically aims for an annual inflation target of 2%, the number of newly issued coins decreases after each halving. Meynkhard describes that this decrease in newly issued Bitcoins, assuming constant demand, causes the market value to increase in the long term. Although in contrast to stock markets, there is only a fraction of historical data available, this halving phenomenon could certainly be observed. The halving in 2016 is made responsible for the price increase from USD 500 to USD 20'000 by December 2017. The latest halving in May 2020 appears to be responsible for the subsequent bull market, which let the price drive from USD 9000 to a new all-time high greater than USD 60'000. The energy-intensive mining of Bitcoin is essential for the blockchain and thus the currency to function. Additionally, the code determines that the maximum supply is limited. This analogy to gold mining is why the broad media often refer to it as digital gold [@digital_gold].

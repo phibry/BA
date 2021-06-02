@@ -126,20 +126,29 @@ sharpe_bh <- sqrt(365)*mean(bh, na.rm = T) / sqrt(var(bh, na.rm = T))
 # save(GARCH_Signals)
 
 # Plot performances
+
+load("data/GARCH_vola_predictions/garch_perf.rda")
+load("data/GARCH_vola_predictions/sharpe_perf.rda")
 par(mfrow = c(1,1))
-plot(cumsum(bh), main = "Cumulative daily returns")
-lines(cumsum(perf_sign), col = 2)
-lines(cumsum(perf), col = 3)
-addLegend(legend.loc = "topleft", legend = c(paste("Buy-and-Hold, Sharpe:", round(sharpe_bh, 2)), 
-                                                 paste("GARCH Signum Trading, Sharpe:", round(sharpe_sign,2)),
-                                                 paste("GARCH Volatility Trading, Sharpe:", round(sharpe, 2))), 
-          col = c(1,2,3), lty = 1)
-
-
-
+plot(cumsum(garch_perf[,1]), main = "Cumulative daily returns", lwd=1.5)
+lines(cumsum(garch_perf[,2]), col = 2, lwd=1.5)
+lines(cumsum(garch_perf[,3]), col = 3, lwd=1.5)
+addLegend(legend.loc = "topleft", legend = c(paste("Buy-and-Hold, Sharpe:", round(sharpe_perf[1], 2)), 
+                                                 paste("GARCH Signum Trading, Sharpe:", round(sharpe_perf[2],2)),
+                                                 paste("GARCH Volatility Trading, Sharpe:", round(sharpe_perf[3], 2))), 
+          col = c(1,2,3), lty = 1, lwd=1.5)
+# sharpe_perf[1]
+# sharpe_perf <- cbind(sharpe_bh, sharpe_sign, sharpe)
+# garch_perf <- cbind(bh, perf_sign, perf)
+# save(garch_perf, file = "data/GARCH_vola_predictions/garch_perf.rda")
+# save(sharpe_perf, file = "data/GARCH_vola_predictions/sharpe_perf.rda")
 # Save trading signals only
 
+<<<<<<< HEAD
+garch_out_signal=as.xts(GARCH_vola)$Trading_signal["2020-07-01::"]
+=======
 # garch_out_signal=as.xts(GARCH_vola)$Trading_signal["2020-07-01::"]
+>>>>>>> main
 # save(garch_out_signal, file = "data/GARCH_vola_predictions/garch_out_signal.rda")
 
 

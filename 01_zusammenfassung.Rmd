@@ -5,3 +5,5 @@ geometry: margin = 1in
 
 
 ## Zusammenfassung
+
+Das stetige weltweite Wachstum von Methoden des maschinellen Lernens wird auch für die Finanzmärkte immer wichtiger. Allerdings sind diese Methoden meist noch sehr intransparent. Diese Arbeit befasst sich mit der Anwendung von neuronalen Netzen, deren Erklärbarkeit und dem Handel von Bitcoin, welcher als Begründer der jüngsten Anlageklasse Kryptowährung gilt. Anfangs wird die Theorie der verwendeten neuronalen Netze und der neuartige Aspekt der Erklärbarkeit erläutert, aussderdem folgt ein kurzer Einblick in die Bitcoin-Theorie gegeben. Als erster Ansatz wird eine optimale Netzwerkarchitektur durch Rechenleistung bestimmt, um genaue Vorhersagen für den täglichen Handel von Bitcoin zu optimieren. Mit dem Aspekt der Erklärbarkeit und einer Vorhersage für die Volatilität mit einem GARCH-Modell wird eine Regel für den Handel implementiert und dann mit der Hinzunahme der Kryptowährung Ether, die auf der Ethereum-Blockchain basiert, verbessert. Die Ergebnisse sind vielversprechend, die Erklärbarkeit bringt einen deutlichen Mehrwert, und der fast unschlagbare Benchmark Buy and Hold kann übertroffen werden.
