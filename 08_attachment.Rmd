@@ -8,6 +8,8 @@ geometry: margin = 1in
 This bachelorthesis is created  with R-4.0.2 , RStudio Version 1.4.904 and RMarkdown in collaborative working via Git / Github
 https://github.com/phibry/BA 
 
+Note that all figures similar to Figure \ref{fig:all2_05}:  parameter $\beta$ = $\kappa$ from thesis
+
 
 ```{r meanmean1, out.width='90%', fig.cap='MSE mean over all 9 splits with all 3 layers.', echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/batch5/mean_mean_3layer.jpeg")
@@ -58,6 +60,27 @@ knitr::include_graphics("images/splitplots/price9.jpeg")
 
 ```{r vola_forecasts, out.width='90%', fig.cap='One-step-ahead forecasts of volatility using rolling window of size 365. Refitting model after every months.', echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/GARCH/vola_forecasts.png")
+```
+
+
+```{r all2_05, out.width='90%', fig.cap='Split 9.', echo=FALSE,fig.align="center"}
+knitr::include_graphics("images/xailpd/lambda_2_with0_5/all.jpeg")
+```
+
+```{r all2, out.width='90%', fig.cap='Split 9.', echo=FALSE,fig.align="center"}
+knitr::include_graphics("images/xailpd/lambda_2/all.jpeg")
+```
+
+```{r all1_5_05, out.width='90%', fig.cap='Split 9.', echo=FALSE,fig.align="center"}
+knitr::include_graphics("images/xailpd/lambda_1_5_with0_5/all.jpeg")
+```
+
+```{r all1_5, out.width='90%', fig.cap='Split 9.', echo=FALSE,fig.align="center"}
+knitr::include_graphics("images/xailpd/lambda_1_5/all.jpeg")
+```
+
+```{r all1_05, out.width='90%', fig.cap='Split 9.', echo=FALSE,fig.align="center"}
+knitr::include_graphics("images/xailpd/lambda_1_with0_5/all.jpeg")
 ```
 
 ```{r xai_plot2, fig.align='center', echo=FALSE, fig.cap="LPD of BTC.", out.width='100%', fig.width = 10, fig.height = 6}
