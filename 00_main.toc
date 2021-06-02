@@ -18,24 +18,24 @@
 \contentsline {subsubsection}{2.4. Bitcoin}{14}{section*.26}%
 \contentsline {paragraph}{2.4.1. Historical Analysis}{14}{section*.27}%
 \contentsline {paragraph}{2.4.2. Cryptocurrencies and Bitcoin Technology}{16}{section*.30}%
-\contentsline {paragraph}{2.4.3. Valuation and Digital Gold}{17}{section*.32}%
-\contentsline {subsection}{3. Methodology}{18}{section*.33}%
-\contentsline {subsubsection}{3.1. Data Exploration}{19}{section*.35}%
-\contentsline {subsubsection}{3.2. Network Architecture}{21}{section*.39}%
-\contentsline {paragraph}{3.2.1. Defining Train and Test Samples}{23}{section*.40}%
-\contentsline {paragraph}{3.2.2. Defining Input-Layer}{24}{section*.42}%
-\contentsline {paragraph}{3.x.x. Neural Network Training}{25}{section*.44}%
-\contentsline {paragraph}{3.2.3. Evaluating Network Architecture}{26}{section*.45}%
-\contentsline {paragraph}{3.2.4. Model Selection}{32}{section*.52}%
-\contentsline {paragraph}{3.2.5. Benchmark}{32}{section*.53}%
-\contentsline {subsubsection}{3.3. Trading Strategy}{33}{section*.54}%
-\contentsline {paragraph}{3.3.1. Trading with Neural Networks and LPD}{34}{section*.56}%
-\contentsline {paragraph}{3.3.2. Neural Network}{34}{section*.57}%
-\contentsline {paragraph}{3.3.3. LPD Signal}{35}{section*.58}%
-\contentsline {paragraph}{3.3.4. GARCH Volatility Predictions}{37}{section*.61}%
-\contentsline {paragraph}{3.3.5. NN and LPD Estimation}{39}{section*.63}%
-\contentsline {paragraph}{3.3.6. Adding Ether}{42}{section*.67}%
-\contentsline {subsection}{4. Results}{44}{section*.70}%
-\contentsline {subsection}{5. Conclusion}{45}{section*.71}%
-\contentsline {subsection}{References}{46}{section*.72}%
-\contentsline {subsection}{Attachment}{48}{section*.73}%
+\contentsline {paragraph}{2.4.3. Valuation and Digital Gold}{18}{section*.32}%
+\contentsline {subsection}{3. Methodology}{19}{section*.33}%
+\contentsline {subsubsection}{3.1. Data Exploration}{20}{section*.35}%
+\contentsline {subsubsection}{3.2. Network Architecture}{22}{section*.39}%
+\contentsline {paragraph}{3.2.1. Defining Train and Test Samples}{24}{section*.40}%
+\contentsline {paragraph}{3.2.2. Defining Input-Layer}{25}{section*.42}%
+\contentsline {paragraph}{3.x.x. Neural Network Training}{26}{section*.44}%
+\contentsline {paragraph}{3.2.3. Evaluating Network Architecture}{27}{section*.45}%
+\contentsline {paragraph}{3.2.4. Model Selection}{33}{section*.52}%
+\contentsline {paragraph}{3.2.5. Benchmark}{33}{section*.53}%
+\contentsline {subsubsection}{3.3. Trading Strategy}{34}{section*.54}%
+\contentsline {paragraph}{3.3.1. Trading with Neural Networks and LPD}{35}{section*.56}%
+\contentsline {paragraph}{3.3.2. Neural Network}{35}{section*.57}%
+\contentsline {paragraph}{3.3.3. LPD Signal}{36}{section*.58}%
+\contentsline {paragraph}{3.3.4. GARCH Volatility Predictions}{38}{section*.61}%
+\contentsline {paragraph}{3.3.5. NN and LPD Estimation}{40}{section*.63}%
+\contentsline {paragraph}{3.3.6. Adding Ether}{43}{section*.67}%
+\contentsline {subsection}{4. Results}{45}{section*.70}%
+\contentsline {subsection}{5. Conclusion}{46}{section*.71}%
+\contentsline {subsection}{References}{47}{section*.72}%
+\contentsline {subsection}{Attachment}{49}{section*.73}%
