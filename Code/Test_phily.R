@@ -22,7 +22,7 @@ split2 <- logret["2020-02-01::2020-08-31"]
 split2_in <- split2["2020-02-01::2020-07-31"]
 split2_out <- split2["2020-08-01::2020-08-31"]
 
-
+tail(data_obj$data_mat, 1)
 # Last Period####jkfj
 # Test: Last Month
 # Training: Last 6 Months
