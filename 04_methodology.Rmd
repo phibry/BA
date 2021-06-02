@@ -47,7 +47,7 @@ plot(log_ret, ylab="Log Return", main="Logarithmic Return BTC/USD")
 
 Figure \ref{fig:log_ret} displays the historical log returns. In addition to the volatility clusters typical for financial time series, large outliers are visible. The negative outlier at the beginning of 2020 is particularly noticeable. By computing the autocorrelation (ACF) of the series in figure \ref{fig:acf_log_ret}, we can describe the dependency in these clusters. According to the ACF, the lags 6 and 10 are significant on a 5% level.
 
-Curios from which distribution the log returns might originate, we are fitting a normal distribution and a Students-t distribution to the data in figure \ref{fig:histogramm_logreturns}. Interestingly the mean is shifted slightly (0.002) to the positive side. By inspecting the tails, one can observe that the negative tail is not fitted as well as the positive part by the t distribution. The two normal distributions either over- or underestimate the values in the tails, therefore we conclude that the proposed t-distribution fits the data better but also not perfect. Concerning the extreme outlier discussed earlier, visible in figure \ref{fig:log_ret} towards the end, the density plot makes clear how unimaginable small the probability of this extreme observation is. Although the histogram might be useful for value-at-risk considerations, for trading purposes its use is mitigated due to its complete loss of the dependency structure by plotting the returns in a density distribution.
+We are curious about how the log returns are distributed. Therefore, we fit a normal distribution and a Student-t distribution to the histogram of the log returns, which can be seen in figure \ref{fig:histogramm_logreturns}. Interestingly the mean is shifted slightly (0.002) to the positive side. By inspecting the tails, one can observe that the negative tail is not fitted as well as the positive part by the t distribution. The two normal distributions either over- or underestimate the values in the tails, therefore we conclude that the proposed t-distribution fits the data better but also not perfect. Concerning the extreme outlier discussed earlier, visible in figure \ref{fig:log_ret} towards the end, the density plot makes clear how unimaginably small the probability of this extreme observation is. Although the histogram might be useful for value-at-risk considerations, for trading purposes its use is mitigated due to its complete loss of the dependency structure by plotting the returns in a density distribution.
 
 \newpage
 
@@ -101,7 +101,7 @@ $N=\text{maximum Neuron}\in \mathbb{N}^{*}$
 
 $\text{Comb} =\text{Number of all combinations}$
 
-Thus, with our initial setup, we obtain a maximum neuron-layer combination of 1110. To respond to the challenges mentioned in section [2.1.4](#challenges), not only a single network per neuron-layer combination is trained, but a whole batch of 50 networks. So we end up with a total of 55'500 trained networks. For each network, the in-sample and out-of-sample MSE as well as the Sharpe ratios are determined. We use these values to find an optimal network architecture based on the statistical error as well as on the trading performance (daily signum trading).
+Thus, with our initial setup, we obtain a maximum neuron-layer combination of 1'110. To respond to the challenges mentioned in section [2.1.4](#challenges), not only a single network per neuron-layer combination is trained, but a whole batch of 50 networks. So, we end up with a total of 55,500 trained networks. For each network, the in-sample and out-of-sample MSE as well as the Sharpe ratios are determined. We use these values to find an optimal network architecture based on the statistical error as well as on the trading performance (daily signum trading).
 
 To ensure that the neural network with the chosen network architecture does not produce trustworthy predictions only for a specific time period, the in-sample and out-of-sample splits are examined for different time periods.
 
@@ -112,7 +112,9 @@ To ensure that the neural network with the chosen network architecture does not 
 
 We are looking for an optimal network, the optimal network should also provide reasonable and reliable predictions for different periods. For further analysis, we use a subset of the introduced closing prices of Bitcoin. Starting from the first of January 2020 to the 27th of March in 2021, we only consider 15 months for our data.
 
-The reason for doing so is, we do not believe that the historical data longer than a year consists of any information about the price tomorrow. By optimizing our models we found that more data would offer no additional performance, therefore the selected subset should be sufficient. Regarding consistency, the terms train and test set are used in the same sense as in-sample and out-of-sample. As proposed in [@nn_trading] we choose a test train split from 6 months in-sample and 1 month out-of-sample. This split is applied to the whole subset in form of a rolling window. By stepping forward with this 6/1 split by steplength of one month we end up with 9 data splits in total. In figure \ref{fig:test_train} this procedure is visualized, for every new timestep, a new month is considered for the out-of-sample and the first month of the in-sample falls out of the frame. 
+
+
+We do not believe that data older than one year provides useful information for predicting the following day. The reason is that the market environmnet is constantly changing and institutional investors are not yet in agreement about Bitcoin as an asset class. By optimizing our models we found that more data would offer no additional performance, therefore the selected subset should be sufficient. Regarding consistency, the terms train and test set are used in the same sense as in-sample and out-of-sample. As proposed in [@nn_trading] we choose a test train split from 6 months in-sample and 1 month out-of-sample. This split is applied to the whole subset in form of a rolling window. By stepping forward with this 6/1 split by step length of one month we end up with 9 data splits in total. In figure \ref{fig:test_train} this procedure is visualized, for every new timestep, a new month is considered for the out-of-sample and the first month of the in-sample falls out of the frame. 
 
 
 ```{r test_train, out.width='85%', fig.cap='Nine different in- and out-of-sample splits. The 6-month training phase (in-sample) is indicated in blue and the 1-month test phase (out-of-sample) in green. The splits capture different phases of the time series. Both very turbulent phases (split 1) and rather calm phases (split 5) can be recorded.', echo=FALSE, fig.width = 10, fig.height = 6}
@@ -197,7 +199,7 @@ legend("topleft", inset=.02, legend=c("In-sample 6 months","Out-of-sample 1 mont
 
 In the time series in figure \ref{fig:test_train}, one can see different periods. Strongly volatile as well as rather calm phases occur. With the rolling window, we can train and test the networks based on different phases. Thus, we can also evaluate the performance of the networks based on different phases and not only on a predefined single test and train split.
 
-The complexity of the search for the optimal network architecture increases significantly here. With the conditions defined for us, we train and test a total number of 499'500 networks to define the optimal network.
+The complexity of the search for the optimal network architecture increases significantly here. With the conditions defined for us, we train and test a total number of 499,500 networks to define the optimal network.
 
 \newpage
 
@@ -260,7 +262,7 @@ knitr::include_graphics("images/batch5/mse_5_layer3.jpeg")
 ```
 \newpage
 
-Figure \ref{fig:mse_plot5} shows the MSE of the models with 1-3 layers, i.e. the last three plots side by side. As mentioned, it can be seen here that the in-sample MSE scatter towards the bottom respectively decreases with more complex architectures. This does not have a positive effect on the out-of-sample, since in the same area the MSE deteriorates massively (note the different scaling of the y-axes). As a result, we have no real added value from more complex models. Also to be noted is that the in-sample MSE does not get worse than a certain threshold at the upper boundary. This asymmetric scattering around this value is likely due to the numerical characteristics of the optimization algorithm.  
+Figure \ref{fig:mse_plot5} shows the MSE of the models with 1-3 layers, i.e. the last three plots side by side. As mentioned, it can be seen here that the in-sample MSE scatter more towards the bottom as the complexity of the architecture increases. This does not have a positive effect on the out-of-sample, since in the same area the MSE deteriorates massively (note the different scaling of the y-axes). As a result, we have no real added value from more complex models. Also, to be noted is that the in-sample MSE does not get worse than a certain threshold at the upper boundary. This asymmetric scattering around this value is likely due to the numerical characteristics of the optimization algorithm.  
 
 At this point, it should be emphasized that only the analyses from time split 5 are visualized in this section. Our primary goal is to compare the performances of different network architectures using MSE to find the optimal network that works every time split. However, finding an optimal architecture using such visual analysis of the MSE seems nearly impossible. Nevertheless, the main finding of this section is that the MSE deteriorates massively with more complex models and thus a simpler one should be considered. Equally remarkable is the fact that the same model architectures produce such different results. Whilst many models range in a more or less solid midfield, traits of overfitting can be recognized. These are reflected by the spikes in the out-of-sample MSE.
 
@@ -278,11 +280,11 @@ The medians of the MSE's of all 50 equal networks across all time splits are plo
 knitr::include_graphics("images/batch5/median_mse.jpeg")
 ```
 
-First, there is evidence of overfitting in the medians as well. In particular, splits 1-6 shows a somewhat expected picture: the in-sample error becomes smaller with more complex architecture, while the opposite can be seen in the out-of-sample. However, the periodically appearing spikes visible in the time splits 8 and 9 of the in-sample plot seem unnatural. The plausible difference between this and the other splits is the underlying data. Therefore, we take a look at what the initial prices of Bitcoin are doing in this period. The plots with the time splits of the logarithmized prices can be found in the appendix starting with figure \ref{fig:price1}. As a rule of thumb, the neural network behaves better when the train and test pairs behave similarly. In the plots of splits 8 and 9, it is clearly visible that in each case the in-sample shows a bullish behavior. This trend is not continued in the out-of-sample part, which probably leads to biased predictions due to amplified dependence structures.
+First, there is evidence of overfitting in the medians as well. In particular, splits 1-6 shows a somewhat expected picture: the in-sample error becomes smaller with more complex architecture, while the opposite can be seen in the out-of-sample. However, the periodically appearing spikes visible in the time splits 8 and 9 of the in-sample plot seem unnatural. The plausible difference between this and the other splits is the underlying data. Therefore, we take a look at what the initial prices of Bitcoin are doing in this period. The plots with the time splits of the logarithmic prices can be found in the appendix starting with figure \ref{fig:price1}. As a rule of thumb, the neural network behaves better when the train and test pairs behave similarly. In the plots of splits 8 and 9, it is clearly visible that in each case the in-sample shows a bullish behavior. This trend is not continued in the out-of-sample part, which probably leads to biased predictions due to amplified dependence structures.
 
 \newpage
 
-Our goal in the second part of this thesis is to work out a trading strategy with a suitable neural network. Therefore, as the last comparison, we visualize in figure \ref{fig:sharpe_median} how well the different network architectures behave in sign trading. This is simple trading which depends on the sign of the prediction $\hat{y}_{t+1}$ i.e. next expected log return. If a positive prediction is forecasted, the trader is in a long position, otherwise in a short position. As with the previous plot, the Sharpe ratios of each neural network realization perform differently despite having the same network architecture. Therefore, we again decided to plot the median of all Sharpe ratios with the same network architecture. The nine different colors indicate the time interval during which the neural networks were trained and tested.
+Our goal in the second part of this thesis is to work out a trading strategy with a suitable neural network. Therefore, as the last comparison, we visualize in figure \ref{fig:sharpe_median} how well the different network architectures behave in sign trading. This is simple trading which depends on the sign of the prediction $\hat{y}_{t+1}$ i.e. next expected log return. If a positive prediction is forecast, the trader is in a long position, otherwise in a short position. As with the previous plot, the Sharpe ratios of each neural network realization perform differently despite having the same network architecture. Therefore, we again decided to plot the median of all Sharpe ratios with the same network architecture. The nine different colors indicate the time interval during which the neural networks were trained and tested.
 
 ```{r sharpe_median, out.width='100%', fig.cap='Sharpe median across all 9 splits. Sharpe ratios increase in-sample (upper plot) with increasing complexity. Out-of-sample Sharpe ratios tend to decrease with increasing complexity. However, the effect is rather small here.', echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/batch5/median_sharpe.jpeg")
@@ -295,9 +297,9 @@ When looking at the Sharpe ratios, an inverse relationship between the in-sample
 #### 3.2.4. Model Selection {#mod-select}
 &nbsp;
 
-With the above procedure, we have been able to identify the characteristics of neural networks. In time series applications, complex networks lead to overfitting. We could detect an inverse relationship between in- and out-of-sample MSE. We trained a large number of networks, yet no distinct optimal neuron-layer combination can be identified. Determining the architecture based on the minimum MSE would not yield good results. There would be too great a risk that the chosen architecture would be too complex and lead to overfitting. Additionally, the chosen architecture should lead to trustworthy predictions over different time periods (in our example over the 9 splits).
+With the above procedure, we have been able to identify the characteristics of neural networks. In time series applications, complex networks lead to overfitting. We could detect an inverse relationship between in- and out-of-sample MSE. We trained many networks, yet no distinct optimal neuron-layer combination can be identified. Determining the architecture based on the minimum MSE would not yield good results. There would be too great a risk that the chosen architecture would be too complex and lead to overfitting. Additionally, the chosen architecture should lead to trustworthy predictions over different time periods (in our example over the 9 splits).
 
-For the rest of the procedure, we decide to use a neural network architecture of (7,7). According to the 2-layer structure visualized in figure \ref{fig:mse_plot2}, the architecture we chose looks very balanced. In-sample, the MSE is rather in a more optimal range (smaller MSE) and out-of-sample, any overfitting is rather minimal compared to even more complex networks. In the attachment in figure \ref{fig:meanmean2}, you can see the MSE's averaged across all 9 splits. The neuron layer architecture of (7,7) is exactly in the range where the in-sample MSE decreases and out-of-sample increases. The selected network lies exactly between the volatile networks, thus this architecture does not seem to be as prone to overfitting as the one next to it. The (7,7) network is not too complex, tends to have a good in-sample MSE and the out-of-sample MSE does not tend to overfit as much.
+For the rest of the procedure, we decide to use a neural network architecture of (7,7). According to the 2-layer structure visualized in figure \ref{fig:mse_plot2}, the architecture we chose looks very balanced. In-sample, the MSE is rather in a more optimal range (smaller MSE) and out-of-sample, any overfitting is rather minimal compared to even more complex networks. In the attachment in figure \ref{fig:meanmean2}, you can see the average MSE across all 9 splits. The neuron layer architecture of (7,7) is exactly in the range where the in-sample MSE decreases and out-of-sample increases. The selected network lies exactly between the volatile networks, thus this architecture does not seem to be as prone to overfitting as the one next to it. The (7,7) network is not too complex, tends to have a good in-sample MSE and the out-of-sample MSE does not tend to overfit as much.
 
 #### 3.2.5. Benchmark {#benchmark}
 &nbsp;
@@ -324,7 +326,7 @@ The main component is the prediction of the neural network. This reflects the ex
 
 While these methods sound promising, it should not be forgotten that a buy-and-hold strategy (given nerves of steel) also led to remarkable performances in the past that even outperformed traditional asset classes. The price development is described in sections [2.4.1](#historical_analysis) and [2.4.3](#bitcoin_valuation). That is why buy-and-hold is frequently used as a comparison. 
 
-Before we trade the returns, we first need to define the environment and make some assumptions. Normally, trading costs are crucial in high-frequency trading. Since the fee structure for cryptocurrencies is more attractive than for stocks, transaction costs are waived for the sake of simplicity.  Further, we assume the possibility of entering short positions for BTC. These assumptions allow us to wether stay in the market (signal = 1), to exit the market (signal = 0)  or to sell tomorrows return (signal = -1). In the latter two positions, negative returns can be avoided, or we can even profit from the downward movement. By exiting the market with signal 0, there are several opportunities to invest the money elsewhere or just stay out of the market and therefore eliminate market exposure. 
+Before we trade the returns, we first need to define the environment and make some assumptions. Normally, trading costs are crucial in high-frequency trading. Since the fee structure for cryptocurrencies is more attractive than for stocks, transaction costs are waived for the sake of simplicity.  Further, we assume the possibility of entering short positions for BTC. These assumptions allow us to either stay in the market (signal = 1), to exit the market (signal = 0) or to sell tomorrow's return (signal = -1). In the latter two positions, negative returns can be avoided, or we can even profit from the downward movement. By exiting the market with signal 0, there are several opportunities to invest the money elsewhere or just stay out of the market and therefore eliminate market exposure. 
 
 \newpage
 
@@ -338,21 +340,19 @@ The following consecutive sections 3.3.2. and 3.3.3. go together. We describe, h
 #### 3.3.2. Neural Network
 &nbsp;
 
-In [3.2.](#networkarchitecture) we use an average of only fifty realisations of feedforward nets to reduce computation time. However it is proposed by the Central Limit Theorem [@central_limit_theorem] to use an approximate   $\text{number of iterations } N_{total} \ge 100$ for an accurate mean value. 
+In [3.2.](#networkarchitecture) we use an average of only 50 realizations of feedforward nets to reduce computation time. However, it is proposed by the Central Limit Theorem [@central_limit_theorem] to use an approximate   $\text{number of iterations } N_{total} \ge 100$ for an accurate mean value. 
 
-We can calculate now different numbers networks and average them, but what does that mean exactly? 
+For a better understanding, we will take a closer look at an example of the effects of averaging all predictions.
 
-Lets have a look at an example: 
+Assume we calculate an amount of $N_{total}$=100 nets in total and try to predict just 1 day and use the sign of the forecast as a trading signal. If 49 nets predict a positive forecast and 51 a negative, we end up with a negative trading signal, which is actually decided by just one net. This means that the resulting trading signale occurs randomly. A positive trading signal that results from 60 positive predictions and 40 negative ones may be more accurate.
 
-Imagine we calculate an amount of $N_{total}$=100 nets in total and try to predict just 1 day and use the signum of the forecast as a trading signal. If 49 nets predict a positive forecast and 51 nets a negative we end up with a negative trading signal which is actually decided by just one net. Wouldnt it be better if a vast majority of the nets would predict the same sign at least?
-
-In order to get a better hand on that problem we implement the following:
+Therefore, the following a function is introduced that takes this aspect of majority voting into account.
 
 &nbsp;
 
 Let $\hat{\underline{p}}$ be the predicted values {$\hat{p}_{1}...\hat{p}_{N_{total}}$} of the neural networks in a certain time $t$.
-With formula $f()$ \ref{eq:net_decision1} in every $t$ a trading signal is derived by majority decision. How clearly the decision of the forecasts must be, is decided by parameter $\beta$.
-For further evaluation of neural networks $\beta$ can be used as an optimizing factor.
+With function $f$ \ref{eq:net_decision1} in every $t$ a trading signal is derived by majority decision. How clearly the decision of the forecasts must be, is decided by parameter $\kappa$.
+For further evaluation of neural networks $\kappa$ can be used as an optimizing factor.
 
 &nbsp;
  
@@ -360,8 +360,8 @@ For further evaluation of neural networks $\beta$ can be used as an optimizing f
 \begin{equation}\label{eq:net_decision1}
  f(\hat{\underline{p}}) =
 \begin{cases} 
-  0      & \quad \text{if } \frac{1}{N_{total}}  \sum_{k=1}^{N_{total}}sign(\hat{p}_{k}) < \beta \\
-  sign(\sum_{j=1}^{N_{total}}sign(\hat{p}_{k}))    & \quad \text{else}
+  0      & \quad \text{if } \frac{1}{N_{total}}  \sum_{i=1}^{N_{total}}sign(\hat{p}_{i}) < \kappa \\
+  sign(\sum_{i=1}^{N_{total}}sign(\hat{p}_{i}))    & \quad \text{else}
   
 
    \end{cases}
@@ -372,27 +372,25 @@ For further evaluation of neural networks $\beta$ can be used as an optimizing f
   
 $N_{total}$ = Total number of neural networks
 
-$\beta$ = Ratio of majority decision 
+$\kappa$ = Ratio of majority decision 
 
 $\hat{p}_{k}$ = Predicted value from neural network
 
 &nbsp;
 
-one can observe in $f()$ how the uncertain decidings result in a 0 signal. You could also use position sizing and adjust the signal depending on the size of $\beta$ . But we have omitted this aspect, because otherwise there are too many parameters in the model.
+One can observe in $f$ how the uncertain decisions result in a 0 signal. You could also use position sizing and adjust the signal depending on the size of $\kappa$. But we have omitted this aspect, because otherwise there are too many parameters in the model.
 
 \newpage
 
 #### 3.3.3. LPD Signal {#lpd-signal}
 &nbsp;
 
-To explain the following as understandable as possible, we recall chapter [2.2.2](#xai_finance) where the discrete derivatives of each input layer $lag_{j}$ were calculated with respect to the forecast at each time step. This procedure is now applied to the in-sample as well as the out-of-sample region. From the in-sample, the standard deviation and the mean are calculated for each $lag_{j}$. These are now used for the out-of-sample area.  An example with out of sample 01.01.2021 - 08.02.2021 clarifies the procedure:
+To explain the following as understandable as possible, we recall chapter [2.2.2](#xai_finance) where the discrete derivatives of each input layer $lag_{j}$ were calculated with respect to the forecast at each time step. This procedure is now applied to the in-sample as well as the out-of-sample area. From the in-sample, the standard deviation and the mean are calculated for each $lag_{j}$. These are now used for the out-of-sample area. An example with out-of-sample 2021.01.01 - 2021.02.08 clarifies these procedure:
 Figure \ref{fig:lpd_explain} represents the 7 lags, when looking at lag 4, the top line shows the previously calculated mean value from the in-sample (black) and the in-sample standard deviation upwards and downwards (dashed red). For the visualization the lines are drawn only for one lag.
-Let's take a look at the time step 25.01.2021, where you can see that the pink line exceeds the standard deviation.  Now we count in this time step how many other lags also overshoot their standard deviation.
-This is shown in ref \ref{eq:net_decision2}, we see immediately that on 25.01.2021, 4 lags have exceeded their standard deviation by the mean value.
-In the example we state that if 4 or more lags exceed the upper limit the final signal is 0 and if between 2 and 4 lags exceed the standard deviation, we assign the signal 0.5. For our example date 25.01.2021 the signal would be 0.
+Let's take a look at the time step 2021.01.25, where you can see that the pink line exceeds the standard deviation.  Now we count in this time step how many other lags also overshoot their standard deviation.
+This is shown in formula \ref{eq:net_decision2}, we see immediately that on 2021.01.25, 4 lags have exceeded their standard deviation by the mean value.
+In the example we state that if 4 or more lags exceed the upper limit the final signal is 0 and if between 2 and 4 lags exceed the standard deviation, we assign the signal 0.5. For our example date 2021.01.25 the signal would be 0.
 Correctly concluded, we get a trading signal for each date.
-
-
 
 ```{r lpd_explain, fig.align='center', out.width='60%', fig.cap="LPD Plot for illustration: Visualization of the above signal generation procedure. For the top LPD time series, the mean value and the upper and lower decision bands are plotted.", echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
 knitr::include_graphics("images/xailpd/out_decision_small.jpeg")
@@ -413,11 +411,12 @@ addLegend("bottomleft",
           bg="white")
 ```
 
-```{r lpd_explain_sum, fig.align='center', out.width='60%', fig.cap="LPD Sum Plot for illustration: Sum of the LPDs in black. Green is the upper decision limit and the red is the lower one. Values below the green line lead to a signal = 1. Values above the red line lead to a signal = 0. Values between the red and the green line lead to a signal = 0.5.", echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
+```{r lpd_explain_sum, fig.align='center', out.width='60%', fig.cap="LPD Sum Plot for illustration: Sum of the LPDs in black. Red is the upper decision limit and the green is the lower one. Values below the green line lead to a signal = 1. Values above the red line lead to a signal = 0. Values between the red and the green line lead to a signal = 0.5.", echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
 # knitr::include_graphics("images/xailpd/out_sum_2.jpeg")
 load("data/xai/7_7_withsignal_xai_in/sum_explana_out_plot.rda")
 load("data/xai/7_7_withsignal_xai_in/sumCI.rda")
-plot(sum_explana["::2021-02-08"],type=c("b"),main=TeX(sprintf("Sum of lags deviating $\\lambda$ *sdY from $\\bar{Y}$")))
+plot(sum_explana["::2021-02-08"],type=c("b"),
+     main=TeX(sprintf("Sum of lags deviating $\\lambda$ *sdY from $\\bar{Y}$")))
 lines(sumCI$lineup,lwd=2,col="red",lty=1)
 lines(sumCI$linedown,lwd=2,col="green",lty=1)
 name=c("η upper","η lower")
@@ -432,15 +431,9 @@ addLegend("topright",
 
 \newpage
 
-To use this behavior for optimizing our model, a more informal general approach is needed.
-The standarddeviaton is therefore scaled with parameter $\lambda$ and with  formula \ref{eq:count} in every $lag_{j}$ it is decided whether the predicted LPD $X_{j}$ exceeds $\bar{Y}_{j} \pm \lambda sdY_{j}$.  
+To use this behavior for optimizing our model, a more formal general approach is required. The standard deviation is therefore scaled with parameter $\lambda$ and with formula \ref{eq:count} in every $lag_{j}$ it is decided whether the predicted LPD $X_{j}$ exceeds $\bar{Y}_{j} \pm \lambda sdY_{j}$.  
 
-With function $g$ \ref{eq:count} we count the lags which exceed their bands, the output of $g$ is between 0 and $lag_{n}$. In  $\text{signal}$ \ref{eq:net_decision2}, $g$ is further applied to generate a signal.
-With $\eta_{lower}$ (green) and $\eta_{upper}$ (red) it is decided which final output for the timestep $t$ should be assigned
-In section [3.1.](#data_exploration) last section, we observed, that larger negative returns are more likely than positive, therefore the proposed signal is 0. For values between $\eta_{lower}$ and $\eta_{upper}$ we propose a signal 0.5. 
-Function \ref{eq:net_decision2} $\text{signal}$  is now applied to every timestep $t$, therefore the final LPD signal is computed.
-
-
+With function $g$ \ref{eq:count} we count the lags which exceed their bands, the output of $g$ is between 0 and $lag_{n}$. In  $\text{signal}$ \ref{eq:net_decision2}, $g$ is further applied to generate a signal. With $\eta_{lower}$ (green) and $\eta_{upper}$ (red) it is decided which final output for the timestep $t$ should be assigned. In section [3.1.](#data_exploration) last section, we observed, that larger negative returns are more likely than positive, therefore the proposed signal is 0. For values between $\eta_{lower}$ and $\eta_{upper}$ we propose a signal 0.5. Function \ref{eq:net_decision2} $\text{signal}$  is now applied to every timestep $t$, therefore the final LPD signal is computed.
 
 &nbsp;
 
@@ -475,9 +468,9 @@ sdY=\sqrt{  \frac{1}{n_{in}}  \sum_{t=1}^{n_{in}}(Y_{t}-\bar{Y})^{2} }
 
 &nbsp;
 
-$\underline{Y}_{t}$ = Vector of in-sample LPD {$Y_{t}..Y_{lag_{n}}$} observed for every t
+$\underline{Y}_{t}$ = Vector of in-sample LPD {$Y_{t}...Y_{lag_{n}}$} observed for every t
 
-$\underline{X}_{t}$ = Vector of out-of-sample LPD {$X_{t}..X_{lag_{n}}$} predicted for every t
+$\underline{X}_{t}$ = Vector of out-of-sample LPD {$X_{t}...X_{lag_{n}}$} predicted for every t
 
 $lag_{n}$ = Maximum number of lags
 
@@ -485,7 +478,7 @@ $\lambda$ = Scaling parameter for standard deviation
 
 $\eta_{lower},\eta_{upper}$ = Lower  and upper border for signal decision
 
-$g$ = Function of lags exceeding band $\in$ {0..$lag_{n}$}
+$g$ = Function of lags exceeding band $\in$ {$0...lag_{n}$}
 
 $signal$ = Function of final signal
 
@@ -546,16 +539,16 @@ the 9 splits which were introduced in section [3.2.1](#test_train), are now used
 
 Our findings from the GARCH model were not very promising, nevertheless we combine their signals with the neuralnet output and the signals from LPD.
 
-With the previously established architecture, different values for the parameters: $\lambda$, $\eta_{lower},\eta_{upper}$ and $\beta$  are used and the performance is compared to each other. In order to find a balance between precision and computation time, we found $N_{total}$= 1000 iterations should be sufficient for the evaluation.
+With the previously established architecture, different values for the parameters: $\lambda$, $\eta_{lower},\eta_{upper}$ and $\kappa$  are used and the performance is compared to each other. In order to find a balance between precision and computation time, we found $N_{total}$= 1000 iterations should be sufficient for the evaluation.
 
-The most promising performance is found with $\lambda = 1$,$\eta_{lower} > \eta_{upper}$ (no 0.5 signals were used) $\eta_{upper}=3$ and $\beta = 0.2$.
+The most promising performance is found with $\lambda = 1$,$\eta_{lower} > \eta_{upper}$ (no 0.5 signals were used) $\eta_{upper}=3$ and $\kappa = 0.2$.
 In figure \ref{fig:perf} different combinations are visualized, NN is simply trading the forecast of neuralnet based on their sign. The signals of LPD are all 1 except off all those which are predicted 0. NN+LPD is the performance as described in section [3.3.3](#lpd-signal). The combination NN+LPD+GARCH takes in account the GARCH signals from section [3.3.4](#garch-signal). If LPD or GARCH signal is 0 then the signal is also 0. 
 
 By investigating the plot it seems that some combinations are performing better than the others. The GARCH application appears to worsen the performance. Ligthblue and the Yellow line catches our eye, their perfomance seems to be better than the rest and as we can see, those are combinations of NN+LPD.
 
 &nbsp;
 
-```{r perf, fig.align='center', out.width='80%', fig.cap="Visualization of different signaling combinations. The best performing rule here is buy and hold in green. It is closely followed by the light blue NN+LPD combination with a $\\beta$ of 0.2. The behavior of the individual rules is often very similar, few different decisions can influence the performance. Especially at the end of July, beginning of August the rules behave differently, but then usually behave very similarly.", echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
+```{r perf, fig.align='center', out.width='80%', fig.cap="Visualization of different signaling combinations. The best performing rule here is buy and hold in green. It is closely followed by the light blue NN+LPD combination with a $\\kappa$ of 0.2. The behavior of the individual rules is often very similar, few different decisions can influence the performance. Especially at the end of July, beginning of August the rules behave differently, but then usually behave very similarly.", echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
 
 # knitr::include_graphics("images/xailpd/lambda_1/perf.svg")
 
@@ -565,20 +558,20 @@ plot.xts(compare_perf,
          main=TeX(sprintf("Performance cumulated from 9 Splits, $\\lambda = %d$", 1)),
          col=colors)
 addLegend("topleft",
-          legend.names=c(TeX(sprintf("NN $\\beta = %.1f$", 0.1)),
-                         TeX(sprintf("LPD $\\beta = %.1f$", 0.1)),
-                         TeX(sprintf("NN+LPD $\\beta = %.1f$", 0.1)),
-                         TeX(sprintf("NN+LPD+GARCH $\\beta = %.1f$", 0.1)),
+          legend.names=c(TeX(sprintf("NN $\\kappa = %.1f$", 0.1)),
+                         TeX(sprintf("LPD $\\kappa = %.1f$", 0.1)),
+                         TeX(sprintf("NN+LPD $\\kappa = %.1f$", 0.1)),
+                         TeX(sprintf("NN+LPD+GARCH $\\kappa = %.1f$", 0.1)),
                          
-                         TeX(sprintf("NN $\\beta = %.1f$", 0.2)),
-                         TeX(sprintf("LPD $\\beta = %.1f$", 0.2)),
-                         TeX(sprintf("NN+LPD $\\beta = %.1f$", 0.2)),
-                         TeX(sprintf("NN+LPD+GARCH $\\beta = %.1f$", 0.2)),
+                         TeX(sprintf("NN $\\kappa = %.1f$", 0.2)),
+                         TeX(sprintf("LPD $\\kappa = %.1f$", 0.2)),
+                         TeX(sprintf("NN+LPD $\\kappa = %.1f$", 0.2)),
+                         TeX(sprintf("NN+LPD+GARCH $\\kappa = %.1f$", 0.2)),
                          
-                         TeX(sprintf("NN $\\beta = %.1f$", 0.3)),
-                         TeX(sprintf("LPD $\\beta = %.1f$", 0.3)),
-                         TeX(sprintf("NN+LPD $\\beta = %.1f$", 0.3)),
-                         TeX(sprintf("NN+LPD+GARCH $\\beta = %.1f$", 0.3))
+                         TeX(sprintf("NN $\\kappa = %.1f$", 0.3)),
+                         TeX(sprintf("LPD $\\kappa = %.1f$", 0.3)),
+                         TeX(sprintf("NN+LPD $\\kappa = %.1f$", 0.3)),
+                         TeX(sprintf("NN+LPD+GARCH $\\kappa = %.1f$", 0.3))
                          ,
                          TeX(sprintf("Buy and Hold"))),
           col=colors,
@@ -590,31 +583,31 @@ addLegend("topleft",
 
 \newpage
 
-Regarding the Sharpe in figure \ref{fig:sharpe} our findings from before are confirmed. The NN+LPD with $\beta = 0.2$ has even a better Sharpe ratio than buy and hold. But another observation is seemingly more interesting, the LPD is alway better than only NN. By investigating the other calculations we have done, we find the same pattern, therefore we conclude that LPD brings us a real benefit.
+Regarding the Sharpe in figure \ref{fig:sharpe} our findings from before are confirmed. The NN+LPD with $\kappa = 0.2$ has even a better Sharpe ratio than buy and hold. But another observation is seemingly more interesting, the LPD is alway better than only NN. By investigating the other calculations we have done, we find the same pattern, therefore we conclude that LPD brings us a real benefit.
 
 &nbsp;
 
-```{r sharpe, fig.align='center', out.width='80%', fig.cap="Sharpe ratios of different signaling combinations. Based on the performance measure Sharpe ratios, the LPDs lead to a better performance. According to the Sharpe ratio, the performance of the NN+LPD signaling rule with a $\\beta$ of 0.2, is better than Buy and Hold.",echo=FALSE, fig.width = 8, fig.height = 5}
+```{r sharpe, fig.align='center', out.width='80%', fig.cap="Sharpe ratios of different signaling combinations. Based on the performance measure Sharpe ratios, the LPDs lead to a better performance. According to the Sharpe ratio, the performance of the NN+LPD signaling rule with a $\\kappa$ of 0.2, is better than Buy and Hold.",echo=FALSE, fig.width = 8, fig.height = 5}
 # knitr::include_graphics("images/xailpd/lambda_1/sharpe.svg")
 
 load("data/xai/7_7_withsignal_xai_in/sharpeplot_without_eth.rda")
 defaultmar <- par("mar")
 par(mar=c(11,4,4,4))
 my_bar <- barplot(as.numeric(sharpesave), border=F,
-                  names.arg=c(TeX(sprintf("NN $\\beta = %.1f$", 0.1)),
-                              TeX(sprintf("LPD $\\beta = %.1f$", 0.1)),
-                              TeX(sprintf("NN+LPD $\\beta = %.1f$", 0.1)),
-                              TeX(sprintf("NN+LPD+GARCH $\\beta = %.1f$", 0.1)),
+                  names.arg=c(TeX(sprintf("NN $\\kappa = %.1f$", 0.1)),
+                              TeX(sprintf("LPD $\\kappa = %.1f$", 0.1)),
+                              TeX(sprintf("NN+LPD $\\kappa = %.1f$", 0.1)),
+                              TeX(sprintf("NN+LPD+GARCH $\\kappa = %.1f$", 0.1)),
                               
-                              TeX(sprintf("NN $\\beta = %.1f$", 0.2)),
-                              TeX(sprintf("LPD $\\beta = %.1f$", 0.2)),
-                              TeX(sprintf("NN+LPD $\\beta = %.1f$", 0.2)),
-                              TeX(sprintf("NN+LPD+GARCH $\\beta = %.1f$", 0.2)),
+                              TeX(sprintf("NN $\\kappa = %.1f$", 0.2)),
+                              TeX(sprintf("LPD $\\kappa = %.1f$", 0.2)),
+                              TeX(sprintf("NN+LPD $\\kappa = %.1f$", 0.2)),
+                              TeX(sprintf("NN+LPD+GARCH $\\kappa = %.1f$", 0.2)),
                               
-                              TeX(sprintf("NN $\\beta = %.1f$", 0.3)),
-                              TeX(sprintf("LPD $\\beta = %.1f$", 0.3)),
-                              TeX(sprintf("NN+LPD $\\beta = %.1f$", 0.3)),
-                              TeX(sprintf("NN+LPD+GARCH $\\beta = %.1f$", 0.3)),
+                              TeX(sprintf("NN $\\kappa = %.1f$", 0.3)),
+                              TeX(sprintf("LPD $\\kappa = %.1f$", 0.3)),
+                              TeX(sprintf("NN+LPD $\\kappa = %.1f$", 0.3)),
+                              TeX(sprintf("NN+LPD+GARCH $\\kappa = %.1f$", 0.3)),
                               
                               TeX(sprintf("Buy and Hold"))),
                   cex.names=0.8,
@@ -629,7 +622,7 @@ par(mar=defaultmar)
 
 \newpage
 
-Figure \ref{fig:batch} gives a insight on how the individual combinations performed in each of the 9 splits. The NN+LPD with $\beta = 0.2$ is predominantly better in the first three splits, in the middle section its worse and towards the end the Sharpe is again better than buy and hold.
+Figure \ref{fig:batch} gives a insight on how the individual combinations performed in each of the 9 splits. The NN+LPD with $\kappa = 0.2$ is predominantly better in the first three splits, in the middle section its worse and towards the end the Sharpe is again better than buy and hold.
 But lets take this plot not to serious because these splits are just one month out-of-sample i.e the Sharpe ratio is sensitive to outliers, this effect is even stronger when there is little data present.
 
 &nbsp;
@@ -675,12 +668,12 @@ colors= c("green","red","pink","violetred","darkorchid","blue","lightblue")
 plot(data, col=colors, main=TeX(sprintf("Performance cumulated from 9 splits, $\\lambda = %d$", 1)))
 addLegend("topleft", 
           legend.names=c(TeX(sprintf("Buy and Hold, $Sharpe = %.2f$", 3.57)),
-                         TeX(sprintf("LPD+NN $\\beta = %.1f$, $Sharpe = %.2f$", 0.1, 2.54)),
-                         TeX(sprintf("LPD+NN+ETH if 0 $\\beta = %.1f$, $Sharpe = %.2f$", 0.1, 3.47)),
-                         TeX(sprintf("LPD+NN $\\beta = %.1f$, $Sharpe = %.2f$", 0.2, 3.76)),
-                         TeX(sprintf("LPD+NN+ETH if 0 $\\beta = %.1f$, $Sharpe = %.2f$", 0.2, 4.41)),
-                         TeX(sprintf("LPD+NN $\\beta = %.1f$, $Sharpe = %.2f$", 0.3, 3.40)),
-                         TeX(sprintf("LPD+NN+ETH if 0 $\\beta = %.1f$, $Sharpe = %.2f$", 0.3, 3.80))),
+                         TeX(sprintf("LPD+NN $\\kappa = %.1f$, $Sharpe = %.2f$", 0.1, 2.54)),
+                         TeX(sprintf("LPD+NN+ETH if 0 $\\kappa = %.1f$, $Sharpe = %.2f$", 0.1, 3.47)),
+                         TeX(sprintf("LPD+NN $\\kappa = %.1f$, $Sharpe = %.2f$", 0.2, 3.76)),
+                         TeX(sprintf("LPD+NN+ETH if 0 $\\kappa = %.1f$, $Sharpe = %.2f$", 0.2, 4.41)),
+                         TeX(sprintf("LPD+NN $\\kappa = %.1f$, $Sharpe = %.2f$", 0.3, 3.40)),
+                         TeX(sprintf("LPD+NN+ETH if 0 $\\kappa = %.1f$, $Sharpe = %.2f$", 0.3, 3.80))),
                          
           col=colors,
           lty=c(rep(1,13),2),
@@ -693,7 +686,7 @@ addLegend("topleft",
 
 In figure \ref{fig:with_eth} the NN+LPD's from figure \ref{fig:perf} and the adding of Ether is visualized. In the lower part, we can observe the signals which are 0 in the NN+LPD model. These zeroes are now filled up with the log returns from Ether.
 
-The one performance with NN+LPD+ETH with $\beta = 20 \%$ seems promising. Also for the other two NN+LPD the adding of Ether seems benefital.
+The one performance with NN+LPD+ETH with $\kappa = 20 \%$ seems promising. Also for the other two NN+LPD the adding of Ether seems benefital.
 
 \newpage
 
@@ -708,7 +701,7 @@ plot(data[,c(1,5)], col=colors, main=TeX(sprintf("Performance cumulated from 9 s
 
 addLegend("left",
           legend.names=c(TeX(sprintf("Buy and Hold, $Sharpe = %.2f$", 3.57)),
-                         TeX(sprintf("LPD+NN+ETH if 0 $\\beta = %.1f$, $Sharpe = %.2f$", 0.2, 4.41))),
+                         TeX(sprintf("LPD+NN+ETH if 0 $\\kappa = %.1f$, $Sharpe = %.2f$", 0.2, 4.41))),
           col=colors,
           lty=c(rep(1,13),2),
           lwd=c(rep(2,13),3),
