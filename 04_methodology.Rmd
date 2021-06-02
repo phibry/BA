@@ -490,6 +490,10 @@ $g$ = Function of lags exceeding band , output $\in$ {$0...lag_{n}$}
 
 $signal$ = Function of trading signal
 
+$\mu_{j}$ = arithmetic mean of insample LPD for every $lag_{j}$
+
+$\sigma_{j}$ =  standard deviation of insample LPD for every $lag_{j}$
+
 \newpage
 
 #### 3.3.4. GARCH Volatility Predictions {#garch-signal}
