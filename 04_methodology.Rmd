@@ -543,7 +543,7 @@ Figure \ref{fig:garch_trading} illustrates how the GARCH trading strategies show
 
 \newpage
 
-#### 3.3.5. NN and LPD Estimation
+#### 3.3.5. NN and LPD Trading
 &nbsp;
 
 In section [3.2.4](#mod-select) we have decided to fix the architecture 7 layers 7 nets, all
@@ -555,22 +555,24 @@ Our previous findings from the GARCH model were not very promising, nevertheless
 
 $\hat{nn}_{t}$ = neuralnet signals $\in$ {$-1,0,1$}
 
-$\hat{LPD}_{t}$ = LPD signals $\in$ {$0,0.5,1$}
+$\hat{LPD}_{t}$ = LPD signals $\in$ {$0,0.5,1$} 
 
-$\hat{garch}_{t}$ = GARCH signals $\in$ {$0,1$}
+$\hat{garch}_{t}$ = GARCH signals $\in$ {$0,1$} from section [3.3.4](#garch-signal
 
 &nbsp;
 
-With the previously established architecture, all combinations of the signals for different values for the parameters: $\lambda$, $\eta_{lower},\eta_{upper}$ and $\kappa$  are computed and the performance is compared to each other and the benchmark from [3.2.5](#benchmark). To find a balance between precision and computation time, we found $N_{total}$= 1000 Neural networks in every split, which should be sufficient for the evaluation.
+With the previously established architecture, all combinations of the signals for different values for the parameters: $\lambda$, $\eta_{lower},\eta_{upper}$ and $\kappa$  are computed and the performance is compared to each other and the benchmark from [3.2.5](#benchmark). To find a balance between precision and computation time, we found $N_{total}$= 1000 Neural networks in every split, should be sufficient for the evaluation.
 
 The most promising performance is found with $\lambda = 1$,$\eta_{lower} > \eta_{upper}$ (no 0.5 signals were used) $\eta_{upper}=3$ and $\kappa = 0.2$.
 In figure \ref{fig:perf} different combinations are visualized.
 
-NN is simply trading the forecast of the neural net, based on their sign.
+- NN is simply trading the $LogReturn_{t}$ with $\hat{nn}_{t}$ 
 
-NN+LPD is the performance as described in section [3.3.3](#lpd-signal). The combination NN+LPD+GARCH takes into account the GARCH signals from section [3.3.4](#garch-signal). If the  LPD or GARCH signal is 0 then the signal is also 0. 
+- NN+LPD is the product of NN and $\hat{LPD}_{t}$ 
 
-By investigating the plot it seems that some combinations are performing better than the others. The GARCH application appears to worsen the performance. The Ligthblue and the Yellow line catches our eye, their performance seems to be better than the rest and as we can see, those are combinations of NN+LPD.
+-  NN+LPD+GARCH takes into account the GARCH signals $\hat{garch}_{t}$ by multiplying them with NN+LPD.
+
+By investigating the plot, it seems that some combinations are performing better than the others. The GARCH application appears to worsen the performance. The Ligthblue and the Yellow line catches our eye, their performance seems to be better than the rest and as we can see, those are combinations of NN+LPD.
 
 &nbsp;
 
@@ -609,7 +611,7 @@ addLegend("topleft",
 
 \newpage
 
-Regarding the Sharpe in figure \ref{fig:sharpe} our findings from before are confirmed. The NN+LPD with $\kappa = 0.2$ has even a better Sharpe ratio than buy and hold. But another observation is seemingly more interesting, the LPD is alway better than only NN. By investigating the other calculations we have done, we find the same pattern, therefore we conclude that LPD brings us a real benefit.
+Regarding the Sharpe in figure \ref{fig:sharpe} our findings from before are confirmed. The NN+LPD with $\kappa = 0.2$ has even a better Sharpe ratio than buy and hold. But another observation is seemingly more interesting, the LPD is alway better than only NN. By investigating the other calculations we have done (plots found in  [Attachement](#attachement)), we find the same pattern, therefore we conclude that LPD brings us a real benefit for this particular application.
 
 &nbsp;
 
@@ -649,7 +651,7 @@ par(mar=defaultmar)
 \newpage
 
 Figure \ref{fig:batch} gives a insight on how the individual combinations performed in each of the 9 splits. The NN+LPD with $\kappa = 0.2$ is predominantly better in the first three splits, in the middle section its worse and towards the end the Sharpe is again better than buy and hold.
-But lets take this plot not to serious because these splits are just one month out-of-sample i.e the Sharpe ratio is sensitive to outliers, this effect is even stronger when there is little data present.
+But we have to take this plot with a grain of salt because these splits are only one month out of sample, meaning the Sharpe Ratio is sensitive to outliers, this effect is even stronger when there are few datapoints present.
 
 &nbsp;
 
@@ -676,7 +678,7 @@ for (i in 1:8){lines(allsharp[,i],col=colorsbatch[i],type="l",lwd=2)}
 In the performance plot \ref{fig:perf}, we have still left out what to do with 0 signals. One opportunity as in [3.3](#trading-strat) shortly mentioned, is to invest the money in another asset. By reason of staying in the same asset class we choose Ether [@ether] to invest in.
 The coin Ether from Ethereum is with $61.48B [@ethereum] the second largest cryptocurrency according to marketcapitalisation. 
 
-According to [@correlation_btc] the correlation between the two assets is 0.91. This is not a braking factor to us, because the 0 signal of the LPD is just indicating that something is changing in the data or the neural net is not stable, thus we cant exactly know what the 0 signal means. 
+According to [@correlation_btc] the correlation between the two assets is 0.91. This is not a braking factor to us, because the 0 signal of the LPD is just indicating that something is changing in the data or the neural net is not stable, thus we can not exactly know what the 0 signal means. 
 
 The structure Ether is very similar to Bitcoin [@oeko3project]. The series is imported in the same way as BTC e.g. the log returns are derived.
 
@@ -710,7 +712,7 @@ addLegend("topleft",
 
 &nbsp;
 
-In figure \ref{fig:with_eth} the NN+LPD's from figure \ref{fig:perf} and the adding of Ether is visualized. In the lower part, we can observe the signals which are 0 in the NN+LPD model. These zeroes are now filled up with the log returns from Ether.
+In figure \ref{fig:with_eth} the NN+LPD's from figure \ref{fig:perf} and the adding of Ether is visualized. In the lower part, we can observe the signals which are 0 in the NN+LPD model. These zeroes are now complemented with the log returns from Ether.
 
 The one performance with NN+LPD+ETH with $\kappa = 20 \%$ seems promising. Also for the other two NN+LPD the adding of Ether seems benefital.
 
@@ -742,12 +744,12 @@ addEventLines(events, srt=0, pos=1, lty=3, col = rep("#004c6d",6),lwd=2, cex=1.2
 
 &nbsp;
 
-For  a closer analysis, lets have a look at the cumulated logreturns of the best performing model vs. buy-and-hold in Figure \ref{fig:with_eth_sole}. The following analysis is related to the violet chart and starts from left to right, beginning with letter **A**. 
-Imideatly after the line by letter **A**, there are several decisions which differ from buy-and-hold and force a shift to the series. In letter **B** we observe a similar behavior for a short period of time. The unsatisfying trend change in letter **C** is stopped around the first of November. Thereafter unto the point in letter **D** the decisions of the model behave quite similar the green line. Right after **D** the net handles the negative trend very well and climbs further up. The same accounts for letter E, where the trend once more goes in the opposite direction than the benchmark. Shortly after **F** the model does exactly the same as buy-and-hold.
+For a closer analysis, let us have a look at the cumulated log-returns of the best performing model vs. buy-and-hold in Figure \ref{fig:with_eth_sole}. The following analysis is related to the violet chart and starts from left to right, beginning with the letter **A**. 
+Immediately after the line by letter **A**, several decisions differ from buy-and-hold and force a shift to the series. In the letter **B**, we observe similar behavior for a short period. The unsatisfying trend change in the letter **C** is stopped around the first of November. Thereafter unto the point in letter **D** the decisions of the model behave quite similar to the green line. Right after **D** the net handles the negative trend very well and climbs further up. The same accounts for the letter E, where the trend once more goes in the opposite direction than the benchmark. Shortly after **F** the model does exactly the same as buy-and-hold.
 
-Lets have a simple theoretical comparison example under the assumptions in [3.3.](#trading-strat) at last.
+Let's have a simple theoretical comparison example under the assumptions in [3.3.](#trading-strat) at last.
 
-With summarizing the logreturns from \ref{eq:logreturn} with Formula \ref{eq:logreturns_transforming},  one can calculate the value $S_{tn}$ which we end up with, when an Amount $S_{t0}$ is invested at the beginning.
+With summarizing the logreturns from \ref{eq:logreturn} with Formula \ref{eq:logreturns_transforming}, one can calculate the value $S_{tn}$ which we end up with, when an Amount $S_{t0}$ is invested at the beginning.
 
 &nbsp;
 
@@ -760,7 +762,7 @@ S_{tn} &=S_{t0}\prod_{k=1}^{t_{n}}e^{LogReturn_{k}} \\
 
 &nbsp;
 
-Lets say, we invest 1000 US-Dollar  at the beginning of the timeperiod in \ref{fig:with_eth_sole}. With buy-and-hold we would end up at 6003.25 US-Dollar by the end of March. However if we invest the 1000 USD in the best performing strategy we will end up with **11'633.70**  USD, that would be as nearly as double the amount of buy-and-hold. Comparing the Sharperatios  **4.41** to 3.57  of the LogReturns, the used strategy does also significantly better. 
+Lets say, we invest 1000 US-Dollar  at the beginning of the timeperiod in \ref{fig:with_eth_sole}. With buy-and-hold we would end up at 6003.25 US-Dollar by the end of March. However if we invest the 1000 USD in the best performing strategy we will end up with **11'633.70**  USD, that would be as nearly as double the amount of buy-and-hold. Comparing the Sharperatios  **4.41** to 3.57  of the LogReturns, the used strategy does also significantly better.  
 
 
 
