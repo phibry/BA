@@ -547,9 +547,9 @@ Figure \ref{fig:garch_trading} illustrates how the GARCH trading strategies show
 &nbsp;
 
 In section [3.2.4](#mod-select) we have decided to fix the architecture 7 layers 7 nets, all
-the 9 splits which were introduced in section [3.2.1](#test_train), are now used for trading. In every 6 month insample split a new model is estimated with the schema from [3.3.1](#trading_lpd_nn). The out-of-sample signals of the Neuralnet and LPD from every split are summarized. 
+the 9 splits which were introduced in section [3.2.1](#test_train), are now used for trading. In every 6 month-insample split a new model is estimated with the schema from [3.3.1](#trading_lpd_nn). The out-of-sample signals of the Neuralnet and LPD from every split are summarized. 
 
-Our previous findings from the GARCH model were not very promising, nevertheless we try to use those signals with the neuralnet output and the signals from LPD. That leaves us with a total of three signals for every timestep: 
+Our previous findings from the GARCH model were not very promising, nevertheless, we try to use those signals with the neural net output and the signals from LPD. That leaves us with a total of three signals for every timestep: 
 
 &nbsp;
 
@@ -561,16 +561,16 @@ $\hat{garch}_{t}$ = GARCH signals $\in$ {$0,1$}
 
 &nbsp;
 
-With the previously established architecture, all combinations of the signals for  different values for the parameters: $\lambda$, $\eta_{lower},\eta_{upper}$ and $\kappa$  are computet and the performance is compared to each other and to the benchmark from [3.2.5](#benchmark). In order to find a balance between precision and computation time, we found $N_{total}$= 1000 Neural networks in every split, should be sufficient for the evaluation.
+With the previously established architecture, all combinations of the signals for different values for the parameters: $\lambda$, $\eta_{lower},\eta_{upper}$ and $\kappa$  are computed and the performance is compared to each other and the benchmark from [3.2.5](#benchmark). To find a balance between precision and computation time, we found $N_{total}$= 1000 Neural networks in every split, which should be sufficient for the evaluation.
 
 The most promising performance is found with $\lambda = 1$,$\eta_{lower} > \eta_{upper}$ (no 0.5 signals were used) $\eta_{upper}=3$ and $\kappa = 0.2$.
 In figure \ref{fig:perf} different combinations are visualized.
 
-NN is simply trading the forecast of neuralnet based on their sign.
+NN is simply trading the forecast of the neural net, based on their sign.
 
-NN+LPD is the performance as described in section [3.3.3](#lpd-signal). The combination NN+LPD+GARCH takes in account the GARCH signals from section [3.3.4](#garch-signal). If LPD or GARCH signal is 0 then the signal is also 0. 
+NN+LPD is the performance as described in section [3.3.3](#lpd-signal). The combination NN+LPD+GARCH takes into account the GARCH signals from section [3.3.4](#garch-signal). If the  LPD or GARCH signal is 0 then the signal is also 0. 
 
-By investigating the plot it seems that some combinations are performing better than the others. The GARCH application appears to worsen the performance. The Ligthblue and the Yellow line catches our eye, their perfomance seems to be better than the rest and as we can see, those are combinations of NN+LPD.
+By investigating the plot it seems that some combinations are performing better than the others. The GARCH application appears to worsen the performance. The Ligthblue and the Yellow line catches our eye, their performance seems to be better than the rest and as we can see, those are combinations of NN+LPD.
 
 &nbsp;
 
