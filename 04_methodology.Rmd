@@ -11,7 +11,7 @@ The focus of this thesis can be divided into three areas. First, the aim is to f
 
 &nbsp;
 
-```{r flowchart_overview, fig.align='center', out.width='65%', fig.cap='This flowchart illustrates an overview of the individual intermediate steps that are covered in the Methodology section. ', echo=FALSE}
+```{r flowchart_overview, fig.align='center', out.width='65%', fig.cap='This flowchart illustrates an overview of the individual intermediate steps that are covered in the methodology section. After the data is explored, the details for the network archtecture are examined and compared quantitatively. Finally, aspects of explainable artificial intelligence (XAI) and traditional time series analysis are applied for the implementation of the trading strategy.', echo=FALSE}
 knitr::include_graphics("images/flowchart_overview.png")
 ```
 
@@ -30,7 +30,7 @@ For processing and analyzing the data in order to fulfill the weak stationarity 
 \end{align}
 ```
 
-```{r log_ret, echo=FALSE, message=FALSE, fig.cap="Logarithmic returns of BTC/USD. Start of the time series is autumn 2014 and goes here until spring 2021. One can recognize the typical patterns of log returns, namely the vola clusters. This means phases in which the returns fluctuate strongly.", out.width='85%', fig.width = 10, fig.height = 5}
+```{r log_ret, echo=FALSE, message=FALSE, fig.cap="Logarithmic returns of BTC/USD. Data are available from fall 2014 to spring 2021. The volatility clusters typical for time series are apparent. In these phases, the log returns fluctuate strongly.", out.width='85%', fig.width = 10, fig.height = 5}
 # load("data/log_ret_27_03_21.rda");log_ret=    log_ret_27_03_21   # loading logreturns
 # df_sub <- data.frame(date = ymd(time(log_ret)), value = as.numeric(log_ret))
 # plot(df_sub,
@@ -59,7 +59,7 @@ chart.ACF.phil(log_ret, main="Autocorrelation of log returns", maxlag = 20, ymax
 
 &nbsp;
 
-```{r histogramm_logreturns, out.width='80%', fig.cap='Histogram of BTC log return. Possible distribution of the data. None of the possible distributions would fit the data as well as possible. The blue t-Student distribution would fit the data better in the tails, while the yellow normal distribution would disperse a little better around the expected value.', echo=FALSE,fig.align="center", fig.width = 8, fig.height = 4.4}
+```{r histogramm_logreturns, out.width='80%', fig.cap='This histogram of BTC log returns illustrates how well it fits to different distributions. The blue t-Student distribution would fit the data better in the tails, while the yellow normal distribution would disperse a little better around the expected value. The distribution should be taken with a grain of salt, as the time dependence of the volatility is not taken into account.', echo=FALSE,fig.align="center", fig.width = 8, fig.height = 4.4}
 # knitr::include_graphics("images/histogram_logret_3.jpeg")
 
 load("data/log_ret_27_03_21.rda")  # loading logreturns closing! data xts
@@ -208,9 +208,9 @@ The complexity of the search for the optimal network architecture increases sign
 
 To train the feedforward neural networks, we need to specify the input layer in addition to the network architecture. For this, we take the autocorrelation function of the time period specified earlier.
 
-In contrast to the ACFs of the entire data set shown in figure \ref{fig:acf_log_ret} where lags 6 and 10 have a high impact, here in figure \ref{fig:test_train_acf} we see that lags 4 and 10 are significant. If one uses the ACFs as an indicator for the specification of a model, it must be considered that for other time periods also other rules apply. For modeling the entire data set, one could safely specify the input layer up to a lag of 10. Here for our subset, we specify the input layer up to a lag of 7. Lag 7 is just significant and could potentially explain an important dependency in the data. Since Bitcoin can be traded 7 days a week, including weekends, the dependency of 7 lags in the ACFs would also be explained.
+In contrast to the ACFs of the entire data set shown in figure \ref{fig:acf_log_ret} where lags 6 and 10 have a high impact, here in figure \ref{fig:test_train_acf} we see that lags 4 and 10 are significant. If one uses the ACF's as an indicator for the specification of a model, it must be considered that for other time periods also other rules apply. For modeling the entire data set, one could safely specify the input layer up to a lag of 10. Here for our subset, we specify the input layer up to a lag of 7. Lag 7 is just significant and could potentially explain an important dependency in the data. Since Bitcoin can be traded 7 days a week, including weekends, the dependency of 7 lags in the ACFs would also be explained.
 
-```{r test_train_acf, out.width='85%', fig.cap='Autocorrelation function of our chosen time period. One can clearly see an increased influence of lags 4 and 7, not as in the ACFs of the entire data set with significant values at 6 and 10. Only late at lag 18 does the ACF show a significant value again.', echo=FALSE, fig.width = 10, fig.height = 6}
+```{r test_train_acf, out.width='85%', fig.cap="Autocorrelation function of our chosen time period. One can clearly see an increased influence of lags 4 and 7, not as in the ACF's of the entire data set with significant values at 6 and 10. Only late at lag 18 does the ACF show a significant value again.", echo=FALSE, fig.width = 10, fig.height = 6}
 
 chart.ACF.phil(subseti, maxlag = 20, ymax = 0.12, main="ACF of time period: 2020-01-01/2021-03-27")
 ```
