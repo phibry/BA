@@ -431,36 +431,42 @@ addLegend("topright",
 
 \newpage
 
-To use this behavior for optimizing our model, a more formal general approach is required. The standard deviation is therefore scaled with parameter $\lambda$ and with formula \ref{eq:count} in every $lag_{j}$ it is decided whether the predicted LPD $X_{j}$ exceeds $\bar{Y}_{j} \pm \lambda sdY_{j}$.  
+To use this behavior for optimizing our model, a more formal general approach is required. The standard deviation is therefore scaled with parameter $\lambda$ and with formula \ref{eq:count} in every $lag_{j}$ it is decided whether the predicted LPD $\Delta_{j,t}$ exceeds $\mu_{j} \pm \lambda \sigma_{j}$.  
 
 With function $g$ \ref{eq:count} we count the lags which exceed their bands, the output of $g$ is between 0 and $lag_{n}$. In  $\text{signal}$ \ref{eq:net_decision2}, $g$ is further applied to generate a signal. With $\eta_{lower}$ (green) and $\eta_{upper}$ (red) it is decided which final output for the timestep $t$ should be assigned. In section [3.1.](#data_exploration) last section, we observed, that larger negative returns are more likely than positive, therefore the proposed signal is 0. For values between $\eta_{lower}$ and $\eta_{upper}$ we propose a signal 0.5. Function \ref{eq:net_decision2} $\text{signal}$  is now applied to every timestep $t$, therefore the final LPD signal is computed.
 
 &nbsp;
 
-```{=tex}
-\begin{align} \label{eq:sdY}
-sdY=\sqrt{  \frac{1}{n_{in}}  \sum_{t=1}^{n_{in}}(Y_{t}-\bar{Y})^{2} }
-\end{align}
-```
 
 ```{=tex}
 \begin{align} \label{eq:Ybar}
-\bar{Y}=\frac{1}{n_{in}} \sum_{t=1}^{n_{in}}Y_{t}
+\mu_{j}=\frac{1}{n_{in}} \sum_{t=1}^{n_{in}}\Delta_{j,t}
 \end{align}
 ```
 
+
+```{=tex}
+\begin{align} \label{eq:sdY}
+\sigma_{j}=\sqrt{  \frac{1}{n_{in}}  \sum_{t=1}^{n_{in}}(\mu_{j}-\hat{\Delta}_{j,t})^{2} }
+\end{align}
+```
+
+
+
+
+
 ```{=tex}
 \begin{align} \label{eq:count}
-\text{g(\underline{X})}=\sum_{j=1}^{lag_{n}}\Big((X_{j}>\bar{Y}_{j}+\lambda sdY_{j} )\vee( X_{j}<\bar{Y}_{j}-\lambda sdY_{j})\Big)
+g(\hat{\Delta}_{t})=\sum_{j=1}^{lag_{n}}\Big((\hat{\Delta}_{j}>\mu_{j} - \lambda \sigma_{j} )\vee( \hat{\Delta}_{j}<\mu_{j} + \lambda \sigma_{j})\Big)
 \end{align}
 ```
 
 ```{=tex}
 \begin{equation}\label{eq:net_decision2}
-\text{signal}(\underline{X}) =
+\text{signal}(\hat{\Delta}_{t}) =
 \begin{cases} 
-  0.5    & \quad \text{if } ,  \eta_{lower} < \text{g(\underline{X})} \le \eta_{upper}    \\                                              
-  0      & \quad \text{if } ,   \eta_{upper} < \text{g(\underline{X})} \\
+  0.5    & \quad \text{if } ,  \eta_{lower} < g(\hat{\Delta}_{t}) \le \eta_{upper}    \\                                              
+  0      & \quad \text{if } ,   \eta_{upper} < g(\hat{\Delta}_{t}) \\
   1      & \quad \text{else}
    \end{cases}
 \end{equation}
@@ -468,19 +474,21 @@ sdY=\sqrt{  \frac{1}{n_{in}}  \sum_{t=1}^{n_{in}}(Y_{t}-\bar{Y})^{2} }
 
 &nbsp;
 
-$\underline{Y}_{t}$ = Vector of in-sample LPD {$Y_{t}...Y_{lag_{n}}$} observed for every t
+$\Delta_{j,t}$ = matrix of in-sample LPD {$\underline{\Delta}_{1}...\underline{\Delta}_{n_{in}}$} observed for every t in insample
 
-$\underline{X}_{t}$ = Vector of out-of-sample LPD {$X_{t}...X_{lag_{n}}$} predicted for every t
-
-$lag_{n}$ = Maximum number of lags
+$\hat{\Delta}_{j,t}$ = matrix of out-of-sample LPD {$\underline{\hat{\Delta}}_{1}...\underline{\hat{\Delta}}_{n_{out}}$} predicted for every t in out of sample
 
 $\lambda$ = Scaling parameter for standard deviation
 
+$lag_{n}$ = Maximum number of lags
+
 $\eta_{lower},\eta_{upper}$ = Lower  and upper border for signal decision
 
-$g$ = Function of lags exceeding band $\in$ {$0...lag_{n}$}
+$n_{in} ,n_{out}$ = Maximum time insample / out-of-sample
 
-$signal$ = Function of final signal
+$g$ = Function of lags exceeding band , output $\in$ {$0...lag_{n}$}
+
+$signal$ = Function of trading signal
 
 \newpage
 
@@ -509,7 +517,7 @@ $\hat{\sigma}_{t}$ = predicted volatility for every ${t}$
 
 $\sigma_{historical}$ = historical volatility
 
-In other words, the code checks whether the predicted volatility is significantly greater than the 95% confidence interval (based on historical data). If this is the case, the trading signal is set to 0, i.e. the position is sold respectively we stay out of the market. If the expected volatility is within the normal range, we enter respectively remain in a long position. For simplicity, a threshold of 1.64 is used, which corresponds approximately to the upper 95% confidence interval for a standard normal distribution.
+In other words, the function checks whether the predicted volatility is significantly greater than the 95% confidence interval (based on historical data). If this is the case, the trading signal is set to 0, i.e. the position is sold respectively we stay out of the market. If the expected volatility is within the normal range, we enter respectively remain in a long position. For simplicity, a threshold of 1.64 is used, which corresponds approximately to the upper 95% confidence interval for a standard normal distribution.
 
 \newpage
 
