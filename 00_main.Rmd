@@ -1,21 +1,30 @@
 ---
 soutput:
+<<<<<<< HEAD
   html_document:
     toc: no
     df_print: paged
+=======
+>>>>>>> main
   pdf_document:
     toc: no
 bibliography: add/doc.bib
-linkcolor: red
+linkcolor: gray
 csl: add/ieee.csl
 header-includes:
 - \usepackage{pdfpages}
 - \usepackage{amsmath}
 - \usepackage{placeins}
+<<<<<<< HEAD
 output:
   word_document: default
   html_document:
     df_print: paged
+=======
+- \usepackage[font=it]{caption}
+output:
+  pdf_document: default
+>>>>>>> main
 ---
 ```{r, include=FALSE}
 options(tinytex.verbose = TRUE)
