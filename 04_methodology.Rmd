@@ -11,7 +11,7 @@ The focus of this thesis can be divided into three areas. First, the aim is to f
 
 &nbsp;
 
-```{r flowchart_overview, fig.align='center', out.width='65%', fig.cap='This flowchart illustrates an overview of the individual intermediate steps that are covered in the Methodology section. ', echo=FALSE}
+```{r flowchart_overview, fig.align='center', out.width='65%', fig.cap='This flowchart illustrates an overview of the individual intermediate steps that are covered in the methodology section. After the data is explored, the details for the network archtecture are examined and compared quantitatively. Finally, aspects of Explainable Artificial Intelligence and traditional time series analysis are applied for the implementation of the trading strategy.', echo=FALSE}
 knitr::include_graphics("images/flowchart_overview.png")
 ```
 
