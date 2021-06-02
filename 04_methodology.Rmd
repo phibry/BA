@@ -208,7 +208,7 @@ The complexity of the search for the optimal network architecture increases sign
 
 To train the feedforward neural networks, we need to specify the input layer in addition to the network architecture. For this, we take the autocorrelation function of the time period specified earlier.
 
-In contrast to the ACFs of the entire data set shown in figure \ref{fig:acf_log_ret} where lags 6 and 10 have a high impact, here in figure \ref{fig:test_train_acf} we see that lags 4 and 10 are significant. If one uses the ACF's as an indicator for the specification of a model, it must be considered that for other time periods also other rules apply. For modeling the entire data set, one could safely specify the input layer up to a lag of 10. Here for our subset, we specify the input layer up to a lag of 7. Lag 7 is just significant and could potentially explain an important dependency in the data. Since Bitcoin can be traded 7 days a week, including weekends, the dependency of 7 lags in the ACFs would also be explained.
+In contrast to the ACF's of the entire data set shown in figure \ref{fig:acf_log_ret} where lags 6 and 10 have a high impact, here in figure \ref{fig:test_train_acf} we see that lags 4 and 10 are significant. If one uses the ACF's as an indicator for the specification of a model, it must be considered that for other time periods also other rules apply. For modeling the entire data set, one could safely specify the input layer up to a lag of 10. Here for our subset, we specify the input layer up to a lag of 7. Lag 7 is just significant and could potentially explain an important dependency in the data. Since Bitcoin can be traded 7 days a week, including weekends, the dependency of 7 lags in the ACFs would also be explained.
 
 ```{r test_train_acf, out.width='85%', fig.cap="Autocorrelation function of our chosen time period. One can clearly see an increased influence of lags 4 and 7, not as in the ACF's of the entire data set with significant values at 6 and 10. Only late at lag 18 does the ACF show a significant value again.", echo=FALSE, fig.width = 10, fig.height = 6}
 
@@ -233,7 +233,7 @@ Here we would like to focus on some findings that we discovered during the proce
 
 The plot in figure \ref{fig:mse_plot1} compares one layer networks with different numbers of neurons with each other. Networks with a maximum of ten neurons are compared. These different configurations can be seen on the x-axis. The first data point corresponds to a simple network with one neuron. The y-axis shows the MSE values obtained with the respective trained model. As already explained, we use 50 different optimizations of each configuration to get a better idea of a potentially systematic relationship with the MSE. In the plot, each of the 50 configurations is drawn using a different color.
 
-```{r mse_plot1, out.width='100%', fig.cap='In- and out-of-sample MSE of the 5th split. Only the networks with only one layer are shown here. Simplest network has 1 neuron (leftmost) and the most complex one has 10 neurons (rightmost), so here you have the MSEs of 10 different networks. In-sample the MSEs tend to decrease, while out-of-sample they increase.', echo=FALSE, fig.align="center"}
+```{r mse_plot1, out.width='100%', fig.cap="In- and out-of-sample MSE of the 5th time split. Only the networks with only one layer are shown here. Simplest network has 1 neuron (leftmost) and the most complex one has 10 neurons (rightmost), therefore we have the MSE's of 10 different neural networks. The in-sample MSE's tend to decrease, while the out-of-sample MSE's move the opposite direction.", echo=FALSE, fig.align="center"}
 knitr::include_graphics("images/batch5/mse_5_layer1.jpeg")
 ```
 
@@ -245,7 +245,7 @@ If you add another layer to the network architecture, the number of different ne
 
 As noted earlier in figure \ref{fig:mse_plot1}, the values for the MSE also fluctuate more and more with increasing complexity. Small in-sample MSE for more complex networks leads to rather high out-of-sample MSE. This leads us to the previously mentioned challenges in section [2.1.4.1](#overfitting), and that is that too many estimated parameters can lead to overfitting of the network.
 
-```{r mse_plot2, out.width='100%', fig.cap='In- and out-of-sample MSE of the 5th split. Shown here are only the networks with two layers. The simplest network has an architecture of 1 neuron per layer (leftmost) and the most complex has 10 neurons per layer (rightmost), so you have the MSEs of 100 different networks. As in the previous graph, in-sample MSEs tend to decrease while out-of-sample MSEs tend to increase.', echo=FALSE,fig.align="center"}
+```{r mse_plot2, out.width='100%', fig.cap="In- and out-of-sample MSE of the 5th split. Shown here are only the networks with two layers. The simplest network has an architecture of 1 neuron per layer (leftmost) and the most complex has 10 neurons per layer (rightmost), therefore we have the MSE's of 100 different neural networks. As in the previous graph, in-sample MSE's tend to decrease while out-of-sample MSE's tend to increase.", echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/batch5/mse_5_layer2.jpeg")
 ```
 
@@ -257,7 +257,7 @@ Lastly, we look at the results of the different network architectures with a thi
 
 It is interesting that at the beginning, with the rather simple model architectures, the MSE of all realizations is very constant and only varies very slightly.
 
-```{r mse_plot3, out.width='100%', fig.cap='In- and out-of-sample MSE of the 5th split. Shown here are only the networks with 3 layers. Simplest network has an architecture of 1 neuron per layer (leftmost) and the most complex has 10 neurons per layer (rightmost), so here you have the MSEs of 1000 different networks. Same pattern as for 1 layer and 2 layers. In-sample the MSE decreases, out-of-sample it increases.', echo=FALSE,fig.align="center"}
+```{r mse_plot3, out.width='100%', fig.cap="In- and out-of-sample MSE of the 5th split. Shown here are only the networks with 3 layers. Simplest network has an architecture of 1 neuron per layer (leftmost) and the most complex has 10 neurons per layer (rightmost), therefore we have the MSE's of 1000 different neural networks. Same pattern as for 1 layer and 2 layers: The in-sample the MSE's decreases, while the out-of-sample MSE's increase.", echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/batch5/mse_5_layer3.jpeg")
 ```
 \newpage
@@ -266,7 +266,7 @@ Figure \ref{fig:mse_plot5} shows the MSE of the models with 1-3 layers, i.e. the
 
 At this point, it should be emphasized that only the analyses from time split 5 are visualized in this section. Our primary goal is to compare the performances of different network architectures using MSE to find the optimal network that works every time split. However, finding an optimal architecture using such visual analysis of the MSE seems nearly impossible. Nevertheless, the main finding of this section is that the MSE deteriorates massively with more complex models and thus a simpler one should be considered. Equally remarkable is the fact that the same model architectures produce such different results. Whilst many models range in a more or less solid midfield, traits of overfitting can be recognized. These are reflected by the spikes in the out-of-sample MSE.
 
-```{r mse_plot5, out.width='100%', fig.cap='In- and out-of-sample MSE of the 5th split. The 3 previous graphs are summarized here. One has here an overview of all 3 layers and thus of all 1110 neuron-layer combinations. The more complex a network, the smaller the in-sample MSE becomes, but the larger the out-of-sample MSE becomes.', echo=FALSE,fig.align="center"}
+```{r mse_plot5, out.width='100%', fig.cap="In- and out-of-sample MSE of the 5th split. The 3 previous graphs are summarized here and represents an overview of all 3 layers, which results in a total of 1110 neuron-layer combinations. Again, the inverse relationship is evident. The more complex a network, the smaller the in-sample MSE's become. At the same time, the out-of-sample MSE's increase.", echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/batch5/mse_5_all.jpeg")
 ```
 
@@ -276,7 +276,7 @@ What has not yet been studied is the dependence of the neural network's behavior
 
 The medians of the MSE's of all 50 equal networks across all time splits are plotted in figure \ref{fig:mse_median}. We restrict ourselves to neural networks with 1-2 layers (recognizable in the red (1) and blue (2) rectangles), since it can be assumed that too complex models are not suitable for the target. The lines represent the medians of the MSE of all 50 optimized neural networks at a given network architecture (x-axis). The nine different colors specify the specific time split in which the neural networks have been trained and tested. We anticipate that this comparison will facilitate finding a network architecture that performs across all time splits. 
 
-```{r mse_median, out.width='100%', fig.cap='MSE median across all 9 splits. For each network architecture, 50 neural networks were trained (55`500 models per time split). The nine colors illustrate how these models behave in the different time splits. Time periods with a strong trend (for example, the dark red line, split 7) lead to the same structure as already noted in the previous graphs. The more complex a network, the smaller the in-sample MSE becomes, but the larger it becomes out-of-sample.', echo=FALSE,fig.align="center"}
+```{r mse_median, out.width='100%', fig.cap="We take the median of all MSE's for a given network architecture. The 9 splits are visualized by different colors. For each network architecture, 50 neural networks were trained (55`500 models per time split). The nine colors illustrate how these models behave in the different time splits. Time periods with a strong trend (for example, the dark red line, split 7) lead to the same structure as already noted in the previous graphs. Again, the inverse relationship is evident. The more complex a network, the smaller the in-sample MSE's become. At the same time, the out-of-sample MSE's increase.", echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/batch5/median_mse.jpeg")
 ```
 
@@ -286,7 +286,7 @@ First, there is evidence of overfitting in the medians as well. In particular, s
 
 Our goal in the second part of this thesis is to work out a trading strategy with a suitable neural network. Therefore, as the last comparison, we visualize in figure \ref{fig:sharpe_median} how well the different network architectures behave in sign trading. This is simple trading which depends on the sign of the prediction $\hat{y}_{t+1}$ i.e. next expected log return. If a positive prediction is forecast, the trader is in a long position, otherwise in a short position. As with the previous plot, the Sharpe ratios of each neural network realization perform differently despite having the same network architecture. Therefore, we again decided to plot the median of all Sharpe ratios with the same network architecture. The nine different colors indicate the time interval during which the neural networks were trained and tested.
 
-```{r sharpe_median, out.width='100%', fig.cap='Sharpe median across all 9 splits. Sharpe ratios increase in-sample (upper plot) with increasing complexity. Out-of-sample Sharpe ratios tend to decrease with increasing complexity. However, the effect is rather small here.', echo=FALSE,fig.align="center"}
+```{r sharpe_median, out.width='100%', fig.cap='We take the median of all Sharpe ratios for a given network architecture. The 9 splits are visualized by different colors. The in-sample Sharpe ratios increase (upper plot) with increasing complexity. The out-of-sample Sharpe ratios tend to decrease with increasing complexity. In comparison to the previous plots using the MSE, the effect is much smaller here.', echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/batch5/median_sharpe.jpeg")
 ```
 
@@ -316,7 +316,7 @@ This section describes the trading strategy in more detail. In basic terms, the 
 
 &nbsp;
 
-```{r flowchart_trading, fig.align='center', out.width='100%', fig.cap='This flowchart illustrates an overview of the trading strategy applied in this section. From left to right: Trading signals are created from forecasts, XAI and GARCH and combined at the end.', echo=FALSE}
+```{r flowchart_trading, fig.align='center', out.width='100%', fig.cap='This flowchart illustrates an overview of the trading strategy applied in this section. After finding the best network architecture for accurate forecasts of log returns, we check the stability of the neural network with XAI. The GARCH-model addresses the phenomenon of volatility clusters. Finally, all these information are combined in a trading strategy in order to be compared with our benchmark consisting of buy-and-hold.', echo=FALSE}
 knitr::include_graphics("images/flowchart_trading.png")
 ```
 
@@ -392,7 +392,7 @@ This is shown in formula \ref{eq:net_decision2}, we see immediately that on 2021
 In the example we state that if 4 or more lags exceed the upper limit the final signal is 0 and if between 2 and 4 lags exceed the standard deviation, we assign the signal 0.5. For our example date 2021.01.25 the signal would be 0.
 Correctly concluded, we get a trading signal for each date.
 
-```{r lpd_explain, fig.align='center', out.width='60%', fig.cap="LPD Plot for illustration: Visualization of the above signal generation procedure. For the top LPD time series, the mean value and the upper and lower decision bands are plotted.", echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
+```{r lpd_explain, fig.align='center', out.width='60%', fig.cap="The LPD is used to generate the trading signal. Higher volatility indicates that the neural network may provide unreliable outputs. For the top LPD time series, the mean value and the upper and lower decision bands are plotted. Each time this LPD exceeds the upper or lower decision band, a signal is realized for this lag. In the most extreme phases it can happen that several lags exceed the decision bands and thus generate several signals. The number of all exceedances will be considered in the next plot in order to generate the XAI trading signal.", echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
 knitr::include_graphics("images/xailpd/out_decision_small.jpeg")
 load("data/xai/7_7_withsignal_xai_in/OLPD_mat_out_plot.rda")
 load("data/xai/7_7_withsignal_xai_in/meanCI.rda")
@@ -411,7 +411,7 @@ addLegend("bottomleft",
           bg="white")
 ```
 
-```{r lpd_explain_sum, fig.align='center', out.width='60%', fig.cap="LPD Sum Plot for illustration: Sum of the LPDs in black. Red is the upper decision limit and the green is the lower one. Values below the green line lead to a signal = 1. Values above the red line lead to a signal = 0. Values between the red and the green line lead to a signal = 0.5.", echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
+```{r lpd_explain_sum, fig.align='center', out.width='60%', fig.cap="The black line shows how many lags exceed the threshold defined above at one point in time. The more extreme lags are counted, the more unstable the neural network is. Red is the upper decision limit and the green is the lower one. Values below the green line indicate realiability and lead to a signal = 1. Values above the red line indicate instability and lead to a signal = 0. Values between the red and the green line lead to a signal = 0.5.", echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
 # knitr::include_graphics("images/xailpd/out_sum_2.jpeg")
 load("data/xai/7_7_withsignal_xai_in/sum_explana_out_plot.rda")
 load("data/xai/7_7_withsignal_xai_in/sumCI.rda")
@@ -525,7 +525,7 @@ In other words, the function checks whether the predicted volatility is signific
 
 \newpage
 
-```{r garch_trading, fig.align='center', out.width='80%', fig.cap='Cumulative daily returns of two different GARCH trading strategies and a simple buy-and-hold strategy. The GARCH Signum strategy is based on the ARMA(1,1)-GARCH(1,1) prediction, while the GARCH Volatility strategy simply checks if the threshold is exceeded. The time periods where we quit the market is clearly visible as horizontal lines.', echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
+```{r garch_trading, fig.align='center', out.width='80%', fig.cap='Cumulative daily returns of two different GARCH trading strategies and a simple buy-and-hold strategy. The GARCH signum strategy is based on the ARMA(1,1)-GARCH(1,1) prediction, while the GARCH volatility strategy simply checks if the threshold is exceeded. The time periods where we quit the market is clearly visible as horizontal lines.', echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
 # knitr::include_graphics("images/GARCH/garch_trading.png")
 
 load("data/GARCH_vola_predictions/garch_perf.rda")
@@ -574,7 +574,7 @@ By investigating the plot it seems that some combinations are performing better 
 
 &nbsp;
 
-```{r perf, fig.align='center', out.width='80%', fig.cap="Visualization of different signaling combinations. The best performing rule here is buy and hold in green. It is closely followed by the light blue NN+LPD combination with a $\\kappa$ of 0.2. The behavior of the individual rules is often very similar, few different decisions can influence the performance. Especially at the end of July, beginning of August the rules behave differently, but then usually behave very similarly.", echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
+```{r perf, fig.align='center', out.width='80%', fig.cap="Different combinations of trading signals are compared with each other. The best performing one is buy-and-hold (green). It is closely followed by the light blue NN+LPD combination with a $\\kappa$ of 0.2. The behavior of the individual rules is often very similar, few different decisions can influence the performance. Especially at the end of July, beginning of August the rules behave differently, but then usually behave very similarly.", echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
 
 # knitr::include_graphics("images/xailpd/lambda_1/perf.svg")
 
@@ -684,7 +684,7 @@ That said, we use a simple rule to integrate Ether. If the signal of the combina
 
 &nbsp;
 
-```{r with_eth, fig.align='center', out.width='80%', fig.cap="In addition to LPD+NN combinations with different beta, combinations with ETH are added here. The combination LPD+NN+ETH with a beta of 0.2, clearly performs best here. Overall, even 3 combinations are better than buy and hold.",echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
+```{r with_eth, fig.align='center', out.width='80%', fig.cap="As described in this section, we investigate whether the addition of an alternative investment can lead to better performance. The trading signals with different kappas resulting from the neural networks and LPD (LPD+NN) are supplemented with occasional investments in ETH. The combination LPD+NN+ETH with a kappa of 0.2, clearly performs best here. Overall, even 3 combinations are better than buy and hold.",echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
 # knitr::include_graphics("images/xailpd/lambda_1/lpd_nn_eth_perf.svg")
 load("data/xai/7_7_withsignal_xai_in/performance_with_eth.rda")
 load("data/xai/7_7_withsignal_xai_in/nn_lpd_without_eth.rda")
