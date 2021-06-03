@@ -26,6 +26,16 @@ Investing is about having your money invested in the market. Therefore, the thou
 
 ### 5.1. Outlook
 
+There are many different ways, to implement a trading strategy, due to the time limitation, this thesis could only investigate a small part of the applications of feed forward nets in trading.
+
+The Explainability aspect of neural networks is still in developement. Further work could try to improve the application of XAI in the context of financial timeseries.
+ 
+Future work based on this thesis, also could investigate the real time application test of the model for trading. Since this thesis is only valid under the assumptions taken, a practical application needs to deal with these issues.
+
+
+
+
+
 
 
 

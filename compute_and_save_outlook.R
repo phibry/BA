@@ -1,5 +1,9 @@
 # testfile Buehl
 
+
+
+rm(list=ls())
+
 # testfile Buehler
 # this file is only for testing purpose, does not appear in final paper
 
@@ -25,10 +29,6 @@ source("add/Functions.r")
 # log_ret_27_03_21  = na.exclude(diff(log(Cl(BTC_USD_27_03_21)))) # saveing the logretursn of closing data Cl()
 # save(log_ret_27_03_21, file = "data/log_ret_03_06_21.rda")
 
-
-
-
-rm(list=ls())
 
 
 #loading data
