@@ -224,7 +224,7 @@ For the following procedure for finding an optimal network architecture we use a
 
 \newpage
 
-#### 3.x.x. Neural Network Training {#train-nn}
+#### 3.2.3. Neural Network Training {#train-nn}
 &nbsp;
 
 For training the networks, we use the function `neuralnet()`, which is part of the R-package `neuralnet`. The advantage of this function is that it uses the backpropagation algorithm presented in section [2.1.2](#backprogation_algorithm). Various parameters must be passed to the function. We pass the 6-month in-sample data sets defined in section [3.2.1](#test_train), which are specially tailored for our applications. In the previous section, we decided on a maximum delay of 7 and the structure of the input layer can be seen in table \ref{tab:data_tab}. The pink-colored values indicate that they are the same values but shifted. These are the input data of the 5th test period, which would start in 2020-05-01. However, since we shift the data by 7-time units, we also lose 7 days of data, since no values are known before 2020-05-01 to fill the delays with data. If, for example, we would consider a larger number of delays, then the data set would accordingly also become smaller and smaller.
@@ -279,7 +279,7 @@ For the out-of-sample area, the `predict` function from the same package is used
 
 \newpage
 
-#### 3.2.3.  Evaluating Network Architecture {#evaluate_nn}
+#### 3.2.4.  Evaluating Network Architecture {#evaluate_nn}
 &nbsp;
 
 Here we would like to focus on some findings that we discovered during the processing of the trained networks. To illustrate the results, an extract is discussed here, namely only the 5th train/test split (in figure \ref{fig:test_train} the middle one).
@@ -347,14 +347,14 @@ When looking at the Sharpe ratios, an inverse relationship between the in-sample
 
 \newpage
 
-#### 3.2.4. Model Selection {#mod-select}
+#### 3.2.5. Model Selection {#mod-select}
 &nbsp;
 
 With the above procedure, we have been able to identify the characteristics of neural networks. In time series applications, complex networks lead to overfitting. We could detect an inverse relationship between in- and out-of-sample MSE. We trained many networks, yet no distinct optimal neuron-layer combination can be identified. Determining the architecture based on the minimum MSE would not yield good results. There would be too great a risk that the chosen architecture would be too complex and lead to overfitting. Additionally, the chosen architecture should lead to trustworthy predictions over different time periods (in our example over the 9 splits).
 
 For the rest of the procedure, we decide to use a neural network architecture of (7,7). According to the 2-layer structure visualized in figure \ref{fig:mse_plot2}, the architecture we chose looks very balanced. In-sample, the MSE is rather in a more optimal range (smaller MSE) and out-of-sample, any overfitting is rather minimal compared to even more complex networks. In the attachment in figure \ref{fig:meanmean2}, you can see the average MSE across all 9 splits. The neuron layer architecture of (7,7) is exactly in the range where the in-sample MSE decreases and out-of-sample increases. The selected network lies exactly between the volatile networks, thus this architecture does not seem to be as prone to overfitting as the one next to it. The (7,7) network is not too complex, tends to have a good in-sample MSE and the out-of-sample MSE does not tend to overfit as much.
 
-#### 3.2.5. Benchmark {#benchmark}
+#### 3.2.6. Benchmark {#benchmark}
 &nbsp;
 
 The trained networks and applied methods are compared with each other using a benchmark. For this purpose, we use the buy-and-hold, which is a long-term passive investment strategy. Investing with this strategy often leads to better returns in the long run than active trading [@bnh]. This strategy is hard to beat, especially when the market is trending upwards. In such a trend, an active strategy would hardly recommend anything other than buy-and-hold.
@@ -375,7 +375,7 @@ knitr::include_graphics("images/flowchart_trading.png")
 
 &nbsp;
 
-The main component is the prediction of the neural network. This reflects the expected log return of the next day and is thus an important indicator of whether the money should remain invested or not. However, the output of these neural networks are to be treated with caution, as we have seen in the section [3.2.3](#evaluate_nn). Therefore, we rely on XAI to detect instability and incorporate this information into the final trading signal. Furthermore, volatility persistence is observed in financial time series, i.e. large changes can be expected after large changes. Leverage effects are also probable, which means that the tendency to achieve a negative return is higher when volatility is large. A GARCH model is used to model these phenomena, whose volatility predictions provide important information for the final trading signal.
+The main component is the prediction of the neural network. This reflects the expected log return of the next day and is thus an important indicator of whether the money should remain invested or not. However, the output of these neural networks are to be treated with caution, as we have seen in the section [3.2.4](#evaluate_nn). Therefore, we rely on XAI to detect instability and incorporate this information into the final trading signal. Furthermore, volatility persistence is observed in financial time series, i.e. large changes can be expected after large changes. Leverage effects are also probable, which means that the tendency to achieve a negative return is higher when volatility is large. A GARCH model is used to model these phenomena, whose volatility predictions provide important information for the final trading signal.
 
 While these methods sound promising, it should not be forgotten that a buy-and-hold strategy (given nerves of steel) also led to remarkable performances in the past that even outperformed traditional asset classes. The price development is described in sections [2.4.1](#historical_analysis) and [2.4.3](#bitcoin_valuation). That is why buy-and-hold is frequently used as a comparison. 
 
@@ -445,6 +445,8 @@ This is shown in formula \ref{eq:net_decision2}, we see immediately that on 2021
 In the example we state that if 4 or more lags exceed the upper limit the final signal is 0 and if between 2 and 4 lags exceed the standard deviation, we assign the signal 0.5. For our example date 2021.01.25 the signal would be 0.
 Correctly concluded, we get a trading signal for each date.
 
+&nbsp;
+
 ```{r lpd_explain, fig.align='center', out.width='60%', fig.cap="The LPD is used to generate the trading signal. Higher volatility indicates that the neural network may provide unreliable outputs. For the top LPD time series, the mean value and the upper and lower decision bands are plotted. Each time this LPD exceeds the upper or lower decision band, a signal is realized for this lag. In the most extreme phases it can happen that several lags exceed the decision bands and thus generate several signals. The number of all exceedances will be considered in the next plot in order to generate the XAI trading signal.", echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
 knitr::include_graphics("images/xailpd/out_decision_small.jpeg")
 load("data/xai/7_7_withsignal_xai_in/OLPD_mat_out_plot.rda")
@@ -464,6 +466,8 @@ addLegend("bottomleft",
           bg="white")
 ```
 
+\newpage
+
 ```{r lpd_explain_sum, fig.align='center', out.width='60%', fig.cap="The black line shows how many lags exceed the threshold defined above at one point in time. The more extreme lags are counted, the more unstable the neural network is. Red is the upper decision limit and the green is the lower one. Values below the green line indicate realiability and lead to a signal = 1. Values above the red line indicate instability and lead to a signal = 0. Values between the red and the green line lead to a signal = 0.5.", echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
 # knitr::include_graphics("images/xailpd/out_sum_2.jpeg")
 load("data/xai/7_7_withsignal_xai_in/sum_explana_out_plot.rda")
@@ -482,7 +486,7 @@ addLegend("topright",
           bg="white")
 ```
 
-\newpage
+&nbsp;
 
 To use this behavior for optimizing our model, a more formal general approach is required. The standard deviation is therefore scaled with parameter $\lambda$ and with formula \ref{eq:count} in every $lag_{j}$ it is decided whether the predicted LPD $\Delta_{j,t}$ exceeds $\mu_{j} \pm \lambda \sigma_{j}$.  
 
@@ -537,9 +541,9 @@ $lag_{n}$ = Maximum number of lags
 
 $\eta_{lower},\eta_{upper}$ = Lower  and upper border for signal decision
 
-$n_{in} ,n_{out}$ = Maximum time insample / out-of-sample
+$n_{in}, n_{out}$ = Maximum time insample / out-of-sample
 
-$g$ = Function of lags exceeding band , output $\in$ {$0...lag_{n}$}
+$g$ = Function of lags exceeding band, output $\in$ {$0...lag_{n}$}
 
 $signal$ = Function of trading signal
 
@@ -596,38 +600,40 @@ Figure \ref{fig:garch_trading} illustrates how the GARCH trading strategies show
 
 \newpage
 
-#### 3.3.5. NN and LPD Estimation
+#### 3.3.5. NN and LPD Trading
 &nbsp;
 
-In section [3.2.4](#mod-select) we have decided to fix the architecture 7 layers 7 nets, all
-the 9 splits which were introduced in section [3.2.1](#test_train), are now used for trading. In every 6 month insample split a new model is estimated with the schema from [3.3.1](#trading_lpd_nn). The out-of-sample signals of the Neuralnet and LPD from every split are summarized. 
+In section [3.2.5](#mod-select) we have decided to fix the architecture 7 layers 7 nets, all
+the 9 splits which were introduced in section [3.2.1](#test_train), are now used for trading. In every 6 month-insample split a new model is estimated with the schema from [3.3.1](#trading_lpd_nn). The out-of-sample signals of the Neuralnet and LPD from every split are summarized. 
 
-Our previous findings from the GARCH model were not very promising, nevertheless we try to use those signals with the neuralnet output and the signals from LPD. That leaves us with a total of three signals for every timestep: 
+Our previous findings from the GARCH model were not very promising, nevertheless, we try to use those signals with the neural net output and the signals from LPD. That leaves us with a total of three signals for every timestep: 
 
 &nbsp;
 
 $\hat{nn}_{t}$ = neuralnet signals $\in$ {$-1,0,1$}
 
-$\hat{LPD}_{t}$ = LPD signals $\in$ {$0,0.5,1$}
+$\hat{LPD}_{t}$ = LPD signals $\in$ {$0,0.5,1$} 
 
-$\hat{garch}_{t}$ = GARCH signals $\in$ {$0,1$}
+$\hat{garch}_{t}$ = GARCH signals $\in$ {$0,1$} from section [3.3.4](#garch-signal)
 
 &nbsp;
 
-With the previously established architecture, all combinations of the signals for  different values for the parameters: $\lambda$, $\eta_{lower},\eta_{upper}$ and $\kappa$  are computet and the performance is compared to each other and to the benchmark from [3.2.5](#benchmark). In order to find a balance between precision and computation time, we found $N_{total}$= 1000 Neural networks in every split, should be sufficient for the evaluation.
+With the previously established architecture, all combinations of the signals for different values for the parameters: $\lambda$, $\eta_{lower},\eta_{upper}$ and $\kappa$  are computed and the performance is compared to each other as well as to the benchmark from [3.2.6](#benchmark). To find a balance between precision and computation time, we found $N_{total}$= 1000 Neural networks in every split, should be sufficient for the evaluation.
 
-The most promising performance is found with $\lambda = 1$,$\eta_{lower} > \eta_{upper}$ (no 0.5 signals were used) $\eta_{upper}=3$ and $\kappa = 0.2$.
+The most promising performance is found with $\lambda = 1$, $\eta_{lower} > \eta_{upper}$ (no 0.5 signals were used) $\eta_{upper}=3$ and $\kappa = 0.2$.
 In figure \ref{fig:perf} different combinations are visualized.
 
-NN is simply trading the forecast of neuralnet based on their sign.
+- NN is simply trading the $LogReturn_{t}$ with $\hat{nn}_{t}$ 
 
-NN+LPD is the performance as described in section [3.3.3](#lpd-signal). The combination NN+LPD+GARCH takes in account the GARCH signals from section [3.3.4](#garch-signal). If LPD or GARCH signal is 0 then the signal is also 0. 
+- NN+LPD is the product of NN and $\hat{LPD}_{t}$ 
 
-By investigating the plot it seems that some combinations are performing better than the others. The GARCH application appears to worsen the performance. The Ligthblue and the Yellow line catches our eye, their perfomance seems to be better than the rest and as we can see, those are combinations of NN+LPD.
+-  NN+LPD+GARCH takes into account the GARCH signals $\hat{garch}_{t}$ by multiplying them with NN+LPD.
+
+By investigating the plot, it seems that some combinations are performing better than the others. The GARCH application appears to worsen the performance. The Ligthblue and the Yellow line catches our eye, their performance seems to be better than the rest and as we can see, those are combinations of NN+LPD. Notice that signals with zeroes are not yet invested elsewhere, therefore they represent staying out of the market, mitigate risk and wait for a new signal to come.
 
 &nbsp;
 
-```{r perf, fig.align='center', out.width='80%', fig.cap="Different combinations of trading signals are compared with each other. The best performing one is buy-and-hold (green). It is closely followed by the light blue NN+LPD combination with a $\\kappa$ of 0.2. The behavior of the individual rules is often very similar, few different decisions can influence the performance. Especially at the end of July, beginning of August the rules behave differently, but then usually behave very similarly.", echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
+```{r perf, fig.align='center', out.width='80%', fig.cap="Different combinations of trading signals are compared to each other. The best performing one is buy-and-hold (green). It is closely followed by the light blue NN+LPD combination with a $\\kappa$ of 0.2. The behavior of the individual rules is often very similar, few different decisions can influence the performance. Especially at the end of July, beginning of August the rules behave differently, but then usually behave very similarly.", echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
 
 # knitr::include_graphics("images/xailpd/lambda_1/perf.svg")
 
@@ -662,7 +668,7 @@ addLegend("topleft",
 
 \newpage
 
-Regarding the Sharpe in figure \ref{fig:sharpe} our findings from before are confirmed. The NN+LPD with $\kappa = 0.2$ has even a better Sharpe ratio than buy and hold. But another observation is seemingly more interesting, the LPD is alway better than only NN. By investigating the other calculations we have done, we find the same pattern, therefore we conclude that LPD brings us a real benefit.
+Regarding the Sharpe in figure \ref{fig:sharpe} our findings from before are confirmed. The NN+LPD with $\kappa = 0.2$ has even a better Sharpe ratio than buy and hold. But another observation is seemingly more interesting, the LPD is always better than only NN. By investigating the other calculations we have done (plots found in  [Attachement](#attachement)), we find the same pattern, therefore we conclude that LPD brings us a real benefit for this particular application.
 
 &nbsp;
 
@@ -699,10 +705,10 @@ grid()
 par(mar=defaultmar)
 ```
 
-\newpage
 
-Figure \ref{fig:batch} gives a insight on how the individual combinations performed in each of the 9 splits. The NN+LPD with $\kappa = 0.2$ is predominantly better in the first three splits, in the middle section its worse and towards the end the Sharpe is again better than buy and hold.
-But lets take this plot not to serious because these splits are just one month out-of-sample i.e the Sharpe ratio is sensitive to outliers, this effect is even stronger when there is little data present.
+
+Figure \ref{fig:batch} gives an insight on how the individual combinations performed in each of the 9 splits. The NN+LPD with $\kappa = 0.2$ is predominantly better in the first three splits, in the middle section its worse and towards the end the Sharpe is again better than buy and hold.
+But we have to take this plot with a grain of salt because these splits are only one month out of sample, meaning the Sharpe Ratio is sensitive to outliers, this effect is even stronger when there are few datapoints present.
 
 &nbsp;
 
@@ -729,7 +735,7 @@ for (i in 1:8){lines(allsharp[,i],col=colorsbatch[i],type="l",lwd=2)}
 In the performance plot \ref{fig:perf}, we have still left out what to do with 0 signals. One opportunity as in [3.3](#trading-strat) shortly mentioned, is to invest the money in another asset. By reason of staying in the same asset class we choose Ether [@ether] to invest in.
 The coin Ether from Ethereum is with $61.48B [@ethereum] the second largest cryptocurrency according to marketcapitalisation. 
 
-According to [@correlation_btc] the correlation between the two assets is 0.91. This is not a braking factor to us, because the 0 signal of the LPD is just indicating that something is changing in the data or the neural net is not stable, thus we cant exactly know what the 0 signal means. 
+According to [@correlation_btc] the correlation between the two assets is 0.91. This is not a braking factor to us, because the 0 signal of the LPD is just indicating that something is changing in the data or the neural net is not stable, thus we can not exactly know what the 0 signal means. 
 
 The structure Ether is very similar to Bitcoin [@oeko3project]. The series is imported in the same way as BTC e.g. the log returns are derived.
 
@@ -763,7 +769,7 @@ addLegend("topleft",
 
 &nbsp;
 
-In figure \ref{fig:with_eth} the NN+LPD's from figure \ref{fig:perf} and the adding of Ether is visualized. In the lower part, we can observe the signals which are 0 in the NN+LPD model. These zeroes are now filled up with the log returns from Ether.
+In figure \ref{fig:with_eth} the NN+LPD's from figure \ref{fig:perf} and the adding of Ether is visualized. In the lower part, we can observe the signals which are 0 in the NN+LPD model. These zeroes are now complemented with the log returns from Ether.
 
 The one performance with NN+LPD+ETH with $\kappa = 20 \%$ seems promising. Also for the other two NN+LPD the adding of Ether seems benefital.
 
@@ -795,12 +801,12 @@ addEventLines(events, srt=0, pos=1, lty=3, col = rep("#004c6d",6),lwd=2, cex=1.2
 
 &nbsp;
 
-For  a closer analysis, lets have a look at the cumulated logreturns of the best performing model vs. buy-and-hold in Figure \ref{fig:with_eth_sole}. The following analysis is related to the violet chart and starts from left to right, beginning with letter **A**. 
-Imideatly after the line by letter **A**, there are several decisions which differ from buy-and-hold and force a shift to the series. In letter **B** we observe a similar behavior for a short period of time. The unsatisfying trend change in letter **C** is stopped around the first of November. Thereafter unto the point in letter **D** the decisions of the model behave quite similar the green line. Right after **D** the net handles the negative trend very well and climbs further up. The same accounts for letter E, where the trend once more goes in the opposite direction than the benchmark. Shortly after **F** the model does exactly the same as buy-and-hold.
+For a closer analysis, let us have a look at the cumulated log-returns of the best performing model vs. buy-and-hold in Figure \ref{fig:with_eth_sole}. The following analysis is related to the violet chart and starts from left to right, beginning with the letter **A**. 
+Immediately after the line by letter **A**, several decisions differ from buy-and-hold and force a shift to the series. In the letter **B**, we observe similar behavior for a short period. The unsatisfying trend change in the letter **C** is stopped around the first of November. Thereafter unto the point in letter **D** the decisions of the model behave quite similar to the green line. Right after **D** the net handles the negative trend very well and climbs further up. The same accounts for the letter **E**, where the trend once more goes in the opposite direction than the benchmark. Shortly after **F** the model does exactly the same as buy-and-hold.
 
-Lets have a simple theoretical comparison example under the assumptions in [3.3.](#trading-strat) at last.
+Let's have a simple theoretical comparison example under the assumptions in [3.3.](#trading-strat) at last.
 
-With summarizing the logreturns from \ref{eq:logreturn} with Formula \ref{eq:logreturns_transforming},  one can calculate the value $S_{tn}$ which we end up with, when an Amount $S_{t0}$ is invested at the beginning.
+With summarizing the logreturns from \ref{eq:logreturn} with Formula \ref{eq:logreturns_transforming}, one can calculate the value $S_{tn}$ which we end up with, when an Amount $S_{t0}$ is invested at the beginning.
 
 &nbsp;
 
@@ -813,7 +819,7 @@ S_{tn} &=S_{t0}\prod_{k=1}^{t_{n}}e^{LogReturn_{k}} \\
 
 &nbsp;
 
-Lets say, we invest 1000 US-Dollar  at the beginning of the timeperiod in \ref{fig:with_eth_sole}. With buy-and-hold we would end up at 6003.25 US-Dollar by the end of March. However if we invest the 1000 USD in the best performing strategy we will end up with **11'633.70**  USD, that would be as nearly as double the amount of buy-and-hold. Comparing the Sharperatios  **4.41** to 3.57  of the LogReturns, the used strategy does also significantly better. 
+Lets say, we invest 1000 US-Dollars  at the beginning of the timeperiod in \ref{fig:with_eth_sole}. With buy-and-hold we would end up at 6003.25 US-Dollars by the end of March. However if we invest the 1000 USD in the best performing strategy we will end up with **11'633.70**  USD, that would be as nearly as double the amount of buy-and-hold. Comparing the Sharperatios  **4.41** to 3.57  of the LogReturns, the used strategy does also significantly better.  
 
 
 
