@@ -9,7 +9,7 @@ In this bachelor thesis, we deal with three different fields. First, the network
 
 1) What influence does the selection of the network architecture have on the quality of predictions? What influence can be found concerning the Sharpe ratio of a simple trading strategy?
 
-Pursuing the first guiding question, all possible network architecture combinations between one layer with one neuron and three layers with ten neurons each are quantitatively compared. The plots of the error function MSE in chapter [3.2.2.](#evaluate_nn) show that a complex model is more prone to overfitting. The Sharpe ratio is used to assess trading performance. There it can be seen that the inverse relationship between the in-sample and out-of-sample indicates overfitting characteristics. In conclusion, no rule of thumb can be found that works well without testing and comparing. The model should be complex enough for the sake of accuracy, but should not have overfitting. Ultimately, it seems to make sense that the number of neurons should be in the range of the number of inputs.
+Pursuing the first guiding question, all possible network architecture combinations between one layer with one neuron and three layers with ten neurons each are quantitatively compared. The plots of the error function MSE in chapter [3.2.4.](#evaluate_nn) show that a complex model is more prone to overfitting. The Sharpe ratio is used to assess trading performance. There it can be seen that the inverse relationship between the in-sample and out-of-sample indicates overfitting characteristics. In conclusion, no rule of thumb can be found that works well without testing and comparing. The model should be complex enough for the sake of accuracy, but should not have overfitting. Ultimately, it seems to make sense that the number of neurons should be in the range of the number of inputs.
 
 2) What is the added value of enhancing this neural network with aspects of explainable artificial intelligence (XAI)? Again, the impact on trading performance will be investigated. 
 
@@ -22,7 +22,7 @@ The selected neural network provides the predictions of the log return of the ne
 Investing is about having your money invested in the market. Therefore, the thought process is continued by making an alternative investment in Ether during phases where the previous methods recommend going out of the market. Surprisingly, such a strategy leads to an outperformance of buy-and-hold for the chosen period. 
 
 
-
+\newpage
 
 ### 5.1. Outlook
 

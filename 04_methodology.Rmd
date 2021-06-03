@@ -51,7 +51,7 @@ We are curious about how the log returns are distributed. Therefore, we fit a no
 
 \newpage
 
-```{r acf_log_ret, echo=FALSE, message=FALSE, fig.cap="Autocorrelation function of BTC log returns during the entire time period from fall 2014 to spring 2021. Lag 6 and 10 are significant (values exceed the blue dotted line) and thus have an impact on possible models.", out.width='80%', fig.width = 8, fig.height = 4.4}
+```{r acf_log_ret, echo=FALSE, message=FALSE, fig.cap="Autocorrelation function of BTC log returns during the entire time period from fall 2014 to spring 2021. Lag 6 and 10 are significant (values exceed the blue dotted line) and thus have an impact on possible models.", out.width='70%', fig.width = 9, fig.height = 5}
 chart.ACF.phil(log_ret, main="Autocorrelation of log returns", maxlag = 20, ymax = 0.07)
 ```
 
@@ -59,7 +59,10 @@ chart.ACF.phil(log_ret, main="Autocorrelation of log returns", maxlag = 20, ymax
 
 &nbsp;
 
-```{r histogramm_logreturns, out.width='80%', fig.cap='This histogram of BTC log returns illustrates how well it fits to different distributions. The blue t-Student distribution would fit the data better in the tails, while the yellow normal distribution would disperse a little better around the expected value. The distribution should be taken with a grain of salt, as the time dependence of the volatility is not taken into account.', echo=FALSE,fig.align="center", fig.width = 8, fig.height = 4.4}
+&nbsp;
+
+
+```{r histogramm_logreturns, out.width='70%', fig.cap='This histogram of BTC log returns illustrates how well it fits to different distributions. The blue t-Student distribution would fit the data better in the tails, while the yellow normal distribution would disperse a little better around the expected value. The distribution should be taken with a grain of salt, as the time dependence of the volatility is not taken into account.', echo=FALSE,fig.align="center", fig.width = 9, fig.height = 5}
 # knitr::include_graphics("images/histogram_logret_3.jpeg")
 
 load("data/log_ret_27_03_21.rda")  # loading logreturns closing! data xts
@@ -210,7 +213,9 @@ To train the feedforward neural networks, we need to specify the input layer in 
 
 In contrast to the ACF's of the entire data set shown in figure \ref{fig:acf_log_ret} where lags 6 and 10 have a high impact, here in figure \ref{fig:test_train_acf} we see that lags 4 and 10 are significant. If one uses the ACF's as an indicator for the specification of a model, it must be considered that for other time periods also other rules apply. For modeling the entire data set, one could safely specify the input layer up to a lag of 10. Here for our subset, we specify the input layer up to a lag of 7. Lag 7 is just significant and could potentially explain an important dependency in the data. Since Bitcoin can be traded 7 days a week, including weekends, the dependency of 7 lags in the ACFs would also be explained.
 
-```{r test_train_acf, out.width='85%', fig.cap="Autocorrelation function of our chosen time period. One can clearly see an increased influence of lags 4 and 7, not as in the ACF's of the entire data set with significant values at 6 and 10. Only late at lag 18 does the ACF show a significant value again.", echo=FALSE, fig.width = 10, fig.height = 6}
+&nbsp;
+
+```{r test_train_acf, out.width='85%', fig.cap="Autocorrelation function of our chosen time period. One can clearly see an increased influence of lags 4 and 7, not as in the ACF's of the entire data set with significant values at 6 and 10. Only late at lag 18 does the ACF show a significant value again.", echo=FALSE, fig.width = 9, fig.height = 5}
 
 chart.ACF.phil(subseti, maxlag = 20, ymax = 0.12, main="ACF of time period: 2020-01-01/2021-03-27")
 ```
@@ -219,14 +224,62 @@ For the following procedure for finding an optimal network architecture we use a
 
 \newpage
 
-#### 3.x.x. Neural Network Training {#train-nn}
+#### 3.2.3. Neural Network Training {#train-nn}
 &nbsp;
 
-So far, we have specified the time periods as well as the input layer for the neural network. Together with one of the many different neuron layer combinations from section [3.2](#networkarchitecture), we can train networks. The exact procedure will be explained in more detail in this section.
+For training the networks, we use the function `neuralnet()`, which is part of the R-package `neuralnet`. The advantage of this function is that it uses the backpropagation algorithm presented in section [2.1.2](#backprogation_algorithm). Various parameters must be passed to the function. We pass the 6-month in-sample data sets defined in section [3.2.1](#test_train), which are specially tailored for our applications. In the previous section, we decided on a maximum delay of 7 and the structure of the input layer can be seen in table \ref{tab:data_tab}. The pink-colored values indicate that they are the same values but shifted. These are the input data of the 5th test period, which would start in 2020-05-01. However, since we shift the data by 7-time units, we also lose 7 days of data, since no values are known before 2020-05-01 to fill the delays with data. If, for example, we would consider a larger number of delays, then the data set would accordingly also become smaller and smaller.
+
+```{r data_tab, echo=FALSE}
+load("data/data_obj_5.rda")
+name <- c("lag0", "lag1", "lag2", "lag3", "lag4", "lag5",
+          "lag6", "lag7")  
+
+subseti <- as.data.frame(round(head(data_obj_5$data_mat, 5), 5))
+colnames(subseti) <- name
+kbl(subseti, caption="Adapted data of the 5th test/train split for training neural networks with the R package neuralnet. Lag0 corresponds to the original data while the rest are simply the corresponding lag of the original data. The color-coded values show that these are simply shifted values.", booktabs = T, linesep = "") %>%
+  kable_styling(latex_options = c("hold_position")) %>%
+  column_spec(2, color = c("#E413A3", rep("#000000", 4))) %>%
+  column_spec(3, color = c("#000000", "#E413A3", rep("#000000", 3))) %>%
+  column_spec(4, color = c(rep("#000000", 2), "#E413A3", rep("#000000", 2))) %>%
+  column_spec(5, color = c(rep("#000000", 3), "#E413A3", "#000000")) %>%
+  column_spec(6, color = c(rep("#000000", 4), "#E413A3"))
+```
+
+&nbsp;
+
+In addition to the training data, we pass the function an equation to specify how the training data should be handled. In our application, we aim to find a reliable prediction for the original value from the lagged data and define the equation for the function as follows:
+
+$$lag0 \sim lag1+lag2+lag3+lag4+lag5+lag6+lag7$$
+
+The function thus uses the delayed data 1 to 7 as input layer and trains a network to get as close as possible to the true values of lag0. As discussed in section [3.2](#networkarchitecture), we would like to investigate the impact of network architecture on network performance. Thus, for each split, we pass the corresponding architecture from (1) to (10,10,10) to the function.
+
+In the `neuralnet`-function, we use the sigmoid logistic function as the activation function. As mentioned in section [2.1.2](#backprogation_algorithm), the logistic function returns values between 0 and 1. According to the article by Sebastian Heinz, neural networks benefit when the input layers are scaled according to the activation function. Solving the numerical optimization problem is therefore simplified. Intuitively, this also makes sense. If you look at the course of the logistic function in figure \ref{fig:sigmoid}, the activity of neurons close to zero is higher than at extreme values. Extreme positive or negative values would result in 0 or 1 according to the activation function and thus no longer make a large contribution to the model. The numerical problem would be much more complex to solve than having values within an active band. Thus, we scale the data to a range of [0, 1] that is convenient for numerical optimization. The lowest value in the data set is scaled to a 0, while the highest value is scaled to a 1. The listed values from table \ref{tab:data_tab} are transformed and can be seen in table \ref{tab:data_tab_scaled}.
 
 \newpage
 
-#### 3.2.3.  Evaluating Network Architecture {#evaluate_nn}
+```{r data_tab_scaled, echo=FALSE}
+name <- c("lag0", "lag1", "lag2", "lag3", "lag4", "lag5",
+          "lag6", "lag7")  
+subseti <- as.data.frame(round(head(data_obj_5$train_set, 5), 5))
+colnames(subseti) <- name
+kbl(subseti, caption="Scaled data from the 5th test/train split. This is the same data as in the previous table, only here the data is scaled between 0 and 1.", booktabs = T, linesep = "") %>%
+  kable_styling(latex_options = c("hold_position")) %>%
+  column_spec(2, color = c("#E413A3", rep("#000000", 4))) %>%
+  column_spec(3, color = c("#000000", "#E413A3", rep("#000000", 3))) %>%
+  column_spec(4, color = c(rep("#000000", 2), "#E413A3", rep("#000000", 2))) %>%
+  column_spec(5, color = c(rep("#000000", 3), "#E413A3", "#000000")) %>%
+  column_spec(6, color = c(rep("#000000", 4), "#E413A3"))
+```
+
+&nbsp;
+
+The result from the `neuralnet`-function is then the prediction of the network for the in-sample test data set, i.e. the data with the lag0. To compare the performance in the in-sample area with other networks, the results computed from the scaled data by the network are transformed back to the original form.
+
+For the out-of-sample area, the `predict` function from the same package is used. One passes the trained network (optimized weights and biases) with the scaled out-of-sample data (lag 1 to 7). This result is then also transformed back and compared to the original data (lag0) to analyze the performance of the neural network, ouf-of-sample.
+
+\newpage
+
+#### 3.2.4.  Evaluating Network Architecture {#evaluate_nn}
 &nbsp;
 
 Here we would like to focus on some findings that we discovered during the processing of the trained networks. To illustrate the results, an extract is discussed here, namely only the 5th train/test split (in figure \ref{fig:test_train} the middle one).
@@ -294,14 +347,14 @@ When looking at the Sharpe ratios, an inverse relationship between the in-sample
 
 \newpage
 
-#### 3.2.4. Model Selection {#mod-select}
+#### 3.2.5. Model Selection {#mod-select}
 &nbsp;
 
 With the above procedure, we have been able to identify the characteristics of neural networks. In time series applications, complex networks lead to overfitting. We could detect an inverse relationship between in- and out-of-sample MSE. We trained many networks, yet no distinct optimal neuron-layer combination can be identified. Determining the architecture based on the minimum MSE would not yield good results. There would be too great a risk that the chosen architecture would be too complex and lead to overfitting. Additionally, the chosen architecture should lead to trustworthy predictions over different time periods (in our example over the 9 splits).
 
 For the rest of the procedure, we decide to use a neural network architecture of (7,7). According to the 2-layer structure visualized in figure \ref{fig:mse_plot2}, the architecture we chose looks very balanced. In-sample, the MSE is rather in a more optimal range (smaller MSE) and out-of-sample, any overfitting is rather minimal compared to even more complex networks. In the attachment in figure \ref{fig:meanmean2}, you can see the average MSE across all 9 splits. The neuron layer architecture of (7,7) is exactly in the range where the in-sample MSE decreases and out-of-sample increases. The selected network lies exactly between the volatile networks, thus this architecture does not seem to be as prone to overfitting as the one next to it. The (7,7) network is not too complex, tends to have a good in-sample MSE and the out-of-sample MSE does not tend to overfit as much.
 
-#### 3.2.5. Benchmark {#benchmark}
+#### 3.2.6. Benchmark {#benchmark}
 &nbsp;
 
 The trained networks and applied methods are compared with each other using a benchmark. For this purpose, we use the buy-and-hold, which is a long-term passive investment strategy. Investing with this strategy often leads to better returns in the long run than active trading [@bnh]. This strategy is hard to beat, especially when the market is trending upwards. In such a trend, an active strategy would hardly recommend anything other than buy-and-hold.
@@ -322,7 +375,7 @@ knitr::include_graphics("images/flowchart_trading.png")
 
 &nbsp;
 
-The main component is the prediction of the neural network. This reflects the expected log return of the next day and is thus an important indicator of whether the money should remain invested or not. However, the output of these neural networks are to be treated with caution, as we have seen in the section [3.2.3](#evaluate_nn). Therefore, we rely on XAI to detect instability and incorporate this information into the final trading signal. Furthermore, volatility persistence is observed in financial time series, i.e. large changes can be expected after large changes. Leverage effects are also probable, which means that the tendency to achieve a negative return is higher when volatility is large. A GARCH model is used to model these phenomena, whose volatility predictions provide important information for the final trading signal.
+The main component is the prediction of the neural network. This reflects the expected log return of the next day and is thus an important indicator of whether the money should remain invested or not. However, the output of these neural networks are to be treated with caution, as we have seen in the section [3.2.4](#evaluate_nn). Therefore, we rely on XAI to detect instability and incorporate this information into the final trading signal. Furthermore, volatility persistence is observed in financial time series, i.e. large changes can be expected after large changes. Leverage effects are also probable, which means that the tendency to achieve a negative return is higher when volatility is large. A GARCH model is used to model these phenomena, whose volatility predictions provide important information for the final trading signal.
 
 While these methods sound promising, it should not be forgotten that a buy-and-hold strategy (given nerves of steel) also led to remarkable performances in the past that even outperformed traditional asset classes. The price development is described in sections [2.4.1](#historical_analysis) and [2.4.3](#bitcoin_valuation). That is why buy-and-hold is frequently used as a comparison. 
 
@@ -392,6 +445,8 @@ This is shown in formula \ref{eq:net_decision2}, we see immediately that on 2021
 In the example we state that if 4 or more lags exceed the upper limit the final signal is 0 and if between 2 and 4 lags exceed the standard deviation, we assign the signal 0.5. For our example date 2021.01.25 the signal would be 0.
 Correctly concluded, we get a trading signal for each date.
 
+&nbsp;
+
 ```{r lpd_explain, fig.align='center', out.width='60%', fig.cap="The LPD is used to generate the trading signal. Higher volatility indicates that the neural network may provide unreliable outputs. For the top LPD time series, the mean value and the upper and lower decision bands are plotted. Each time this LPD exceeds the upper or lower decision band, a signal is realized for this lag. In the most extreme phases it can happen that several lags exceed the decision bands and thus generate several signals. The number of all exceedances will be considered in the next plot in order to generate the XAI trading signal.", echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
 knitr::include_graphics("images/xailpd/out_decision_small.jpeg")
 load("data/xai/7_7_withsignal_xai_in/OLPD_mat_out_plot.rda")
@@ -411,6 +466,8 @@ addLegend("bottomleft",
           bg="white")
 ```
 
+\newpage
+
 ```{r lpd_explain_sum, fig.align='center', out.width='60%', fig.cap="The black line shows how many lags exceed the threshold defined above at one point in time. The more extreme lags are counted, the more unstable the neural network is. Red is the upper decision limit and the green is the lower one. Values below the green line indicate realiability and lead to a signal = 1. Values above the red line indicate instability and lead to a signal = 0. Values between the red and the green line lead to a signal = 0.5.", echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
 # knitr::include_graphics("images/xailpd/out_sum_2.jpeg")
 load("data/xai/7_7_withsignal_xai_in/sum_explana_out_plot.rda")
@@ -429,7 +486,7 @@ addLegend("topright",
           bg="white")
 ```
 
-\newpage
+&nbsp;
 
 To use this behavior for optimizing our model, a more formal general approach is required. The standard deviation is therefore scaled with parameter $\lambda$ and with formula \ref{eq:count} in every $lag_{j}$ it is decided whether the predicted LPD $\Delta_{j,t}$ exceeds $\mu_{j} \pm \lambda \sigma_{j}$.  
 
@@ -484,9 +541,9 @@ $lag_{n}$ = Maximum number of lags
 
 $\eta_{lower},\eta_{upper}$ = Lower  and upper border for signal decision
 
-$n_{in} ,n_{out}$ = Maximum time insample / out-of-sample
+$n_{in}, n_{out}$ = Maximum time insample / out-of-sample
 
-$g$ = Function of lags exceeding band , output $\in$ {$0...lag_{n}$}
+$g$ = Function of lags exceeding band, output $\in$ {$0...lag_{n}$}
 
 $signal$ = Function of trading signal
 
@@ -546,7 +603,7 @@ Figure \ref{fig:garch_trading} illustrates how the GARCH trading strategies show
 #### 3.3.5. NN and LPD Trading
 &nbsp;
 
-In section [3.2.4](#mod-select) we have decided to fix the architecture 7 layers 7 nets, all
+In section [3.2.5](#mod-select) we have decided to fix the architecture 7 layers 7 nets, all
 the 9 splits which were introduced in section [3.2.1](#test_train), are now used for trading. In every 6 month-insample split a new model is estimated with the schema from [3.3.1](#trading_lpd_nn). The out-of-sample signals of the Neuralnet and LPD from every split are summarized. 
 
 Our previous findings from the GARCH model were not very promising, nevertheless, we try to use those signals with the neural net output and the signals from LPD. That leaves us with a total of three signals for every timestep: 
@@ -561,7 +618,7 @@ $\hat{garch}_{t}$ = GARCH signals $\in$ {$0,1$} from section [3.3.4](#garch-sign
 
 &nbsp;
 
-With the previously established architecture, all combinations of the signals for different values for the parameters: $\lambda$, $\eta_{lower},\eta_{upper}$ and $\kappa$  are computed and the performance is compared to each other as well as to the benchmark from [3.2.5](#benchmark). To find a balance between precision and computation time, we found $N_{total}$= 1000 Neural networks in every split, should be sufficient for the evaluation.
+With the previously established architecture, all combinations of the signals for different values for the parameters: $\lambda$, $\eta_{lower},\eta_{upper}$ and $\kappa$  are computed and the performance is compared to each other as well as to the benchmark from [3.2.6](#benchmark). To find a balance between precision and computation time, we found $N_{total}$= 1000 Neural networks in every split, should be sufficient for the evaluation.
 
 The most promising performance is found with $\lambda = 1$, $\eta_{lower} > \eta_{upper}$ (no 0.5 signals were used) $\eta_{upper}=3$ and $\kappa = 0.2$.
 In figure \ref{fig:perf} different combinations are visualized.
