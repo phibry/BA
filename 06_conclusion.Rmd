@@ -26,7 +26,11 @@ Investing is about having your money invested in the market. Therefore, the thou
 
 ### 5.1. Outlook
 
-There are many different ways, to implement a trading strategy, due to the time limitation, this thesis could only investigate a small part of the applications of feed forward nets in trading.
+There are thousand different ways, to implement a trading strategy, due to the time limitation, this thesis could only investigate a small part of the applications of feed forward nets in trading.
+
+The GARCH model is only 1 of the many classical approaches for timeseries. Based on this thesis other tools such as different Moving averages or  ARMA-APARCH Models could be combined with the neural net .
+Interesting would might also be the inputsmoothing  of the neural net with an MA. 
+
 
 The Explainability aspect of neural networks is still in developement. Further work could try to improve the application of XAI in the context of financial timeseries.
  
