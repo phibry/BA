@@ -26,18 +26,53 @@ Investing is about having your money invested in the market. Therefore, the thou
 
 ### 5.1. Outlook
 
-There are thousand different ways, to implement a trading strategy, due to the time limitation, this thesis could only investigate a small part of the applications of feed forward nets in trading.
+There are thousand different ways, to implement a trading strategy, due to the time limitation, this thesis could only investigate a small part of the applications of feed forward nets in trading. Recent events in the cryptocurrency market, which just occured at the end of the writing phase of this thesis,  made us curios how the model would perform with the recent drawdown. The model handled the drawdown phase properly as seen in Figure \ref{fig:with_eth_sole_outlook}
 
-The GARCH model is only 1 of the many classical approaches for timeseries. Based on this thesis other tools such as different Moving averages or  ARMA-APARCH Models could be combined with the neural net .
-Interesting would might also be the inputsmoothing  of the neural net with an MA. 
+The GARCH model is only 1 of the many classical approaches for timeseries. Based on this thesis other tools such as different moving averages or  ARMA-APARCH Models in combination with feed forward nets.
+Also interesting  might be the inputsmoothing of the neural net with an MA. 
 
 
-The Explainability aspect of neural networks is still in developement. Further work could try to improve the application of XAI in the context of financial timeseries.
+The Explainability aspect of neural networks is still in development. Further work could try to improve the application of XAI in the context of financial timeseries.
  
 Future work based on this thesis, also could investigate the real time application test of the model for trading. Since this thesis is only valid under the assumptions taken, a practical application needs to deal with these issues.
 
 
+```{r with_eth_sole_outlook, fig.align='center', out.width='80%', fig.cap="Data collected at the end of the writing phase of this thesis",echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
 
+load("data/xai/7_7_withsignal_xai_in/performance_with_eth.rda")
+load("data/xai/7_7_withsignal_xai_in/nn_lpd_without_eth.rda")
+load("data/xai/7_7_withsignal_xai_in/nn_lpd_without_eth_outlook.rda")
+
+
+signal <- data$BTC.USD.Close
+signal$BTC.USD.Close <- nn_lpd
+
+data=data[,c(1,5)]
+
+concl=cumsum(concl["2021-03-27::"])
+concl[,1]=concl[,1]+1.792302
+concl[,2]=concl[,2]+2.45390
+
+data = merge(data,concl)
+
+colors= c("green","darkorchid")
+plot(data, col=colors, main=TeX(sprintf("Performance cumulated from 9 splits, $\\lambda = %d$", 1)))
+
+addLegend("left",
+          legend.names=c(TeX(sprintf("Buy and Hold", 3.57)),
+                         TeX(sprintf("LPD+NN+ETH if 0 $\\kappa = %.1f$", 0.2, 4.41))),
+          col=colors,
+          lty=c(rep(1,13),2),
+          lwd=c(rep(2,13),3),
+          ncol=1,
+          bg="white")
+
+events<- xts("end", as.Date("2021-03-27"))
+
+addEventLines(events, srt=0, pos=1, lty=3, col ="blue",lwd=2, cex=1.2)
+# lines(signal, on=NA, lwd=2, col="red", ylim=c(-1.3, 1.3))
+
+```
 
 
 
