@@ -51,7 +51,7 @@ We are curious about how the log returns are distributed. Therefore, we fit a no
 
 \newpage
 
-```{r acf_log_ret, echo=FALSE, message=FALSE, fig.cap="Autocorrelation function of BTC log returns during the entire time period from fall 2014 to spring 2021. Lag 6 and 10 are significant (values exceed the blue dotted line) and thus have an impact on possible models.", out.width='80%', fig.width = 8, fig.height = 4.4}
+```{r acf_log_ret, echo=FALSE, message=FALSE, fig.cap="Autocorrelation function of BTC log returns during the entire time period from fall 2014 to spring 2021. Lag 6 and 10 are significant (values exceed the blue dotted line) and thus have an impact on possible models.", out.width='70%', fig.width = 9, fig.height = 5}
 chart.ACF.phil(log_ret, main="Autocorrelation of log returns", maxlag = 20, ymax = 0.07)
 ```
 
@@ -59,7 +59,10 @@ chart.ACF.phil(log_ret, main="Autocorrelation of log returns", maxlag = 20, ymax
 
 &nbsp;
 
-```{r histogramm_logreturns, out.width='80%', fig.cap='This histogram of BTC log returns illustrates how well it fits to different distributions. The blue t-Student distribution would fit the data better in the tails, while the yellow normal distribution would disperse a little better around the expected value. The distribution should be taken with a grain of salt, as the time dependence of the volatility is not taken into account.', echo=FALSE,fig.align="center", fig.width = 8, fig.height = 4.4}
+&nbsp;
+
+
+```{r histogramm_logreturns, out.width='70%', fig.cap='This histogram of BTC log returns illustrates how well it fits to different distributions. The blue t-Student distribution would fit the data better in the tails, while the yellow normal distribution would disperse a little better around the expected value. The distribution should be taken with a grain of salt, as the time dependence of the volatility is not taken into account.', echo=FALSE,fig.align="center", fig.width = 9, fig.height = 5}
 # knitr::include_graphics("images/histogram_logret_3.jpeg")
 
 load("data/log_ret_27_03_21.rda")  # loading logreturns closing! data xts
@@ -210,7 +213,9 @@ To train the feedforward neural networks, we need to specify the input layer in 
 
 In contrast to the ACF's of the entire data set shown in figure \ref{fig:acf_log_ret} where lags 6 and 10 have a high impact, here in figure \ref{fig:test_train_acf} we see that lags 4 and 10 are significant. If one uses the ACF's as an indicator for the specification of a model, it must be considered that for other time periods also other rules apply. For modeling the entire data set, one could safely specify the input layer up to a lag of 10. Here for our subset, we specify the input layer up to a lag of 7. Lag 7 is just significant and could potentially explain an important dependency in the data. Since Bitcoin can be traded 7 days a week, including weekends, the dependency of 7 lags in the ACFs would also be explained.
 
-```{r test_train_acf, out.width='85%', fig.cap="Autocorrelation function of our chosen time period. One can clearly see an increased influence of lags 4 and 7, not as in the ACF's of the entire data set with significant values at 6 and 10. Only late at lag 18 does the ACF show a significant value again.", echo=FALSE, fig.width = 10, fig.height = 6}
+&nbsp;
+
+```{r test_train_acf, out.width='85%', fig.cap="Autocorrelation function of our chosen time period. One can clearly see an increased influence of lags 4 and 7, not as in the ACF's of the entire data set with significant values at 6 and 10. Only late at lag 18 does the ACF show a significant value again.", echo=FALSE, fig.width = 9, fig.height = 5}
 
 chart.ACF.phil(subseti, maxlag = 20, ymax = 0.12, main="ACF of time period: 2020-01-01/2021-03-27")
 ```
@@ -222,7 +227,55 @@ For the following procedure for finding an optimal network architecture we use a
 #### 3.x.x. Neural Network Training {#train-nn}
 &nbsp;
 
-So far, we have specified the time periods as well as the input layer for the neural network. Together with one of the many different neuron layer combinations from section [3.2](#networkarchitecture), we can train networks. The exact procedure will be explained in more detail in this section.
+For training the networks, we use the function `neuralnet()`, which is part of the R-package `neuralnet`. The advantage of this function is that it uses the backpropagation algorithm presented in section [2.1.2](#backprogation_algorithm). Various parameters must be passed to the function. We pass the 6-month in-sample data sets defined in section [3.2.1](#test_train), which are specially tailored for our applications. In the previous section, we decided on a maximum delay of 7 and the structure of the input layer can be seen in table \ref{tab:data_tab}. The pink-colored values indicate that they are the same values but shifted. These are the input data of the 5th test period, which would start in 2020-05-01. However, since we shift the data by 7-time units, we also lose 7 days of data, since no values are known before 2020-05-01 to fill the delays with data. If, for example, we would consider a larger number of delays, then the data set would accordingly also become smaller and smaller.
+
+```{r data_tab, echo=FALSE}
+load("data/data_obj_5.rda")
+name <- c("lag0", "lag1", "lag2", "lag3", "lag4", "lag5",
+          "lag6", "lag7")  
+
+subseti <- as.data.frame(round(head(data_obj_5$data_mat, 5), 5))
+colnames(subseti) <- name
+kbl(subseti, caption="Adapted data of the 5th test/train split for training neural networks with the R package neuralnet. Lag0 corresponds to the original data while the rest are simply the corresponding lag of the original data. The color-coded values show that these are simply shifted values.", booktabs = T, linesep = "") %>%
+  kable_styling(latex_options = c("hold_position")) %>%
+  column_spec(2, color = c("#E413A3", rep("#000000", 4))) %>%
+  column_spec(3, color = c("#000000", "#E413A3", rep("#000000", 3))) %>%
+  column_spec(4, color = c(rep("#000000", 2), "#E413A3", rep("#000000", 2))) %>%
+  column_spec(5, color = c(rep("#000000", 3), "#E413A3", "#000000")) %>%
+  column_spec(6, color = c(rep("#000000", 4), "#E413A3"))
+```
+
+&nbsp;
+
+In addition to the training data, we pass the function an equation to specify how the training data should be handled. In our application, we aim to find a reliable prediction for the original value from the lagged data and define the equation for the function as follows:
+
+$$lag0 \sim lag1+lag2+lag3+lag4+lag5+lag6+lag7$$
+
+The function thus uses the delayed data 1 to 7 as input layer and trains a network to get as close as possible to the true values of lag0. As discussed in section [3.2](#networkarchitecture), we would like to investigate the impact of network architecture on network performance. Thus, for each split, we pass the corresponding architecture from (1) to (10,10,10) to the function.
+
+In the `neuralnet`-function, we use the sigmoid logistic function as the activation function. As mentioned in section [2.1.2](#backprogation_algorithm), the logistic function returns values between 0 and 1. According to the article by Sebastian Heinz, neural networks benefit when the input layers are scaled according to the activation function. Solving the numerical optimization problem is therefore simplified. Intuitively, this also makes sense. If you look at the course of the logistic function in figure \ref{fig:sigmoid}, the activity of neurons close to zero is higher than at extreme values. Extreme positive or negative values would result in 0 or 1 according to the activation function and thus no longer make a large contribution to the model. The numerical problem would be much more complex to solve than having values within an active band. Thus, we scale the data to a range of [0, 1] that is convenient for numerical optimization. The lowest value in the data set is scaled to a 0, while the highest value is scaled to a 1. The listed values from table \ref{tab:data_tab} are transformed and can be seen in table \ref{tab:data_tab_scaled}.
+
+\newpage
+
+```{r data_tab_scaled, echo=FALSE}
+name <- c("lag0", "lag1", "lag2", "lag3", "lag4", "lag5",
+          "lag6", "lag7")  
+subseti <- as.data.frame(round(head(data_obj_5$train_set, 5), 5))
+colnames(subseti) <- name
+kbl(subseti, caption="Scaled data from the 5th test/train split. This is the same data as in the previous table, only here the data is scaled between 0 and 1.", booktabs = T, linesep = "") %>%
+  kable_styling(latex_options = c("hold_position")) %>%
+  column_spec(2, color = c("#E413A3", rep("#000000", 4))) %>%
+  column_spec(3, color = c("#000000", "#E413A3", rep("#000000", 3))) %>%
+  column_spec(4, color = c(rep("#000000", 2), "#E413A3", rep("#000000", 2))) %>%
+  column_spec(5, color = c(rep("#000000", 3), "#E413A3", "#000000")) %>%
+  column_spec(6, color = c(rep("#000000", 4), "#E413A3"))
+```
+
+&nbsp;
+
+The result from the `neuralnet`-function is then the prediction of the network for the in-sample test data set, i.e. the data with the lag0. To compare the performance in the in-sample area with other networks, the results computed from the scaled data by the network are transformed back to the original form.
+
+For the out-of-sample area, the `predict` function from the same package is used. One passes the trained network (optimized weights and biases) with the scaled out-of-sample data (lag 1 to 7). This result is then also transformed back and compared to the original data (lag0) to analyze the performance of the neural network, ouf-of-sample.
 
 \newpage
 

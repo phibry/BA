@@ -76,6 +76,7 @@ t <- tanh(v)
 # Plotting sigmoid functions
 plot(x = v, y = l, type = "l", main = "Activation functions", xlim = c(-5,5), ylim = c(-1, 1), ylab = "y")
 lines(x = v, y = t, col = 2)
+grid()
 legend("bottomright", legend = c("Logistic", "Tanh"), col = c(1,2), pch = "-", cex = 1)
 ```
 
@@ -373,6 +374,8 @@ events <- xts(LETTERS[1:5], as.Date(c("2015-01-14","2017-12-16","2018-12-15","20
 plot.xts(Cl(BTC_USD), col = "black", main="Bitcoin in US $",lwd = 0.8)
 addEventLines(events,srt=90,pos=2,lty=3,col = c("darkgreen","red","darkgreen","red","darkgreen"),lwd=2,)
 ```
+
+&nbsp;
 
 &nbsp;
 

@@ -18,6 +18,9 @@ dates_mat[1,][3]
 
 chart.ACF.phil(logret["2020-01-01::2021-03-27"],  ymax = 0.12, main="ACF of time period: 2020-01-01/2021-03-27")
 
+
+data_obj$f
+
 #.####
 # Training/Prediction####
 ## 1####
@@ -66,6 +69,7 @@ nn_10_3_50_4 <- nn_nl_comb_sharpe_mse(maxneuron=10,
 
 ## 5####
 iter <- 5
+data_obj$target_out
 data_obj <- data_function(x=logret, lags=7, in_out_sep=dates_mat[iter,][2], start=dates_mat[iter,][1], end=dates_mat[iter,][3])
 c(as.character(time(head(data_obj$target_in, 1))), as.character(time(tail(data_obj$target_in, 1))), as.character(length(data_obj$target_in)))
 c(as.character(time(head(data_obj$target_out, 1))), as.character(time(tail(data_obj$target_out, 1))), as.character(length(data_obj$target_out)))
@@ -74,6 +78,58 @@ nn_10_3_50_5 <- nn_nl_comb_sharpe_mse(maxneuron=10,
                                       real=50,
                                       data_obj=data_obj)
 # save(nn_10_3_50_5, file = "data/batch_5/nn_10_3_50_5.rda") # 1.65h
+data_obj_5 <- data_obj
+save(data_obj_5, file = "data/data_obj_5.rda")
+head(data_obj_5$target_in)
+head(data_obj_5$data_mat, 5)
+test <- nn_nl_comb_sharpe_mse(maxneuron=7,
+                                      maxlayer=2,
+                                      real=1,
+                                      data_obj=data_obj)
+
+
+logistic_fun <- function (x) {
+  return(1/(1 + exp(-x)))
+}
+
+
+par(mfrow=c(1,2))
+plot(data_obj_5$train_set[,1], type="l", main="")
+grid()
+plot(as.matrix(data_obj_5$target_in), type="l")
+grid()
+
+data_obj_5$train_set
+nnt <- neuralnet(data_obj_5$f, data=data_obj_5$train_set, hidden=c(7,7), linear.output=T, stepmax = 1e+08)
+nnf <- neuralnet(data_obj_5$f, data=data_obj_5$train_set, hidden=c(7,7), linear.output=F, stepmax = 1e+08)
+
+predict(nn, as.matrix(test_set[,2:ncol(test_set)]))
+
+as.matrix(data_obj_5$test_set[,2:ncol(data_obj_5$test_set)])
+
+par(mfrow=c(1,4))
+
+plot(nnt$net.result[[1]], type="l", col="blue", ylim=c(0.2,0.8))
+lines(nnf$net.result[[1]], col="red")
+
+nnf_logistic <- logistic_fun(nnf$net.result[[1]])
+
+plot(nnf$net.result[[1]], type="l", col="red", ylim=c(0,1))
+lines(nnf_logistic, col="red", lty=3)
+lines(nnt$net.result[[1]], col="blue")
+lines(data_obj_5$train_set[,1])
+legend("topleft", legend = c("linear", "logistic(linear)", "non-linear", "original"),
+       lty=c(1,3,1,1), col=c("red", "red", "blue", "black"))
+nnt
+nnf
+nn$act.fct
+
+nn$linear.output
+nn$net.result
+
+plot(nn$net.result[[1]], type="l")
+lines(data_obj_5$train_set[,1], col="red")
+lines(nn$net.result[[1]], col="blue")
 
 ## 6####
 iter <- 6
