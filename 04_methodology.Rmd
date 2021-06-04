@@ -12,7 +12,8 @@ The focus of this thesis can be divided into three areas. First, the aim is to f
 &nbsp;
 
 ```{r flowchart_overview, fig.align='center', out.width='65%', fig.cap='This flowchart illustrates an overview of the individual intermediate steps that are covered in the methodology section. After the data is explored, the details for the network archtecture are examined and compared quantitatively. Finally, aspects of explainable artificial intelligence (XAI) and traditional time series analysis are applied for the implementation of the trading strategy.', echo=FALSE}
-knitr::include_graphics("images/flowchart_overview.png")
+# knitr::include_graphics("images/flowchart_overview.png")
+knitr::include_graphics("images/flowchart_overview2.png")
 ```
 
 \newpage
@@ -104,7 +105,7 @@ $N=\text{maximum Neuron}\in \mathbb{N}^{*}$
 
 $\text{Comb} =\text{Number of all combinations}$
 
-Thus, with our initial setup, we obtain a maximum neuron-layer combination of 1'110. To respond to the challenges mentioned in section [2.1.4](#challenges), not only a single network per neuron-layer combination is trained, but a whole batch of 50 networks. So, we end up with a total of 55,500 trained networks. For each network, the in-sample and out-of-sample MSE as well as the Sharpe ratios are determined. We use these values to find an optimal network architecture based on the statistical error as well as on the trading performance (daily signum trading).
+Thus, with our initial setup, we obtain a maximum neuron-layer combination of 1,110. To respond to the challenges mentioned in section [2.1.4](#challenges), not only a single network per neuron-layer combination is trained, but a whole batch of 50 networks. So, we end up with a total of 55,500 trained networks. For each network, the in-sample and out-of-sample MSE as well as the Sharpe ratios are determined. We use these values to find an optimal network architecture based on the statistical error as well as on the trading performance (daily signum trading).
 
 To ensure that the neural network with the chosen network architecture does not produce trustworthy predictions only for a specific time period, the in-sample and out-of-sample splits are examined for different time periods.
 
@@ -227,7 +228,7 @@ For the following procedure for finding an optimal network architecture we use a
 #### 3.2.3. Neural Network Training {#train-nn}
 &nbsp;
 
-For training the networks, we use the function `neuralnet()`, which is part of the R-package `neuralnet`. The advantage of this function is that it uses the backpropagation algorithm presented in section [2.1.2](#backprogation_algorithm). Various parameters must be passed to the function. We pass the 6-month in-sample data sets defined in section [3.2.1](#test_train), which are specially tailored for our applications. In the previous section, we decided on a maximum delay of 7 and the structure of the input layer can be seen in table \ref{tab:data_tab}. The pink-colored values indicate that they are the same values but shifted. These are the input data of the 5th test period, which would start in 2020-05-01. However, since we shift the data by 7-time units, we also lose 7 days of data, since no values are known before 2020-05-01 to fill the delays with data. If, for example, we would consider a larger number of delays, then the data set would accordingly also become smaller and smaller.
+For training the networks, we use the function `neuralnet()`, which is part of the R-package `neuralnet`. The advantage of this function is the utilization of the backpropagation algorithm presented in section [2.1.2](#backprogation_algorithm). Various parameters must be passed to the function. We pass the 6-month in-sample data sets defined in section [3.2.1](#test_train), which are specially tailored for our applications. In the previous section, we decided on a maximum delay of 7 and the structure of the input layer can be seen in table \ref{tab:data_tab}. The pink-colored values indicate that they are the same values but shifted. These are the input data of the 5th test period, which would start in 2020-05-01. However, since we shift the data by 7-time units, we also lose 7 days of data, since no values are known before 2020-05-01 to fill the delays with data (of course values exist before, but so the procedure can be applied to all possible time periods). If, for example, we would consider a larger number of delays, then the data set would accordingly also become smaller and smaller.
 
 ```{r data_tab, echo=FALSE}
 load("data/data_obj_5.rda")
@@ -253,7 +254,7 @@ $$lag0 \sim lag1+lag2+lag3+lag4+lag5+lag6+lag7$$
 
 The function thus uses the delayed data 1 to 7 as input layer and trains a network to get as close as possible to the true values of lag0. As discussed in section [3.2](#networkarchitecture), we would like to investigate the impact of network architecture on network performance. Thus, for each split, we pass the corresponding architecture from (1) to (10,10,10) to the function.
 
-In the `neuralnet`-function, we use the sigmoid logistic function as the activation function. As mentioned in section [2.1.2](#backprogation_algorithm), the logistic function returns values between 0 and 1. According to the article by Sebastian Heinz, neural networks benefit when the input layers are scaled according to the activation function. Solving the numerical optimization problem is therefore simplified. Intuitively, this also makes sense. If you look at the course of the logistic function in figure \ref{fig:sigmoid}, the activity of neurons close to zero is higher than at extreme values. Extreme positive or negative values would result in 0 or 1 according to the activation function and thus no longer make a large contribution to the model. The numerical problem would be much more complex to solve than having values within an active band. Thus, we scale the data to a range of [0, 1] that is convenient for numerical optimization. The lowest value in the data set is scaled to a 0, while the highest value is scaled to a 1. The listed values from table \ref{tab:data_tab} are transformed and can be seen in table \ref{tab:data_tab_scaled}.
+In the `neuralnet`-function, we use the sigmoid logistic function as the activation function. As mentioned in section [2.1.2](#backprogation_algorithm), the logistic function returns values between 0 and 1. According to the article by Sebastian Heinz, neural networks benefit when the input layers are scaled according to the activation function [@heinz]. Solving the numerical optimization problem is therefore simplified. If you look at the logistic function in figure \ref{fig:sigmoid}, the activity of neurons close to zero is higher than at extreme values. Extreme positive or negative values would result in 0 or 1 according to the activation function and thus no longer make a large contribution to the model. The numerical problem would be much more complex to solve than having values within an active band. Thus, we scale the data to a range of [0, 1] that is convenient for numerical optimization. The lowest value in the data set is scaled to 0, while the highest value is scaled to 1. The listed values from table \ref{tab:data_tab} are transformed and can be seen in table \ref{tab:data_tab_scaled}.
 
 \newpage
 
@@ -273,9 +274,9 @@ kbl(subseti, caption="Scaled data from the 5th test/train split. This is the sam
 
 &nbsp;
 
-The result from the `neuralnet`-function is then the prediction of the network for the in-sample test data set, i.e. the data with the lag0. To compare the performance in the in-sample area with other networks, the results computed from the scaled data by the network are transformed back to the original form.
+The result from the `neuralnet`-function is the prediction of the network for the in-sample test data set, i.e. the data with the lag0. To compare the performance in the in-sample area with other networks, the results computed from the scaled data by the network are transformed back to the original form.
 
-For the out-of-sample area, the `predict` function from the same package is used. One passes the trained network (optimized weights and biases) with the scaled out-of-sample data (lag 1 to 7). This result is then also transformed back and compared to the original data (lag0) to analyze the performance of the neural network, ouf-of-sample.
+For the out-of-sample area, the `predict` function from the same package is used. One passes the trained network (optimized weights and biases) with the scaled out-of-sample data (lag 1 to 7). This result is also transformed back and compared to the original data (lag0) to analyze the performance of the neural network, ouf-of-sample.
 
 \newpage
 
@@ -403,7 +404,7 @@ Therefore, the following a function is introduced that takes this aspect of majo
 
 &nbsp;
 
-Let $\hat{\underline{p}}$ be the predicted values {$\hat{p}_{1}...\hat{p}_{N_{total}}$} of the neural networks in a certain time $t$.
+Let $\hat{\underline{p}}$ be the predicted values {$\hat{p}_{1}\dotsc\hat{p}_{N_{total}}$} of the neural networks in a certain time $t$.
 With function $f$ \ref{eq:net_decision1} in every $t$ a trading signal is derived by majority decision. How clearly the decision of the forecasts must be, is decided by parameter $\kappa$.
 For further evaluation of neural networks $\kappa$ can be used as an optimizing factor.
 
@@ -427,7 +428,7 @@ $N_{total}$ = Total number of neural networks
 
 $\kappa$ = Ratio of majority decision 
 
-$\hat{p}_{k}$ = Predicted value from neural network
+$\hat{p}_{m}$ = Predicted value from neural network, $m \in$ {$1 \dotsc N_{total}$}
 
 &nbsp;
 
@@ -488,7 +489,7 @@ addLegend("topright",
 
 &nbsp;
 
-To use this behavior for optimizing our model, a more formal general approach is required. The standard deviation is therefore scaled with parameter $\lambda$ and with formula \ref{eq:count} in every $lag_{j}$ it is decided whether the predicted LPD $\Delta_{j,t}$ exceeds $\mu_{j} \pm \lambda \sigma_{j}$.  
+To use this behavior for optimizing our model, a more formal general approach is required. The standard deviation is therefore scaled with parameter $\lambda$ and with formula \ref{eq:count} in every $lag_{j}$ it is decided whether the predicted LPD $\hat{\Delta}_{j,t}$ exceeds $\mu_{j} \pm \lambda \sigma_{j}$.  
 
 With function $g$ \ref{eq:count} we count the lags which exceed their bands, the output of $g$ is between 0 and $lag_{n}$. In  $\text{signal}$ \ref{eq:net_decision2}, $g$ is further applied to generate a signal. With $\eta_{lower}$ (green) and $\eta_{upper}$ (red) it is decided which final output for the timestep $t$ should be assigned. In section [3.1.](#data_exploration) last section, we observed, that larger negative returns are more likely than positive, therefore the proposed signal is 0. For values between $\eta_{lower}$ and $\eta_{upper}$ we propose a signal 0.5. Function \ref{eq:net_decision2} $\text{signal}$  is now applied to every timestep $t$, therefore the final LPD signal is computed.
 
@@ -504,7 +505,7 @@ With function $g$ \ref{eq:count} we count the lags which exceed their bands, the
 
 ```{=tex}
 \begin{align} \label{eq:sdY}
-\sigma_{j}=\sqrt{  \frac{1}{n_{in}}  \sum_{t=1}^{n_{in}}(\mu_{j}-\hat{\Delta}_{j,t})^{2} }
+\sigma_{j}=\sqrt{  \frac{1}{n_{in}}  \sum_{t=1}^{n_{in}}(\mu_{j}-\Delta_{j,t})^{2} }
 \end{align}
 ```
 
@@ -514,7 +515,7 @@ With function $g$ \ref{eq:count} we count the lags which exceed their bands, the
 
 ```{=tex}
 \begin{align} \label{eq:count}
-g(\hat{\Delta}_{t})=\sum_{j=1}^{lag_{n}}\Big((\hat{\Delta}_{j}>\mu_{j} - \lambda \sigma_{j} )\vee( \hat{\Delta}_{j}<\mu_{j} + \lambda \sigma_{j})\Big)
+g(\hat{\Delta}_{t})=\sum_{j=1}^{lag_{n}}\Big((\hat{\Delta}_{j,t}>\mu_{j} - \lambda \sigma_{j} )\vee( \hat{\Delta}_{j,t}<\mu_{j} + \lambda \sigma_{j})\Big)
 \end{align}
 ```
 
@@ -531,9 +532,9 @@ g(\hat{\Delta}_{t})=\sum_{j=1}^{lag_{n}}\Big((\hat{\Delta}_{j}>\mu_{j} - \lambda
 
 &nbsp;
 
-$\Delta_{j,t}$ = matrix of in-sample LPD {$\underline{\Delta}_{1}...\underline{\Delta}_{n_{in}}$} observed for every t in insample
+$\Delta_{j,t}$ = Matrix of in-sample LPD {$\underline{\Delta}_{1}...\underline{\Delta}_{n_{in}}$} observed for every t in insample
 
-$\hat{\Delta}_{j,t}$ = matrix of out-of-sample LPD {$\underline{\hat{\Delta}}_{1}...\underline{\hat{\Delta}}_{n_{out}}$} predicted for every t in out of sample
+$\hat{\Delta}_{j,t}$ = Matrix of out-of-sample LPD {$\underline{\hat{\Delta}}_{1}...\underline{\hat{\Delta}}_{n_{out}}$} predicted for every t in out of sample
 
 $\lambda$ = Scaling parameter for standard deviation
 
@@ -547,9 +548,9 @@ $g$ = Function of lags exceeding band, output $\in$ {$0...lag_{n}$}
 
 $signal$ = Function of trading signal
 
-$\mu_{j}$ = arithmetic mean of insample LPD for every $lag_{j}$
+$\mu_{j}$ = Arithmetic mean of insample LPD for every $lag_{j}$
 
-$\sigma_{j}$ =  standard deviation of insample LPD for every $lag_{j}$
+$\sigma_{j}$ =  Standard deviation of insample LPD for every $lag_{j}$
 
 \newpage
 
@@ -603,18 +604,18 @@ Figure \ref{fig:garch_trading} illustrates how the GARCH trading strategies show
 #### 3.3.5. NN and LPD Trading
 &nbsp;
 
-In section [3.2.5](#mod-select) we have decided to fix the architecture 7 layers 7 nets, all
-the 9 splits which were introduced in section [3.2.1](#test_train), are now used for trading. In every 6 month-insample split a new model is estimated with the schema from [3.3.1](#trading_lpd_nn). The out-of-sample signals of the Neuralnet and LPD from every split are summarized. 
+In section [3.2.5](#mod-select) we have decided to fix the architecture to 2 layers with 7 neurons each, all
+the 9 splits which were introduced in section [3.2.1](#test_train), are now used for trading. In every 6 month-insample split a new model is estimated with the schema from [3.3.1](#trading_lpd_nn). The out-of-sample signals of the neural network and LPD from every split are summarized. 
 
 Our previous findings from the GARCH model were not very promising, nevertheless, we try to use those signals with the neural net output and the signals from LPD. That leaves us with a total of three signals for every timestep: 
 
 &nbsp;
 
-$\hat{nn}_{t}$ = neuralnet signals $\in$ {$-1,0,1$}
+$\hat{NN}_{t}$ = neuralnet signals $\in$ {$-1,0,1$}
 
 $\hat{LPD}_{t}$ = LPD signals $\in$ {$0,0.5,1$} 
 
-$\hat{garch}_{t}$ = GARCH signals $\in$ {$0,1$} from section [3.3.4](#garch-signal)
+$\hat{GARCH}_{t}$ = GARCH signals $\in$ {$0,1$} from section [3.3.4](#garch-signal)
 
 &nbsp;
 
@@ -623,11 +624,11 @@ With the previously established architecture, all combinations of the signals fo
 The most promising performance is found with $\lambda = 1$, $\eta_{lower} > \eta_{upper}$ (no 0.5 signals were used) $\eta_{upper}=3$ and $\kappa = 0.2$.
 In figure \ref{fig:perf} different combinations are visualized.
 
-- NN is simply trading the $LogReturn_{t}$ with $\hat{nn}_{t}$ 
+- NN is simply trading the $LogReturn_{t}$ with $\hat{NN}_{t}$ 
 
 - NN+LPD is the product of NN and $\hat{LPD}_{t}$ 
 
--  NN+LPD+GARCH takes into account the GARCH signals $\hat{garch}_{t}$ by multiplying them with NN+LPD.
+-  NN+LPD+GARCH takes into account the GARCH signals $\hat{GARCH}_{t}$ by multiplying them with NN+LPD.
 
 By investigating the plot, it seems that some combinations are performing better than the others. The GARCH application appears to worsen the performance. The Ligthblue and the Yellow line catches our eye, their performance seems to be better than the rest and as we can see, those are combinations of NN+LPD. Notice that signals with zeroes are not yet invested elsewhere, therefore they represent staying out of the market, mitigate risk and wait for a new signal to come.
 
