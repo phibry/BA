@@ -3,7 +3,7 @@ soutput:
   pdf_document:
     toc: no
 bibliography: add/doc.bib
-linkcolor: gray
+linkcolor: red
 csl: add/ieee.csl
 header-includes:
 - \usepackage{pdfpages}
