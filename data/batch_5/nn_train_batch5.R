@@ -19,6 +19,24 @@ dates_mat[1,][3]
 chart.ACF.phil(logret["2020-01-01::2021-03-27"],  ymax = 0.12, main="ACF of time period: 2020-01-01/2021-03-27")
 
 
+x_fit <- logret["2020-01-01::2021-03-27"]
+y.garch_11 <- garchFit(~garch(1,1), data=x_fit, delta=2, include.delta=F, 
+                       include.mean=F, trace=F)
+summary(y.garch_11)
+
+par(mfrow=c(1,1))
+ts.plot(x_fit)
+lines(y.garch_11@sigma.t,col="red")
+
+# Standardisierten Residuen -> u
+standard_residuals <- y.garch_11@residuals/y.garch_11@sigma.t
+ts.plot(standard_residuals)
+
+par(mfrow=c(2,1))
+chart.ACF.phil(logret["2020-01-01::2021-03-27"],  ymax = 0.12, main="ACF of time period: 2020-01-01/2021-03-27")
+chart.ACF.phil(standard_residuals,  ymax = 0.12, main="Acf standardized residuals GARCH(1,1)")
+
+
 data_obj$f
 
 #.####
