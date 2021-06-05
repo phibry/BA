@@ -360,7 +360,7 @@ For the rest of the procedure, we decide to use a neural network architecture of
 
 The trained networks and applied methods are compared with each other using a benchmark. For this purpose, we use the buy-and-hold, which is a long-term passive investment strategy. Investing with this strategy often leads to better returns in the long run than active trading [@bnh]. This strategy is hard to beat, especially when the market is trending upwards. In such a trend, an active strategy would hardly recommend anything other than buy-and-hold.
 
-We, therefore, compare our developed active strategies with the cumulative log returns. Our benchmark includes all green out-of-sample returns from figure \ref{fig:test_train} cumulated.
+We, therefore, compare our developed active strategies with the cumulative log returns. Our benchmark includes all green out-of-sample returns from figure \ref{fig:test_train} cumulative.
 
 \newpage
 
@@ -387,22 +387,18 @@ Before we trade the returns, we first need to define the environment and make so
 #### 3.3.1. Trading with Neural Networks and LPD {#trading_lpd_nn}
 &nbsp;
 
-The following consecutive sections [3.3.1.1](#network) and[ 3.3.1.2](#lpd-signal) go together. We describe, how in this thesis the neural network and LPD( theory explained in section [2.2.2](#xai_finance)) is used to create  trading signals. 
-
-
+The following consecutive sections [3.3.1.1](#network) and [3.3.1.2](#lpd-signal) complement each other. We describe, how the neural network and LPD (theory explained in section [2.2.2](#xai_finance)) is used to create  trading signals. 
 
 ##### 3.3.1.1. Neural Network {#network}
 &nbsp;
 
-In [3.2.](#networkarchitecture) we use an average of only 50 realizations of feedforward nets to reduce computation time. However, it is proposed by the Central Limit Theorem [@central_limit_theorem] to use an approximate $\text{number of iterations } N_{total} \ge 100$ for an accurate mean value. 
+In [3.2.](#networkarchitecture), we use an average of only 50 realizations of feedforward networks to reduce computation time. However, it is proposed by the central limit theorem [@central_limit_theorem] to use an approximate $\text{number of iterations } N_{total} \ge 100$ for an accurate mean value. 
 
-For a better understanding, we will take a closer look at an example of the effects of averaging all predictions. Assume we calculate an amount of $N_{total}$=100 nets in total and try to predict just 1 day and use the sign of the forecast as a trading signal. If 49 nets predict a positive forecast and 51 a negative, we end up with a negative trading signal, which is actually decided by just one net. This means that the resulting trading signale occurs randomly. A positive trading signal that results from 60 positive predictions and 40 negative ones may be more accurate. Therefore, the following a function is introduced that takes this aspect of majority voting into account.
+For a better understanding, we will take a closer look at how we handle the predictions in order to generate a trading signal. Assuming we calculate an amount of $N_{total}$=100 networks in total, try to predict just 1 day, and use the sign of the forecast as a trading signal. If 49 nets predict a positive forecast and 51 a negative, we end up with a negative trading signal, which is actually decided by just one net. This means that the resulting trading signal occurs randomly. A positive trading signal that results from 60 positive predictions and 40 negative ones may be more accurate. Therefore, the following a function is introduced that takes this aspect of majority voting into account.
 
 &nbsp;
 
-Let $\hat{\underline{p}}$ be the predicted values {$\hat{p}_{1}\dotsc\hat{p}_{N_{total}}$} of the neural networks in a certain time $t$.
-With function $f$ \ref{eq:net_decision1} in every $t$ a trading signal is derived by majority decision. How clearly the decision of the forecasts must be, is decided by parameter $\kappa$.
-For further evaluation of neural networks $\kappa$ can be used as an optimizing factor.
+Let $\hat{\underline{p}}$ be the predicted values {$\hat{p}_{1}\dotsc\hat{p}_{N_{total}}$} of the neural networks in a certain time $t$. With the help of function $f$ seen in equation \ref{eq:net_decision1}, we derive a trading signal for every t, while we pay attention to majority decision. The parameter $\kappa$ influences how large the percentage of votes must be for a vote to win. For further evaluation of neural networks, $\kappa$ can be used as an optimizing factor.
 
 &nbsp;
  
@@ -428,18 +424,18 @@ $\hat{p}_{m}$ = Predicted value from neural network, $m \in$ {$1 \dotsc N_{total
 
 &nbsp;
 
-One can observe in function $f$ how the uncertain decisions result in a 0 signal. You could also use position sizing and adjust the signal depending on the size of $\kappa$. But we have omitted this aspect, because otherwise there are too many parameters in the model.
+One can observe in function $f$ how the uncertain decisions result in a 0 signal. Another aspect that could be included is position sizing and to adjust the signal depending on the size of $\kappa$. In scope of this thesis, these aspects are omitted due to resource constraints.
 
 \newpage
 
 ##### 3.3.1.2. LPD Signal {#lpd-signal}
 &nbsp;
 
-To explain the following as understandable as possible, we recall chapter [2.2.2](#xai_finance) where the discrete derivatives of each input layer $lag_{j}$ were calculated with respect to the forecast at each time step. This procedure is now applied to the in-sample as well as the out-of-sample area. From the in-sample, the standard deviation and the mean are calculated for each $lag_{j}$. These are now used for the out-of-sample area. An example with out-of-sample 2021-01-01 - 2021-02-08 clarifies these procedure:
-Figure \ref{fig:lpd_explain} represents the 7 lags, when looking at lag 4, the top line shows the previously calculated mean value from the in-sample (black) and the in-sample standard deviation upwards and downwards (dashed red). For the visualization the lines are drawn only for one lag.
-Let us take a look at the time step 2021-01-25, where you can see that the pink line exceeds the standard deviation.  Now we count in this time step how many other lags also overshoot their standard deviation.
-This is shown in formula \ref{eq:net_decision2}, we see immediately that on 2021-01-25, 4 lags have exceeded their standard deviation by the mean value.
-In the example we state that if 4 or more lags exceed the upper limit the final signal is 0 and if between 2 and 4 lags exceed the standard deviation, we assign the signal 0.5. For our example date 2021-01-25 the signal would be 0.
+To explain the following as understandable as possible, we recall chapter [2.2.2](#xai_finance) where the discrete derivatives of each input layer $lag_{j}$ were calculated with respect to the forecast at each time step. This procedure is now applied to the in-sample as well as the out-of-sample area. From the in-sample, the mean and the standard deviation are calculated for each $lag_{j}$ so that we can determine which values are considered extreme. These are now used for the out-of-sample area. An example with out-of-sample 2021-01-01 - 2021-02-08 clarifies these procedure:
+
+Figure \ref{fig:lpd_explain} represents the 7 lags, when looking at lag 4, the top line shows the previously calculated mean value from the in-sample (black) and the in-sample standard deviation upwards and downwards (dashed red). For the visualization the lines are only drawn for one lag.
+Let us take a look at the time step 2021-01-25, where we can see that the pink line exceeds the standard deviation. Next, we count how many other lags also overshoot their standard deviation in this time step.
+This procedure is described by formula \ref{eq:net_decision2}. We recognize that 4 lags have exceeded their standard deviation on 2021-01-25 and therefore indicate an unstable state of the neural network. In this example, we state that if 4 or more lags exceed the upper limit the final signal is 0. If the the number is between 2 and 4, we assign the signal to 0.5. For our example date 2021-01-25 the signal would be 0.
 Correctly concluded, we get a trading signal for each date.
 
 &nbsp;
@@ -485,9 +481,9 @@ addLegend("topright",
 
 &nbsp;
 
-To use this behavior for optimizing our model, a more formal general approach is required. The standard deviation is therefore scaled with parameter $\lambda$ and with formula \ref{eq:count} in every $lag_{j}$ it is decided whether the predicted LPD $\hat{\Delta}_{j,t}$ exceeds $\mu_{j} \pm \lambda \sigma_{j}$.  
+To use this behavior for optimizing our model, a more general approach is required. The standard deviation is therefore scaled with parameter $\lambda$. With the help of formula \ref{eq:count}, it is decided in every $lag_{j}$ whether the predicted LPD $\hat{\Delta}_{j,t}$ exceeds $\mu_{j} \pm \lambda \sigma_{j}$.  
 
-With function $g$ \ref{eq:count} we count the lags which exceed their bands, the output of $g$ is between 0 and $lag_{n}$. In  $\text{signal}$ \ref{eq:net_decision2}, $g$ is further applied to generate a signal. With $\eta_{lower}$ (green) and $\eta_{upper}$ (red) it is decided which final output for the timestep $t$ should be assigned. In section [3.1.](#data_exploration) last section, we observed, that larger negative returns are more likely than positive, therefore the proposed signal is 0. For values between $\eta_{lower}$ and $\eta_{upper}$ we propose a signal 0.5. Function \ref{eq:net_decision2} $\text{signal}$  is now applied to every timestep $t$, therefore the final LPD signal is computed.
+With function $g$ seen in equation \ref{eq:count}, we count the lags which exceed their bands, the output of $g$ is between 0 and $lag_{n}$. In equation \ref{eq:net_decision2}, $g$ is further applied to generate a signal. With $\eta_{lower}$ (green) and $\eta_{upper}$ (red), it is decided which final output for the time step $t$ should be assigned. In the last part of section [3.1.](#data_exploration), we observed that larger negative returns are more likely than positive ones, therefore the proposed signal is 0. For values between $\eta_{lower}$ and $\eta_{upper}$ we propose a signal 0.5. Function \ref{eq:net_decision2} is then applied to every time step $t$, therefore the final LPD signal is computed.
 
 \newpage
 
@@ -538,15 +534,15 @@ $lag_{n}$ = Maximum number of lags
 
 $\eta_{lower},\eta_{upper}$ = Lower  and upper border for signal decision
 
-$n_{in}, n_{out}$ = Maximum time insample / out-of-sample
+$n_{in}, n_{out}$ = Maximum time in-sample / out-of-sample
 
 $g$ = Function of lags exceeding band, output $\in$ {$0...lag_{n}$}
 
 $signal$ = Function of trading signal
 
-$\mu_{j}$ = Arithmetic mean of insample LPD for every $lag_{j}$
+$\mu_{j}$ = Arithmetic mean of in-sample LPD for every $lag_{j}$
 
-$\sigma_{j}$ =  Standard deviation of insample LPD for every $lag_{j}$
+$\sigma_{j}$ =  Standard deviation of in-sample LPD for every $lag_{j}$
 
 \newpage
 
@@ -557,14 +553,14 @@ In a further step, we examine the time series with a traditional GARCH model tha
 
 The first trading strategy is based on one-step-ahead rolling window forecasts (here: log return) resulting from the ARMA(1,1)-GARCH(1,1). When we predict a positive value, the algorithm decides to enter, respectively remain in a long position. When predicting a negative value, we enter a short position to benefit from the anticipated market movement. 
 
-The second strategy is solely based on volatility predictions resulting from a GARCH(1,1) and tries to take an advantage from the asymmetric volatility phenomenon by F. Black. This phenomenon describes a negative correlation between the volatility of the return and the achieved return [@leverage_effect]. Therefore, we define the following trading rule:
+The second strategy is solely based on volatility predictions resulting from a GARCH(1,1) and tries to take an advantage from the asymmetric volatility phenomenon proposed by F. Black. This phenomenon describes a negative correlation between the volatility of the return and the achieved return [@leverage_effect]. Therefore, we define the following trading rule:
 
 ```{=tex}
 \begin{equation}\label{eq:vola_predict}
 \text{Signal}_{GARCH}(\hat{\sigma}_{t}) =
 \begin{cases} 
                                               
-  0      & \quad \text{if} ,  \hat{\sigma}_{t} \ge \sigma_{historical} \\
+  0      & \quad \text{if} ,  \hat{\sigma}_{t} \ge 1.64*\sigma_{historical} \\
   1      & \quad \text{else}
 
    \end{cases}
@@ -600,10 +596,7 @@ Figure \ref{fig:garch_trading} illustrates how the GARCH trading strategies show
 #### 3.3.3. Neural Network and LPD Trading
 &nbsp;
 
-In section [3.2.5](#mod-select) we have decided to fix the architecture to 2 layers with 7 neurons each, all
-the 9 splits which were introduced in section [3.2.1](#test_train), are now used for trading. In every 6 month-insample split a new model is estimated with the schema from [3.3.1](#trading_lpd_nn). The out-of-sample signals of the neural network and LPD from every split are summarized. 
-
-Our previous findings from the GARCH model were not very promising, nevertheless, we try to use those signals with the neural net output and the signals from LPD. That leaves us with a total of three signals for every timestep: 
+In section [3.2.5](#mod-select) we decide to use a network architecture consisting of 2 layers with 7 neurons each. All the 9 splits which were introduced in section [3.2.1](#test_train) are now being used for trading. In every 6 month in-sample split, a new model is estimated with the schema from [3.3.1](#trading_lpd_nn). The out-of-sample signals of the neural network and LPD from every split are summarized. Our previous findings from the GARCH model were not very promising, nevertheless, we try to use those signals with the neural net output and the signals from LPD. That leaves us with a total of three signals for every time step: 
 
 &nbsp;
 
@@ -611,14 +604,12 @@ $\hat{NN}_{t}$ = Neural net signals $\in$ {$-1,0,1$}
 
 $\hat{LPD}_{t}$ = LPD signals $\in$ {$0,0.5,1$} 
 
-$\hat{GARCH}_{t}$ = GARCH signals $\in$ {$0,1$} from section [3.3.2](#garch-signal)
+$\hat{GARCH}_{t}$ = GARCH volatility trading signals $\in$ {$0,1$} 
 
 &nbsp;
 
-With the previously established architecture, all combinations of the signals for different values for the parameters: $\lambda$, $\eta_{lower},\eta_{upper}$ and $\kappa$  are computed and the performance is compared to each other as well as to the benchmark from [3.2.6](#benchmark). To find a balance between precision and computation time, we found $N_{total}$= 1000 Neural networks in every split, should be sufficient for the evaluation.
-
-The most promising performance is found with $\lambda = 1$, $\eta_{lower} > \eta_{upper}$ (no 0.5 signals were used) $\eta_{upper}=3$ and $\kappa = 0.2$.
-In figure \ref{fig:perf} different combinations are visualized.
+With the previously established architecture, all combinations of the signals for different values for the parameters: $\lambda$, $\eta_{lower},\eta_{upper}$ and $\kappa$  are computed and the performance is compared to each other as well as to the benchmark from [3.2.6](#benchmark). To find a balance between precision and computation time, we optimize $N_{total}$= 1000 neural networks in every split. This should be sufficient for evaluation. The most promising performance is found with $\lambda = 1$, $\eta_{lower} > \eta_{upper}$ (no 0.5 signals were used) $\eta_{upper}=3$ and $\kappa = 0.2$.
+In figure \ref{fig:perf} different combinations are visualized. To complement the legend in this plot, the strategy combinations are described below: 
 
 - NN is simply trading the $LogReturn_{t}$ with $\hat{NN}_{t}$ 
 
@@ -626,7 +617,7 @@ In figure \ref{fig:perf} different combinations are visualized.
 
 -  NN+LPD+GARCH takes into account the GARCH signals $\hat{GARCH}_{t}$ by multiplying them with NN+LPD.
 
-By investigating the plot, it seems that some combinations are performing better than the others. The GARCH application appears to worsen the performance. The ligthblue and the yellow line catches our eye, their performance seems to be better than the rest and as we can see, those are combinations of NN+LPD. Notice that signals with zeroes are not yet invested elsewhere, therefore they represent staying out of the market, mitigate risk and wait for a new signal to come.
+By investigating the plot, it seems that some combinations are performing better than the others. The GARCH application appears to worsen the performance. The light blue and the yellow line catches our eye as their performance seems to be better than the rest. Surprisingly, these are combinations of NN+LPD. Notice that signal = 0 means that we stay out of the market, mitigate risk and wait for a new signal to come.
 
 &nbsp;
 
@@ -637,7 +628,7 @@ By investigating the plot, it seems that some combinations are performing better
 load("data/xai/7_7_withsignal_xai_in/perfall_without_eth.rda")
 colors= c("red","pink","violetred","darkorchid","blue","lightblue","turquoise","dodgerblue4","darkorange","goldenrod1","yellow","darkgoldenrod1","green")
 plot.xts(compare_perf,
-         main=TeX(sprintf("Performance cumulated from 9 Splits, $\\lambda = %d$", 1)),
+         main=TeX(sprintf("Cumulative performance from 9 Splits, $\\lambda = %d$", 1)),
          col=colors)
 addLegend("topleft",
           legend.names=c(TeX(sprintf("NN $\\kappa = %.1f$", 0.1)),
@@ -665,7 +656,8 @@ addLegend("topleft",
 
 \newpage
 
-When we have a closer look at the Sharpe ratio in \ref{fig:sharpe}, our findings from before are confirmed. The NN+LPD with $\kappa = 0.2$ has even a better Sharpe ratio than buy and hold. But another observation is seemingly more interesting, the LPD is always better than only NN. By investigating the other calculations we have done (plots found in  [Attachement](#attachement)), we find the same pattern, therefore we conclude that LPD brings us a real benefit for this particular application.
+When we have a closer look at the Sharpe ratio in figure \ref{fig:sharpe}, our findings from before are confirmed. The NN+LPD with $\kappa = 0.2$ results in a better Sharpe ratio than buy and hold. Another observation is seemingly more interesting: In the strategies tested, the addition of LPD always led to better results than with neural networks alone. 
+By investigating the other calculations we have done (plots found in  [attachement](#attachement)), we find the same pattern. Therefore, we conclude that LPD brings us a real benefit for this particular application.
 
 &nbsp;
 
@@ -702,10 +694,7 @@ grid()
 par(mar=defaultmar)
 ```
 
-
-
-Figure \ref{fig:batch} gives an insight on how the individual combinations performed in each of the 9 splits. The NN+LPD with $\kappa = 0.2$ is predominantly better in the first three splits, in the middle section its worse and towards the end the Sharpe is again better than buy and hold.
-But we have to take this plot with a grain of salt because these splits are only one month out of sample, meaning the Sharpe Ratio is sensitive to outliers, this effect is even stronger when there are few datapoints present.
+Figure \ref{fig:batch} gives an insight on how the individual combinations performed in each of the 9 splits. The NN+LPD with $\kappa = 0.2$ is predominantly better in the first three splits, in the middle section its worse and towards the end the Sharpe is again better than buy and hold. We have to take this plot with a grain of salt because these splits have only an out-of-sample of one month and the Sharpe ratio is sensitive to outliers. This effect is even stronger when there are few datapoints present.
 
 &nbsp;
 
@@ -729,14 +718,9 @@ for (i in 1:8){lines(allsharp[,i],col=colorsbatch[i],type="l",lwd=2)}
 #### 3.3.3. Adding Ether
 &nbsp;
 
-In the performance plot \ref{fig:perf}, we have still left out what to do with 0 signals. One opportunity as in [3.3](#trading-strat) shortly mentioned, is to invest the money in another asset. By reason of staying in the same asset class we choose Ether [@ether] to invest in.
-The coin Ether from Ethereum is with $61.48B [@ethereum] the second largest cryptocurrency according to market capitalisation. 
+In the performance plot in figure \ref{fig:perf}, we have not decided what we do during phases with signal = 0. One opportunity is, as in [3.3](#trading-strat) shortly mentioned, to invest the money in another asset. For this consideration, we decide to use Ether (ETH) in order to stay within the cryptocurrency market [@ether]. Based on market capitalization, the Ethereum Blockchain cryptocurrency is the second most widely used currency [@ethereum]. According to an article from Y. Gola [@correlation_btc], the correlation between BTC and ETH is 0.91. Although the investigation of a negative correlation would of course have been exciting, it does not matter in our application with LPD. A signal = 0 in fact means that something is changing in the data or the neural network is not stable, thus we can not exactly know what this signal means. The ETH prices are imported in the same way as BTC/USD. We transfom ETH/USD to log returns so that we can use them in combination with BTC log returns. This is convenient because besides time-additivity, log returns have the characteristic that they are relative and not dependent on the price level. 
 
-According to [@correlation_btc] the correlation between the two assets is 0.91. This is not a braking factor to us, because the 0 signal of the LPD is just indicating that something is changing in the data or the neural net is not stable, thus we can not exactly know what the 0 signal means. 
-
-The structure Ether is very similar to Bitcoin [@oeko3project]. The series is imported in the same way as BTC e.g. the log returns are derived.
-
-That said, we use a simple rule to integrate Ether. If the signal of the combination NN+LPD is 0 then we go long on Ether. As soon as the signal from LPD changes back to 1 or -1, Ether is sold and the Bitcoin position is entered again.
+We use a simple rule to integrate Ether. If the signal of the combination NN+LPD is 0, we enter a long position in Ether. As soon as the signal from LPD changes back to 1 or -1, Ether is sold and the long/short position is based on BTC again. 
 
 &nbsp;
 
@@ -747,7 +731,7 @@ load("data/xai/7_7_withsignal_xai_in/nn_lpd_without_eth.rda")
 signal <- data$BTC.USD.Close
 signal$BTC.USD.Close <- nn_lpd
 colors= c("green","red","pink","violetred","darkorchid","blue","lightblue")
-plot(data, col=colors, main=TeX(sprintf("Performance cumulated from 9 splits, $\\lambda = %d$", 1)))
+plot(data, col=colors, main=TeX(sprintf("Cumulative performance from 9 splits, $\\lambda = %d$", 1)))
 addLegend("topleft", 
           legend.names=c(TeX(sprintf("Buy and Hold, $Sharpe = %.2f$", 3.57)),
                          TeX(sprintf("LPD+NN $\\kappa = %.1f$, $Sharpe = %.2f$", 0.1, 2.54)),
@@ -766,9 +750,7 @@ addLegend("topleft",
 
 &nbsp;
 
-In figure \ref{fig:with_eth} the NN+LPD's from figure \ref{fig:perf} and the adding of Ether is visualized. In the lower part, we can observe the signals which are 0 in the NN+LPD model. These zeroes are now complemented with the log returns from Ether.
-
-The one performance with NN+LPD+ETH with $\kappa = 20 \%$ seems promising. Also for the other two NN+LPD the adding of Ether seems benefital.
+Figure \ref{fig:with_eth} visualizes how the cumulative returns of the previous NN+LPD strategy performs in combination with Ether. There are several phases where a signal = 0 from the NN+LPD can be observed. These periods are now complemented with the log returns from Ether. In summary, we can see that adding ETH improves overall performance. The best performance is achieved with NN+LPD+ETH with $\kappa = 20 \%$, which is promising. 
 
 \newpage
 
@@ -779,7 +761,7 @@ load("data/xai/7_7_withsignal_xai_in/nn_lpd_without_eth.rda")
 signal <- data$BTC.USD.Close
 signal$BTC.USD.Close <- nn_lpd
 colors= c("green","darkorchid")
-plot(data[,c(1,5)], col=colors, main=TeX(sprintf("Performance cumulated from 9 splits, $\\lambda = %d$", 1)))
+plot(data[,c(1,5)], col=colors, main=TeX(sprintf("Cumulative performance from 9 splits, $\\lambda = %d$", 1)))
 
 addLegend("left",
           legend.names=c(TeX(sprintf("Buy and Hold, $Sharpe = %.2f$", 3.57)),
@@ -798,12 +780,10 @@ addEventLines(events, srt=0, pos=1, lty=3, col = rep("#004c6d",6),lwd=2, cex=1.2
 
 &nbsp;
 
-For a closer analysis, let us have a look at the cumulated log-returns of the best performing model vs. buy-and-hold in Figure \ref{fig:with_eth_sole}. The following analysis is related to the violet chart and starts from left to right, beginning with the letter **A**. 
-Immediately after the line by letter **A**, several decisions differ from buy-and-hold and force a shift to the series. In the letter **B**, we observe similar behavior for a short period. The unsatisfying trend change in the letter **C** is stopped around the first of November. Thereafter unto the point in letter **D** the decisions of the model behave quite similar to the green line. Right after **D** the net handles the negative trend very well and climbs further up. The same accounts for the letter **E**, where the trend once more goes in the opposite direction than the benchmark. Shortly after **F** the model does exactly the same as buy-and-hold.
+For a closer analysis, figure \ref{fig:with_eth_sole} shows the cumulative log returns of the best performing model in comparison to buy-and-hold. The following analysis is related to the violet chart and starts from left to right, beginning with the letter **A**. 
+Immediately after the line by letter **A**, several decisions differ from buy-and-hold and force a shift of the series. In the letter **B**, we observe similar behavior for a short period. The unsatisfying trend change in the letter **C** is stopped around the first of November. Thereafter unto the point in letter **D** the decisions of the model behave quite similarly to the green line. Right after **D** the net handles the negative trend very well and climbs further up. The same accounts for the letter **E**, where the trend once more goes in the opposite direction than the benchmark. Shortly after **F**, the model does reasonably the same as buy-and-hold.
 
-Let us have a simple theoretical comparison example under the assumptions in [3.3](#trading-strat) at last.
-
-With summarizing the logreturns from \ref{eq:logreturn} with Formula \ref{eq:logreturns_transforming}, one can calculate the value $S_{tn}$ which we end up with, when an Amount $S_{t0}$ is invested at the beginning.
+Last, a simple theoretical comparison is made, as mentioned in chapter [3.3](#trading-strat). We can summarize the log returns from equation \ref{eq:logreturn} with equation \ref{eq:logreturns_transforming}. As a result, one can calculate the value $S_{tn}$ which we end up with, when an Amount $S_{t0}$ is invested at the beginning.  
 
 &nbsp;
 
@@ -816,7 +796,7 @@ S_{tn} &=S_{t0}\prod_{k=1}^{t_{n}}e^{LogReturn_{k}} \\
 
 &nbsp;
 
-Lets say, we invest 1000 US-Dollars  at the beginning of the timeperiod in \ref{fig:with_eth_sole}. With buy-and-hold we would end up at 6003.25 US-Dollars by the end of March. However if we invest the 1000 USD in the best performing strategy we will end up with **11'633.70**  USD, that would be as nearly as double the amount of buy-and-hold. Comparing the Sharperatios  **4.41** to 3.57 of the LogReturns, the used strategy does also significantly better.  
+A theoretical investment of USD 1'000 is made at 2020-07-01, which is also the first date in figure \ref{fig:with_eth_sole}. A buy-and-hold strategy would result in a value of USD 6003.25 by the end of March 2021. However if we invest the 1000 USD in the best performing strategy we will end up with USD **11'633.70**  USD, which is nearly double the amount achieved with buy-and-hold. Comparing the Sharpe ratios of the LPD+NN+ETH (**4.41**) to buy-and-hold (3.57), the used strategy does also significantly better.
 
 
 

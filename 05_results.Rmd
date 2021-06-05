@@ -4,26 +4,12 @@ geometry: margin = 1in
 ---
 
 ## 4. Results
-In this section, we summarize our results from the individual parts.
 
-Regarding the network architecture, we find that it is not worthwhile to use a feedforward network with as many layers and neurons as possible, since this leads to overfitting.
+In this section, we summarize our results from the individual parts. Regarding the network architecture, we find that it is not worthwhile to use a feedforward network with as many layers and neurons as possible, since this leads to overfitting. Furthermore, we found out, that if the correlation between in-sample MSE and out-of-sample MSE is positive, this does not necessarily mean that this also accounts for the performance. From this finding, we can conclude that a less complex network in our case leads to equal or better results. For our purpose, a two-layer with each 7 neuron net is therefore sufficient.
 
-Furthermore, we found out, that if the correlation between in-sample MSE and out-of-sample MSE is positive, this does not necessarily mean that this also accounts for the performance. From this finding, we can conclude that a less complex network in our case leads to equal or better results. 
+In terms of trading, we tested all combinations of three approaches: Forecasts using neural networks, stability check with LPD, and volatility predictions with GARCH. After forecasting the volatility with a rolling window GARCH we conclude: the performance is not satisfying enough. The combination of the GARCH volatility with neural net and LPD also brings no further benefit.
 
-For our purpose, a two-layer with each 7 neuron net is therefore sufficient.
-
-In terms of trading, we tested all combinations of three approaches: Neural net forecast, stability check with LPD, and volatility predictions with GARCH.
-
-After forecasting the volatility with a rolling window GARCH we conclude: the performance is not satisfying enough.
-The combination of the GARCH volatility with neural net and LPD also brings no further benefit.
-
-
-The combination of neural net and the LPD approach with parameter $\lambda=1$ and $\kappa = 20 \%$ lead to a good performance.
-
-
-We also notice the improvement in the performance of the neural net through LPD in almost all cases.
-
-Finally, with the addition of the asset ether and the use of the 0 signals, we have outperformed the benchmark buy and hold.
+The combination of neural net and the LPD approach with parameter $\lambda=1$ and $\kappa = 20 \%$ lead to a good performance. We also notice the improvement in the performance of the neural network signals through LPD in almost all cases. Finally, with the addition of the asset Ether and the use of the 0 signals, we have outperformed the benchmark buy-and-hold.
 
 
 
