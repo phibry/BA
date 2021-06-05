@@ -387,22 +387,18 @@ Before we trade the returns, we first need to define the environment and make so
 #### 3.3.1. Trading with Neural Networks and LPD {#trading_lpd_nn}
 &nbsp;
 
-The following consecutive sections [3.3.1.1](#network) and[ 3.3.1.2](#lpd-signal) go together. We describe, how in this thesis the neural network and LPD( theory explained in section [2.2.2](#xai_finance)) is used to create  trading signals. 
-
-
+The following consecutive sections [3.3.1.1](#network) and [3.3.1.2](#lpd-signal) complement each other. We describe, how the neural network and LPD (theory explained in section [2.2.2](#xai_finance)) is used to create  trading signals. 
 
 ##### 3.3.1.1. Neural Network {#network}
 &nbsp;
 
-In [3.2.](#networkarchitecture) we use an average of only 50 realizations of feedforward nets to reduce computation time. However, it is proposed by the Central Limit Theorem [@central_limit_theorem] to use an approximate $\text{number of iterations } N_{total} \ge 100$ for an accurate mean value. 
+In [3.2.](#networkarchitecture), we use an average of only 50 realizations of feedforward networks to reduce computation time. However, it is proposed by the central limit theorem [@central_limit_theorem] to use an approximate $\text{number of iterations } N_{total} \ge 100$ for an accurate mean value. 
 
-For a better understanding, we will take a closer look at an example of the effects of averaging all predictions. Assume we calculate an amount of $N_{total}$=100 nets in total and try to predict just 1 day and use the sign of the forecast as a trading signal. If 49 nets predict a positive forecast and 51 a negative, we end up with a negative trading signal, which is actually decided by just one net. This means that the resulting trading signale occurs randomly. A positive trading signal that results from 60 positive predictions and 40 negative ones may be more accurate. Therefore, the following a function is introduced that takes this aspect of majority voting into account.
+For a better understanding, we will take a closer look at how we handle the predictions in order to generate a trading signal. Assuming we calculate an amount of $N_{total}$=100 networks in total, try to predict just 1 day, and use the sign of the forecast as a trading signal. If 49 nets predict a positive forecast and 51 a negative, we end up with a negative trading signal, which is actually decided by just one net. This means that the resulting trading signal occurs randomly. A positive trading signal that results from 60 positive predictions and 40 negative ones may be more accurate. Therefore, the following a function is introduced that takes this aspect of majority voting into account.
 
 &nbsp;
 
-Let $\hat{\underline{p}}$ be the predicted values {$\hat{p}_{1}\dotsc\hat{p}_{N_{total}}$} of the neural networks in a certain time $t$.
-With function $f$ \ref{eq:net_decision1} in every $t$ a trading signal is derived by majority decision. How clearly the decision of the forecasts must be, is decided by parameter $\kappa$.
-For further evaluation of neural networks $\kappa$ can be used as an optimizing factor.
+Let $\hat{\underline{p}}$ be the predicted values {$\hat{p}_{1}\dotsc\hat{p}_{N_{total}}$} of the neural networks in a certain time $t$. With the help of function $f$ seen in equation \ref{eq:net_decision1}, we derive a trading signal for every t, while we pay attention to majority decision. The parameter $\kappa$ influences how large the percentage of votes must be for a vote to win. For further evaluation of neural networks, $\kappa$ can be used as an optimizing factor.
 
 &nbsp;
  
@@ -428,18 +424,18 @@ $\hat{p}_{m}$ = Predicted value from neural network, $m \in$ {$1 \dotsc N_{total
 
 &nbsp;
 
-One can observe in function $f$ how the uncertain decisions result in a 0 signal. You could also use position sizing and adjust the signal depending on the size of $\kappa$. But we have omitted this aspect, because otherwise there are too many parameters in the model.
+One can observe in function $f$ how the uncertain decisions result in a 0 signal. Another aspect that could be included is position sizing and to adjust the signal depending on the size of $\kappa$. In scope of this thesis, these aspects are omitted due to resource constraints.
 
 \newpage
 
 ##### 3.3.1.2. LPD Signal {#lpd-signal}
 &nbsp;
 
-To explain the following as understandable as possible, we recall chapter [2.2.2](#xai_finance) where the discrete derivatives of each input layer $lag_{j}$ were calculated with respect to the forecast at each time step. This procedure is now applied to the in-sample as well as the out-of-sample area. From the in-sample, the standard deviation and the mean are calculated for each $lag_{j}$. These are now used for the out-of-sample area. An example with out-of-sample 2021-01-01 - 2021-02-08 clarifies these procedure:
-Figure \ref{fig:lpd_explain} represents the 7 lags, when looking at lag 4, the top line shows the previously calculated mean value from the in-sample (black) and the in-sample standard deviation upwards and downwards (dashed red). For the visualization the lines are drawn only for one lag.
-Let us take a look at the time step 2021-01-25, where you can see that the pink line exceeds the standard deviation.  Now we count in this time step how many other lags also overshoot their standard deviation.
-This is shown in formula \ref{eq:net_decision2}, we see immediately that on 2021-01-25, 4 lags have exceeded their standard deviation by the mean value.
-In the example we state that if 4 or more lags exceed the upper limit the final signal is 0 and if between 2 and 4 lags exceed the standard deviation, we assign the signal 0.5. For our example date 2021-01-25 the signal would be 0.
+To explain the following as understandable as possible, we recall chapter [2.2.2](#xai_finance) where the discrete derivatives of each input layer $lag_{j}$ were calculated with respect to the forecast at each time step. This procedure is now applied to the in-sample as well as the out-of-sample area. From the in-sample, the mean and the standard deviation are calculated for each $lag_{j}$ so that we can determine which values are considered extreme. These are now used for the out-of-sample area. An example with out-of-sample 2021-01-01 - 2021-02-08 clarifies these procedure:
+
+Figure \ref{fig:lpd_explain} represents the 7 lags, when looking at lag 4, the top line shows the previously calculated mean value from the in-sample (black) and the in-sample standard deviation upwards and downwards (dashed red). For the visualization the lines are only drawn for one lag.
+Let us take a look at the time step 2021-01-25, where we can see that the pink line exceeds the standard deviation. Next, we count how many other lags also overshoot their standard deviation in this time step.
+This procedure is described by formula \ref{eq:net_decision2}. We recognize that 4 lags have exceeded their standard deviation on 2021-01-25 and therefore indicate an unstable state of the neural network. In this example, we state that if 4 or more lags exceed the upper limit the final signal is 0. If the the number is between 2 and 4, we assign the signal to 0.5. For our example date 2021-01-25 the signal would be 0.
 Correctly concluded, we get a trading signal for each date.
 
 &nbsp;
