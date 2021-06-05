@@ -26,9 +26,9 @@ Investing is about having your money invested in the market. Therefore, the thou
 
 ### 5.1. Outlook
 
-There are thousand different ways, to implement a trading strategy, due to the time limitation, this thesis could only investigate a small part of the applications of feed forward nets in trading. Recent events in the cryptocurrency market, which just occured at the end of the writing phase of this thesis,  made us curios how the model would perform with the recent drawdown. The model handled the drawdown phase properly as seen in Figure \ref{fig:with_eth_sole_outlook}
+There are thousand different ways, to implement a trading strategy, due to the time limitation, this thesis could only investigate a small part of the applications of feed forward nets in trading. Recent events in the cryptocurrency market, which just occured at the end of the writing phase of this thesis,  made us curios how the model would perform with the recent drawdown. The model handled the drawdown phase properly as seen in Figure \ref{fig:with_eth_sole_outlook}. The massive loss in the beginning of may was unfortunately even amplified but shortly after damped and the trend reversed, comparing to buy-and-hold.
 
-The GARCH model is only 1 of the many classical approaches for timeseries. Based on this thesis other tools such as different moving averages or  ARMA-APARCH Models in combination with feed forward nets.
+The GARCH model is only one of the many classical approaches for timeseries. Based on this thesis other tools such as different moving averages or  ARMA-APARCH Models in combination with feed forward nets.
 Also interesting  might be the inputsmoothing of the neural net with an MA. 
 
 
