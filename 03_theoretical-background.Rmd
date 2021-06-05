@@ -30,7 +30,7 @@ The construction of an artificial neural network is demonstrated using a percept
 
 5.  Activation function
 
-Inputs are the information that is fed into the model. In the case of econometric time series, it is mostly the current and historical log returns (lags). These are multiplied by the weights and added together with the bias term to form the weighted sum. This weighted sum is finally passed on to the non-linear activation function, which determines the output of the perceptron.
+Inputs are the information that is fed into the model. In the case of econometric time series, it is mostly the current and lagged log returns. These are multiplied by the weights and added together with the bias term to form the weighted sum. This weighted sum is finally passed on to the non-linear activation function, which determines the output of the perceptron.
 
 \newpage
 
@@ -38,14 +38,14 @@ Inputs are the information that is fed into the model. In the case of econometri
 knitr::include_graphics("images/Perceptron.jpg")
 ```
 
-The perceptron can also be represented as a function, which can be seen in equation \ref{eq:perceptron}. Analogous to the representation above, the inputs $x_{i}$ are multiplied by the weights $w_{i}$ in a linear combination. Then an error term is added so that the whole can be packed into the non-linear activation function $g(S)$ . $\hat{y}$ is the binary output of this perceptron. With the aid of an activation function, binary output is obtained. The Heaviside step function shown in figure \ref{fig:perceptron_schema} is usually only used in single layer perceptrons, which recognize linear separable patterns. For the multi-layer neural networks presented later, step functions are not an option, because in the course of the backpropagation algorithm the gradient descent has to be minimized. This requires derivatives of the activation function, which in the case of this Heaviside step function equals 0. Because the foundation for the optimization process is missing, functions like the sigmoid function or the hyperbolic tangent function are used [@nn_learning_theoretical_foundations]. More about this topic is discussed in section [2.1.2](#backprogation_algorithm).
+The perceptron can also be represented as a function, which can be seen in equation \ref{eq:perceptron}. Analogous to the representation above, the inputs $x_{i}$ are multiplied by the weights $w_{i}$ in a linear combination. Then an error term is added so that the whole can be packed into the non-linear activation function $g(S)$. $\hat{y}$ is the binary output of this perceptron. With the aid of an activation function, a binary output is obtained. The Heaviside step function shown in figure \ref{fig:perceptron_schema} is usually only used in single layer perceptrons, which recognize linear separable patterns. For the multi-layer neural networks presented later, step functions are not an option, because in the backpropagation algorithm the gradient descent has to be minimized. This requires derivatives of the activation function, which in the case of this Heaviside step function equals 0. Because the foundation for the optimization process is missing, functions like the sigmoid function or the hyperbolic tangent function are used [@nn_learning_theoretical_foundations]. More about this topic is discussed in section [2.1.2](#backprogation_algorithm).
 
 ```{=tex}
 \begin{align} \label{eq:perceptron}
 \hat{y}=g(w_{0}+\sum_{i=1}^{n}x_{i}w_{i})
 \end{align}
 ```
-As just mentioned, the aim is to feed the perceptron with the training set and change the weights $w_{i}$ with each cycle so that the prediction becomes more accurate. The output value is compared to the desired value. Finally, the sign of the difference $y-\hat{y}$ determines whether the inputs of that iteration are added to or subtracted from the weights. Ideally, the weights will gradually converge and provide us with a usable model [@nn_learning_theoretical_foundations].
+As just mentioned, the aim is to feed the perceptron with the training set and change the weights $w_{i}$ with each cycle so that the prediction becomes more accurate. The output value is compared to the desired value. Finally, the sign of the difference $y-\hat{y}$ determines whether the inputs of that iteration are added to the weights or subtracted from them. Ideally, the weights will gradually converge and provide us with a usable model [@nn_learning_theoretical_foundations].
 
 \newpage
 
@@ -80,7 +80,7 @@ grid()
 legend("bottomright", legend = c("Logistic", "Tanh"), col = c(1,2), pch = "-", cex = 1)
 ```
 
-In the course of the error analysis, the output of the neural network and the result from the activation function in the output layer is compared with the desired value. The most commonly used error function E is the Mean Squared Error (MSE), which is seen in equation \ref{eq:mse}. $y_{i}$ represents the actual value for the data point $i$, while $\hat{y}_{i}$ is the predicted value for data point $i$. The average of this error function is the average MSE, which is determined for a corresponding model. The learning problem is to adjust the weights $w_{i}$ within the training sample so that $MSE(w)$ is minimized [@efficient_backprop].
+In the error analysis, the output of the neural network is compared with the desired value. The most commonly used error function $E$ is the Mean Squared Error (MSE), which is seen in equation \ref{eq:mse}. $y_{i}$ represents the actual value for the data point $i$, while $\hat{y}_{i}$ is the predicted value for data point $i$. The average of this error function is the average MSE, which is determined for a corresponding model. The learning problem is to adjust the weights $w_{i}$ within the training sample so that MSE$(w)$ is minimized [@efficient_backprop].
 
 ```{=tex}
 \begin{align} \label{eq:mse}
@@ -89,7 +89,8 @@ In the course of the error analysis, the output of the neural network and the re
   &=\frac{1}{n}\sum_{i = 1}^{n}(y_{i}-g(w_{0}+x_{i}w_{i}))^2 \nonumber 
 \end{align}
 ```
-As mentioned, this is searched for by the gradient descent method. The gradient of a function is a vector whose entries are the first partial derivatives of the function. The first entry is the partial derivative after the first variable, the second entry is the partial derivative after the second variable and so on. Each entry indicates the slope of the function in the direction of the variable to which it was derived. In this work, the notation $\nabla{E}$ is used when talking about the gradient for the error function $E$, which is displayed in equation \ref{eq:gradient_descent} [@backpropagation].
+
+The gradient of a function is a vector whose entries are the first partial derivatives of the function. The first entry is the partial derivative after the first variable, the second entry is the partial derivative after the second variable and so on. Each entry indicates the slope of the function in the direction of the variable to which it was derived. In this work, the notation $\nabla{E}$ is used when talking about the gradient for the error function $E$, which is displayed in equation \ref{eq:gradient_descent} [@backpropagation].
 
 ```{=tex}
 \begin{align} \label{eq:gradient_descent}
@@ -99,7 +100,7 @@ As mentioned, this is searched for by the gradient descent method. The gradient 
 \frac{\partial E}{\partial w_{i}})
 \end{align}
 ```
-The weights get adjusted according to the following algorithm \ref{eq:weight_adj} where $\Delta{w_{i}}$ is the change of the weight $w_{i}$ and $\gamma$ represents a freely definable parameter. In literature, this parameter is often called a learning constant [@backpropagation_proofs]. The negative value is used because the gradient naturally points in the direction with the largest increase of the error function. To minimize the MSE, the elements in the gradient $\nabla{E}$ must be multiplied by -1.
+The weights get adjusted according to the following algorithm \ref{eq:weight_adj} where $\Delta{w_{i}}$ is the change of the weight $w_{i}$ and $\gamma$ represents a freely definable parameter. In literature, this parameter is often called learning constant [@backpropagation_proofs]. The negative value is used because the gradient naturally points in the direction with the largest increase of the error function. To minimize the MSE, the elements in the gradient $\nabla{E}$ must be multiplied by -1.
 
 ```{=tex}
 \begin{align} \label{eq:weight_adj}
@@ -113,7 +114,9 @@ The weights get adjusted according to the following algorithm \ref{eq:weight_adj
 #### 2.1.3. Multilayer Perceptron {#MLP}
 &nbsp;
 
-Multilayer perceptrons (MLP) are widely used feedforward neural network models and make usage of the backpropagation algorithm. They are an evolution of the original perceptron proposed by Rosenblatt in 1958 [@perceptron_paper]. The distinction is that they have at least one hidden layer between input and output layer, which means that an MLP has more neurons whose weights must be optimized. Consequently, this requires more computing power, but more complex classification problems can be handled [@mlp_architecture]. figure \ref{fig:mlp_schema} shows the structure of an MLP with $n$ hidden layers. Compared to the perceptron, it can be seen that this neural network consists of an input layer, one or more hidden layers, and an output layer. In each layer, there is a different number of neurons, which are also called nodes. These properties (number of layers and nodes) can be summarized with the term 'network architecture' and will be dealt with in this thesis.
+Multilayer perceptrons (MLP) are widely used feedforward neural network models and make usage of the backpropagation algorithm. They are an evolution of the original perceptron proposed by Rosenblatt in 1958 [@perceptron_paper]. The distinction is that they have at least one hidden layer between input and output layer, which means that an MLP has more neurons whose weights must be optimized. Consequently, this requires more computing power, but more complex classification problems can be handled [@mlp_architecture]. Figure \ref{fig:mlp_schema} shows the structure of an MLP with $n$ hidden layers. Compared to the perceptron, it can be seen that this neural network consists of an input layer, one or more hidden layers, and an output layer. In each layer, there is a different number of neurons, which are also called nodes. These properties (number of layers and nodes) can be summarized with the term 'network architecture' and will be dealt with in this thesis.
+
+&nbsp;
 
 ```{r mlp_schema, fig.align='center', out.width='60%', fig.cap='Schematic diagram of a multilayer perceptron. On the left, you see the input layer, on the right the output layer. All layers in between are described as hidden layers. If there is more than one hidden layer, it is referred to as a deep learning neural network.', echo=FALSE}
 knitr::include_graphics("images/MLP.jpeg")
@@ -121,7 +124,7 @@ knitr::include_graphics("images/MLP.jpeg")
 # https://assets.website-files.com/5ac6b7f2924c652fd013a891/5edab65ea64212da0ad611b7_5d52f096076d2b058e88cf0c_Artificial-neural-network-architecture-ANN-i-h-1-h-2-h-n-o.jpeg
 ```
 
-Every neural network has an input layer, which consists of one or more nodes. This number is determined by the training data and tells us how many features should be delivered to the neural network. In the case of Bitcoin prices, we could use today's price and the prices from the last 10 days (lags 1-10), so the input layer would consist of 11 nodes. Some configurations also require a bias term to adjust the output along with the weighted sum, which is also added to the input layer. In contrast to the scheme of the MLP, this setup can be seen in figure \ref{fig:perceptron_schema} where the bias term is defined as 'constant'. Similarly, to the input layer, each neural network has exactly one output layer. This can consist of one or more nodes. In this thesis, MLP is used as a regressor and therefore only one neuron is needed in this layer.
+Every neural network has an input layer (also called features), which consists of one or more nodes. This number is determined by the training data and tells us how many features should be delivered to the neural network. In the case of Bitcoin prices, we could use today's price and the prices from the last 10 days (lags 1-10), so the input layer would consist of 10 nodes. Some configurations also require a bias term to adjust the output along with the weighted sum, which is also added to the input layer. In contrast to the scheme of the MLP, this setup can be seen in figure \ref{fig:perceptron_schema} where the bias term is defined as 'constant'. Similarly, to the input layer, each neural network has exactly one output layer. This can consist of one or more nodes. In this thesis, MLP is used as a regressor and therefore only one neuron is needed in this layer.
 
 In between are the hidden layers, whose number and size can be configured as desired. The challenge is to find an optimal and efficient configuration without causing overfitting of the training data. The number of hidden layers depends primarily on the application area of the neural network. For example, working with image recognition would require more layers since the image file is broken down into individual pixels. Subsequently, the layers are used to optimize from rough outlines to the smallest detail. In our research, we came across several methods or 'rules of thumb' to optimize the model. A frequently suggested method is explained by Andrej Karpathy (director of the AI department of Tesla, Inc.). His GitHub entry recommends the approach of starting with a model that is too large and causes overfitting. Subsequently, the model is reduced by focusing on increasing training loss and improving validation loss [@recipe_training].
 
@@ -135,12 +138,12 @@ In this section, we address the two fundamental challenges when dealing with neu
 ##### 2.1.4.1. Overfitting {#overfitting}
 &nbsp;
 
-We have encountered several challenges that can occur when using neural networks. One of these possible problems is called overfitting. The goal of a neural network is to build a statistical model of the training set that is capable of generating the data. In overfitting on the other hand, the exact conditions of the training data including noise are reproduced. The focus is no longer on the underlying function. Last but not least, an unnecessarily large number of parameters or epochs can be 'consumed' for this, which makes the whole process relatively inefficient [@RNN]. 
+We encounter several challenges that can occur when using neural networks. One of these possible problems is called overfitting. The goal of a neural network is to build a statistical model of the training set that is capable of generating the data. In overfitting on the other hand, the exact conditions of the training data including noise are reproduced. The focus is no longer on the underlying function. Last but not least, an unnecessarily large number of parameters or epochs can be consumed for this, which makes the whole process relatively inefficient [@RNN]. 
 
 ##### 2.1.4.2. Vanishing Gradient Problem {#vanishing_gradient}
 &nbsp;
 
-Another characteristic that requires our attention is the vanishing gradient problem. As explained in section [2.1.2.](#backpropagation_algorithm), the weights of the neural network are adjusted using the gradient of the loss function. Thereby, the problem can occur that the gradient almost vanishes. The error function's gradients become so small that the backpropagation algorithm takes smaller steps towards the loss function's minima and eventually stops learning. For example, if the derivative of an activation function such as the logistic sigmoid function approaches zero for extremely large or small values for $x$. To avoid these extreme values for $x$, the inputs are scaled and normalized in this paper. This ensures that the definition range is within the range where the gradient is still large enough for the backpropagation algorithm.  
+Another characteristic that requires our attention is the vanishing gradient problem. As explained in section [2.1.2](#backprogation_algorithm), the weights of the neural network are adjusted using the gradient of the loss function. Thereby, the problem can occur that the gradient almost vanishes. The error function's gradients become so small that the backpropagation algorithm takes smaller steps towards the loss function's minima and eventually stops learning. For example, if the derivative of an activation function such as the logistic sigmoid function approaches zero for extremely large or small input values $x$. To avoid these extreme values for $x$, the inputs are scaled and normalized in this paper. This ensures that the definition range is within the range where the gradient is still large enough for the backpropagation algorithm.  
 
 \newpage
 
@@ -148,16 +151,16 @@ Another characteristic that requires our attention is the vanishing gradient pro
 
 Depending on the model architecture, a neural network can be a very complex construct. A number of weights and biases linked to the neurons lead to an output of the network through training. Understanding how exactly the alterations of the weights and biases lead to this output is a rather complex task. Due to this difficulty in interpretation, neural networks are often referred to as black boxes [@blackbox].
 
-Although the networks may lead to desired results, it can be important to build an understanding of these models. Suppose we are developing a classification method in supervised learning for a particular problem. A classical approach such as linear regression is easy to understand and we can convince people with little knowledge of mathematics of the usefulness of this method. Considering that a good and simple explanation may depend on investment, would an investor fund something that is not understood and difficult to get a grasp of? Neural networks with their non-linearity and the large number of parameters does not make it easy for the user to convince an investor of the benefits of a neural network.
+Although the networks may lead to desired results, it can be important to build an understanding of these models. Suppose we are developing a classification method in supervised learning for a particular problem. A classical approach such as linear regression is easy to understand and we can convince people with little knowledge of mathematics of the usefulness of this method. Considering that a good and simple explanation may depend on investment, would an investor fund something that is not understood and difficult to get a grasp of? With their non-linearity and the large number of parameters does not make it easy for the user to convince an investor of the benefits of a neural network.
 
 #### 2.2.1. Classic Approach {#classic}
 &nbsp;
 
 As mentioned earlier, it is almost impossible to explain the networks based on the weights and biases. The following methods try to find effects on the features. One tries to find out which influence a certain feature has on the prediction of the network. There are classical approaches for explaining neural networks in the applications such as image recognition or text mining.
 
-A widely used approach is the Shapley value which has its origin in game theory. With this method, one tries to find out how big the influence of a feature is. So how much a feature contributes to the prediction. The problem with this method is that it mixes the data at different points in time. In this paper, we study the prediction of financial time series, i.e. autocorrelated data. Thus, this approach is not suitable for our application to interpret the importance of individual features (lagged log returns) [@slide_xai].
+A widely used approach is the Shapley value which has its origin in game theory. With this method, one tries to find out how big the influence of a feature is. The problem with this method is that it mixes the data at different points in time. In this paper, we study the prediction of financial time series, i.e. autocorrelated data. Thus, this approach is not suitable for our application to interpret the importance of individual features (lagged log returns) [@slide_xai].
 
-An approach like ALE (Accumulated Local Effects) examines how the network reacts to change [@slide_xai]. The features (lags) are plotted in order against ALE in a graph. The problem with this method is that the plotted features do not contain the dimension of time. It could be that two very high values are very close to each other in the plot, but in reality, they occurred years after each other.
+An approach like ALE (Accumulated Local Effects) examines how the network reacts to change [@slide_xai]. The features (lags) are compared in order against ALE. The problem with this method is that the features do not contain the dimension of time. It is possible that two very high values are close to each other, but in reality, they occure years after each other.
 
 Another approach is the LIME (Local Interpretable Model-agnostic Explanations). This method examines the change of the forecast when changing the input data. A permuted data set is generated from the given data (for example, adding standardized noise). Using this artificially altered data set, an interpretable model (regression) is created to analyze the change in features [@xai_blackbox]. Changing the data affects the time dependence of the data. Thus, this method is also unusable for our application.
 
@@ -166,9 +169,9 @@ Another approach is the LIME (Local Interpretable Model-agnostic Explanations). 
 #### 2.2.2. Explainability for Financial Time Series {#xai_finance}
 &nbsp;
 
-For the interpretation of financial time series, we would like to keep the dependency structure. The changes in trend or variability should be maintained. The sequence should not be shuffled. When mixing up the order, a value from far back could suddenly play a bigger role for the model than a current one. Intuitively, this would not add any value to financial time series.
+For the interpretation of financial time series, we would like to keep the dependency structure. The changes in trend or variability should be maintained. The sequence should not be shuffled. When mixing up the order, an older value could suddenly play a bigger role for the model than a current one. This would not add any value to financial time series modelling.
 
-For our application, the lagged log returns of Bitcoin prices, are the features to be studied (in this paper we are focusing on Bitcoin, here we are already using it as a means of explaining neural networks. A detailed description of BTC follows in sections [2.4](#bitcoin) and [3.1](#data_exploration)). We want to explore how the features affect the output of the neural network. A network is trained with delayed values as the input layer to match the output as closely as possible to the original values (the non-delayed ones). This concept strongly resembles a linear regression. The following equation establishes a relationship of the lagged data with the regression coefficients.
+For our application, the lagged log returns of Bitcoin prices are the features to be studied. In this paper, we focus on Bitcoin, here we are already using it as a means of explaining neural networks. A detailed description of BTC follows in sections [2.4](#bitcoin) and [3.1](#data_exploration). We want to explore how the features affect the output of the neural network. A network is trained with delayed values as the input layer to match the output as closely as possible to the original values. This concept strongly resembles a linear regression. The following equation establishes a relationship of the lagged data with the regression coefficients.
 
 ```{=tex}
 \begin{align} \label{eq:lm1}
@@ -204,7 +207,7 @@ chart.ACF.phil.special(logret, ymax=0.06, maxlag = 20, main="BTC log return depe
 
 \newpage
 
-Looking at the regression coefficients in table \ref{tab:lm_tab}, we can discover the relationship between the ACF's and the coefficients of the regression. Again, lags 6 and 10 make the largest positive contribution to the fit of the model. Lags 7, 8, 9 make a negative contribution, as can also be seen in the ACFs.  Sign and value are in line with the ACF's.
+Looking at the regression coefficients in table \ref{tab:lm_tab}, we can discover the relationship between the ACF's and the coefficients of the regression. Again, lags 6 and 10 make the largest positive contribution to the fit of the model. Lags 7, 8, 9 make a negative contribution, as can also be seen in the ACF's.  Sign and value are in line with the ACF's.
 
 ```{r lm_tab, echo=FALSE}
 library(kableExtra)
@@ -234,7 +237,7 @@ We can now calculate the partial derivatives of the output of a neural network w
 \end{align}  
 ```
 
-Basically, we have a similar concept as above with the regression. Only here the coefficients are the partial derivatives that establish the relationship between input and output at each point in time. Whereas in regression you would only have 1 coefficient to estimate per input neuron $\beta_{i}$, here you have one coefficient $\Delta_{it}$ for each input neuron at each time point $t$.
+Basically, we have a similar concept as above with the regression. The difference is that the coefficients are the partial derivatives that establish the relationship between input and output at each point in time. Whereas in regression you would only have 1 coefficient to estimate per input neuron $\beta_{i}$, here you have one coefficient $\Delta_{it}$ for each input neuron at each time point $t$.
 
 ```{=tex}
 \begin{align} \label{eq:xai_fit}
@@ -298,7 +301,7 @@ kbl(df, caption="Comparison between linear regression (LR) and linear parameter 
 
 &nbsp;
 
-Together with the findings from the visualization in figure \ref{fig:xai_acf} and the autocorrelations in figure \ref{fig:xai_plot1}, a connection can be established. Strong autocorrelations, i.e. large dependencies on a given delay, can be recognized in the partial derivatives. With the help of the LPD's and the autocorrelations, the behavior of neuronal networks could be explained with the handling of time series. The delayed input of a neural network seems to have probably a connection with the ACF's.
+Together with the findings from the visualization in figure \ref{fig:xai_acf} and the autocorrelations in figure \ref{fig:xai_plot1}, a connection can be established. Strong autocorrelations, i.e. large dependencies on a given lag, can be recognized in the partial derivatives. With the help of the LPD's and the autocorrelations, the behavior of neuronal networks could be explained with the handling of time series. The lagged input of a neural network seems to have probably a connection with the ACF's.
 
 Thus, we can say that at best, with this method of calculating the partial derivatives for each feature at each time t, we may have found an explanation for the black box of neural networks. With this method we cannot explain how the network led to exactly this prediction using the backpropagation algorithm with the many weights and error terms, but the basic structure, i.e. information which is in the data (for example the autocorrelation), can be found. The ACF is a basic method to find structures in time series and here, with the LPD's you can fall back on exactly this ACF. Despite the complexity of the networks, this special procedure for the XAI leads to the basic ACF's, thus improving the explainability.
 
@@ -336,7 +339,7 @@ The second performance measurement method is also widely used and called mean sq
 \end{align}  
 ```
 
-The application of MSE is widely used in statistical modeling and supervised learning. However, it should be noted that the metric is very sensitive to outliers. In the presence of outliers, a robust variant should be considered as an alternative. 
+The application of MSE is widely used in statistical modeling and supervised learning. However, it should be noted that the metric is very sensitive to outliers.
 
 \newpage
 
