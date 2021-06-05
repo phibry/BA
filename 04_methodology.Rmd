@@ -481,9 +481,9 @@ addLegend("topright",
 
 &nbsp;
 
-To use this behavior for optimizing our model, a more formal general approach is required. The standard deviation is therefore scaled with parameter $\lambda$ and with formula \ref{eq:count} in every $lag_{j}$ it is decided whether the predicted LPD $\hat{\Delta}_{j,t}$ exceeds $\mu_{j} \pm \lambda \sigma_{j}$.  
+To use this behavior for optimizing our model, a more general approach is required. The standard deviation is therefore scaled with parameter $\lambda$. With the help of formula \ref{eq:count}, it is decided in every $lag_{j}$ whether the predicted LPD $\hat{\Delta}_{j,t}$ exceeds $\mu_{j} \pm \lambda \sigma_{j}$.  
 
-With function $g$ \ref{eq:count} we count the lags which exceed their bands, the output of $g$ is between 0 and $lag_{n}$. In  $\text{signal}$ \ref{eq:net_decision2}, $g$ is further applied to generate a signal. With $\eta_{lower}$ (green) and $\eta_{upper}$ (red) it is decided which final output for the timestep $t$ should be assigned. In section [3.1.](#data_exploration) last section, we observed, that larger negative returns are more likely than positive, therefore the proposed signal is 0. For values between $\eta_{lower}$ and $\eta_{upper}$ we propose a signal 0.5. Function \ref{eq:net_decision2} $\text{signal}$  is now applied to every timestep $t$, therefore the final LPD signal is computed.
+With function $g$ seen in equation \ref{eq:count}, we count the lags which exceed their bands, the output of $g$ is between 0 and $lag_{n}$. In equation \ref{eq:net_decision2}, $g$ is further applied to generate a signal. With $\eta_{lower}$ (green) and $\eta_{upper}$ (red), it is decided which final output for the time step $t$ should be assigned. In the last part of section [3.1.](#data_exploration), we observed that larger negative returns are more likely than positive ones, therefore the proposed signal is 0. For values between $\eta_{lower}$ and $\eta_{upper}$ we propose a signal 0.5. Function \ref{eq:net_decision2} is then applied to every time step $t$, therefore the final LPD signal is computed.
 
 \newpage
 
@@ -534,15 +534,15 @@ $lag_{n}$ = Maximum number of lags
 
 $\eta_{lower},\eta_{upper}$ = Lower  and upper border for signal decision
 
-$n_{in}, n_{out}$ = Maximum time insample / out-of-sample
+$n_{in}, n_{out}$ = Maximum time in-sample / out-of-sample
 
 $g$ = Function of lags exceeding band, output $\in$ {$0...lag_{n}$}
 
 $signal$ = Function of trading signal
 
-$\mu_{j}$ = Arithmetic mean of insample LPD for every $lag_{j}$
+$\mu_{j}$ = Arithmetic mean of in-sample LPD for every $lag_{j}$
 
-$\sigma_{j}$ =  Standard deviation of insample LPD for every $lag_{j}$
+$\sigma_{j}$ =  Standard deviation of in-sample LPD for every $lag_{j}$
 
 \newpage
 
@@ -553,14 +553,14 @@ In a further step, we examine the time series with a traditional GARCH model tha
 
 The first trading strategy is based on one-step-ahead rolling window forecasts (here: log return) resulting from the ARMA(1,1)-GARCH(1,1). When we predict a positive value, the algorithm decides to enter, respectively remain in a long position. When predicting a negative value, we enter a short position to benefit from the anticipated market movement. 
 
-The second strategy is solely based on volatility predictions resulting from a GARCH(1,1) and tries to take an advantage from the asymmetric volatility phenomenon by F. Black. This phenomenon describes a negative correlation between the volatility of the return and the achieved return [@leverage_effect]. Therefore, we define the following trading rule:
+The second strategy is solely based on volatility predictions resulting from a GARCH(1,1) and tries to take an advantage from the asymmetric volatility phenomenon proposed by F. Black. This phenomenon describes a negative correlation between the volatility of the return and the achieved return [@leverage_effect]. Therefore, we define the following trading rule:
 
 ```{=tex}
 \begin{equation}\label{eq:vola_predict}
 \text{Signal}_{GARCH}(\hat{\sigma}_{t}) =
 \begin{cases} 
                                               
-  0      & \quad \text{if} ,  \hat{\sigma}_{t} \ge \sigma_{historical} \\
+  0      & \quad \text{if} ,  \hat{\sigma}_{t} \ge 1.64*\sigma_{historical} \\
   1      & \quad \text{else}
 
    \end{cases}
@@ -596,10 +596,7 @@ Figure \ref{fig:garch_trading} illustrates how the GARCH trading strategies show
 #### 3.3.3. Neural Network and LPD Trading
 &nbsp;
 
-In section [3.2.5](#mod-select) we have decided to fix the architecture to 2 layers with 7 neurons each, all
-the 9 splits which were introduced in section [3.2.1](#test_train), are now used for trading. In every 6 month-insample split a new model is estimated with the schema from [3.3.1](#trading_lpd_nn). The out-of-sample signals of the neural network and LPD from every split are summarized. 
-
-Our previous findings from the GARCH model were not very promising, nevertheless, we try to use those signals with the neural net output and the signals from LPD. That leaves us with a total of three signals for every timestep: 
+In section [3.2.5](#mod-select) we decide to use a network architecture consisting of 2 layers with 7 neurons each. All the 9 splits which were introduced in section [3.2.1](#test_train) are now being used for trading. In every 6 month in-sample split, a new model is estimated with the schema from [3.3.1](#trading_lpd_nn). The out-of-sample signals of the neural network and LPD from every split are summarized. Our previous findings from the GARCH model were not very promising, nevertheless, we try to use those signals with the neural net output and the signals from LPD. That leaves us with a total of three signals for every time step: 
 
 &nbsp;
 
@@ -607,14 +604,12 @@ $\hat{NN}_{t}$ = Neural net signals $\in$ {$-1,0,1$}
 
 $\hat{LPD}_{t}$ = LPD signals $\in$ {$0,0.5,1$} 
 
-$\hat{GARCH}_{t}$ = GARCH signals $\in$ {$0,1$} from section [3.3.2](#garch-signal)
+$\hat{GARCH}_{t}$ = GARCH volatility trading signals $\in$ {$0,1$} 
 
 &nbsp;
 
-With the previously established architecture, all combinations of the signals for different values for the parameters: $\lambda$, $\eta_{lower},\eta_{upper}$ and $\kappa$  are computed and the performance is compared to each other as well as to the benchmark from [3.2.6](#benchmark). To find a balance between precision and computation time, we found $N_{total}$= 1000 Neural networks in every split, should be sufficient for the evaluation.
-
-The most promising performance is found with $\lambda = 1$, $\eta_{lower} > \eta_{upper}$ (no 0.5 signals were used) $\eta_{upper}=3$ and $\kappa = 0.2$.
-In figure \ref{fig:perf} different combinations are visualized.
+With the previously established architecture, all combinations of the signals for different values for the parameters: $\lambda$, $\eta_{lower},\eta_{upper}$ and $\kappa$  are computed and the performance is compared to each other as well as to the benchmark from [3.2.6](#benchmark). To find a balance between precision and computation time, we optimize $N_{total}$= 1000 neural networks in every split. This should be sufficient for evaluation. The most promising performance is found with $\lambda = 1$, $\eta_{lower} > \eta_{upper}$ (no 0.5 signals were used) $\eta_{upper}=3$ and $\kappa = 0.2$.
+In figure \ref{fig:perf} different combinations are visualized. To complement the legend in this plot, the strategy combinations are described below: 
 
 - NN is simply trading the $LogReturn_{t}$ with $\hat{NN}_{t}$ 
 
@@ -622,7 +617,7 @@ In figure \ref{fig:perf} different combinations are visualized.
 
 -  NN+LPD+GARCH takes into account the GARCH signals $\hat{GARCH}_{t}$ by multiplying them with NN+LPD.
 
-By investigating the plot, it seems that some combinations are performing better than the others. The GARCH application appears to worsen the performance. The ligthblue and the yellow line catches our eye, their performance seems to be better than the rest and as we can see, those are combinations of NN+LPD. Notice that signals with zeroes are not yet invested elsewhere, therefore they represent staying out of the market, mitigate risk and wait for a new signal to come.
+By investigating the plot, it seems that some combinations are performing better than the others. The GARCH application appears to worsen the performance. The light blue and the yellow line catches our eye as their performance seems to be better than the rest. Surprisingly, these are combinations of NN+LPD. Notice that signal = 0 means that we stay out of the market, mitigate risk and wait for a new signal to come.
 
 &nbsp;
 
@@ -661,7 +656,8 @@ addLegend("topleft",
 
 \newpage
 
-When we have a closer look at the Sharpe ratio in \ref{fig:sharpe}, our findings from before are confirmed. The NN+LPD with $\kappa = 0.2$ has even a better Sharpe ratio than buy and hold. But another observation is seemingly more interesting, the LPD is always better than only NN. By investigating the other calculations we have done (plots found in  [Attachement](#attachement)), we find the same pattern, therefore we conclude that LPD brings us a real benefit for this particular application.
+When we have a closer look at the Sharpe ratio in \ref{fig:sharpe}, our findings from before are confirmed. The NN+LPD with $\kappa = 0.2$ results in a better Sharpe ratio than buy and hold. Another observation is seemingly more interesting: In the strategies tested, the addition of LPD always led to better results than with neural networks alone. 
+By investigating the other calculations we have done (plots found in  [Attachement](#attachement)), we find the same pattern, therefore we conclude that LPD brings us a real benefit for this particular application.
 
 &nbsp;
 
