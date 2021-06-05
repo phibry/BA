@@ -360,7 +360,7 @@ For the rest of the procedure, we decide to use a neural network architecture of
 
 The trained networks and applied methods are compared with each other using a benchmark. For this purpose, we use the buy-and-hold, which is a long-term passive investment strategy. Investing with this strategy often leads to better returns in the long run than active trading [@bnh]. This strategy is hard to beat, especially when the market is trending upwards. In such a trend, an active strategy would hardly recommend anything other than buy-and-hold.
 
-We, therefore, compare our developed active strategies with the cumulative log returns. Our benchmark includes all green out-of-sample returns from figure \ref{fig:test_train} cumulated.
+We, therefore, compare our developed active strategies with the cumulative log returns. Our benchmark includes all green out-of-sample returns from figure \ref{fig:test_train} cumulative.
 
 \newpage
 
@@ -628,7 +628,7 @@ By investigating the plot, it seems that some combinations are performing better
 load("data/xai/7_7_withsignal_xai_in/perfall_without_eth.rda")
 colors= c("red","pink","violetred","darkorchid","blue","lightblue","turquoise","dodgerblue4","darkorange","goldenrod1","yellow","darkgoldenrod1","green")
 plot.xts(compare_perf,
-         main=TeX(sprintf("Performance cumulated from 9 Splits, $\\lambda = %d$", 1)),
+         main=TeX(sprintf("Cumulative performance from 9 Splits, $\\lambda = %d$", 1)),
          col=colors)
 addLegend("topleft",
           legend.names=c(TeX(sprintf("NN $\\kappa = %.1f$", 0.1)),
@@ -656,8 +656,8 @@ addLegend("topleft",
 
 \newpage
 
-When we have a closer look at the Sharpe ratio in \ref{fig:sharpe}, our findings from before are confirmed. The NN+LPD with $\kappa = 0.2$ results in a better Sharpe ratio than buy and hold. Another observation is seemingly more interesting: In the strategies tested, the addition of LPD always led to better results than with neural networks alone. 
-By investigating the other calculations we have done (plots found in  [Attachement](#attachement)), we find the same pattern, therefore we conclude that LPD brings us a real benefit for this particular application.
+When we have a closer look at the Sharpe ratio in figure \ref{fig:sharpe}, our findings from before are confirmed. The NN+LPD with $\kappa = 0.2$ results in a better Sharpe ratio than buy and hold. Another observation is seemingly more interesting: In the strategies tested, the addition of LPD always led to better results than with neural networks alone. 
+By investigating the other calculations we have done (plots found in  [attachement](#attachement)), we find the same pattern. Therefore, we conclude that LPD brings us a real benefit for this particular application.
 
 &nbsp;
 
@@ -694,10 +694,7 @@ grid()
 par(mar=defaultmar)
 ```
 
-
-
-Figure \ref{fig:batch} gives an insight on how the individual combinations performed in each of the 9 splits. The NN+LPD with $\kappa = 0.2$ is predominantly better in the first three splits, in the middle section its worse and towards the end the Sharpe is again better than buy and hold.
-But we have to take this plot with a grain of salt because these splits are only one month out of sample, meaning the Sharpe Ratio is sensitive to outliers, this effect is even stronger when there are few datapoints present.
+Figure \ref{fig:batch} gives an insight on how the individual combinations performed in each of the 9 splits. The NN+LPD with $\kappa = 0.2$ is predominantly better in the first three splits, in the middle section its worse and towards the end the Sharpe is again better than buy and hold. We have to take this plot with a grain of salt because these splits have only an out-of-sample of one month and the Sharpe ratio is sensitive to outliers. This effect is even stronger when there are few datapoints present.
 
 &nbsp;
 
@@ -721,14 +718,9 @@ for (i in 1:8){lines(allsharp[,i],col=colorsbatch[i],type="l",lwd=2)}
 #### 3.3.3. Adding Ether
 &nbsp;
 
-In the performance plot \ref{fig:perf}, we have still left out what to do with 0 signals. One opportunity as in [3.3](#trading-strat) shortly mentioned, is to invest the money in another asset. By reason of staying in the same asset class we choose Ether [@ether] to invest in.
-The coin Ether from Ethereum is with $61.48B [@ethereum] the second largest cryptocurrency according to market capitalisation. 
+In the performance plot in figure \ref{fig:perf}, we have not decided what we do during phases with signal = 0. One opportunity is, as in [3.3](#trading-strat) shortly mentioned, to invest the money in another asset. For this consideration, we decide to use Ether (ETH) in order to stay within the cryptocurrency market [@ether]. Based on market capitalization, the Ethereum Blockchain cryptocurrency is the second most widely used currency [@ethereum]. According to an article from Y. Gola [@correlation_btc], the correlation between BTC and ETH is 0.91. Although the investigation of a negative correlation would of course have been exciting, it does not matter in our application with LPD. A signal = 0 in fact means that something is changing in the data or the neural network is not stable, thus we can not exactly know what this signal means. The ETH prices are imported in the same way as BTC/USD. We transfom ETH/USD to log returns so that we can use them in combination with BTC log returns. This is convenient because besides time-additivity, log returns have the characteristic that they are relative and not dependent on the price level. 
 
-According to [@correlation_btc] the correlation between the two assets is 0.91. This is not a braking factor to us, because the 0 signal of the LPD is just indicating that something is changing in the data or the neural net is not stable, thus we can not exactly know what the 0 signal means. 
-
-The structure Ether is very similar to Bitcoin [@oeko3project]. The series is imported in the same way as BTC e.g. the log returns are derived.
-
-That said, we use a simple rule to integrate Ether. If the signal of the combination NN+LPD is 0 then we go long on Ether. As soon as the signal from LPD changes back to 1 or -1, Ether is sold and the Bitcoin position is entered again.
+We use a simple rule to integrate Ether. If the signal of the combination NN+LPD is 0, we enter a long position in Ether. As soon as the signal from LPD changes back to 1 or -1, Ether is sold and the long/short position is based on BTC again. 
 
 &nbsp;
 
@@ -739,7 +731,7 @@ load("data/xai/7_7_withsignal_xai_in/nn_lpd_without_eth.rda")
 signal <- data$BTC.USD.Close
 signal$BTC.USD.Close <- nn_lpd
 colors= c("green","red","pink","violetred","darkorchid","blue","lightblue")
-plot(data, col=colors, main=TeX(sprintf("Performance cumulated from 9 splits, $\\lambda = %d$", 1)))
+plot(data, col=colors, main=TeX(sprintf("Cumulative performance from 9 splits, $\\lambda = %d$", 1)))
 addLegend("topleft", 
           legend.names=c(TeX(sprintf("Buy and Hold, $Sharpe = %.2f$", 3.57)),
                          TeX(sprintf("LPD+NN $\\kappa = %.1f$, $Sharpe = %.2f$", 0.1, 2.54)),
@@ -758,9 +750,7 @@ addLegend("topleft",
 
 &nbsp;
 
-In figure \ref{fig:with_eth} the NN+LPD's from figure \ref{fig:perf} and the adding of Ether is visualized. In the lower part, we can observe the signals which are 0 in the NN+LPD model. These zeroes are now complemented with the log returns from Ether.
-
-The one performance with NN+LPD+ETH with $\kappa = 20 \%$ seems promising. Also for the other two NN+LPD the adding of Ether seems benefital.
+Figure \ref{fig:with_eth} visualizes how the cumulative returns of the previous NN+LPD strategy performs in combination with Ether. There are several phases where a signal = 0 from the NN+LPD can be observed. These periods are now complemented with the log returns from Ether. In summary, we can see that adding ETH improves overall performance. The best performance is achieved with NN+LPD+ETH with $\kappa = 20 \%$, which is promising. 
 
 \newpage
 
@@ -771,7 +761,7 @@ load("data/xai/7_7_withsignal_xai_in/nn_lpd_without_eth.rda")
 signal <- data$BTC.USD.Close
 signal$BTC.USD.Close <- nn_lpd
 colors= c("green","darkorchid")
-plot(data[,c(1,5)], col=colors, main=TeX(sprintf("Performance cumulated from 9 splits, $\\lambda = %d$", 1)))
+plot(data[,c(1,5)], col=colors, main=TeX(sprintf("Cumulative performance from 9 splits, $\\lambda = %d$", 1)))
 
 addLegend("left",
           legend.names=c(TeX(sprintf("Buy and Hold, $Sharpe = %.2f$", 3.57)),
@@ -790,12 +780,10 @@ addEventLines(events, srt=0, pos=1, lty=3, col = rep("#004c6d",6),lwd=2, cex=1.2
 
 &nbsp;
 
-For a closer analysis, let us have a look at the cumulated log-returns of the best performing model vs. buy-and-hold in Figure \ref{fig:with_eth_sole}. The following analysis is related to the violet chart and starts from left to right, beginning with the letter **A**. 
-Immediately after the line by letter **A**, several decisions differ from buy-and-hold and force a shift to the series. In the letter **B**, we observe similar behavior for a short period. The unsatisfying trend change in the letter **C** is stopped around the first of November. Thereafter unto the point in letter **D** the decisions of the model behave quite similar to the green line. Right after **D** the net handles the negative trend very well and climbs further up. The same accounts for the letter **E**, where the trend once more goes in the opposite direction than the benchmark. Shortly after **F** the model does exactly the same as buy-and-hold.
+For a closer analysis, figure \ref{fig:with_eth_sole} shows the cumulative log returns of the best performing model in comparison to buy-and-hold. The following analysis is related to the violet chart and starts from left to right, beginning with the letter **A**. 
+Immediately after the line by letter **A**, several decisions differ from buy-and-hold and force a shift of the series. In the letter **B**, we observe similar behavior for a short period. The unsatisfying trend change in the letter **C** is stopped around the first of November. Thereafter unto the point in letter **D** the decisions of the model behave quite similarly to the green line. Right after **D** the net handles the negative trend very well and climbs further up. The same accounts for the letter **E**, where the trend once more goes in the opposite direction than the benchmark. Shortly after **F**, the model does reasonably the same as buy-and-hold.
 
-Let us have a simple theoretical comparison example under the assumptions in [3.3](#trading-strat) at last.
-
-With summarizing the logreturns from \ref{eq:logreturn} with Formula \ref{eq:logreturns_transforming}, one can calculate the value $S_{tn}$ which we end up with, when an Amount $S_{t0}$ is invested at the beginning.
+Last, a simple theoretical comparison is made, as mentioned in chapter [3.3](#trading-strat). We can summarize the log returns from equation \ref{eq:logreturn} with equation \ref{eq:logreturns_transforming}. As a result, one can calculate the value $S_{tn}$ which we end up with, when an Amount $S_{t0}$ is invested at the beginning.  
 
 &nbsp;
 
@@ -808,7 +796,7 @@ S_{tn} &=S_{t0}\prod_{k=1}^{t_{n}}e^{LogReturn_{k}} \\
 
 &nbsp;
 
-Lets say, we invest 1000 US-Dollars  at the beginning of the timeperiod in \ref{fig:with_eth_sole}. With buy-and-hold we would end up at 6003.25 US-Dollars by the end of March. However if we invest the 1000 USD in the best performing strategy we will end up with **11'633.70**  USD, that would be as nearly as double the amount of buy-and-hold. Comparing the Sharperatios  **4.41** to 3.57 of the LogReturns, the used strategy does also significantly better.  
+A theoretical investment of USD 1'000 is made at 2020-07-01, which is also the first date in figure \ref{fig:with_eth_sole}. A buy-and-hold strategy would result in a value of USD 6003.25 by the end of March 2021. However if we invest the 1000 USD in the best performing strategy we will end up with USD **11'633.70**  USD, which is nearly double the amount achieved with buy-and-hold. Comparing the Sharpe ratios of the LPD+NN+ETH (**4.41**) to buy-and-hold (3.57), the used strategy does also significantly better.
 
 
 
