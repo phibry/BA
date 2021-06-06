@@ -9,7 +9,7 @@ The well-known asset classes such as equities, bonds, and money market instrumen
 
 1) What influence does the selection of the network architecture have on the quality of predictions? What influence can be found concerning the Sharpe ratio of a simple trading strategy?
 
-2) Can aspects of explainable artificial intelligence (XAI) help to make the functioning of neural networks intuitively comprehensible?
+2) What is the added value of enhancing this neural network with aspects of explainable artificial intelligence (XAI)? 
 
 3) How can the acquired information about neural networks, XAI, and general time series analysis be used to define an efficient trading strategy?
 
