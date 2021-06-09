@@ -1037,3 +1037,30 @@ plot(xai_data, main="LPD ~ Bitcoin", col=colorino)
 for (i in c(7,8,9,10,11))
   mtext(colnames(xai_data)[i], col=colorino[i], line=-i*0.8)
 plot(logret, main="Log Return ~ Bitcoin")
+
+
+
+# Plot Abdstract####
+source("add/libraries.r") 
+source("add/Functions.r")
+
+
+load("data/xai/7_7_withsignal_xai_in/performance_with_eth.rda")
+load("data/xai/7_7_withsignal_xai_in/nn_lpd_without_eth.rda")
+signal <- data$BTC.USD.Close
+signal$BTC.USD.Close <- nn_lpd
+colors= c("green","darkorchid")
+plot(data[,c(1,5)], col=colors, main="Bitcoin Performance Comparison", lwd=3)
+
+addLegend("topleft",
+          legend.names=c("Buy-and-hold", "Trading Strategy"),
+          col=colors,
+          lty=c(rep(1,13),2),
+          lwd=c(rep(2,13),3),
+          ncol=1,
+          bg="white")
+
+events<- xts(LETTERS[1:6], as.Date(c("2020-08-01","2020-09-04","2020-10-18","2021-01-15","2021-02-22","2021-03-12")))
+addEventLines(events, srt=0, pos=1, lty=3, col = rep("#004c6d",6),lwd=2, cex=1.2)
+# lines(signal, on=NA, lwd=2, col="red", ylim=c(-1.3, 1.3))
+
