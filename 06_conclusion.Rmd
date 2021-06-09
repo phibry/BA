@@ -50,7 +50,7 @@ colors= c("green","darkorchid")
 plot(data, col=colors, main=TeX(sprintf("Performance cumulated from 9 splits, $\\lambda = %d$", 1)))
 
 addLegend("left",
-          legend.names=c(TeX(sprintf("Buy and Hold", 3.57)),
+          legend.names=c(TeX(sprintf("Buy-and-hold", 3.57)),
                          TeX(sprintf("LPD+NN+ETH if 0 $\\kappa = %.1f$", 0.2, 4.41))),
           col=colors,
           lty=c(rep(1,13),2),

@@ -5,10 +5,10 @@ geometry: margin = 1in
 
 ## Attachment {#attachement}
 
-This bachelorthesis is created  with R-4.0.2 , RStudio Version 1.4.904 and RMarkdown in collaborative working via Git / Github
+This bachelorthesis is created with R-4.0.2 , RStudio Version 1.4.904 and RMarkdown in collaborative working via Git / Github
 https://github.com/phibry/BA 
 
-Note that all figures similar to Figure \ref{fig:all2_05}:  parameter $\beta$ = $\kappa$ from thesis
+Note that all figures similar to figure \ref{fig:all2_05}: parameter $\beta$ = $\kappa$ from thesis
 
 
 ```{r meanmean1, out.width='90%', fig.cap='MSE mean over all 9 splits with all 3 layers.', echo=FALSE,fig.align="center"}
