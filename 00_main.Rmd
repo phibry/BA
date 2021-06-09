@@ -26,16 +26,14 @@ source("add/libraries.R")
 source("add/Functions.R")
 ```
 
-\pagenumbering{gobble}
 
-```{=tex}
 \includepdf{add/titlepage.pdf}
 \includepdf{add/declaration.pdf}
-```
-```{=tex}
+
+\pagenumbering{Roman}
+
 \setcounter{tocdepth}{4}
 \tableofcontents
-```
 
 \newpage
 
