@@ -524,9 +524,9 @@ g(\hat{\Delta}_{t})=\sum_{j=1}^{lag_{n}}\Big((\hat{\Delta}_{j,t}>\mu_{j} - \lamb
 
 &nbsp;
 
-$\Delta_{j,t}$ = Matrix of in-sample LPD {$\underline{\Delta}_{1}...\underline{\Delta}_{n_{in}}$} observed for every t in insample
+$\Delta_{j,t}$ = Matrix of in-sample LPD {$\underline{\Delta}_{1}...\underline{\Delta}_{n_{in}}$} observed for every t in train sample
 
-$\hat{\Delta}_{j,t}$ = Matrix of out-of-sample LPD {$\underline{\hat{\Delta}}_{1}...\underline{\hat{\Delta}}_{n_{out}}$} predicted for every t in out of sample
+$\hat{\Delta}_{j,t}$ = Matrix of out-of-sample LPD {$\underline{\hat{\Delta}}_{1}...\underline{\hat{\Delta}}_{n_{out}}$} predicted for every t in test sample
 
 $\lambda$ = Scaling parameter for standard deviation
 
@@ -611,11 +611,11 @@ $\hat{GARCH}_{t}$ = GARCH volatility trading signals $\in$ {$0,1$}
 With the previously established architecture, all combinations of the signals for different values for the parameters: $\lambda$, $\eta_{lower},\eta_{upper}$ and $\kappa$  are computed and the performance is compared to each other as well as to the benchmark from [3.2.6](#benchmark). To find a balance between precision and computation time, we optimize $N_{total}$= 1000 neural networks in every split. This should be sufficient for evaluation. The most promising performance is found with $\lambda = 1$, $\eta_{lower} > \eta_{upper}$ (no 0.5 signals were used) $\eta_{upper}=3$ and $\kappa = 0.2$.
 In figure \ref{fig:perf} different combinations are visualized. To complement the legend in this plot, the strategy combinations are described below: 
 
-- NN is simply trading the $LogReturn_{t}$ with $\hat{NN}_{t}$ 
+- NN: Trading the $LogReturn_{t}$ with $\hat{NN}_{t}$ 
 
-- NN+LPD is the product of NN and $\hat{LPD}_{t}$ 
+- NN+LPD: Product of NN and $\hat{LPD}_{t}$ 
 
--  NN+LPD+GARCH takes into account the GARCH signals $\hat{GARCH}_{t}$ by multiplying them with NN+LPD.
+- NN+LPD+GARCH: Taking the GARCH signals $\hat{GARCH}_{t}$ into account by multiplying them with NN+LPD.
 
 By investigating the plot, it seems that some combinations are performing better than the others. The GARCH application appears to worsen the performance. The light blue and the yellow line catches our eye as their performance seems to be better than the rest. Surprisingly, these are combinations of NN+LPD. Notice that signal = 0 means that we stay out of the market, mitigate risk and wait for a new signal to come.
 
