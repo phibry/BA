@@ -392,7 +392,7 @@ The following consecutive sections [3.3.1.1](#network) and [3.3.1.2](#lpd-signal
 ##### 3.3.1.1. Neural Network {#network}
 &nbsp;
 
-In [3.2.](#networkarchitecture), we use an average of only 50 realizations of feedforward networks to reduce computation time. However, it is proposed by the central limit theorem [@central_limit_theorem] to use an approximate $\text{number of iterations } N_{total} \ge 100$ for an accurate mean value. 
+In [3.2](#networkarchitecture), we use an average of only 50 realizations of feedforward networks to reduce computation time. However, it is proposed by the central limit theorem [@central_limit_theorem] to use an approximate $\text{number of iterations } N_{total} \ge 100$ for an accurate mean value. 
 
 For a better understanding, we will take a closer look at how we handle the predictions in order to generate a trading signal. Assuming we calculate an amount of $N_{total}$=100 networks in total, try to predict just 1 day, and use the sign of the forecast as a trading signal. If 49 nets predict a positive forecast and 51 a negative, we end up with a negative trading signal, which is actually decided by just one net. This means that the resulting trading signal occurs randomly. A positive trading signal that results from 60 positive predictions and 40 negative ones may be more accurate. Therefore, the following a function is introduced that takes this aspect of majority voting into account.
 
@@ -483,7 +483,7 @@ addLegend("topright",
 
 To use this behavior for optimizing our model, a more general approach is required. The standard deviation is therefore scaled with parameter $\lambda$. With the help of formula \ref{eq:count}, it is decided in every $lag_{j}$ whether the predicted LPD $\hat{\Delta}_{j,t}$ exceeds $\mu_{j} \pm \lambda \sigma_{j}$.  
 
-With function $g$ seen in equation \ref{eq:count}, we count the lags which exceed their bands, the output of $g$ is between 0 and $lag_{n}$. In equation \ref{eq:net_decision2}, $g$ is further applied to generate a signal. With $\eta_{lower}$ (green) and $\eta_{upper}$ (red), it is decided which final output for the time step $t$ should be assigned. In the last part of section [3.1.](#data_exploration), we observed that larger negative returns are more likely than positive ones, therefore the proposed signal is 0. For values between $\eta_{lower}$ and $\eta_{upper}$ we propose a signal 0.5. Function \ref{eq:net_decision2} is then applied to every time step $t$, therefore the final LPD signal is computed.
+With function $g$ seen in equation \ref{eq:count}, we count the lags which exceed their bands, the output of $g$ is between 0 and $lag_{n}$. In equation \ref{eq:net_decision2}, $g$ is further applied to generate a signal. With $\eta_{lower}$ (green) and $\eta_{upper}$ (red), it is decided which final output for the time step $t$ should be assigned. In the last part of section [3.1](#data_exploration), we observed that larger negative returns are more likely than positive ones, therefore the proposed signal is 0. For values between $\eta_{lower}$ and $\eta_{upper}$ we propose a signal 0.5 . Function \ref{eq:net_decision2} is then applied to every time step $t$, therefore the final LPD signal is computed.
 
 \newpage
 
@@ -657,7 +657,7 @@ addLegend("topleft",
 \newpage
 
 When we have a closer look at the Sharpe ratio in figure \ref{fig:sharpe}, our findings from before are confirmed. The NN+LPD with $\kappa = 0.2$ results in a better Sharpe ratio than buy-and-hold. Another observation is seemingly more interesting: In the strategies tested, the addition of LPD always led to better results than with neural networks alone. 
-By investigating the other calculations we have done (plots found in  [attachement](#attachement)), we find the same pattern. Therefore, we conclude that LPD brings us a real benefit for this particular application.
+By investigating the other calculations we have done (plots found in  [Attachement](#attachement)), we find the same pattern. Therefore, we conclude that LPD brings us a real benefit for this particular application.
 
 &nbsp;
 

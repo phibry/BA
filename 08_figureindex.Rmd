@@ -1,0 +1,20 @@
+---
+output: pdf_document
+geometry: margin = 1in
+---
+
+## Index of figures {#index_of_figures}
+
+All figures are created with R-4.0.2 , RStudio Version 1.4.904 by the authors of this thesis (can be found in Github repository) except for the following:
+
+
+-  Figure \ref{fig:perceptron_schema} 
+URL: https://towardsdatascience.com/what-the-hell-is-perceptron-626217814f53 
+
+
+-  Figure \ref{fig:mlp_schema} 
+URL: https://assets.website-files.com/5ac6b7f2924c652fd013a891/5edab65ea64212da0ad611b7_5d52f096076d2b058e88cf0c_Artificial-neural-network-architecture-ANN-i-h-1-h-2-h-n-o.jpeg
+
+
+-  Figure \ref{fig:blockchain} 
+URL: https://www.realtech.com/blog/blockchain-basics/

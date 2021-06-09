@@ -81,5 +81,10 @@ source("add/Functions.R")
 
 \newpage
 
-```{r child = '08_attachment.Rmd'}
+```{r child = '08_figureindex.Rmd'}
+```
+
+\newpage
+
+```{r child = '09_attachment.Rmd'}
 ```
