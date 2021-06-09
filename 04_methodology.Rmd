@@ -1,7 +1,5 @@
 ---
-output:
-  html_document:
-    df_print: paged
+output: pdf_document
 geometry: margin = 1in
 ---
 

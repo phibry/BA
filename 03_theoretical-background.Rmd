@@ -1,10 +1,6 @@
 ---
 output: pdf_document
 geometry: margin = 1in
-# output:
-#   html_document:
-#     df_print: paged
-bibliography: add/doc.bib
 ---
 
 ## 2. Theory {#theory}
@@ -375,7 +371,7 @@ events <- xts(LETTERS[1:5], as.Date(c("2015-01-14","2017-12-16","2018-12-15","20
 
 #plots
 plot.xts(Cl(BTC_USD), col = "black", main="Bitcoin in US $",lwd = 0.8)
-addEventLines(events,srt=90,pos=2,lty=3,col = c("darkgreen","red","darkgreen","red","darkgreen"),lwd=2,)
+addEventLines(events,srt=0,pos=1,lty=3,col = c("darkgreen","red","darkgreen","red","darkgreen"),lwd=2, cex=1.2)
 ```
 
 &nbsp;
@@ -387,7 +383,7 @@ addEventLines(events,srt=90,pos=2,lty=3,col = c("darkgreen","red","darkgreen","r
 ```{r logprice_btc, out.width='70%', fig.cap='Logarithmic transformation of the price development of the upper chart. In this representation, the relative price changes are better visible. Thus, the events marked with the letters can be better compared with each other. In contrast to the upper chart, here you can see not only the extreme price spikes, but also the rather small price movements.', echo=FALSE, fig.keep='last', fig.width = 8, fig.height = 5}
 # knitr::include_graphics("images/btc_usd.jpeg")
 plot.xts(cl_btc_log,col = "black", main="Logarithmic Bitcoin in US $",lwd = 0.8)
-addEventLines(events,srt=90,pos=2,lty=3,col = c("darkgreen","red","darkgreen","red","darkgreen"),lwd=2,)
+addEventLines(events,srt=0,pos=1,lty=3,col = c("darkgreen","red","darkgreen","red","darkgreen"),lwd=2, cex=1.2)
 
 ```
 
