@@ -309,7 +309,7 @@ Lastly, we look at the results of the different network architectures with a thi
 
 It is interesting that at the beginning, with the rather simple model architectures, the MSE of all realizations is very constant and only varies very slightly.
 
-```{r mse_plot3, out.width='100%', fig.cap="In- and out-of-sample MSE of the 5th split. Shown here are only the networks with 3 layers. Simplest network has an architecture of 1 neuron per layer (leftmost) and the most complex has 10 neurons per layer (rightmost), therefore we have the MSE's of 1000 different neural networks. Same pattern as for 1 layer and 2 layers: The in-sample the MSE's decreases, while the out-of-sample MSE's increase.", echo=FALSE,fig.align="center"}
+```{r mse_plot3, out.width='100%', fig.cap="In- and out-of-sample MSE of the 5th split. Shown here are only the networks with 3 layers. Simplest network has an architecture of 1 neuron per layer (leftmost) and the most complex has 10 neurons per layer (rightmost), therefore we have the MSE's of 1,000 different neural networks. Same pattern as for 1 layer and 2 layers: The in-sample the MSE's decreases, while the out-of-sample MSE's increase.", echo=FALSE,fig.align="center"}
 knitr::include_graphics("images/batch5/mse_5_layer3.jpeg")
 ```
 \newpage
@@ -606,7 +606,7 @@ $\hat{GARCH}_{t}$ = GARCH volatility trading signals $\in$ {$0,1$}
 
 &nbsp;
 
-With the previously established architecture, all combinations of the signals for different values for the parameters: $\lambda$, $\eta_{lower},\eta_{upper}$ and $\kappa$  are computed and the performance is compared to each other as well as to the benchmark from [3.2.6](#benchmark). To find a balance between precision and computation time, we optimize $N_{total}$= 1000 neural networks in every split. This should be sufficient for evaluation. The most promising performance is found with $\lambda = 1$, $\eta_{lower} > \eta_{upper}$ (no 0.5 signals were used) $\eta_{upper}=3$ and $\kappa = 0.2$.
+With the previously established architecture, all combinations of the signals for different values for the parameters: $\lambda$, $\eta_{lower},\eta_{upper}$ and $\kappa$  are computed and the performance is compared to each other as well as to the benchmark from [3.2.6](#benchmark). To find a balance between precision and computation time, we optimize $N_{total}$= 1,000 neural networks in every split. This should be sufficient for evaluation. The most promising performance is found with $\lambda = 1$, $\eta_{lower} > \eta_{upper}$ (no 0.5 signals were used) $\eta_{upper}=3$ and $\kappa = 0.2$.
 In figure \ref{fig:perf} different combinations are visualized. To complement the legend in this plot, the strategy combinations are described below: 
 
 - NN: Trading the $LogReturn_{t}$ with $\hat{NN}_{t}$ 
@@ -790,7 +790,7 @@ S_{tn} &=S_{t0}\prod_{k=1}^{t_{n}}e^{LogReturn_{k}} \\
 
 &nbsp;
 
-A theoretical investment of USD 1'000 is made at 2020-07-01, which is also the first date in figure \ref{fig:with_eth_sole}. A buy-and-hold strategy would result in a value of USD 6003.25 by the end of March 2021. However if we invest the 1000 USD in the best performing strategy we will end up with USD **11'633.70**  USD, which is nearly double the amount achieved with buy-and-hold. Comparing the Sharpe ratios of the LPD+NN+ETH (**4.41**) to buy-and-hold (3.57), the used strategy does also significantly better.
+A theoretical investment of USD 1,000 is made at 2020-07-01, which is also the first date in figure \ref{fig:with_eth_sole}. A buy-and-hold strategy would result in a value of USD 6,003.25 by the end of March 2021. However if we invest the 1,000 USD in the best performing strategy we will end up with USD **11'633.70**  USD, which is nearly double the amount achieved with buy-and-hold. Comparing the Sharpe ratios of the LPD+NN+ETH (**4.41**) to buy-and-hold (3.57), the used strategy does also significantly better.
 
 
 
