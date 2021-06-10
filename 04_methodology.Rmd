@@ -61,7 +61,7 @@ chart.ACF.phil(log_ret, main="Autocorrelation of log returns", maxlag = 20, ymax
 &nbsp;
 
 
-```{r histogramm_logreturns, out.width='70%', fig.cap='This histogram of BTC log returns illustrates how well it fits to different distributions. The blue t-Student distribution would fit the data better in the tails, while the yellow normal distribution would disperse a little better around the expected value. The distribution should be taken with a grain of salt, as the time dependence of the volatility is not taken into account.', echo=FALSE,fig.align="center", fig.width = 9, fig.height = 5}
+```{r histogramm_logreturns, out.width='70%', fig.cap='This histogram of BTC log returns illustrates how well it fits to different distributions. The blue t-Student distribution fit the data better in the tails, while the yellow normal distribution disperse a little better around the expected value. The distribution should be taken with a grain of salt, as the time dependence of the volatility is not taken into account.', echo=FALSE,fig.align="center", fig.width = 9, fig.height = 5}
 # knitr::include_graphics("images/histogram_logret_3.jpeg")
 
 load("data/log_ret_27_03_21.rda")  # loading logreturns closing! data xts
