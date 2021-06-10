@@ -5,11 +5,11 @@ geometry: margin = 1in
 
 ## 2. Theory {#theory}
 
-The following section is intended to provide the theoretical foundations necessary for our work. It is divided into a part that provides an overview of artificial neural networks. Followed by section [2.4](#bitcoin) which shows the background and the ecosystem of Bitcoin. This knowledge should be kept in mind, which should help in understanding the price formation of Bitcoin.
+The following section is intended to provide the theoretical foundations necessary for our work. It is divided into a part that provides an overview of artificial neural networks. Subsequently, the different methods of Explainable Artificial Intelligence (XAI) are presented. Followed by the metrics that are being used to compare the results. Finally section [2.4](#bitcoin) shows the background and the ecosystem of Bitcoin. This knowledge should be kept in mind, which should help in understanding the price formation of Bitcoin.
 
 ### 2.1. Neural network {#neural_network}
 
-In the context of this work, artificial neural networks are used to answer supervised learning questions that focus on the classification of data. This means that a neural network finds a correlation between the data and their labels and optimizes its parameters to minimize the error for the next try. This process is called supervised training and is performed with a test data sample. An application example of classification is that a neural network is used for face recognition after it has learned the classification of different faces in the process of supervised training. Predictive analysis works similarly to the classification of labeled data. It estimates future values based on past events and can be trained with historical data. On the other hand, unsupervised learning (clustering) is applied to detect patterns from unlabeled data. Based on these patterns, for example, anomalies can be detected that are relevant in the fight against fraud (fraud detection). Unsupervised learning is not discussed further in this paper. Section [2.1.1](#perceptron) will demonstrate the functioning of a neural network using a simple perceptron.
+In the context of this work, artificial neural networks are used to answer supervised learning questions that focus on the classification of data. This means that a neural network finds a correlation between the data and their labels and optimizes its parameters to minimize the error for the next try. This process is called supervised training and is performed with a test data sample. An application example of classification is that a neural network is used for face recognition after it has learned the classification of different faces in the process of supervised training. Predictive analysis works similarly to the classification of labeled data. It estimates future values based on past events and can be trained with historical data. On the other hand, unsupervised learning (clustering) is applied to detect patterns from unlabeled data. Based on these patterns, for example, anomalies can be detected that are relevant in the fight against fraud (fraud detection). Unsupervised learning is not discussed further in this paper. Section [2.1.1](#perceptron) will demonstrate the working principle of a neural network using a simple perceptron.
 
 #### 2.1.1. Perceptron {#perceptron}
 &nbsp;
@@ -26,7 +26,7 @@ The construction of an artificial neural network is demonstrated using a percept
 
 5.  Activation function
 
-Inputs are the information that is fed into the model. In the case of econometric time series, it is mostly the current and lagged log returns. These are multiplied by the weights and added together with the bias term to form the weighted sum. This weighted sum is finally passed on to the non-linear activation function, which determines the output of the perceptron.
+Inputs are the information that is fed into the model. In the case of financial time series, it is mostly the current and lagged data. These are multiplied by the weights and added together with the bias term to form the weighted sum. This weighted sum is finally passed on to the non-linear activation function, which determines the output of the perceptron.
 
 \newpage
 
@@ -76,7 +76,7 @@ grid()
 legend("bottomright", legend = c("Logistic", "Tanh"), col = c(1,2), pch = "-", cex = 1)
 ```
 
-In the error analysis, the output of the neural network is compared with the desired value. The most commonly used error function $E$ is the mean squared error (MSE), which is seen in equation \ref{eq:mse}. $y_{i}$ represents the actual value for the data point $i$, while $\hat{y}_{i}$ is the predicted value for data point $i$. The average of this error function is the average MSE, which is determined for a corresponding model. The learning problem is to adjust the weights $w_{i}$ within the training sample so that MSE$(w)$ is minimized [@efficient_backprop].
+In the error analysis, the output of the neural network is compared with the desired value. The most commonly used error function $E$ is the Mean Squared Error, which is seen in equation \ref{eq:mse}. $y_{i}$ represents the actual value for the data point $i$, while $\hat{y}_{i}$ is the predicted value for data point $i$. The average of this error function is the average MSE, which is determined for a corresponding model. The learning problem is to adjust the weights $w_{i}$ within the training sample so that MSE$(w)$ is minimized [@efficient_backprop].
 
 ```{=tex}
 \begin{align} \label{eq:mse}
@@ -122,8 +122,7 @@ knitr::include_graphics("images/MLP.jpeg")
 
 Every neural network has an input layer (also called features), which consists of one or more nodes. This number is determined by the training data and tells us how many features should be delivered to the neural network. In the case of Bitcoin prices, we could use today's price and the prices from the last 10 days (lags 1-10), so the input layer would consist of 10 nodes. Some configurations also require a bias term to adjust the output along with the weighted sum, which is also added to the input layer. In contrast to the scheme of the MLP, this setup can be seen in figure \ref{fig:perceptron_schema} where the bias term is defined as 'constant'. Similarly, to the input layer, each neural network has exactly one output layer. This can consist of one or more nodes. In this thesis, MLP is used as a regressor and therefore only one neuron is needed in this layer.
 
-In between are the hidden layers, whose number and size can be configured as desired. The challenge is to find an optimal and efficient configuration without causing overfitting of the training data. The number of hidden layers depends primarily on the application area of the neural network. For example, working with image recognition would require more layers since the image file is broken down into individual pixels. Subsequently, the layers are used to optimize from rough outlines to the smallest detail. In our research, we came across several methods or 'rules of thumb' to optimize the model. A frequently suggested method is explained by Andrej Karpathy (director of the AI department of Tesla, Inc.). His GitHub entry recommends the approach of starting with a model that is too large and causes overfitting. Subsequently, the model is reduced by focusing on increasing training loss and improving validation loss [@recipe_training].
-
+In between are the hidden layers, whose number and size can be configured as desired. The challenge is to find an optimal and efficient configuration without causing overfitting of the training data. The number of hidden layers depends primarily on the application area of the neural network. For example, working with image recognition would require more layers since the image file is broken down into individual pixels. Subsequently, the layers are used to optimize from rough outlines to the smallest detail. In our research, we came across several methods or 'rules of thumb' to optimize the model. A frequently suggested method is explained by Andrej Karpathy (director of the AI department of Tesla, Inc.). His GitHub entry recommends the approach of starting with a model that is too large and causes overfitting. Subsequently, the model is reduced by focusing on increasing training loss and improving validation loss [@recipe_training]. Nevertheless, in this thesis we develop our own approach for finding an optimal network architecture, which will be described in section [3.2](#networkarchitecture).
 \newpage
 
 #### 2.1.4. Challenges {#challenges}
@@ -147,27 +146,28 @@ Another characteristic that requires our attention is the vanishing gradient pro
 
 Depending on the model architecture, a neural network can be a very complex construct. A number of weights and biases linked to the neurons lead to an output of the network through training. Understanding how exactly the alterations of the weights and biases lead to this output is a rather complex task. Due to this difficulty in interpretation, neural networks are often referred to as black boxes [@blackbox].
 
-Although the networks may lead to desired results, it can be important to build an understanding of these models. Suppose we are developing a classification method in supervised learning for a particular problem. A classical approach such as linear regression is easy to understand and we can convince people with little knowledge of mathematics of the usefulness of this method. Considering that a good and simple explanation may depend on investment, would an investor fund something that is not understood and difficult to get a grasp of? With their non-linearity and the large number of parameters does not make it easy for the user to convince an investor of the benefits of a neural network.
+Although the networks may lead to desired results, it can be important to build an understanding of these models. Suppose we are developing a classification method in supervised learning for a particular problem. A classical approach such as Linear Regression is intuitively easier to understand. Therefore, the usefulness of it can also be made clear to a wider audience. Considering that a good and simple explanation may depend on investment, would an investor fund something that is not understood and difficult to get a grasp of? The non-linearity and the large number of parameters do not make it easier to convince an investor of the added value of neural networks.
+
 
 #### 2.2.1. Classic Approach {#classic}
 &nbsp;
 
-As mentioned earlier, it is almost impossible to explain the networks based on the weights and biases. The following methods try to find effects on the features. We wonder which influence a certain feature has on the prediction of the network. There are classical approaches for explaining neural networks in the applications such as image recognition or text mining.
+As mentioned earlier, it is almost impossible to explain the networks based on the weights and biases. The following methods try to find effects on the input layer, called features. We wonder which influence a certain feature has on the prediction of the network. There are classical approaches for explaining neural networks in the applications such as image recognition or text mining.
 
 A widely used approach is the Shapley value which has its origin in game theory. With this method, one tries to find out how big the influence of a feature is. The problem with this method is that it mixes the data at different points in time. In this paper, we study the prediction of financial time series, i.e. autocorrelated data. Thus, this approach is not suitable for our application to interpret the importance of individual features (lagged log returns) [@slide_xai].
 
-An approach like ALE (Accumulated Local Effects) examines how the network reacts to change [@slide_xai]. The features (lags) are compared in order against ALE. The problem with this method is that the features do not contain the dimension of time. It is possible that two very high values are close to each other, but in reality, they occure years after each other.
+An approach like ALE (Accumulated Local Effects) examines how the network reacts to change [@slide_xai]. The features (lags) are compared in order against ALE. The problem with this method is that the features do not contain the dimension of time. It is possible that two very high values are close to each other, but in reality, they occur years after each other.
 
-Another approach is the LIME (Local Interpretable Model-agnostic Explanations). This method examines the change of the forecast when changing the input data. A permuted data set is generated from the given data (for example, adding standardized noise). Using this artificially altered data set, an interpretable model (regression) is created to analyze the change in features [@xai_blackbox]. Changing the data affects the time dependence of the data. Thus, this method is also unusable for our application.
+Another approach is the LIME (Local Interpretable Model-agnostic Explanations). This method examines the change of the forecast when changing the input data. A permuted data set is generated from the given data (for example, adding standardized noise). Using this artificially altered data set, an interpretable model (regression) is created to analyze the change in features [@xai_blackbox]. Changing the data affects the time dependence. Thus, this method is also unusable for our application.
 
 \newpage
 
 #### 2.2.2. Explainability for Financial Time Series {#xai_finance}
 &nbsp;
 
-For the interpretation of financial time series, we would like to keep the dependency structure. The changes in trend or variability should be maintained. The sequence should not be shuffled. When mixing up the order, an older value could suddenly play a bigger role for the model than a current one. This would not add any value to financial time series modelling.
+For the interpretation of financial time series, we would like to keep the dependency structure. The changes in trend or variability should be maintained. The sequence should not be shuffled. When mixing up the order, an older value could suddenly play a bigger role for the model than a current one. This would not add any value to financial time series modelling. Therefore, a more sophisticated approach is needed to keep the dependency structure, as proposed by M. Wildi [@slide_xai].
 
-For our application, the lagged log returns of Bitcoin prices are the features to be studied. In this paper, we focus on Bitcoin, here we are already using it as a means of explaining neural networks. A detailed description of BTC follows in sections [2.4](#bitcoin) and [3.1](#data_exploration). We want to explore how the features affect the output of the neural network. A network is trained with delayed values as the input layer to match the output as closely as possible to the original values. This concept strongly resembles a linear regression. The following equation establishes a relationship of the lagged data with the regression coefficients.
+For our application, the lagged log returns of Bitcoin prices are the features to be studied. In this paper, we focus on Bitcoin, here we are already using it as a means of explaining neural networks. A detailed description of BTC follows in sections [2.4](#bitcoin) and [3.1](#data_exploration). We want to explore how the features affect the output of the neural network. A network is trained with delayed values as the input layer to match the output as closely as possible to the original values. This concept strongly resembles a Linear Regression. The following equation establishes a relationship of the lagged data with the regression coefficients.
 
 ```{=tex}
 \begin{align} \label{eq:lm1}
@@ -183,11 +183,11 @@ In our concrete example, the equation would look like this.
 \end{align}  
 ```
 
-Now, what could the fitted regression coefficients tell us about the respective lagged values. For that, we can look at the autocorrelation function of the Bitcoin log returns (ACF's) in figure \ref{fig:xai_acf}. Lags at 6 (red) and 10 (orange) have a positive impact on the original data structure. In the context of the time series, this means that there is a strong 6- or 10-day dependency. 
+Now, what could the fitted regression coefficients tell us about the respective lagged values. For that, we look at the autocorrelation function (ACF) of the Bitcoin log returns in figure \ref{fig:xai_acf}. Lags at 6 (red) and 10 (orange) have a positive impact on the original data structure. In the context of the time series, this means that there is a strong 6- or 10-day dependency. 
 
 &nbsp;
 
-```{r xai_acf, fig.align='center', echo=FALSE, fig.cap="Autocorrelation function of BTC/USD. In red and orange you can see significant positive ACF's at lags 6 and 10. These signal some importance for model considerations. Between 6 and 10, the ACF's are negative and thus would have a negative effect on a model. For further considerations, all lags from 6 to 10 are included.", out.width='75%', fig.width = 8, fig.height = 5}
+```{r xai_acf, fig.align='center', echo=FALSE, fig.cap="Autocorrelation function of BTC/USD. In red and orange you can see significant positive autocorrelations at lags 6 and 10. These signal some importance for model considerations. Between 6 and 10, the autocorrelations are negative and thus would have a negative effect on a model. For further considerations, all lags from 6 to 10 are included.", out.width='75%', fig.width = 8, fig.height = 5}
 # Load Data
 load("data/log_ret_27_03_21.rda")
 load("data/BTC_USD_27_03_21.rda")
@@ -203,7 +203,7 @@ chart.ACF.phil.special(logret, ymax=0.06, maxlag = 20, main="BTC log return depe
 
 \newpage
 
-Looking at the regression coefficients in table \ref{tab:lm_tab}, we can discover the relationship between the ACF's and the coefficients of the regression. Again, lags 6 and 10 make the largest positive contribution to the fit of the model. Lags 7, 8, 9 make a negative contribution, as can also be seen in the ACF's.  Sign and value are in line with the ACF's.
+Looking at the regression coefficients in table \ref{tab:lm_tab}, we can discover the relationship between the autocorrelations and the coefficients of the regression. Again, lags 6 and 10 make the largest positive contribution to the fit of the model. Lags 7, 8, 9 make a negative contribution, as can also be seen in the autocorrelations.  Sign and value are in line with the autocorrelations.
 
 ```{r lm_tab, echo=FALSE}
 library(kableExtra)
@@ -223,9 +223,9 @@ kbl(df, caption="Coefficients 6 (red) and 10 (orange) have the greatest positive
   column_spec(11, color="#ff7c43")
 ```
 
-Now we would like to create such an analogy with neural networks. In the case of linear regression, the coefficients, or the weights of the lagged data are the solutions of the partial derivatives of the optimization function. One obtains a coefficient for each lag, thus the respective weight, is time independent. We would now like to extend this concept. We want to keep the structure of the time series, the time dependence.
+We would like to create such an analogy with neural networks. In the case of Linear Regression, the coefficients, or the weights of the lagged data are the solutions of the partial derivatives of the optimization function. One obtains a coefficient for each lag, thus the respective weight, is time independent. This concept will be extended by keeping the structure of the time series, the time dependence.
 
-We can now calculate the partial derivatives of the output of a neural network with the respective input data of time $t$ for each time $t$. We obtain the coefficients or weights $\Delta_{jt}$.
+We calculate the partial derivatives of the output of a neural network with the respective input data of time $t$ for each time $t$ and the coefficients or weights $\Delta_{jt}$ are obtained.
 
 ```{=tex}
 \begin{align} \label{eq:xai_partial}
@@ -241,21 +241,21 @@ Basically, we have a similar concept as above with the regression. The differenc
 \end{align}  
 ```
 
-In simpler terms, we train a neural network with input data of length up to lag $q$. Now we change a data point at time $t$, add a disturbance term by $\delta$. So, we change the value of an explanatory variable, one of our features. Suppose our input data at time $t$ looks like this.
+In simpler terms, a neural network with input data of length up to lag $q$ is trained. We change a data point at time $t$, add a disturbance term by $\delta$. The value of an explanatory variable, one of the features, is changed. Suppose our input data at time $t$ looks like this.
 
 $$X_{t} = x_{1t}+x_{2t}+...+x_{qt}$$
-For the feature at lag 1, we now want to calculate the partial derivative. We create a new data set $Y$ and change the data point at lag 1.
+For the feature at lag 1, we want to calculate the partial derivative. A new data set $Y$ is created and the data point at lag 1 is changed.
 
 $$Y_{t} = x_{1t}+(\delta*x_{1t})+x_{2t}+...+x_{qt}$$
-With the trained network we finally generate two predictions for time $t$. Once with the original data $NN(X)$ and once with the data with the slightly altered value $NN(Y)$. Now we can calculate the discrete approximated partial derivative.
+With the trained network we finally generate two predictions for time $t$. Once each for the original data $NN(X)$ and with the slightly altered data $NN(Y)$. Now the discrete approximated partial derivative can be calculated.
 
 $$\Delta_{1t} = \frac{\text{NN}(X_{t}) - \text{NN}(Y_{t})}{\delta*x_{1t}}$$
 
-The output of the neural network changes by the value $\Delta_{1t}$ if the input is changed by 1. This procedure can now be performed for each feature at each time point. This gives us the derivatives for each feature and time point, which makes an explanation of neural networks more feasible. We call these newly generated data sets linear parameter data (LPD) [@slide_xai].
+The output of the neural network changes by the value $\Delta_{1t}$ if the input is changed by 1. This procedure can now be performed for each feature at each time point. This returns the derivatives for each feature and time point, which makes an explanation of neural networks more feasible. The newly generated data sets are called Linear Parameter Data (LPD) [@slide_xai].
 
 \newpage
 
-In figure \ref{fig:xai_plot1}, you can see the $\Delta_{it}$, that is, the partial derivatives from equation \ref{eq:xai_fit} up to $q=10$, and you can see the intercept. For the comparison to the linear regression and the autocorrelation, only the lags 6 to 10 are explicitly highlighted. A detailed identification of all LPD's can be seen in figure \ref{fig:xai_plot2}.
+In figure \ref{fig:xai_plot1}, one can see the intercept and $\Delta_{it}$, which are the partial derivatives from equation \ref{eq:xai_fit} up to $q=10$. For the comparison to the Linear Regression and the autocorrelation, only the lags 6 to 10 are explicitly highlighted. A detailed identification of all LPD's can be seen in figure \ref{fig:xai_plot2}.
 
 It is noticeable that the structure of LPD's strongly resembles the logarithmic returns of BTC. The heteroskedasticity of the log returns, i.e. the volatility clusters are also evident in the LPD's. If the BTC is in a turbulent phase, then the partial derivatives also fluctuate. 
 
@@ -274,7 +274,7 @@ In the autocorrelations (figure \ref{fig:xai_acf}) and in the regression coeffic
 
 \newpage
 
-To provide a more accurate and better comparison between regression and XAI, table \ref{tab:lpd_tab} compares the regression coefficients with the mean values of the LPDs. Although the values are not equal, the signs are the same. With this knowledge, we can say that both procedures are similar. Through this similarity, a connection can be made. As already explained in section [2.2.1](#classic), a linear regression is easier to explain and therefore more likely to be used. With this transfer between these two procedures, a bridge can be built.
+To provide a more accurate and better comparison between regression and XAI, table \ref{tab:lpd_tab} compares the regression coefficients with the mean values of the LPDs. Although the values are not equal, the signs are the same aswell as the ranks. With this knowledge, we can say that both procedures are similar. Through this similarity, a connection can be made. As already explained in section [2.2.1](#classic), a Linear Regression is easier to explain and therefore more likely to be used. With this transfer between these two procedures, an analaogy can be illustrated.
 
 ```{r lpd_tab, echo=FALSE}
 library(kableExtra)
@@ -285,7 +285,7 @@ lpd <- round(as.numeric(apply(na.omit(xai_data), 2, mean)[c(7,8,9,10,11)]), 5)
 df <- as.data.frame(rbind(name, lr, lpd))
 colnames(df) <- NULL
 rownames(df) <- c(" ","LR", "LPD")
-kbl(df, caption="Comparison between linear regression (LR) and linear parameter data (LPD) coefficients. Again, lags 6 and 10 have the largest positive effect in the respective model. Also 7, 8 and 9 all have a negative sign.", booktabs = T, linesep = "") %>%
+kbl(df, caption="Comparison between Linear Regression (LR) and linear parameter data (LPD) coefficients. Again, lags 6 and 10 have the largest positive effect in the respective model. Also 7, 8 and 9 all have a negative sign.", booktabs = T, linesep = "") %>%
   kable_styling(latex_options = c("hold_position")) %>%
   column_spec(1, color="#000000") %>%
   column_spec(2, color="#f6004a") %>%
@@ -297,12 +297,11 @@ kbl(df, caption="Comparison between linear regression (LR) and linear parameter 
 
 &nbsp;
 
-Together with the findings from the visualization in figure \ref{fig:xai_acf} and the autocorrelations in figure \ref{fig:xai_plot1}, a connection can be established. Strong autocorrelations, i.e. large dependencies on a given lag, can be recognized in the partial derivatives. With the help of the LPD's and the autocorrelations, the behavior of neuronal networks could be explained with the handling of time series. The lagged input of a neural network seems to have probably a connection with the ACF's.
+Together with the findings from the visualization in figure \ref{fig:xai_acf} and the autocorrelations in figure \ref{fig:xai_plot1}, a connection can be established. Strong autocorrelations, i.e. large dependencies on a given lag, can be recognized in the partial derivatives. With the help of the LPD's and the autocorrelations, the behavior of neuronal networks could be explained with the handling of time series. The lagged input of a neural network seems to have a connection with the ACF.
 
-Thus, we can say that at best, with this method of calculating the partial derivatives for each feature at each time t, we may have found an explanation for the black box of neural networks. With this method we cannot explain how the network led to exactly this prediction using the backpropagation algorithm with the many weights and error terms, but the basic structure, i.e. information which is in the data (for example the autocorrelation), can be found. The ACF is a basic method to find structures in time series and here, with the LPD's you can fall back on exactly this ACF. Despite the complexity of the networks, this special procedure for the XAI leads to the basic ACF's, thus improving the explainability.
+Thus, with this method of calculating the partial derivatives for each feature at each time $t$, an explanation may be found for the black box of neural networks. With this method we cannot explain how the network led to exactly this prediction using the backpropagation algorithm with the many weights and error terms, but the basic structure, i.e. information which is in the data (for example the autocorrelation), can be found. The ACF is a basic method to find structures in time series and here, with the LPD's you can fall back on exactly this ACF. Despite the complexity of the networks, this special procedure for the XAI leads to the basic ACF, thus improving the explainability.
 
-Another finding is the correlated behavior of the partial derivatives and the original time series. Volatile log return of the BTC leads to unstable derivatives. In other words, during a turbulent phase in the market, the neural networks are unstable, leading to unstable solutions. This particular behavior can potentially be used for possible trading decisions, which will be explored in section [3.3](#trading-strat)
-.
+Another finding is the correlated behavior of the partial derivatives and the original time series. Volatile log return of the BTC leads to unstable derivatives. During a turbulent phase in the market, the neural network is unstable and leads to unreliable outputs. This particular behavior can potentially be used for possible trading decisions, which will be explored in section [3.3](#trading-strat).
 
 \newpage
 
@@ -326,7 +325,7 @@ $R_{p}$ represents the return of the portfolio, while $R_{f}$ equals the risk fr
 #### 2.3.2. Mean Squared Error (MSE) {#MSE}
 &nbsp;
 
-The second performance measurement method is also widely used and called mean squared error. Its calculation is very simple, for every timestep the estimated value is subtracted from the real empirical value, squared and then summarized and divided by the absolute number of observations as seen in equation \ref{eq:MSE}.
+The second performance measurement method is also widely used and called mean squared error. Its calculation is very simple, for every time step the estimated value is subtracted from the real empirical value, squared and then summarized and divided by the absolute number of observations as seen in equation \ref{eq:MSE}.
 
 ```{=tex}
 \begin{align} \label{eq:MSE}
@@ -341,7 +340,7 @@ The application of MSE is widely used in statistical modeling and supervised lea
 
 ### 2.4. Bitcoin {#bitcoin}
 
-In this section, Bitcoin is introduced as a cryptocurreny by analyzing and commenting historical events. Further the technology in and around cryptocurrencies in section [2.4.2](#bitcoin_tec) is briefly explained. This section serves to get an overview of the technology and background of Bitcoin. A more detailed description is beyond the scope of this thesis and will therefore be refrained from. We work with the short form 'BTC', which is the abbreviation for the currency. 
+In this section, Bitcoin is introduced as a cryptocurreny by analyzing and commenting historical events. Further the technology in and around cryptocurrencies in section [2.4.2](#bitcoin_tec) is briefly explained. This section serves to get an overview of the technology and background of Bitcoin. A more detailed description is beyond the scope of this thesis and will therefore be refrained from.
 
 #### 2.4.1. Historical Analysis {#historical_analysis}
 &nbsp;
@@ -393,7 +392,7 @@ addEventLines(events,srt=0,pos=1,lty=3,col = c("darkgreen","red","darkgreen","re
 &nbsp;
 
 This section focuses on the technical aspects of the cryptocurrency Bitcoin. It describes the role that blockchain technology plays in cryptocurrencies and how this manifests itself in the case of Bitcoin. One may look at a cryptocurrency similarly to a normal currency because you can buy and sell things and get Bitcoin in exchange. But cryptocurrencies fundamentally differ from conservative currencies in almost all ways. The cryptocurrencies (not just Bitcoin) are based on the blockchain technology introduced in Nakamoto's paper [@bitcoin]. The system is decentralized, where no institution or government regulates the market in terms of the blockchain itself. The transactions are signed by the participants via  cryptographic hash functions, which generate a private and public key. This means that every signature can only be accessed by the owner of the private key i.e. it can not be copied. Once a transaction is signed, it is broadcast into the network to all participants, so that everyone sees a transaction has been made.  Around 2400 transactions are packed in a block (the block size is limited by memory) which are broadcast to all participants of the system. Every block consists the transaction information, previous hash, the special number and their resulting hash as visualized in figure \ref{fig:blockchain}.
-Miners are now trying to approve the block by generating a hash with a certain pattern with the hash function f(previous hash, data of the block, special number), the so-called proof of work. The first miner who finds the special number according to the hash with a certain pattern, gets an amount of Bitcoin in reward.
+Miners are now trying to approve the block by generating a hash with a certain pattern with the hash function $f(\text{previous hash}, \text{data of the block}, \text{special number})$, the so-called proof of work. The first miner who finds the special number according to the hash with a certain pattern, gets an amount of Bitcoin in reward.
 The block with its new hash and the special number is now added to the chain and is broadcast to the network. If someone manipulates transactions in a block and finds the special number to the hash, he could potentially get away with it but not for long because for the next block he must also be the first to find the right hash and so on. In figure \ref{fig:blockchain}, the red block is a false one that gets attached and later declined because the other branch is longer. Only the longest chain can be trusted, and because there are so many miners one must have more than 50 % off the calculating power to get the best chance to find the right hash. Therefore, it is almost impossible to manipulate the chain. The cryptocurrency itself is now entirely defined by a chain of approved blocks by all participants.
 
 Another interesting fact about Bitcoin is that the total number of coins is determined by the rewards of the miners. The first block (genesis block) had a reward of 50 Bitcoins, every 210,000 blocks this reward gets halved. Since a new block is added every 10 minutes (this is the average time to solve a hash) the halving of the block rewards occurs approximately every 4 years. Under these conditions, one expects a block reward of zero in 2140 with a maximum of 21 Million Bitcoins [@blockrewards].
@@ -415,4 +414,4 @@ As mentioned in the previous section, the maximum possible amount of 21 million 
 - Mining process
 - Reward halving
 
-First, it is emphasized that in a decentralized monetary system, the newly issued amount is defined by the cryptographic algorithm. In contrast, this amount is determined by the national banks in the case of conventional currencies. New Bitcoins enter circulation when a miner sells their received reward to fund operating costs or new equipment. Unlike a central bank, which typically aims for an annual inflation target of 2%, the number of newly issued coins decreases after each halving. Meynkhard describes that this decrease in newly issued Bitcoins, assuming constant demand, causes the market value to increase in the long term. Although in contrast to stock markets, there is only a fraction of historical data available, this halving phenomenon could certainly be observed. The halving in 2016 is made responsible for the price increase from USD 500 to USD 20,000 by December 2017. The latest halving in May 2020 appears to be responsible for the subsequent bull market, which let the price drive from USD 9,000 to a new all-time high greater than USD 60,000. The energy-intensive mining of Bitcoin is essential for the blockchain and thus the currency to function. Additionally, the code determines that the maximum supply is limited. This analogy to gold mining is why the broad media often refer to it as digital gold [@digital_gold].
+First, it is emphasized that in a decentralized monetary system, the newly issued amount is defined by the cryptographic algorithm. In contrast, this amount is determined by the national banks in the case of conventional currencies. New Bitcoins enter circulation when a miner sells their received reward to fund operating costs or new equipment. Unlike a central bank, which typically aims for an annual inflation target of 2%, the number of newly issued coins decreases after each halving. Meynkhard describes that this decrease in newly issued Bitcoins, assuming constant demand, causes the market value to increase in the long term. Although in contrast to stock markets, there is only a fraction of historical data available, where this halving phenomenon could certainly be observed. The halving in 2016 is made responsible for the price increase from USD 500 to USD 20,000 by December 2017. The latest halving in May 2020 appears to be responsible for the subsequent bull market, which let the price drive from USD 9,000 to a new all-time high greater than USD 60,000. The energy-intensive mining of Bitcoin is essential for the blockchain and thus the currency to function. Additionally, the code determines that the maximum supply is limited. This analogy to gold mining is why the broad media often refer to it as digital gold [@digital_gold].

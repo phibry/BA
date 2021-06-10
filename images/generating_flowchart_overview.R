@@ -11,19 +11,16 @@ grViz(diagram = "digraph flowchart {
   tab3 [label = '@@3']
   tab4 [label = '@@4']
   tab5 [label = '@@5']
-  tab6 [label = '@@6', shape = diamond]
-  tab7 [label = '@@7']
+  tab6 [label = '@@6']
 
-  tab1 -> tab2 -> tab3 -> tab4 -> tab5 -> tab6 -> tab7;
-  tab6 -> tab4 [label = '  if prediction inaccurate'];
+  tab1 -> tab2 -> tab3 -> tab4 -> tab5 -> tab6;
 }
   [1]: 'Data exploration'
   [2]: 'Definition of time splits'
-  [3]: 'Model specification'
+  [3]: 'Definition of input layer'
   [4]: 'Evaluation of different network architectures'    
   [5]: 'Selection of a suitable neural network' 
-  [6]: 'Conduct check for predictive accuracy'
-  [7]: 'Implementation of trading strategy'
+  [6]: 'Implementation of trading strategy'
   ")
 
 
