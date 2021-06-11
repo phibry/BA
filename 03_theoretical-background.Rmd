@@ -86,6 +86,8 @@ In the error analysis, the output of the neural network is compared with the des
 \end{align}
 ```
 
+&nbsp;
+
 The gradient of a function is a vector whose entries are the first partial derivatives of the function. The first entry is the partial derivative after the first variable, the second entry is the partial derivative after the second variable and so on. Each entry indicates the slope of the function in the direction of the variable to which it was derived. In this work, the notation $\nabla{E}$ is used when talking about the gradient for the error function $E$, which is displayed in equation \ref{eq:gradient_descent} [@backpropagation].
 
 ```{=tex}
@@ -96,6 +98,9 @@ The gradient of a function is a vector whose entries are the first partial deriv
 \frac{\partial E}{\partial w_{i}})
 \end{align}
 ```
+
+&nbsp;
+
 The weights get adjusted according to the following algorithm \ref{eq:weight_adj} where $\Delta{w_{i}}$ is the change of the weight $w_{i}$ and $\gamma$ represents a freely definable parameter. In literature, this parameter is often called learning constant [@backpropagation_proofs]. The negative value is used because the gradient naturally points in the direction with the largest increase of the error function. To minimize the MSE, the elements in the gradient $\nabla{E}$ must be multiplied by -1.
 
 ```{=tex}
