@@ -5,7 +5,7 @@ geometry: margin = 1in
 
 ## Attachment {#attachement}
 
-This bachelorthesis is created with R-4.0.2 , RStudio Version 1.4.904 and RMarkdown in collaborative working via Git / Github
+This bachelorthesis is created with R-4.0.2, RStudio Version 1.4.904 and RMarkdown in collaborative working via Git / Github
 
 The full project with all code and data can be found on https://github.com/phibry/BA 
 

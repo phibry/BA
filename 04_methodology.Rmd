@@ -606,7 +606,7 @@ In figure \ref{fig:perf} different combinations are visualized. To complement th
 
 By investigating the plot, it seems that some combinations are performing better than the others. The GARCH application appears to worsen the performance. The light blue and the yellow line catches our eye as their performance seems to be better than the rest. Surprisingly, these are combinations of NN+LPD. Notice that signal = 0 means that we stay out of the market, mitigate risk and wait for a new signal to come.
 
-&nbsp;
+\newpage
 
 ```{r perf, fig.align='center', out.width='80%', fig.cap="Different combinations of trading signals are compared to each other. The best performing one is buy-and-hold (green). It is closely followed by the light blue NN+LPD combination with a $\\kappa$ of 0.2. The behavior of the individual rules is often very similar, few different decisions can influence the performance. Especially at the end of July, beginning of August the rules behave differently, but then usually behave very similarly.", echo=FALSE, fig.width = 8, fig.height = 5, fig.keep='last'}
 
@@ -641,14 +641,14 @@ addLegend("topleft",
           bg="white")
 ```
 
+When we have a closer look at the Sharpe ratio in figure \ref{fig:sharpe}, our findings from before are confirmed. The NN+LPD with $\kappa = 0.2$ results in a better Sharpe ratio than buy-and-hold. Another observation is seemingly more interesting: In the strategies tested, the addition of LPD always led to better results than with neural networks alone. 
+By investigating the other calculations we have done (plots can be found in section [Attachement](#attachement)), we find the same pattern. Therefore, we conclude that LPD brings us a real benefit for this particular application.
+
+Figure \ref{fig:batch} gives an insight on how the individual combinations performed in each of the 9 splits. The NN+LPD with $\kappa = 0.2$ is predominantly better in the first three splits, in the middle section its worse and towards the end the Sharpe is again better than buy-and-hold. We have to take this plot with a grain of salt because these splits have only an out-of-sample of one month and the Sharpe ratio is sensitive to outliers. This effect is even stronger when there are few datapoints present.
+
 \newpage
 
-When we have a closer look at the Sharpe ratio in figure \ref{fig:sharpe}, our findings from before are confirmed. The NN+LPD with $\kappa = 0.2$ results in a better Sharpe ratio than buy-and-hold. Another observation is seemingly more interesting: In the strategies tested, the addition of LPD always led to better results than with neural networks alone. 
-By investigating the other calculations we have done (plots found in  [Attachement](#attachement)), we find the same pattern. Therefore, we conclude that LPD brings us a real benefit for this particular application.
-
-&nbsp;
-
-```{r sharpe, fig.align='center', out.width='80%', fig.cap="Sharpe ratios of different signaling combinations. Based on the performance measure Sharpe ratios, the LPDs lead to a better performance. According to the Sharpe ratio, the performance of the NN+LPD signaling rule with a $\\kappa$ of 0.2, is better than buy-and-hold.",echo=FALSE, fig.width = 8, fig.height = 5}
+```{r sharpe, fig.align='center', out.width='75%', fig.cap="Sharpe ratios of different signaling combinations. Based on the performance measure Sharpe ratios, the LPDs lead to a better performance. According to the Sharpe ratio, the performance of the NN+LPD signaling rule with a $\\kappa$ of 0.2, is better than buy-and-hold.",echo=FALSE, fig.width = 8, fig.height = 4.5}
 # knitr::include_graphics("images/xailpd/lambda_1/sharpe.svg")
 
 load("data/xai/7_7_withsignal_xai_in/sharpeplot_without_eth.rda")
@@ -681,11 +681,13 @@ grid()
 par(mar=defaultmar)
 ```
 
-Figure \ref{fig:batch} gives an insight on how the individual combinations performed in each of the 9 splits. The NN+LPD with $\kappa = 0.2$ is predominantly better in the first three splits, in the middle section its worse and towards the end the Sharpe is again better than buy-and-hold. We have to take this plot with a grain of salt because these splits have only an out-of-sample of one month and the Sharpe ratio is sensitive to outliers. This effect is even stronger when there are few datapoints present.
+&nbsp;
 
 &nbsp;
 
-```{r batch, fig.align='center', out.width='80%', fig.cap="Sharpe ratios from the same different signaling combinations as in the last two graphs, but each for the 9 different time splits. Certain combinations have very similar decisions and thus, lead to similar trajectories of the Sharpe ratios.",echo=FALSE, fig.width = 8, fig.height = 5}
+&nbsp;
+
+```{r batch, fig.align='center', out.width='75%', fig.cap="Sharpe ratios from the same different signaling combinations as in the last two graphs, but each for the 9 different time splits. Certain combinations have very similar decisions and thus, lead to similar trajectories of the Sharpe ratios.",echo=FALSE, fig.width = 8, fig.height = 4.5}
 # knitr::include_graphics("images/xailpd/lambda_1/batch.svg")
 
 load("data/xai/7_7_withsignal_xai_in/sharpmat_perbatch_without_eth.rda")
